@@ -36,7 +36,7 @@ class OrderList extends Component {
     };
 
     receivedData() {
-        const apiUrl = `http://ec2-3-141-14-95.us-east-2.compute.amazonaws.com:8080/`
+        const apiUrl = `https://18.188.119.57:8443/`
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
