@@ -3,7 +3,7 @@ import {PureComponent} from "react";
 import OrderDetail from "./OrderDetail";
 import {Box, Container} from "@material-ui/core";
 import {HashRouter} from 'react-router-dom';
-import {Switch, Route, Redirect} from 'react-router';
+import {Switch, Route} from 'react-router';
 import Header from "./Header";
 import OrderList from "./OrderList";
 
