@@ -84,7 +84,7 @@ class OrderDetail extends Component {
                                     <TableCell align="center">{row.vendorProduct.product.price}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
                                 </TableRow>
-                            )) : ""}
+                            )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
                             {/*<TableRow>*/}
                             {/*    <TableCell rowSpan={3}/>*/}
                             {/*    <TableCell colSpan={2}>Subtotal</TableCell>*/}
