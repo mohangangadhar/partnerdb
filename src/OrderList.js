@@ -9,6 +9,7 @@ import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import {Link} from 'react-router-dom';
 import {Box, Grid, Typography} from "@material-ui/core";
+import {Item} from "./Item";
 
 class OrderList extends Component {
 
@@ -74,12 +75,12 @@ class OrderList extends Component {
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table className="table" aria-label="spanning table">
-                        <TableHead>
+                        <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
                             <TableRow>
-                                <TableCell>Order No</TableCell>
-                                <TableCell align="center">Date</TableCell>
-                                <TableCell align="center">Total</TableCell>
-                                <TableCell align="center">Status</TableCell>
+                                <TableCell style={{color: 'wheat'}}>Order No</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Date</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Total</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {Container, Divider, FormLabel} from "@material-ui/core";
+import {Item} from "./Item";
 
 class OrderDetail extends Component {
 
@@ -50,8 +51,11 @@ class OrderDetail extends Component {
             <div>
                 <Container maxWidth="md">
                     <Table className="table" aria-label="spanning table">
-                        <TableHead>
+                        <TableHead >
                             <TableRow>
+                                <TableCell>
+                                    <Item/>
+                                </TableCell>
                                 <TableCell>
                                     <FormLabel> Order No : {this.props.location.id} </FormLabel>
                                 </TableCell>
@@ -68,12 +72,12 @@ class OrderDetail extends Component {
                 <Divider/>
                 <TableContainer component={Paper}>
                     <Table className="table" aria-label="spanning table">
-                        <TableHead>
+                        <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
                             <TableRow>
-                                <TableCell>Desc</TableCell>
-                                <TableCell align="center">Qty</TableCell>
-                                <TableCell align="center">Unit Cost</TableCell>
-                                <TableCell align="center">Total</TableCell>
+                                <TableCell style={{color: 'wheat'}}>Desc</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Qty</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Unit Cost</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Total</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
