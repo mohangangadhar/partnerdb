@@ -32,10 +32,18 @@ class OrderList extends Component {
         }, () => {
             this.receivedData()
         });
-
     };
 
     receivedData() {
+        console.log(this.props.match.params);
+        let urlString;
+        if(this.props.match.params.hasOwnProperty("vendorId")){
+            urlString = this.props.match.params.vendorId === "order"
+                ? "order/"
+                : "vendor/" + this.props.match.params.vendorId + "/order/"
+        }
+        console.log(urlString)
+
         const apiUrl = `https://www.alfanzo.com:443/`
         const requestOptions = {
             method: 'POST',
@@ -47,7 +55,7 @@ class OrderList extends Component {
                 "sortByKey": "id"
             })
         };
-        fetch(apiUrl + 'order/', requestOptions)
+        fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data =>
                 this.setState({rows: data.content, totalPages: data.totalPages})
@@ -79,7 +87,7 @@ class OrderList extends Component {
                                 <TableRow key={row.id}>
                                     <TableCell>
                                         <Link to={{
-                                            pathname: 'order',
+                                            pathname: '/detail',
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
