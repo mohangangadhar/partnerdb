@@ -47,7 +47,6 @@ class OrderList extends Component {
                 "sortByKey": "id"
             })
         };
-        console.log(requestOptions);
         fetch(apiUrl + 'order/', requestOptions)
             .then(response => response.json())
             .then(data =>
