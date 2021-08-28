@@ -57,13 +57,13 @@ class OrderDetail extends Component {
                                     <Item/>
                                 </TableCell>
                                 <TableCell>
-                                    <FormLabel> Order No : {this.props.location.id} </FormLabel>
+                                    <FormLabel style={{color: 'wheat'}}> Order No : {this.props.location.id} </FormLabel>
                                 </TableCell>
                                 <TableCell>
-                                    <FormLabel>Date: {this.state.order.createdAt} </FormLabel>
+                                    <FormLabel style={{color: 'wheat'}}>Date: {this.state.order.createdAt} </FormLabel>
                                 </TableCell>
                                 <TableCell>
-                                    <FormLabel>Status: Processing</FormLabel>
+                                    <FormLabel style={{color: 'wheat'}}>Status: Processing</FormLabel>
                                 </TableCell>
                             </TableRow>
                         </TableHead>

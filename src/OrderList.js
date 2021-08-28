@@ -8,8 +8,11 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import {Link} from 'react-router-dom';
-import {Box, Grid, Typography} from "@material-ui/core";
-import {Item} from "./Item";
+import {Box, Button, Grid, Typography} from "@material-ui/core";
+import Picker from "./Picker";
+import CloudDownloadOutlinedIcon from '@material-ui/icons/CloudDownloadOutlined';
+import {TimelineSeparator} from "@material-ui/lab";
+
 
 class OrderList extends Component {
 
@@ -20,11 +23,17 @@ class OrderList extends Component {
             offset: 0,
             perPage: 10,
             currentPage: 0,
-            totalPages: 0
+            totalPages: 0,
+            startDate: "",
+            endDate: "",
         }
         this.handlePageClick = this.handlePageClick.bind(this);
+        this.setStartDate = this.setStartDate.bind(this);
+        this.setEndDate = this.setEndDate.bind(this);
+        this.handleButtonClick = this.handleButtonClick.bind(this);
     }
 
+    // For Pagination
     handlePageClick = (event, value) => {
         value = value - 1 < 0 ? 0 : value - 1
 
@@ -36,14 +45,12 @@ class OrderList extends Component {
     };
 
     receivedData() {
-        console.log(this.props.match.params);
         let urlString;
         if (this.props.match.params.hasOwnProperty("vendorId")) {
             urlString = this.props.match.params.vendorId === "order"
                 ? "order/"
                 : "vendor/" + this.props.match.params.vendorId + "/order/"
         }
-        console.log(urlString)
 
         const apiUrl = `https://www.alfanzo.com:443/`
         const requestOptions = {
@@ -53,7 +60,9 @@ class OrderList extends Component {
                 "pageNumber": this.state.offset,
                 "pageSize": this.state.perPage,
                 "sortDirection": "asc",
-                "sortByKey": "id"
+                "sortByKey": "id",
+                "startDate": this.state.startDate,
+                "endDate": this.state.endDate
             })
         };
         fetch(apiUrl + urlString, requestOptions)
@@ -67,12 +76,32 @@ class OrderList extends Component {
         this.receivedData()
     }
 
+    setStartDate(e) {
+        console.log(e.target.value)
+        this.setState({startDate: e.target.value})
+    }
+
+    setEndDate(e) {
+        this.setState({endDate: e.target.value})
+    }
+
+    handleButtonClick() {
+        this.receivedData()
+    }
+
     render() {
         return (
             <div>
                 <Typography component="h2" variant="h6" style={{color: 'wheat',}} align={"left"} gutterBottom>
                     Orders
                 </Typography>
+                <Grid container justifyContent="flex-end" component={Paper}>
+                    <Picker dateChange={this.setStartDate} label={"Start Date"}/>
+                    <Picker dateChange={this.setEndDate} label={"End Date"}/>
+                    <Button variant={"contained"} color={"primary"} style={{ marginRight: "5px"}} onClick={this.handleButtonClick}>Show</Button>
+                    <CloudDownloadOutlinedIcon fontSize={"large"} style={{ marginRight: "5px"}}/>
+                </Grid>
+                <Box m={1}/>
                 <TableContainer component={Paper}>
                     <Table className="table" aria-label="spanning table">
                         <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
