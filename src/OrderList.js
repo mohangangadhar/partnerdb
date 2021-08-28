@@ -38,7 +38,7 @@ class OrderList extends Component {
     receivedData() {
         console.log(this.props.match.params);
         let urlString;
-        if(this.props.match.params.hasOwnProperty("vendorId")){
+        if (this.props.match.params.hasOwnProperty("vendorId")) {
             urlString = this.props.match.params.vendorId === "order"
                 ? "order/"
                 : "vendor/" + this.props.match.params.vendorId + "/order/"
@@ -70,13 +70,14 @@ class OrderList extends Component {
     render() {
         return (
             <div>
-                <Typography component="h2" variant="h6" color="primary" align={"center"} gutterBottom>
-                    Recent Orders
+                <Typography component="h2" variant="h6" style={{color: 'wheat',}} align={"left"} gutterBottom>
+                    Orders
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table className="table" aria-label="spanning table">
                         <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
                             <TableRow>
+                                {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
                                 <TableCell style={{color: 'wheat'}}>Order No</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Date</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Total</TableCell>
@@ -84,8 +85,9 @@ class OrderList extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.rows.map((row) => (
+                            {this.state.rows.map((row, index) => (
                                 <TableRow key={row.id}>
+                                    {/*<TableCell align="left">{index + 1}</TableCell>*/}
                                     <TableCell>
                                         <Link to={{
                                             pathname: '/detail',

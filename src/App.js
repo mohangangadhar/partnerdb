@@ -10,7 +10,7 @@ import OrderList from "./OrderList";
 class App extends PureComponent {
     render() {
         return (
-            <div className="App">
+            <div className="App" >
                 <Header/>
                 <Box m={5}/>
                 <Container maxWidth="md">
