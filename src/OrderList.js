@@ -10,9 +10,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import {Link} from 'react-router-dom';
 import {Box, Button, Grid, Typography} from "@material-ui/core";
 import Picker from "./Picker";
-import CloudDownloadOutlinedIcon from '@material-ui/icons/CloudDownloadOutlined';
-import {TimelineSeparator} from "@material-ui/lab";
-
+import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 
 class OrderList extends Component {
 
@@ -31,15 +29,14 @@ class OrderList extends Component {
         this.setStartDate = this.setStartDate.bind(this);
         this.setEndDate = this.setEndDate.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.downloadCsvFile = this.downloadCsvFile.bind(this);
     }
 
     // For Pagination
     handlePageClick = (event, value) => {
         value = value - 1 < 0 ? 0 : value - 1
 
-        this.setState({
-            offset: value
-        }, () => {
+        this.setState({offset: value}, () => {
             this.receivedData()
         });
     };
@@ -65,6 +62,7 @@ class OrderList extends Component {
                 "endDate": this.state.endDate
             })
         };
+
         fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data =>
@@ -77,7 +75,6 @@ class OrderList extends Component {
     }
 
     setStartDate(e) {
-        console.log(e.target.value)
         this.setState({startDate: e.target.value})
     }
 
@@ -89,6 +86,42 @@ class OrderList extends Component {
         this.receivedData()
     }
 
+    downloadCsvFile() {
+
+        let urlString;
+        if (this.props.match.params.hasOwnProperty("vendorId")) {
+            urlString = this.props.match.params.vendorId === "order"
+                ? "export/"
+                : "export/" + this.props.match.params.vendorId + "/order/"
+        }
+
+        const apiUrl = `https://www.alfanzo.com:443/`
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                "pageNumber": 0, // Offset is default to 0
+                "pageSize": 150, // Currently number of records set to 150
+                "sortDirection": "asc",
+                "sortByKey": "id",
+                "startDate": this.state.startDate,
+                "endDate": this.state.endDate
+            })
+        };
+
+        fetch(apiUrl + urlString, requestOptions)
+            .then(response => {
+                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+                response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+                });
+            });
+    }
+
     render() {
         return (
             <div>
@@ -98,8 +131,10 @@ class OrderList extends Component {
                 <Grid container justifyContent="flex-end" component={Paper}>
                     <Picker dateChange={this.setStartDate} label={"Start Date"}/>
                     <Picker dateChange={this.setEndDate} label={"End Date"}/>
-                    <Button variant={"contained"} color={"primary"} style={{ marginRight: "5px"}} onClick={this.handleButtonClick}>Show</Button>
-                    <CloudDownloadOutlinedIcon fontSize={"large"} style={{ marginRight: "5px"}}/>
+                    <Button variant={"contained"} color={"primary"} size={"small"} style={{marginRight: "5px"}}
+                            onClick={this.handleButtonClick}>Show</Button>
+                    <ArrowDownwardOutlinedIcon fontSize={"large"} style={{marginRight: "5px"}}
+                                               onClick={this.downloadCsvFile}/>
                 </Grid>
                 <Box m={1}/>
                 <TableContainer component={Paper}>
@@ -133,9 +168,11 @@ class OrderList extends Component {
                 </TableContainer>
                 <Box m={2}/>
                 <Grid container justifyContent={"center"}>
-                    <Pagination variant={"text"} color={"primary"} count={this.state.totalPages}
+                    <Pagination variant={"text"} color={"primary"}
+                                count={this.state.totalPages}
                                 onChange={this.handlePageClick}/>
                 </Grid>
+                <Box m={2}/>
             </div>
         );
     }

@@ -6,6 +6,8 @@ import {HashRouter} from 'react-router-dom';
 import {Switch, Route, Redirect} from 'react-router';
 import Header from "./Header";
 import OrderList from "./OrderList";
+import Sidebar from "./Sidebar";
+import MiniDrawer from "./MiniDrawer";
 
 class App extends PureComponent {
     render() {

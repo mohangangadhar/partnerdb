@@ -29,14 +29,12 @@ class OrderDetail extends Component {
         fetch(apiUrl + 'order/' + this.props.location.id, requestOptions)
             .then(response => response.json())
             .then(data => {
-                    console.log(data);
                     this.setState({order: data.order, orderProductList: data.orderProductList})
                 }
             );
     }
 
     render() {
-        console.log(this.state);
         const detail = (val) => {
             let jsonVal = JSON.parse(val)
             return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
@@ -49,7 +47,7 @@ class OrderDetail extends Component {
 
         return (
             <div>
-                <Container maxWidth="md">
+                <Container maxWidth="md" fixed={false}>
                     <Table className="table" aria-label="spanning table">
                         <TableHead >
                             <TableRow>
@@ -74,6 +72,7 @@ class OrderDetail extends Component {
                     <Table className="table" aria-label="spanning table">
                         <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
                             <TableRow>
+                                <TableCell style={{color: 'wheat'}}>Sl.No</TableCell>
                                 <TableCell style={{color: 'wheat'}}>Desc</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Qty</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Unit Cost</TableCell>
@@ -83,6 +82,7 @@ class OrderDetail extends Component {
                         <TableBody>
                             {this.state.orderProductList.length > 0 ? this.state.orderProductList.map((row, index) => (
                                 <TableRow key={row.vendorProduct.product.title}>
+                                    <TableCell align="left">{index + 1}</TableCell>
                                     <TableCell>{detail(row.vendorProduct.product.title)}</TableCell>
                                     <TableCell align="center">{row.quantity}</TableCell>
                                     <TableCell align="center">{row.vendorProduct.product.price}</TableCell>
