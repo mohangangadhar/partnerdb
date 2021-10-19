@@ -15,7 +15,8 @@ class OrderDetail extends Component {
         super(props);
         this.state = {
             "order": {},
-            "orderProductList": []
+            "orderProductList": [],
+            "user":{}
         }
     }
 
@@ -29,7 +30,7 @@ class OrderDetail extends Component {
         fetch(apiUrl + 'order/' + this.props.location.id, requestOptions)
             .then(response => response.json())
             .then(data => {
-                    this.setState({order: data.order, orderProductList: data.orderProductList})
+                    this.setState({order: data.order, orderProductList: data.orderProductList, user: data.user});
                 }
             );
     }
@@ -61,8 +62,20 @@ class OrderDetail extends Component {
                                     <FormLabel style={{color: 'wheat'}}>Date: {this.state.order.createdAt} </FormLabel>
                                 </TableCell>
                                 <TableCell>
-                                    <FormLabel style={{color: 'wheat'}}>Status: Processing</FormLabel>
+                                    <FormLabel style={{color: 'wheat'}}>Status: {this.state.order.deliveryStatus} </FormLabel>
                                 </TableCell>
+                            </TableRow>
+                            <TableRow style={{}}>
+                                <TableCell>
+                                    <FormLabel style={{color: 'wheat'}}> Name : {this.state.user.name} </FormLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <FormLabel style={{color: 'wheat'}}> Mobile : {this.state.user.mobileNumber} </FormLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <FormLabel style={{color: 'wheat'}}> Email : {this.state.user.email} </FormLabel>
+                                </TableCell>
+
                             </TableRow>
                         </TableHead>
                     </Table>

@@ -7,7 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import CustomTextField from "./CustomTextField";
 import {InputOutlined, SearchOutlined} from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
-import { NotificationManager } from "react-notifications";
+import {NotificationManager} from "react-notifications";
 
 class WalletInfo extends Component {
     constructor(props) {
@@ -25,8 +25,8 @@ class WalletInfo extends Component {
     updateBalance() {
         this.state.data.balance = this.state.balance;
         console.log(this.state);
-        fetch("https://www.alfanzo.com:443/wallet/"+this.state.data.mobileNumber, {
-            method: 'PUT', // or 'PUT'
+        fetch("https://www.alfanzo.com:443/wallet/" + this.state.data.mobileNumber, {
+            method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
@@ -48,12 +48,11 @@ class WalletInfo extends Component {
     render() {
         return (
             <div>
+                <Typography component="h2" variant="h6" style={{color: 'indianred',}} align={"center"} gutterBottom>
+                    Wallet Information
+                </Typography>
                 <Table className="table" aria-label="spanning table">
                     <TableBody>
-                        <Typography component="h2" variant="h6" style={{color: 'indianred',}} align={"center"} gutterBottom>
-                            Wallet Information
-                        </Typography>
-
                         <TableRow style={{backgroundColor: 'white',}}>
                             <TableCell style={{borderBottom: "none"}}>
                                 <FormLabel style={{color: 'indianred'}}>

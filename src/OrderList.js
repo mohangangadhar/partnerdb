@@ -144,6 +144,7 @@ class OrderList extends Component {
                             <TableRow>
                                 {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
                                 <TableCell style={{color: 'wheat'}}>Order No</TableCell>
+                                <TableCell style={{color: 'wheat'}}>User Id</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Date</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Total</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Status</TableCell>
@@ -159,9 +160,10 @@ class OrderList extends Component {
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
+                                    <TableCell >{row.userId}</TableCell>
                                     <TableCell align="center">{row.createdAt}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
-                                    <TableCell align="center">Processing</TableCell>
+                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

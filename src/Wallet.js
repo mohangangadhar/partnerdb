@@ -18,7 +18,7 @@ class Wallet extends React.Component {
         this.searchOrder = this.searchOrder.bind(this);
         this.state = {
             inputValue: "",
-            data:""
+            data: ""
         }
     }
 
@@ -29,9 +29,10 @@ class Wallet extends React.Component {
     }
 
     searchOrder() {
+        this.setState({data: ""});
 
         // this.set State({loading: true});
-        fetch( "https://www.alfanzo.com:443"+ '/wallet/' + this.state.inputValue)
+        fetch("https://www.alfanzo.com:443" + '/wallet/' + this.state.inputValue)
             .then(res => res.json())
             .then((data) => {
                 NotificationManager.success('Found it!', 'Successful!', 1000);
@@ -39,7 +40,7 @@ class Wallet extends React.Component {
                     // orderVal: JSON.parse(data.order_result).Items,
                     // orderInfo: JSON.parse(data.order_result).Items[0],
                     // productVal: JSON.parse(data.product_result).Items,
-                    data:data,
+                    data: data,
                     loading: false
                 });
             })
@@ -70,16 +71,18 @@ class Wallet extends React.Component {
                                                 <SearchOutlined
                                                     onClick={this.searchOrder}
                                                 />
-                                            </IconButton>
-                                        ),
+                                            </IconButton>),
                                     }}
                                 />
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    <Box m={2}/>
-                    {this.state.data.name !== undefined ? <WalletInfo data={this.state.data}/> :"" }
                 </Table>
+                <Box m={2}/>
+                {(this.state.data.name !== undefined || this.state.data !== "") ?
+                    <WalletInfo data={this.state.data}/> : ""}
+                <Box m={2}/>
+                {}
             </TableContainer>
         );
     }
