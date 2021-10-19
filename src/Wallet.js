@@ -34,6 +34,7 @@ class Wallet extends React.Component {
         fetch( "https://www.alfanzo.com:443"+ '/wallet/' + this.state.inputValue)
             .then(res => res.json())
             .then((data) => {
+                NotificationManager.success('Found it!', 'Successful!', 1000);
                 this.setState({
                     // orderVal: JSON.parse(data.order_result).Items,
                     // orderInfo: JSON.parse(data.order_result).Items[0],

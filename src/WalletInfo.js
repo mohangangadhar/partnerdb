@@ -41,7 +41,7 @@ class WalletInfo extends Component {
             })
             .catch((error) => {
                 console.error('Error:', error);
-                NotificationManager.error('Error while making your changes, contact support!', 'Error!');
+                NotificationManager.error('Error occurred while making your changes, contact support!', 'Error!');
             });
     }
 

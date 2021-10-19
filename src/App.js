@@ -26,6 +26,9 @@ import {ShoppingCart} from "@material-ui/icons";
 import ProductDetail from "./ProductDetail";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Wallet from "./Wallet";
+import 'react-notifications/lib/notifications.css';
+import { NotificationContainer } from 'react-notifications';
+
 
 const drawerWidth = 240;
 
@@ -211,6 +214,7 @@ export default function MiniDrawer() {
                             {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
                             {/*<Redirect from="*" to="/app/main/dashboard"/>*/}
                         </Switch>
+                        <NotificationContainer />
                     </HashRouter>
                 </Container>
 
