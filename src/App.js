@@ -3,30 +3,6 @@ import OrderDetail from "./OrderDetail";
 import {HashRouter, Link} from 'react-router-dom';
 import {Redirect, Route, Switch} from 'react-router';
 import OrderList from "./OrderList";
-// class App extends PureComponent {
-//     render() {
-//         return (
-//             <div className="App" >
-//                 <Header/>
-//                 <Box m={5}/>
-//                 <Container maxWidth="md">
-//                     <SideNavBar/>
-//                     <HashRouter>
-//                         <Switch>
-//                             <Route path="/" exact render={() => <Redirect to="/app"/>}/>
-//                             <Route path="/app/:vendorId" exact component={OrderList}/>
-//                             <Route path="/detail" exact component={OrderDetail}/>
-//                             {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
-//                             {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
-//                             {/*<Redirect from="*" to="/app/main/dashboard"/>*/}
-//                         </Switch>
-//                     </HashRouter>
-//                 </Container>
-//             </div>
-//         );
-//     }
-// }
-
 import * as React from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -48,6 +24,8 @@ import {Box, Container} from "@material-ui/core";
 import ProductList from "./ProductList";
 import {ShoppingCart} from "@material-ui/icons";
 import ProductDetail from "./ProductDetail";
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import Wallet from "./Wallet";
 
 const drawerWidth = 240;
 
@@ -159,7 +137,7 @@ export default function MiniDrawer() {
                 <Divider/>
                 <List>
                     <HashRouter>
-                        <ListItem button key="Product">
+                        <ListItem style={{color: "wheat"}} button key="Product">
                             <ListItemIcon>
                                 <Link to={{
                                     pathname: '/app/:vendorId/product',
@@ -182,6 +160,18 @@ export default function MiniDrawer() {
                                 pathname: '/app/order',
                                 id: "4"
                             }}><ListItemText primary="Orders"/></Link>
+                        </ListItem>
+                        <ListItem style={{color: "wheat"}} button key="Wallet">
+                            <ListItemIcon>
+                                <Link to={{
+                                    pathname: '/app/wallet',
+                                    id: "4"
+                                }}><AccountBalanceWalletIcon/></Link>
+                            </ListItemIcon>
+                            <Link to={{
+                                pathname: '/app/wallet',
+                                id: "4"
+                            }}><ListItemText primary="Wallet"/></Link>
                         </ListItem>
                     </HashRouter>
                     {/*    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
@@ -211,6 +201,7 @@ export default function MiniDrawer() {
                     <HashRouter>
                         <Switch>
                             <Route path="/" exact render={() => <Redirect to="/app"/>}/>
+                            <Route path="/app/wallet" exact component={Wallet}/>
                             <Route path="/app/:vendorId" exact component={OrderList}/>
                             <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail}/>
                             <Route path="/app/:vendorId/product/" exact component={ProductList}/>

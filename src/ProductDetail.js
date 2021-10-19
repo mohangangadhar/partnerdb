@@ -6,9 +6,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Box, Container, Divider, FormLabel, TextField} from "@material-ui/core";
+import {Box, Container, Divider, FormControlLabel, FormGroup, FormLabel, TextField} from "@material-ui/core";
 import {Item} from "./Item";
 import {Grid} from "@mui/material";
+import CustomTextField from "./CustomTextField";
 
 
 class ProductDetail extends Component {
@@ -17,9 +18,15 @@ class ProductDetail extends Component {
         super(props);
         this.state = {
             "product": {
-                "title":""
+                "title": ""
             }
         }
+        this.productNameChange = this.productNameChange.bind(this);
+
+    }
+
+    productNameChange(e) {
+        console.log(e.target.value);
     }
 
     componentDidMount() {
@@ -41,7 +48,7 @@ class ProductDetail extends Component {
     render() {
         const detail = (val) => {
 
-            let jsonVal = val ? JSON.parse(val):""
+            let jsonVal = val ? JSON.parse(val) : ""
             return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
         }
         let total = 0;
@@ -56,24 +63,49 @@ class ProductDetail extends Component {
                     <Table>
                         <TableContainer>
                             <TableRow>
-                                <TableCell style={{borderBottom:"none"}}>
-                                    <FormLabel style={{color: 'wheat'}}> Product Id : {this.props.location.id} </FormLabel>
+                                <TableCell style={{borderBottom: "none"}}>
+                                    <FormLabel style={{color: 'wheat'}}> Product Id
+                                        : {this.props.location.id} </FormLabel>
                                 </TableCell>
-                                <TableCell style={{borderBottom:"none"}}>
-                                    <FormLabel style={{color: 'wheat'}}> Name : {detail(this.state.product.title)} </FormLabel>
+                                <TableCell style={{borderBottom: "none"}}>
+                                    <FormLabel style={{color: 'wheat'}}> Name
+                                        : {detail(this.state.product.title)} </FormLabel>
+
+
                                 </TableCell>
                             </TableRow>
-                            <TableRow>
-                                <TableCell style={{borderBottom:"none"}}>
-                                    <FormLabel style={{color: 'wheat'}}> Price : Rs {this.state.product.price} </FormLabel>
+                            <TableRow style={{color: 'wheat'}}>
+                                {/*<CustomTextField*/}
+                                {/*    id="productName"*/}
+                                {/*    value={detail(this.state.product.title)}*/}
+                                {/*    onChange={this.productNameChange}*/}
+                                {/*    margin="normal"*/}
+                                {/*/>*/}
+                                <TableCell style={{borderBottom: "none"}}>
+                                    <TextField
+                                        id="productName"
+                                        default={detail(this.state.product.title)}
+                                        value={detail(this.state.product.title)}
+                                        onChange={this.productNameChange}
+                                        color='secondary'
+                                    />
                                 </TableCell>
-                                <TableCell style={{borderBottom:"none"}}>
-                                    <FormLabel style={{color: 'wheat'}}> Created : {this.state.product.createdAt} </FormLabel>
+
+                            </TableRow>
+                            <TableRow>
+                                <TableCell style={{borderBottom: "none"}}>
+                                    <FormLabel style={{color: 'wheat'}}> Price :
+                                        Rs {this.state.product.price} </FormLabel>
+                                </TableCell>
+                                <TableCell style={{borderBottom: "none"}}>
+                                    <FormLabel style={{color: 'wheat'}}> Created
+                                        : {this.state.product.createdAt} </FormLabel>
                                 </TableCell>
                             </TableRow>
                         </TableContainer>
                     </Table>
                     <Divider/>
+
                 </Container>
             </div>
         );

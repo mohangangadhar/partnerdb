@@ -2,18 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/AppBar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ProductDetail.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ProductList.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Routes.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SideDrawer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/CustomTextField.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Wallet.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/WalletInfo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Header.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/OrderList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProductDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProductDetail.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +47,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
@@ -72,6 +70,12 @@
       <workItem from="1630148275052" duration="27784000" />
       <workItem from="1632129842956" duration="2647000" />
       <workItem from="1632312685278" duration="22896000" />
+      <workItem from="1633001780427" duration="1325000" />
+      <workItem from="1633100028344" duration="1859000" />
+      <workItem from="1633540324428" duration="5752000" />
+      <workItem from="1633681342645" duration="5830000" />
+      <workItem from="1634479768279" duration="16109000" />
+      <workItem from="1634636269717" duration="5087000" />
     </task>
     <servers />
   </component>
