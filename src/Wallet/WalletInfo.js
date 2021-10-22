@@ -15,6 +15,7 @@ class WalletInfo extends Component {
         this.updateBalance = this.updateBalance.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeWallet = this.handleChangeWallet.bind(this);
+        this.handleChangeType = this.handleChangeType.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
         this.proceedTransaction = this.proceedTransaction.bind(this);
         this.state = {
@@ -41,16 +42,25 @@ class WalletInfo extends Component {
         this.setState({balance: event.target.value})
     }
          handleChangeWallet(event){
-            const name = event.target.name;
+            // const name = event.target.name;
             const value = event.target.value;
              this.setState({
              wallet : { 
                      ...this.state.wallet,
-                     [name] : value,
+                     amount : value,
                     }
              }
              );
              console.log(this.state.wallet);
+         }
+         handleChangeType(event){
+             this.setState({
+                 wallet :{
+                    ...this.state.wallet,
+                    type : event.target.value,
+                 }
+             })
+             console.log(this.state.wallet.type);
          }
          handleChangeDescription(event){
             this.setState({
@@ -192,7 +202,7 @@ class WalletInfo extends Component {
                             <FormLabel style={{color: 'indianred'}}>
                                   Select Withdraw/Deposit
                                 </FormLabel>
-                            <Select name="type" value='withdraw' onChange={this.handleChangeWallet}
+                            <Select name="type" value={this.state.wallet.type} onChange={this.handleChangeType}
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     label="transaction"
