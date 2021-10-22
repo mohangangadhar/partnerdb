@@ -25,6 +25,24 @@ class UserList extends Component {
             startDate: "",
             endDate: "",
         }
+
+        // "id": 105,
+        //     "name": "Ssubramanyam RAJU",
+        //     "email": "ssubramanyamraju@gmail.com",
+        //     "username": null,
+        //     "password": "$2y$10$s86A4Rz3T6O.o4KkCFYXeOgML1hkqyXMIl0EQtNZinQXxQlxbFlby",
+        //     "mobileNumber": "+919908622192",
+        //     "mobileVerified": 0,
+        //     "isVerified": 0,
+        //     "active": 1,
+        //     "language": "en",
+        //     "notification": null,
+        //     "meta": null,
+        //     "rememberToken": null,
+        //     "createdAt": "2021-10-21 04:33:21",
+        //     "updatedAt": "2021-10-21 04:33:21"
+
+
         this.handlePageClick = this.handlePageClick.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
     }
@@ -60,7 +78,7 @@ class UserList extends Component {
             })
         };
 
-        fetch(apiUrl + '/user/', requestOptions)
+        fetch(apiUrl + 'user/', requestOptions)
             .then(response => response.json())
             .then(data =>
                 this.setState({rows: data.content, totalPages: data.totalPages})
@@ -92,21 +110,26 @@ class UserList extends Component {
                                 <TableCell align="center" style={{color: 'wheat'}}>Email</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Mobile</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Verified</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Created</TableCell>
+
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {this.state.rows.map((row, index) => (
                                 <TableRow key={row.id}>
                                     <TableCell>
-                                        <Link to={{
-                                            pathname: '/app/'+this.props.match.params.vendorId+'/order/'+row.id,
-                                            id: row.id
-                                        }}>{row.id}</Link>
+                                        {/*<Link to={{*/}
+                                        {/*    pathname: '/app/'+this.props.match.params.vendorId+'/order/'+row.id,*/}
+                                        {/*    id: row.id*/}
+                                        {/*}}>*/}
+                                            {row.id}
+                                        {/*</Link>*/}
                                     </TableCell>
                                     <TableCell >{row.name}</TableCell>
                                     <TableCell align="center">{row.email}</TableCell>
                                     <TableCell align="center">{row.mobileNumber}</TableCell>
-                                    <TableCell align="center">{row.mobileVerified}</TableCell>
+                                    <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
+                                    <TableCell align="center">{row.createdAt}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -124,4 +147,4 @@ class UserList extends Component {
     }
 }
 
-export default OrderList;
+export default UserList;

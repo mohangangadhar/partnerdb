@@ -29,6 +29,8 @@ import Wallet from "./Wallet/Wallet";
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer} from 'react-notifications';
 import Login from "./Login";
+import UserList from "./users/UserList";
+import PeopleIcon from '@mui/icons-material/People';
 
 
 const drawerWidth = 240;
@@ -141,6 +143,18 @@ export default function MiniDrawer() {
                 <Divider/>
                 <List>
                     <HashRouter>
+                        <ListItem style={{color: "wheat"}} button key="User">
+                            <ListItemIcon>
+                                <Link to={{
+                                    pathname: '/app/user',
+                                    id: "3"
+                                }}><PeopleIcon/></Link>
+                            </ListItemIcon>
+                            <Link to={{
+                                pathname: '/app/user',
+                                id: "3"
+                            }}><ListItemText primary="Users"/></Link>
+                        </ListItem>
                         <ListItem style={{color: "wheat"}} button key="Product">
                             <ListItemIcon>
                                 <Link to={{
@@ -188,6 +202,7 @@ export default function MiniDrawer() {
                             {/*<Route exact path="/" component={Login} />*/}
                             <Route path="/" exact render={() => <Redirect to="/app"/>}/>
                             <Route path="/app/wallet" exact component={Wallet}/>
+                            <Route path="/app/user" exact component={UserList}/>
                             <Route path="/app/:vendorId" exact component={OrderList}/>
                             <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail}/>
                             <Route path="/app/:vendorId/product/" exact component={ProductList}/>
