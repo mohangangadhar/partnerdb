@@ -9,8 +9,6 @@ import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import {Link} from 'react-router-dom';
 import {Box, Button, Grid, Typography} from "@material-ui/core";
-import Picker from "./Picker";
-import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 
 class ProductList extends Component {
 
@@ -27,7 +25,6 @@ class ProductList extends Component {
         }
         this.handlePageClick = this.handlePageClick.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
-//        this.downloadCsvFile = this.downloadCsvFile.bind(this);
     }
 
     // For Pagination
@@ -40,12 +37,6 @@ class ProductList extends Component {
     };
 
     receivedData() {
-        let urlString;
-        // if (this.props.match.params.hasOwnProperty("vendorId")) {
-        //     urlString = this.props.match.params.vendorId === "product"
-        //         ? "product/"
-        //         : "vendor/" + this.props.match.params.vendorId + "/order/"
-        // }
 
         const apiUrl = `https://www.alfanzo.com:443/`
         const requestOptions = {
@@ -61,7 +52,7 @@ class ProductList extends Component {
             })
         };
 
-        fetch(apiUrl + 'product/', requestOptions)
+        fetch(apiUrl + 'user/', requestOptions)
             .then(response => response.json())
             .then(data =>
                 this.setState({rows: data.content, totalPages: data.totalPages})
@@ -71,14 +62,6 @@ class ProductList extends Component {
 
     async componentDidMount() {
         this.receivedData()
-    }
-
-    setStartDate(e) {
-        this.setState({startDate: e.target.value})
-    }
-
-    setEndDate(e) {
-        this.setState({endDate: e.target.value})
     }
 
     handleButtonClick() {

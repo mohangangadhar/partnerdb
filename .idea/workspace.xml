@@ -2,11 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Login.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Verify.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/firebase.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/users/UserList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OrderDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/OrderDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/OrderList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wallet.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WalletInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/WalletInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AppBar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Header.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Item.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Item.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MiniDrawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MiniDrawer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OrderDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/OrderDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/OrderList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Picker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Picker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProductDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/products/ProductDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProductList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/products/ProductList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SideDrawer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sidebar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Wallet.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/Wallet.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WalletInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/WalletInfo.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,14 +58,21 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/users" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/users" />
       <recent name="$PROJECT_DIR$/src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components" />
+      <recent name="$PROJECT_DIR$/src/Wallet" />
+      <recent name="$PROJECT_DIR$/src/products" />
+      <recent name="$PROJECT_DIR$/src/orders" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -71,7 +95,9 @@
       <workItem from="1633540324428" duration="5752000" />
       <workItem from="1633681342645" duration="5830000" />
       <workItem from="1634479768279" duration="16109000" />
-      <workItem from="1634636269717" duration="13936000" />
+      <workItem from="1634636269717" duration="26049000" />
+      <workItem from="1634821461340" duration="487000" />
+      <workItem from="1634889492946" duration="163000" />
     </task>
     <servers />
   </component>

@@ -4,7 +4,7 @@ import {Button, FormLabel, Grid, TableCell, TextField, Typography} from "@materi
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
-import CustomTextField from "./CustomTextField";
+import CustomTextField from "../CustomTextField";
 import {InputOutlined, SearchOutlined} from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
 import {NotificationManager} from "react-notifications";
@@ -14,7 +14,22 @@ class WalletInfo extends Component {
         super(props);
         this.updateBalance = this.updateBalance.bind(this);
         this.state = {
-            data: this.props.data
+            data: this.props.data,
+            wallet: {
+                walletId: "",
+                amount:"",
+                type:"",
+                accepted: 1,
+                meta: {
+                    type: "earnings",
+                    source: "order",
+                    source_id: "",
+                    description: "",
+                    source_amount: 70,
+                    source_payment_type: "Online",
+                    source_title: ""
+                },
+            }
         }
     }
 

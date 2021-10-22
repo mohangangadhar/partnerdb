@@ -7,9 +7,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {Box, Container, Divider, FormControlLabel, FormGroup, FormLabel, TextField} from "@material-ui/core";
-import {Item} from "./Item";
+import {Item} from "../components/Item";
 import {Grid} from "@mui/material";
-import CustomTextField from "./CustomTextField";
+import CustomTextField from "../CustomTextField";
 
 
 class ProductDetail extends Component {

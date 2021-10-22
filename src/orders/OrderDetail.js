@@ -7,7 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {Container, Divider, FormLabel} from "@material-ui/core";
-import {Item} from "./Item";
+import {Item} from "../components/Item";
 
 class OrderDetail extends Component {
 

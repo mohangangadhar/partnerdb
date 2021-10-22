@@ -1,8 +1,8 @@
 import './App.css';
-import OrderDetail from "./OrderDetail";
+import OrderDetail from "./orders/OrderDetail";
 import {HashRouter, Link} from 'react-router-dom';
 import {Redirect, Route, Switch} from 'react-router';
-import OrderList from "./OrderList";
+import OrderList from "./orders/OrderList";
 import * as React from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -21,13 +21,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LunchDining from "@mui/icons-material/LunchDining";
 import {Box, Container} from "@material-ui/core";
-import ProductList from "./ProductList";
+import ProductList from "./products/ProductList";
 import {ShoppingCart} from "@material-ui/icons";
-import ProductDetail from "./ProductDetail";
+import ProductDetail from "./products/ProductDetail";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import Wallet from "./Wallet";
+import Wallet from "./Wallet/Wallet";
 import 'react-notifications/lib/notifications.css';
-import { NotificationContainer } from 'react-notifications';
+import {NotificationContainer} from 'react-notifications';
+import Login from "./Login";
 
 
 const drawerWidth = 240;
@@ -144,58 +145,39 @@ export default function MiniDrawer() {
                             <ListItemIcon>
                                 <Link to={{
                                     pathname: '/app/:vendorId/product',
-                                    id: "4"
+                                    id: "1"
                                 }}><LunchDining/></Link>
                             </ListItemIcon>
                             <Link to={{
                                 pathname: '/app/:vendorId/product',
-                                id: "4"
+                                id: "1"
                             }}><ListItemText primary="Product"/></Link>
                         </ListItem>
                         <ListItem button key="Orders">
                             <ListItemIcon>
                                 <Link to={{
                                     pathname: '/app/order',
-                                    id: "4"
+                                    id: "2"
                                 }}><ShoppingCart/></Link>
                             </ListItemIcon>
                             <Link to={{
                                 pathname: '/app/order',
-                                id: "4"
+                                id: "2"
                             }}><ListItemText primary="Orders"/></Link>
                         </ListItem>
                         <ListItem style={{color: "wheat"}} button key="Wallet">
                             <ListItemIcon>
                                 <Link to={{
                                     pathname: '/app/wallet',
-                                    id: "4"
+                                    id: "3"
                                 }}><AccountBalanceWalletIcon/></Link>
                             </ListItemIcon>
                             <Link to={{
                                 pathname: '/app/wallet',
-                                id: "4"
+                                id: "3"
                             }}><ListItemText primary="Wallet"/></Link>
                         </ListItem>
                     </HashRouter>
-                    {/*    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
-                    {/*        <ListItem button key={text}>*/}
-                    {/*            <ListItemIcon>*/}
-                    {/*                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}*/}
-                    {/*            </ListItemIcon>*/}
-                    {/*            <ListItemText primary={text}/>*/}
-                    {/*        </ListItem>*/}
-                    {/*    ))}*/}
-                    {/*</List>*/}
-                    {/*<Divider/>*/}
-                    {/*<List>*/}
-                    {/*    {['All mail', 'Trash', 'Spam'].map((text, index) => (*/}
-                    {/*        <ListItem button key={text}>*/}
-                    {/*            <ListItemIcon>*/}
-                    {/*                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}*/}
-                    {/*            </ListItemIcon>*/}
-                    {/*            <ListItemText primary={text}/>*/}
-                    {/*        </ListItem>*/}
-                    {/*    ))}*/}
                 </List>
             </Drawer>
             <Box component="main" sx={{flexGrow: 1, p: 3}}>
@@ -203,6 +185,7 @@ export default function MiniDrawer() {
                 <Container maxWidth="md">
                     <HashRouter>
                         <Switch>
+                            {/*<Route exact path="/" component={Login} />*/}
                             <Route path="/" exact render={() => <Redirect to="/app"/>}/>
                             <Route path="/app/wallet" exact component={Wallet}/>
                             <Route path="/app/:vendorId" exact component={OrderList}/>
@@ -214,7 +197,7 @@ export default function MiniDrawer() {
                             {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
                             {/*<Redirect from="*" to="/app/main/dashboard"/>*/}
                         </Switch>
-                        <NotificationContainer />
+                        <NotificationContainer/>
                     </HashRouter>
                 </Container>
 

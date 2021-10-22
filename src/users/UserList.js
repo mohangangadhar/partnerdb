@@ -9,10 +9,10 @@ import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import {Link} from 'react-router-dom';
 import {Box, Button, Grid, Typography} from "@material-ui/core";
-import Picker from "./Picker";
+import Picker from "../components/Picker";
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 
-class OrderList extends Component {
+class UserList extends Component {
 
     constructor(props) {
         super(props);
@@ -26,10 +26,7 @@ class OrderList extends Component {
             endDate: "",
         }
         this.handlePageClick = this.handlePageClick.bind(this);
-        this.setStartDate = this.setStartDate.bind(this);
-        this.setEndDate = this.setEndDate.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
-        this.downloadCsvFile = this.downloadCsvFile.bind(this);
     }
 
     // For Pagination
@@ -43,11 +40,11 @@ class OrderList extends Component {
 
     receivedData() {
         let urlString;
-        if (this.props.match.params.hasOwnProperty("vendorId")) {
-            urlString = this.props.match.params.vendorId === "order"
-                ? "order/"
-                : "vendor/" + this.props.match.params.vendorId + "/order/"
-        }
+        // if (this.props.match.params.hasOwnProperty("vendorId")) {
+        //     urlString = this.props.match.params.vendorId === "order"
+        //         ? "user/"
+        //         : "vendor/" + this.props.match.params.vendorId + "/user/"
+        // }
 
         const apiUrl = `https://www.alfanzo.com:443/`
         const requestOptions = {
@@ -63,7 +60,7 @@ class OrderList extends Component {
             })
         };
 
-        fetch(apiUrl + urlString, requestOptions)
+        fetch(apiUrl + '/user/', requestOptions)
             .then(response => response.json())
             .then(data =>
                 this.setState({rows: data.content, totalPages: data.totalPages})
@@ -74,96 +71,42 @@ class OrderList extends Component {
         this.receivedData()
     }
 
-    setStartDate(e) {
-        this.setState({startDate: e.target.value})
-    }
-
-    setEndDate(e) {
-        this.setState({endDate: e.target.value})
-    }
-
     handleButtonClick() {
         this.receivedData()
-    }
-
-    downloadCsvFile() {
-
-        let urlString;
-        if (this.props.match.params.hasOwnProperty("vendorId")) {
-            urlString = this.props.match.params.vendorId === "order"
-                ? "export/"
-                : "export/" + this.props.match.params.vendorId + "/order/"
-        }
-
-        // const apiUrl = `https://www.alfanzo.com:443/`
-        const apiUrl = `https://localhost:443/`
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                "pageNumber": 0, // Offset is default to 0
-                "pageSize": 150, // Currently number of records set to 150
-                "sortDirection": "asc",
-                "sortByKey": "id",
-                "startDate": this.state.startDate,
-                "endDate": this.state.endDate
-            })
-        };
-
-        fetch(apiUrl + urlString, requestOptions)
-            .then(response => {
-                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
-                response.blob().then(blob => {
-                    let url = window.URL.createObjectURL(blob);
-                    let a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    a.click();
-                });
-            });
     }
 
     render() {
         return (
             <div>
                 <Typography component="h2" variant="h6" style={{color: 'wheat',}} align={"left"} gutterBottom>
-                    Orders
+                    Users
                 </Typography>
-                <Grid container justifyContent="flex-end" component={Paper}>
-                    <Picker dateChange={this.setStartDate} label={"Start Date"}/>
-                    <Picker dateChange={this.setEndDate} label={"End Date"}/>
-                    <Button variant={"contained"} color={"primary"} size={"small"} style={{marginRight: "5px"}}
-                            onClick={this.handleButtonClick}>Show</Button>
-                    <ArrowDownwardOutlinedIcon fontSize={"large"} style={{marginRight: "5px"}}
-                                               onClick={this.downloadCsvFile}/>
-                </Grid>
                 <Box m={1}/>
                 <TableContainer component={Paper}>
                     <Table className="table" aria-label="spanning table">
                         <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
                             <TableRow>
                                 {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
-                                <TableCell style={{color: 'wheat'}}>Order No</TableCell>
                                 <TableCell style={{color: 'wheat'}}>User Id</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Date</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Total</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Status</TableCell>
+                                <TableCell style={{color: 'wheat'}}>Name</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Email</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Mobile</TableCell>
+                                <TableCell align="center" style={{color: 'wheat'}}>Verified</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {this.state.rows.map((row, index) => (
                                 <TableRow key={row.id}>
-                                    {/*<TableCell align="left">{index + 1}</TableCell>*/}
                                     <TableCell>
                                         <Link to={{
                                             pathname: '/app/'+this.props.match.params.vendorId+'/order/'+row.id,
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
-                                    <TableCell >{row.userId}</TableCell>
-                                    <TableCell align="center">{row.createdAt}</TableCell>
-                                    <TableCell align="center">{row.total}</TableCell>
-                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                    <TableCell >{row.name}</TableCell>
+                                    <TableCell align="center">{row.email}</TableCell>
+                                    <TableCell align="center">{row.mobileNumber}</TableCell>
+                                    <TableCell align="center">{row.mobileVerified}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
