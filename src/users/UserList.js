@@ -107,7 +107,7 @@ class UserList extends Component {
                                 {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
                                 <TableCell style={{color: 'wheat'}}>User Id</TableCell>
                                 <TableCell style={{color: 'wheat'}}>Name</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Email</TableCell>
+                                <TableCell align="left" style={{color: 'wheat'}}>Email</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Mobile</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Verified</TableCell>
                                 <TableCell align="center" style={{color: 'wheat'}}>Created</TableCell>
@@ -126,7 +126,7 @@ class UserList extends Component {
                                         {/*</Link>*/}
                                     </TableCell>
                                     <TableCell >{row.name}</TableCell>
-                                    <TableCell align="center">{row.email}</TableCell>
+                                    <TableCell align="left">{row.email}</TableCell>
                                     <TableCell align="center">{row.mobileNumber}</TableCell>
                                     <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
                                     <TableCell align="center">{row.createdAt}</TableCell>

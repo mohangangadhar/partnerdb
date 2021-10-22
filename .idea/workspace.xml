@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="Code Refactor">
-      <change afterPath="$PROJECT_DIR$/src/Login.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Login.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Verify.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/firebase.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/users/UserList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/UserList.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -82,7 +77,7 @@
       <workItem from="1634479768279" duration="16109000" />
       <workItem from="1634636269717" duration="26049000" />
       <workItem from="1634821461340" duration="487000" />
-      <workItem from="1634889492946" duration="3291000" />
+      <workItem from="1634889492946" duration="3613000" />
     </task>
     <task id="LOCAL-00001" summary="Code Refactor">
       <created>1634889718993</created>
