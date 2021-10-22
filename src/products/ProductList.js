@@ -52,7 +52,7 @@ class ProductList extends Component {
             })
         };
 
-        fetch(apiUrl + 'user/', requestOptions)
+        fetch(apiUrl + 'product/', requestOptions)
             .then(response => response.json())
             .then(data =>
                 this.setState({rows: data.content, totalPages: data.totalPages})

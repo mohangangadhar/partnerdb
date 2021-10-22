@@ -51,11 +51,9 @@ class WalletInfo extends Component {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
                 NotificationManager.success('You changes have been updated!', 'Successful!', 1000);
             })
             .catch((error) => {
-                console.error('Error:', error);
                 NotificationManager.error('Error occurred while making your changes, contact support!', 'Error!');
             });
     }

@@ -1,29 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="">
+    <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="Code Refactor">
       <change afterPath="$PROJECT_DIR$/src/Login.css" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Login.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Verify.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/firebase.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/users/UserList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AppBar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Header.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Item.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Item.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MiniDrawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MiniDrawer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OrderDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/OrderDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/OrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/OrderList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Picker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Picker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ProductDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/products/ProductDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ProductList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/products/ProductList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SideDrawer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sidebar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wallet.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/Wallet.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WalletInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/WalletInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Wallet/WalletInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/WalletInfo.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,8 +81,16 @@
       <workItem from="1634479768279" duration="16109000" />
       <workItem from="1634636269717" duration="26049000" />
       <workItem from="1634821461340" duration="487000" />
-      <workItem from="1634889492946" duration="163000" />
+      <workItem from="1634889492946" duration="977000" />
     </task>
+    <task id="LOCAL-00001" summary="Code Refactor">
+      <created>1634889718993</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1634889718993</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -115,5 +107,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Code Refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code Refactor" />
   </component>
 </project>
