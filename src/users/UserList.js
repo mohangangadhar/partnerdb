@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -7,8 +7,8 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import {Link} from 'react-router-dom';
-import {Box, Button, Grid, Typography} from "@material-ui/core";
+import { Link } from 'react-router-dom';
+import { Box, Button, Grid, Typography } from "@material-ui/core";
 import Picker from "../components/Picker";
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 
@@ -51,7 +51,7 @@ class UserList extends Component {
     handlePageClick = (event, value) => {
         value = value - 1 < 0 ? 0 : value - 1
 
-        this.setState({offset: value}, () => {
+        this.setState({ offset: value }, () => {
             this.receivedData()
         });
     };
@@ -67,7 +67,7 @@ class UserList extends Component {
         const apiUrl = `https://www.alfanzo.com:443/`
         const requestOptions = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "pageNumber": this.state.offset,
                 "pageSize": this.state.perPage,
@@ -81,7 +81,7 @@ class UserList extends Component {
         fetch(apiUrl + 'user/', requestOptions)
             .then(response => response.json())
             .then(data =>
-                this.setState({rows: data.content, totalPages: data.totalPages})
+                this.setState({ rows: data.content, totalPages: data.totalPages })
             );
     }
 
@@ -96,21 +96,21 @@ class UserList extends Component {
     render() {
         return (
             <div>
-                <Typography component="h2" variant="h6" style={{color: 'wheat',}} align={"left"} gutterBottom>
+                <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                     Users
                 </Typography>
-                <Box m={1}/>
+                <Box m={1} />
                 <TableContainer component={Paper}>
                     <Table className="table" aria-label="spanning table">
-                        <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
+                        <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                             <TableRow>
                                 {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
-                                <TableCell style={{color: 'wheat'}}>User Id</TableCell>
-                                <TableCell style={{color: 'wheat'}}>Name</TableCell>
-                                <TableCell align="left" style={{color: 'wheat'}}>Email</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Mobile</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Verified</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Created</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>Name</TableCell>
+                                <TableCell align="left" style={{ color: 'wheat' }}>Email</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Mobile</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Verified</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Created</TableCell>
 
                             </TableRow>
                         </TableHead>
@@ -122,7 +122,7 @@ class UserList extends Component {
                                         {/*    pathname: '/app/'+this.props.match.params.vendorId+'/order/'+row.id,*/}
                                         {/*    id: row.id*/}
                                         {/*}}>*/}
-                                            {row.id}
+                                        {row.id}
                                         {/*</Link>*/}
                                     </TableCell>
                                     <TableCell >{row.name}</TableCell>
@@ -135,13 +135,13 @@ class UserList extends Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Box m={2}/>
+                <Box m={2} />
                 <Grid container justifyContent={"center"}>
                     <Pagination variant={"text"} color={"primary"}
-                                count={this.state.totalPages}
-                                onChange={this.handlePageClick}/>
+                        count={this.state.totalPages}
+                        onChange={this.handlePageClick} />
                 </Grid>
-                <Box m={2}/>
+                <Box m={2} />
             </div>
         );
     }

@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -7,13 +7,20 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import {Link} from 'react-router-dom';
-import {Box, Button, Grid, Typography} from "@material-ui/core";
+import { Link } from 'react-router-dom';
+import { Box, Button, Grid, Typography } from "@material-ui/core";
 import Picker from "../components/Picker";
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
-
+import { auth } from "../firebase";
+import { Redirect, useHistory } from 'react-router-dom'
+import { useAuthState } from "react-firebase-hooks/auth";
+// function loginCheck() {
+//     const user = useAuthState(auth);
+//     if (!user) {
+//         return <Redirect to="/app" />
+//     }
+// }
 class OrderList extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -31,16 +38,14 @@ class OrderList extends Component {
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.downloadCsvFile = this.downloadCsvFile.bind(this);
     }
-
     // For Pagination
     handlePageClick = (event, value) => {
         value = value - 1 < 0 ? 0 : value - 1
 
-        this.setState({offset: value}, () => {
+        this.setState({ offset: value }, () => {
             this.receivedData()
         });
     };
-
     receivedData() {
         let urlString;
         if (this.props.match.params.hasOwnProperty("vendorId")) {
@@ -52,7 +57,7 @@ class OrderList extends Component {
         const apiUrl = `https://www.alfanzo.com:443/`
         const requestOptions = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "pageNumber": this.state.offset,
                 "pageSize": this.state.perPage,
@@ -66,7 +71,7 @@ class OrderList extends Component {
         fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data =>
-                this.setState({rows: data.content, totalPages: data.totalPages})
+                this.setState({ rows: data.content, totalPages: data.totalPages })
             );
     }
 
@@ -75,11 +80,11 @@ class OrderList extends Component {
     }
 
     setStartDate(e) {
-        this.setState({startDate: e.target.value})
+        this.setState({ startDate: e.target.value })
     }
 
     setEndDate(e) {
-        this.setState({endDate: e.target.value})
+        this.setState({ endDate: e.target.value })
     }
 
     handleButtonClick() {
@@ -99,7 +104,7 @@ class OrderList extends Component {
         const apiUrl = `https://localhost:443/`
         const requestOptions = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "pageNumber": 0, // Offset is default to 0
                 "pageSize": 150, // Currently number of records set to 150
@@ -126,28 +131,28 @@ class OrderList extends Component {
     render() {
         return (
             <div>
-                <Typography component="h2" variant="h6" style={{color: 'wheat',}} align={"left"} gutterBottom>
+                <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                     Orders
                 </Typography>
                 <Grid container justifyContent="flex-end" component={Paper}>
-                    <Picker dateChange={this.setStartDate} label={"Start Date"}/>
-                    <Picker dateChange={this.setEndDate} label={"End Date"}/>
-                    <Button variant={"contained"} color={"primary"} size={"small"} style={{marginRight: "5px"}}
-                            onClick={this.handleButtonClick}>Show</Button>
-                    <ArrowDownwardOutlinedIcon fontSize={"large"} style={{marginRight: "5px"}}
-                                               onClick={this.downloadCsvFile}/>
+                    <Picker dateChange={this.setStartDate} label={"Start Date"} />
+                    <Picker dateChange={this.setEndDate} label={"End Date"} />
+                    <Button variant={"contained"} color={"primary"} size={"small"} style={{ marginRight: "5px" }}
+                        onClick={this.handleButtonClick}>Show</Button>
+                    <ArrowDownwardOutlinedIcon fontSize={"large"} style={{ marginRight: "5px" }}
+                        onClick={this.downloadCsvFile} />
                 </Grid>
-                <Box m={1}/>
+                <Box m={1} />
                 <TableContainer component={Paper}>
                     <Table className="table" aria-label="spanning table">
-                        <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
+                        <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                             <TableRow>
                                 {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
-                                <TableCell style={{color: 'wheat'}}>Order No</TableCell>
-                                <TableCell style={{color: 'wheat'}}>User Id</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Date</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Total</TableCell>
-                                <TableCell align="center" style={{color: 'wheat'}}>Status</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Date</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -156,7 +161,7 @@ class OrderList extends Component {
                                     {/*<TableCell align="left">{index + 1}</TableCell>*/}
                                     <TableCell>
                                         <Link to={{
-                                            pathname: '/app/'+this.props.match.params.vendorId+'/order/'+row.id,
+                                            pathname: '/app/' + this.props.match.params.vendorId + '/order/' + row.id,
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
@@ -169,13 +174,13 @@ class OrderList extends Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Box m={2}/>
+                <Box m={2} />
                 <Grid container justifyContent={"center"}>
                     <Pagination variant={"text"} color={"primary"}
-                                count={this.state.totalPages}
-                                onChange={this.handlePageClick}/>
+                        count={this.state.totalPages}
+                        onChange={this.handlePageClick} />
                 </Grid>
-                <Box m={2}/>
+                <Box m={2} />
             </div>
         );
     }
