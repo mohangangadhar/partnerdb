@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { TableContainer, Table, TableCell, TableHead, TableBody, TableRow } from '@material-ui/core'
+import {TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, Grid} from '@material-ui/core'
+import Pagination from "@material-ui/lab/Pagination";
 function WalletTransactions({ walletid }) {
-    console.log(walletid);
     const [wallet, setWallet] = useState([]);
     const fetchData = async () => {
         await fetch(`https://www.alfanzo.com:443/wallet/${walletid}/transaction`).
@@ -25,6 +25,7 @@ function WalletTransactions({ walletid }) {
                         <TableRow>
                             <TableCell >Amount</TableCell>
                             <TableCell >Type</TableCell>
+                            <TableCell>Date</TableCell>
                             <TableCell >Description</TableCell>
                         </TableRow>
                     </TableHead>
@@ -33,6 +34,7 @@ function WalletTransactions({ walletid }) {
                             <TableRow key={index}>
                                 <TableCell>{data.amount}</TableCell>
                                 <TableCell>{data.type}</TableCell>
+                                <TableCell>{data.createdAt}</TableCell>
                                 <TableCell>{detail(data.meta)}</TableCell>
                             </TableRow>
                         ))}
