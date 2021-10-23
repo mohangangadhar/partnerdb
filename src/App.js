@@ -199,7 +199,7 @@ export default function MiniDrawer() {
                 <Container maxWidth="md">
                     <HashRouter>
                         <Switch>
-                            {/*<Route exact path="/" component={Login} />*/}
+                            <Route exact path="/app" component={Login} />
                             <Route path="/" exact render={() => <Redirect to="/app"/>}/>
                             <Route path="/app/wallet" exact component={Wallet}/>
                             <Route path="/app/user" exact component={UserList}/>
@@ -210,7 +210,7 @@ export default function MiniDrawer() {
                             {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
                             {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
                             {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
-                            {/*<Redirect from="*" to="/app/main/dashboard"/>*/}
+                            {/* <Redirect from="*" to="/app"/> */}
                         </Switch>
                         <NotificationContainer/>
                     </HashRouter>
