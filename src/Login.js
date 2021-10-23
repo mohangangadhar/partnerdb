@@ -3,6 +3,7 @@ import {Link, useHistory} from "react-router-dom";
 import {auth, signInWithEmailAndPassword, signInWithGoogle} from "./firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
 import "./Login.css";
+import { flexbox } from "@mui/system";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ function Login() {
         if (user) history.replace("/app/order");
     }, [user, loading]);
     return (
-        <div className="login">
+        <div className="login" style={{position:"absolute",top:-70,left :20}}>
             <div className="login__container">
                 <input
                     type="text"
