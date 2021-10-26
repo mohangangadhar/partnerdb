@@ -31,7 +31,8 @@ import {NotificationContainer} from 'react-notifications';
 import Login from "./Login";
 import UserList from "./users/UserList";
 import PeopleIcon from '@mui/icons-material/People';
-
+import DetailOrderList from "./DetailOrder/DetailOrderList";
+import AodIcon from '@mui/icons-material/Aod';
 
 const drawerWidth = 240;
 
@@ -191,6 +192,18 @@ export default function MiniDrawer() {
                                 id: "3"
                             }}><ListItemText primary="Wallet"/></Link>
                         </ListItem>
+                        <ListItem button key="DetailOrders">
+                            <ListItemIcon>
+                                <Link to={{
+                                    pathname: '/app/detail/order',
+                                    id: "4"
+                                }}><AodIcon/></Link>
+                            </ListItemIcon>
+                            <Link to={{
+                                pathname: '/app/detail/order',
+                                id: "4"
+                            }}><ListItemText primary="DetailOrders"/></Link>
+                        </ListItem>
                     </HashRouter>
                 </List>
             </Drawer>
@@ -199,11 +212,12 @@ export default function MiniDrawer() {
                 <Container maxWidth="md">
                     <HashRouter>
                         <Switch>
-                            <Route exact path="/app" component={Login} />
+                            <Route exact path="/app" component={Login}/>
                             <Route path="/" exact render={() => <Redirect to="/app"/>}/>
                             <Route path="/app/wallet" exact component={Wallet}/>
                             <Route path="/app/user" exact component={UserList}/>
                             <Route path="/app/:vendorId" exact component={OrderList}/>
+                            <Route path="/app/detail/order" exact component={DetailOrderList}/>
                             <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail}/>
                             <Route path="/app/:vendorId/product/" exact component={ProductList}/>
                             <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail}/>
