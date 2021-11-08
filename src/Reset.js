@@ -8,11 +8,8 @@ function Reset() {
     const [email, setEmail] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const history = useHistory();
-    useEffect(() => {
-        if (user) history.replace("/dashboard");
-    }, [user]);
     return (
-        <div className="reset">
+        <div className="reset" style={{ position: "absolute", top: -70, left: 20 }}>
             <div className="reset__container">
                 <input
                     type="text"

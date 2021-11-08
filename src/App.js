@@ -107,6 +107,7 @@ export default function MiniDrawer() {
     const [user, error] = useAuthState(auth);
     const history = useHistory();
     const logout = () => {
+        alert("Signed Out");
         auth.signOut();
     };
     // React.useEffect(() => {
