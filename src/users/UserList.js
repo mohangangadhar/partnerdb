@@ -110,7 +110,7 @@ function UserList(props) {
             <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-                    onChange={() => handlePageClick()} />
+                    onChange={handlePageClick} />
             </Grid>
             <Box m={2} />
         </div>

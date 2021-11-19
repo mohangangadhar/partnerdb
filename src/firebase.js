@@ -1,7 +1,5 @@
 import firebase from "firebase/compat";
-// import { useAuthState } from "react-firebase-hooks/auth";
-// import { useHistory } from "react-router";
-import { Redirect } from "react-router";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBnfBcR77n4URrn2dv-vWnJAIiJwtQCX9M",
   authDomain: "ityme-4f997.firebaseapp.com",
@@ -75,7 +73,6 @@ const sendPasswordResetEmail = async (email) => {
 };
 const logout = () => {
   auth.signOut();
-  <Redirect to="/" />
   alert("signedout");
 };
 export {

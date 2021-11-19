@@ -31,10 +31,11 @@ import { NotificationContainer } from 'react-notifications';
 import Login from "./Login";
 import UserList from "./users/UserList";
 import PeopleIcon from '@mui/icons-material/People';
-// import { Dashboard } from './DashBoard';
+import AodIcon from '@mui/icons-material/Aod';
 import { auth } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Reset from './Reset'
+import DetailOrderList from './DetailOrder/DetailOrderList';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -204,6 +205,18 @@ export default function MiniDrawer() {
                                 id: "3"
                             }}><ListItemText primary="Wallet" /></Link>
                         </ListItem>
+                        <ListItem button key="DetailOrders">
+                            <ListItemIcon>
+                                <Link to={{
+                                    pathname: '/app/detail/order',
+                                    id: "4"
+                                }}><AodIcon /></Link>
+                            </ListItemIcon>
+                            <Link to={{
+                                pathname: '/app/detail/order',
+                                id: "4"
+                            }}><ListItemText primary="DetailOrders" /></Link>
+                        </ListItem>
                     </HashRouter>
                 </List>
             </Drawer>
@@ -217,6 +230,7 @@ export default function MiniDrawer() {
                             <Route path="/app/wallet" user={user} exact component={Wallet} />
                             <Route path="/app/user" exact component={UserList} />
                             <Route exact path="/reset" component={Reset} />
+                            <Route path="/app/detail/order" exact component={DetailOrderList} />
                             <Route path="/app/:vendorId" exact component={OrderList} />
                             <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                             <Route path="/app/:vendorId/product/" exact component={ProductList} />

@@ -6,21 +6,26 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Box, Container, Divider, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
+import Card from '@material-ui/core/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import { Box, Container, Divider, Typography, Button, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
 import { Item } from "../components/Item";
-import { Grid } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 import CustomTextField from "../CustomTextField";
 import { auth } from '../firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 function ProductDetail(props) {
     const [product, setProduct] = useState({});
+    const [productName, setProductName] = useState("");
+    const [productPrice, setProductPrice] = useState("");
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(() => {
-        if (!user) {
-            history.push("/");
-        }
+        // if (!user) {
+        //     history.push("/");
+        // }
         let apiUrl;
         apiUrl = `https://www.alfanzo.com:443/`;
         console.log(props.location.id);
@@ -32,13 +37,31 @@ function ProductDetail(props) {
             .then(response => response.json())
             .then(data => {
                 setProduct(data);
+                console.log(data.title);
             }
             );
     }, []);
-    const productNameChange = (e) => {
-        console.log(e.target.value);
-    }
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        let productdata = { title: productName, price: productPrice };
+        console.log(productName + ":" + productPrice);
+        let apiUrl;
+        apiUrl = `https://www.alfanzo.com:443/`;
+        console.log(props.location.id);
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productdata)
+        };
+        await fetch(apiUrl + 'product/' + props.location.id, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setProduct(data);
+                console.log(data.title);
+            }
+            );
 
+    }
     const detail = (val) => {
 
         let jsonVal = val ? JSON.parse(val) : ""
@@ -62,27 +85,7 @@ function ProductDetail(props) {
                             <TableCell style={{ borderBottom: "none" }}>
                                 <FormLabel style={{ color: 'wheat' }}> Name
                                     : {detail(product.title)} </FormLabel>
-
-
                             </TableCell>
-                        </TableRow>
-                        <TableRow style={{ color: 'wheat' }}>
-                            {/*<CustomTextField*/}
-                            {/*    id="productName"*/}
-                            {/*    value={detail( product.title)}*/}
-                            {/*    onChange={this.productNameChange}*/}
-                            {/*    margin="normal"*/}
-                            {/*/>*/}
-                            <TableCell style={{ borderBottom: "none" }}>
-                                <TextField
-                                    id="productName"
-                                    default={detail(product.title)}
-                                    value={detail(product.title)}
-                                    onChange={() => productNameChange()}
-                                    color='secondary'
-                                />
-                            </TableCell>
-
                         </TableRow>
                         <TableRow>
                             <TableCell style={{ borderBottom: "none" }}>
@@ -97,7 +100,35 @@ function ProductDetail(props) {
                     </TableContainer>
                 </Table>
                 <Divider />
-
+                <Box style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Card style={{ minWidth: 300 }}>
+                        <Stack spacing={2}>
+                            <CardContent style={{ marginBottom: -20 }}>
+                                <Typography variant="h5" component="div">
+                                    Edit Product
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <TextField
+                                    id="productName"
+                                    label="Enter Product Name"
+                                    value={productName}
+                                    onChange={(event) => setProductName(event.target.value)}
+                                    variant='filled'
+                                />
+                                <TextField
+                                    id="productName"
+                                    label="Enter Product Price"
+                                    value={productPrice}
+                                    onChange={(event) => setProductPrice(event.target.value)}
+                                    variant='filled'
+                                />
+                                <Button variant='contained' color="primary" onClick={(ev) => handleSubmit(ev)}
+                                >Submit</Button>
+                            </CardActions>
+                        </Stack>
+                    </Card>
+                </Box>
             </Container>
         </div>
     )
