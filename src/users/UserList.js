@@ -65,7 +65,7 @@ class UserList extends Component {
         // }
 
 //        const apiUrl = `https://www.alfanzo.com:443/`
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/`
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-18-188-119-57.us-east-2.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

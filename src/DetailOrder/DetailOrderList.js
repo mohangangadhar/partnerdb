@@ -46,7 +46,7 @@ class DetailOrderList extends Component {
         //         : "vendor/" + this.props.match.params.vendorId + "/order/"
         // }
 
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/order/fb`
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-18-188-119-57.us-east-2.compute.amazonaws.com:8080/`
 //        const apiUrl = `https://localhost:443/order/fb`
         const requestOptions = {
             method: 'GET',

@@ -30,7 +30,7 @@ class Wallet extends React.Component {
 
     searchOrder() {
         this.setState({data: ""});
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/`
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-18-188-119-57.us-east-2.compute.amazonaws.com:8080/`
         // this.set State({loading: true});
         fetch(apiUrl + '/wallet/' + this.state.inputValue)
             .then(res => res.json())
