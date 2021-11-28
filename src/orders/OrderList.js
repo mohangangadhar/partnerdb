@@ -49,7 +49,8 @@ class OrderList extends Component {
                 : "vendor/" + this.props.match.params.vendorId + "/order/"
         }
 
-        const apiUrl = `https://www.alfanzo.com:443/`
+//        const apiUrl = `https://www.alfanzo.com:443/`
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

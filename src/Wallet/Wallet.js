@@ -30,9 +30,9 @@ class Wallet extends React.Component {
 
     searchOrder() {
         this.setState({data: ""});
-
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/`
         // this.set State({loading: true});
-        fetch("https://www.alfanzo.com:443" + '/wallet/' + this.state.inputValue)
+        fetch(apiUrl + '/wallet/' + this.state.inputValue)
             .then(res => res.json())
             .then((data) => {
                 NotificationManager.success('Found it!', 'Successful!', 1000);

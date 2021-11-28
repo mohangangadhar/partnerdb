@@ -30,8 +30,10 @@ class ProductDetail extends Component {
     }
 
     componentDidMount() {
-        let apiUrl;
-        apiUrl = `https://www.alfanzo.com:443/`;
+        // let apiUrl;
+        // apiUrl = `https://www.alfanzo.com:443/`;
+
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/`
         console.log(this.props);
         const requestOptions = {
             method: 'GET',

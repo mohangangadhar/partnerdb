@@ -83,7 +83,8 @@ class WalletInfo extends Component {
         this.state.data.wallet = this.state.wallet;
         this.state.data.wallet.meta = this.state.wallet.meta;
         console.log(this.state.data);
-        fetch(`https://www.alfanzo.com:443/wallet/${this.state.wallet.walletId}/transaction`, {
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/`
+        fetch(apiUrl + `/wallet/${this.state.wallet.walletId}/transaction`, {
             method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json',

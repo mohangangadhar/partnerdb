@@ -3,8 +3,9 @@ import {TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, G
 import Pagination from "@material-ui/lab/Pagination";
 function WalletTransactions({ walletid }) {
     const [wallet, setWallet] = useState([]);
+    const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-138-113-26.us-east-2.compute.amazonaws.com:8080/`
     const fetchData = async () => {
-        await fetch(`https://www.alfanzo.com:443/wallet/${walletid}/transaction`).
+        await fetch(apiUrl + `/wallet/${walletid}/transaction`).
             then(response => response.json()).
             then(data => setWallet(data.content)).catch(error => alert(error));
     };
