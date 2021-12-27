@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="Code Refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orders/OrderDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/OrderDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Wallet/WalletTransactions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/WalletTransactions.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +89,9 @@
       <workItem from="1636126481955" duration="795000" />
       <workItem from="1637857449137" duration="661000" />
       <workItem from="1638123507288" duration="3479000" />
-      <workItem from="1638378962176" duration="19000" />
+      <workItem from="1638378962176" duration="642000" />
+      <workItem from="1638888938147" duration="1875000" />
+      <workItem from="1640596566832" duration="57000" />
     </task>
     <task id="LOCAL-00001" summary="Code Refactor">
       <created>1634889718993</created>
