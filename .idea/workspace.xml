@@ -3,7 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="Code Refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DetailOrder/DetailOrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/DetailOrder/DetailOrderList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Wallet/Wallet.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/Wallet.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Wallet/WalletInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/WalletInfo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Wallet/WalletTransactions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wallet/WalletTransactions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orders/OrderDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/OrderDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orders/OrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/OrderList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/products/ProductDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/products/ProductDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/products/ProductList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/products/ProductList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/UserList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/UserList.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +99,8 @@
       <workItem from="1638123507288" duration="3479000" />
       <workItem from="1638378962176" duration="642000" />
       <workItem from="1638888938147" duration="1875000" />
-      <workItem from="1640596566832" duration="57000" />
+      <workItem from="1640596566832" duration="195000" />
+      <workItem from="1641459114900" duration="267000" />
     </task>
     <task id="LOCAL-00001" summary="Code Refactor">
       <created>1634889718993</created>

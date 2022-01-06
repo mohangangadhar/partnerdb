@@ -39,7 +39,7 @@ class ProductList extends Component {
     receivedData() {
 
         //const apiUrl = `https://www.alfanzo.com:443/`
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-18-188-119-57.us-east-2.compute.amazonaws.com:8080/`
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
