@@ -4,7 +4,7 @@ function WalletTransactions({ walletid }) {
     console.log(walletid);
     const [wallet, setWallet] = useState([]);
     const fetchData = async () => {
-        await fetch(`https://www.alfanzo.com:443/wallet/${walletid}/transaction`).
+        await fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${walletid}/transaction`).
             then(response => response.json()).
             then(data => setWallet(data.content)).catch(error => alert(error));
     };

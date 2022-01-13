@@ -27,7 +27,7 @@ function ProductDetail(props) {
         //     history.push("/");
         // }
         let apiUrl;
-        apiUrl = `https://www.alfanzo.com:443/`;
+        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.location.id);
         const requestOptions = {
             method: 'GET',
@@ -46,7 +46,7 @@ function ProductDetail(props) {
         let productdata = { title: productName, price: productPrice };
         console.log(productName + ":" + productPrice);
         let apiUrl;
-        apiUrl = `https://www.alfanzo.com:443/`;
+        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.location.id);
         const requestOptions = {
             method: 'PUT',
@@ -59,7 +59,7 @@ function ProductDetail(props) {
                 setProduct(data);
                 console.log(data.title);
             }
-            );
+            ).then(history.goBack);
 
     }
     const detail = (val) => {

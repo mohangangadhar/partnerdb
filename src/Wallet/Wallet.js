@@ -32,7 +32,7 @@ function Wallet() {
         setData("");
 
         // this.set State({loading: true});
-        fetch("https://www.alfanzo.com:443" + '/wallet/' + inputValue)
+        fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + inputValue)
             .then(res => res.json())
             .then((data) => {
                 NotificationManager.success('Found it!', 'Successful!', 1000);

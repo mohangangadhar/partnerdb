@@ -35,7 +35,7 @@ function OrderList(props) {
                 ? "order/"
                 : "vendor/" + props.match.params.vendorId + "/order/"
         } console.log(urlString);
-        const apiUrl = `https://www.alfanzo.com:443/`
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -81,7 +81,7 @@ function OrderList(props) {
                 : "export/" + id + "/order/"
         }
 
-        const apiUrl = `https://www.alfanzo.com:443/`
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         // const apiUrl = `https://localhost:443/`
         const requestOptions = {
             method: 'POST',
