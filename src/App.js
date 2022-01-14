@@ -305,18 +305,6 @@ export default function MiniDrawer() {
                                     id: "2"
                                 }}><ListItemText primary="Orders" /></Link>
                             </ListItem>
-                            <ListItem button key="DetailOrders">
-                                <ListItemIcon>
-                                    <Link to={{
-                                        pathname: '/app/detail/order',
-                                        id: "4"
-                                    }}><AodIcon /></Link>
-                                </ListItemIcon>
-                                <Link to={{
-                                    pathname: '/app/detail/order',
-                                    id: "4"
-                                }}><ListItemText primary="DetailOrders" /></Link>
-                            </ListItem>
                         </HashRouter>
                     </List>
                 </Drawer>
@@ -326,7 +314,6 @@ export default function MiniDrawer() {
                         <HashRouter>
                             <Switch>
                                 <Route path="/" exact render={() => <h1 style={{ color: "white" }}>Welcome to Jeevamrut</h1>} />
-                                <Route path="/app/detail/order" exact component={DetailOrderList} />
                                 <Route path="/app/:vendorId" exact component={OrderList} />
                                 <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                 <Route path="/app/:vendorId/product/" exact component={ProductList} />
