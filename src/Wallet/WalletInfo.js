@@ -83,8 +83,12 @@ class WalletInfo extends Component {
         this.state.data.wallet = this.state.wallet;
         this.state.data.wallet.meta = this.state.wallet.meta;
         console.log(this.state.data);
+<<<<<<< HEAD
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         fetch(apiUrl + `/wallet/${this.state.wallet.walletId}/transaction`, {
+=======
+        fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${this.state.wallet.walletId}/transaction`, {
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
             method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json',

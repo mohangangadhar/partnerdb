@@ -1,10 +1,18 @@
 import './App.css';
 import OrderDetail from "./orders/OrderDetail";
+<<<<<<< HEAD
 import {HashRouter, Link} from 'react-router-dom';
 import {Redirect, Route, Switch} from 'react-router';
 import OrderList from "./orders/OrderList";
 import * as React from 'react';
 import {styled, useTheme} from '@mui/material/styles';
+=======
+import { HashRouter, Link } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router';
+import OrderList from "./orders/OrderList";
+import * as React from 'react';
+import { styled, useTheme } from '@mui/material/styles';
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,13 +28,20 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LunchDining from "@mui/icons-material/LunchDining";
+<<<<<<< HEAD
 import {Box, Container} from "@material-ui/core";
 import ProductList from "./products/ProductList";
 import {ShoppingCart} from "@material-ui/icons";
+=======
+import { Box, Container } from "@material-ui/core";
+import ProductList from "./products/ProductList";
+import { ShoppingCart } from "@material-ui/icons";
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
 import ProductDetail from "./products/ProductDetail";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Wallet from "./Wallet/Wallet";
 import 'react-notifications/lib/notifications.css';
+<<<<<<< HEAD
 import {NotificationContainer} from 'react-notifications';
 import Login from "./Login";
 import UserList from "./users/UserList";
@@ -36,6 +51,19 @@ import AodIcon from '@mui/icons-material/Aod';
 
 const drawerWidth = 240;
 
+=======
+import { NotificationContainer } from 'react-notifications';
+import Login from "./Login";
+import UserList from "./users/UserList";
+import Button from '@mui/material/Button';
+import PeopleIcon from '@mui/icons-material/People';
+import AodIcon from '@mui/icons-material/Aod';
+import { auth } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import Reset from './Reset'
+import DetailOrderList from './DetailOrder/DetailOrderList';
+const drawerWidth = 240;
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
 const openedMixin = (theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create('width', {
@@ -57,7 +85,11 @@ const closedMixin = (theme) => ({
     },
 });
 
+<<<<<<< HEAD
 const DrawerHeader = styled('div')(({theme}) => ({
+=======
+const DrawerHeader = styled('div')(({ theme }) => ({
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -65,10 +97,16 @@ const DrawerHeader = styled('div')(({theme}) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
+<<<<<<< HEAD
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
 })(({theme, open}) => ({
+=======
+const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -84,8 +122,13 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
+<<<<<<< HEAD
 const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
     ({theme, open}) => ({
+=======
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
@@ -104,7 +147,21 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+<<<<<<< HEAD
 
+=======
+    const [member, setMember] = React.useState("");
+    const [user, error] = useAuthState(auth);
+    const history = useHistory();
+    let id;
+
+
+    const logout = () => {
+        alert("Signed Out");
+        auth.signOut();
+    };
+    console.log(id);
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -112,6 +169,7 @@ export default function MiniDrawer() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+<<<<<<< HEAD
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -237,3 +295,239 @@ export default function MiniDrawer() {
 
 
 //export default App;
+=======
+    if (user) {
+        id = auth.currentUser.uid;
+        if (id == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
+            return (
+                <Box sx={{ display: 'flex' }}>
+                    <CssBaseline />
+                    <AppBar position="fixed" open={open} style={{ background: '#2E3B55' }}>
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{
+                                    marginRight: '36px',
+                                    ...(open && { display: 'none' }),
+                                }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography style={{ flex: 1 }} variant="h6" noWrap component="div">
+                                Jeevamrut Partner Dashboard
+                            </Typography>
+                            <Button variant="contained" onClick={logout}>LogOut</Button>
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer variant="permanent" open={open} style={{ background: '#2E3B55' }}>
+                        <DrawerHeader>
+                            <IconButton onClick={handleDrawerClose}>
+                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                            </IconButton>
+                        </DrawerHeader>
+                        <Divider />
+                        <List>
+                            <HashRouter>
+                                <ListItem style={{ color: "wheat" }} button key="User">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/user',
+                                            id: "3"
+                                        }}><PeopleIcon /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/user',
+                                        id: "3"
+                                    }}><ListItemText primary="Users" /></Link>
+                                </ListItem>
+                                <ListItem style={{ color: "wheat" }} button key="Product">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/:vendorId/product',
+                                            id: "1"
+                                        }}><LunchDining /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/:vendorId/product',
+                                        id: "1"
+                                    }}><ListItemText primary="Product" /></Link>
+                                </ListItem>
+                                <ListItem button key="Orders">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: `/app/order`,
+                                            id: "2"
+                                        }}><ShoppingCart /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/order`,
+                                        id: "2"
+                                    }}><ListItemText primary="Orders" /></Link>
+                                </ListItem>
+                                <ListItem style={{ color: "wheat" }} button key="Wallet">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/wallet',
+                                            id: "3"
+                                        }}><AccountBalanceWalletIcon /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/wallet',
+                                        id: "3"
+                                    }}><ListItemText primary="Wallet" /></Link>
+                                </ListItem>
+                                <ListItem button key="DetailOrders">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/detail/order',
+                                            id: "4"
+                                        }}><AodIcon /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/detail/order',
+                                        id: "4"
+                                    }}><ListItemText primary="DetailOrders" /></Link>
+                                </ListItem>
+                            </HashRouter>
+                        </List>
+                    </Drawer>
+                    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                        <DrawerHeader />
+                        <Container maxWidth="md">
+                            <HashRouter>
+                                <Switch>
+                                    <Route path="/" exact render={() => <Redirect to="/app/user" />} />
+                                    <Route path="/app/wallet" user={user} exact component={Wallet} />
+                                    <Route path="/app/user" exact component={UserList} />
+                                    <Route exact path="/reset" component={Reset} />
+                                    <Route path="/app/detail/order" exact component={DetailOrderList} />
+                                    <Route path="/app/:vendorId" exact component={OrderList} />
+                                    <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
+                                    <Route path="/app/:vendorId/product/" exact component={ProductList} />
+                                    <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                                    {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
+                                    {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
+                                    {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
+                                    <Redirect from="*" to="/app/user" />
+
+                                </Switch>
+                                <NotificationContainer />
+                            </HashRouter>
+                        </Container>
+
+                    </Box>
+                </Box>
+            );
+        }
+        return (
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar position="fixed" open={open} style={{ background: '#2E3B55' }}>
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{
+                                marginRight: '36px',
+                                ...(open && { display: 'none' }),
+                            }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography style={{ flex: 1 }} variant="h6" noWrap component="div">
+                            Jeevamrut Partner Dashboard
+                        </Typography>
+                        <Button variant="contained" onClick={logout}>LogOut</Button>
+                    </Toolbar>
+                </AppBar>
+                <Drawer variant="permanent" open={open} style={{ background: '#2E3B55' }}>
+                    <DrawerHeader>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </DrawerHeader>
+                    <Divider />
+                    <List>
+                        <HashRouter>
+                            <ListItem style={{ color: "wheat" }} button key="Product">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/:vendorId/product',
+                                        id: "1"
+                                    }}><LunchDining /></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: '/app/:vendorId/product',
+                                    id: "1"
+                                }}><ListItemText primary="Product" /></Link>
+                            </ListItem>
+                            <ListItem button key="Orders">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/${id}`,
+                                        id: "2"
+                                    }}><ShoppingCart /></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: `/app/${id}`,
+                                    id: "2"
+                                }}><ListItemText primary="Orders" /></Link>
+                            </ListItem>
+                            <ListItem button key="DetailOrders">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/detail/order',
+                                        id: "4"
+                                    }}><AodIcon /></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: '/app/detail/order',
+                                    id: "4"
+                                }}><ListItemText primary="DetailOrders" /></Link>
+                            </ListItem>
+                        </HashRouter>
+                    </List>
+                </Drawer>
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                    <DrawerHeader />
+                    <Container maxWidth="md">
+                        <HashRouter>
+                            <Switch>
+                                <Route path="/" exact render={() => <h1 style={{ color: "white" }}>Welcome to Jeevamrut</h1>} />
+                                <Route path="/app/detail/order" exact component={DetailOrderList} />
+                                <Route path="/app/:vendorId" exact component={OrderList} />
+                                <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
+                                <Route path="/app/:vendorId/product/" exact component={ProductList} />
+                                <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                                <Redirect from="*" to="/" />
+                            </Switch>
+                            <NotificationContainer />
+                        </HashRouter>
+                    </Container>
+
+                </Box>
+            </Box>
+        );
+    }
+    else {
+        return (
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                <HashRouter>
+                    <Switch>
+                        <Route path="/login" exact component={Login} />
+                        <Route exact path="/reset" component={Reset} />
+                        <Redirect from="*" to="/login" />
+                    </Switch>
+                </HashRouter>
+            </Box>
+        )
+    }
+}
+
+// export default App;
+>>>>>>> 25579f4869cacacfc834ccd265af547bd7ce0dde
