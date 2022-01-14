@@ -125,6 +125,130 @@ export default function MiniDrawer() {
     };
     if (user) {
         id = auth.currentUser.uid;
+        if (id == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
+            return (
+                <Box sx={{ display: 'flex' }}>
+                    <CssBaseline />
+                    <AppBar position="fixed" open={open} style={{ background: '#2E3B55' }}>
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{
+                                    marginRight: '36px',
+                                    ...(open && { display: 'none' }),
+                                }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography style={{ flex: 1 }} variant="h6" noWrap component="div">
+                                Jeevamrut Partner Dashboard
+                            </Typography>
+                            <Button variant="contained" onClick={logout}>LogOut</Button>
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer variant="permanent" open={open} style={{ background: '#2E3B55' }}>
+                        <DrawerHeader>
+                            <IconButton onClick={handleDrawerClose}>
+                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                            </IconButton>
+                        </DrawerHeader>
+                        <Divider />
+                        <List>
+                            <HashRouter>
+                                <ListItem style={{ color: "wheat" }} button key="User">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/user',
+                                            id: "3"
+                                        }}><PeopleIcon /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/user',
+                                        id: "3"
+                                    }}><ListItemText primary="Users" /></Link>
+                                </ListItem>
+                                <ListItem style={{ color: "wheat" }} button key="Product">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/:vendorId/product',
+                                            id: "1"
+                                        }}><LunchDining /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/:vendorId/product',
+                                        id: "1"
+                                    }}><ListItemText primary="Product" /></Link>
+                                </ListItem>
+                                <ListItem button key="Orders">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: `/app/order`,
+                                            id: "2"
+                                        }}><ShoppingCart /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/order`,
+                                        id: "2"
+                                    }}><ListItemText primary="Orders" /></Link>
+                                </ListItem>
+                                <ListItem style={{ color: "wheat" }} button key="Wallet">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/wallet',
+                                            id: "3"
+                                        }}><AccountBalanceWalletIcon /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/wallet',
+                                        id: "3"
+                                    }}><ListItemText primary="Wallet" /></Link>
+                                </ListItem>
+                                <ListItem button key="DetailOrders">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/detail/order',
+                                            id: "4"
+                                        }}><AodIcon /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/detail/order',
+                                        id: "4"
+                                    }}><ListItemText primary="DetailOrders" /></Link>
+                                </ListItem>
+                            </HashRouter>
+                        </List>
+                    </Drawer>
+                    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                        <DrawerHeader />
+                        <Container maxWidth="md">
+                            <HashRouter>
+                                <Switch>
+                                    <Route path="/" exact render={() => <Redirect to="/app/user" />} />
+                                    <Route path="/app/wallet" user={user} exact component={Wallet} />
+                                    <Route path="/app/user" exact component={UserList} />
+                                    <Route exact path="/reset" component={Reset} />
+                                    <Route path="/app/detail/order" exact component={DetailOrderList} />
+                                    <Route path="/app/:vendorId" exact component={OrderList} />
+                                    <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
+                                    <Route path="/app/:vendorId/product/" exact component={ProductList} />
+                                    <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                                    {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
+                                    {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
+                                    {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
+                                    <Redirect from="*" to="/app/user" />
+
+                                </Switch>
+                                <NotificationContainer />
+                            </HashRouter>
+                        </Container>
+
+                    </Box>
+                </Box>
+            );
+        }
         return (
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
@@ -157,18 +281,6 @@ export default function MiniDrawer() {
                     <Divider />
                     <List>
                         <HashRouter>
-                            <ListItem style={{ color: "wheat" }} button key="User">
-                                <ListItemIcon>
-                                    <Link to={{
-                                        pathname: '/app/user',
-                                        id: "3"
-                                    }}><PeopleIcon /></Link>
-                                </ListItemIcon>
-                                <Link to={{
-                                    pathname: '/app/user',
-                                    id: "3"
-                                }}><ListItemText primary="Users" /></Link>
-                            </ListItem>
                             <ListItem style={{ color: "wheat" }} button key="Product">
                                 <ListItemIcon>
                                     <Link to={{
@@ -193,18 +305,6 @@ export default function MiniDrawer() {
                                     id: "2"
                                 }}><ListItemText primary="Orders" /></Link>
                             </ListItem>
-                            <ListItem style={{ color: "wheat" }} button key="Wallet">
-                                <ListItemIcon>
-                                    <Link to={{
-                                        pathname: '/app/wallet',
-                                        id: "3"
-                                    }}><AccountBalanceWalletIcon /></Link>
-                                </ListItemIcon>
-                                <Link to={{
-                                    pathname: '/app/wallet',
-                                    id: "3"
-                                }}><ListItemText primary="Wallet" /></Link>
-                            </ListItem>
                             <ListItem button key="DetailOrders">
                                 <ListItemIcon>
                                     <Link to={{
@@ -225,20 +325,13 @@ export default function MiniDrawer() {
                     <Container maxWidth="md">
                         <HashRouter>
                             <Switch>
-                                <Route path="/" exact render={() => <Redirect to="/app/user" />} />
-                                <Route path="/app/wallet" user={user} exact component={Wallet} />
-                                <Route path="/app/user" exact component={UserList} />
-                                <Route exact path="/reset" component={Reset} />
+                                <Route path="/" exact render={() => <h1 style={{ color: "white" }}>Welcome to Jeevamrut</h1>} />
                                 <Route path="/app/detail/order" exact component={DetailOrderList} />
                                 <Route path="/app/:vendorId" exact component={OrderList} />
                                 <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                 <Route path="/app/:vendorId/product/" exact component={ProductList} />
                                 <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
-                                {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
-                                {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
-                                {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
-                                <Redirect from="*" to="/app/user" />
-
+                                <Redirect from="*" to="/" />
                             </Switch>
                             <NotificationContainer />
                         </HashRouter>
