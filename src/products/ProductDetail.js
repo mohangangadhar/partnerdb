@@ -93,8 +93,8 @@ function ProductDetail(props) {
                                     Rs {product.price} </FormLabel>
                             </TableCell>
                             <TableCell style={{ borderBottom: "none" }}>
-                                <FormLabel style={{ color: 'wheat' }}> Created
-                                    : {product.createdAt} </FormLabel>
+                                <FormLabel style={{ color: 'wheat' }}> Stock Quantity
+                                    : {product.stockQuantity} </FormLabel>
                             </TableCell>
                         </TableRow>
                     </TableContainer>

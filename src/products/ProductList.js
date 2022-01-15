@@ -13,6 +13,7 @@ import Picker from "../components/Picker";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
+import CircularProgress from '@mui/material/CircularProgress';
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 function ProductList(props) {
     const [rows, setRows] = useState([]);
@@ -28,36 +29,37 @@ function ProductList(props) {
         receivedData();
     };
     const receivedData = () => {
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "pageNumber": offSet,
-                "pageSize": perPage,
-                "sortDirection": "asc",
-                "sortByKey": "id",
-                "startDate": startDate,
-                "endDate": endDate
-            })
-        };
+        let urlString;
+        if (props.match.params.hasOwnProperty("vendorId")) {
+            urlString = props.match.params.vendorId === ":vendorId"
+                ? "product/"
+                : "vendor-product-m/" + props.match.params.vendorId + "/query?size=10&page=1";
+        }
 
-        fetch(apiUrl + 'product/', requestOptions)
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
+        console.log(urlString);
+        let requestOptions;
+        requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+
+
+        fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
+                console.log(data.content);
                 setRows(data.content);
                 setTotalPages(data.totalPages);
             });
-        console.log(rows, totalPages);
+
     }
     const [user] = useAuthState(auth);
     const history = useHistory();
-    useEffect(async () => {
-        // if (!user) {
-        //     console.log(user);
-        //     history.replace("/");
-        // }
-        receivedData()
+    useEffect(() => {
+        receivedData();
     }, []);
 
 
@@ -85,22 +87,27 @@ function ProductList(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>sellsCount</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={row.id}>
-                                {/*<TableCell align="left">{index + 1}</TableCell>*/}
-                                <TableCell>
-                                    <Link to={{
-                                        pathname: '/app/' + props.match.params.vendorId + '/product/' + row.id,
-                                        id: row.id
-                                    }}>{row.id}</Link>
-                                </TableCell>
-                                <TableCell align="left">{detail(row.title)}</TableCell>
-                                <TableCell align="center">{row.price}</TableCell>
-                                <TableCell align="center">{row.sellsCount}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
+                    {rows.length > 2 ?
+                        <TableBody>
+                            {rows.map((row, index) => (
+                                <TableRow key={row.product.id}>
+                                    {/*<TableCell align="left">{index + 1}</TableCell>*/}
+                                    <TableCell>
+                                        <Link to={{
+                                            pathname: '/app/' + props.match.params.vendorId + '/product/' + row.id,
+                                            id: row.product.id
+                                        }}>{row.id}</Link>
+                                    </TableCell>
+                                    <TableCell align="left">{detail(row.product.title)}</TableCell>
+                                    <TableCell align="center">{row.product.price}</TableCell>
+                                    <TableCell align="center">{row.product.sellsCount}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody> :
+                        <center>
+                            <CircularProgress />
+                        </center>
+                    }
                 </Table>
             </TableContainer>
             <Box m={2} />

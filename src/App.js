@@ -284,12 +284,12 @@ export default function MiniDrawer() {
                             <ListItem style={{ color: "wheat" }} button key="Product">
                                 <ListItemIcon>
                                     <Link to={{
-                                        pathname: '/app/:vendorId/product',
+                                        pathname: `/app/${id}/product`,
                                         id: "1"
                                     }}><LunchDining /></Link>
                                 </ListItemIcon>
                                 <Link to={{
-                                    pathname: '/app/:vendorId/product',
+                                    pathname: `/app/${id}/product`,
                                     id: "1"
                                 }}><ListItemText primary="Product" /></Link>
                             </ListItem>
