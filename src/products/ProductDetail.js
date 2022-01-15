@@ -5,6 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import CircularProgress from '@mui/material/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardActions from '@mui/material/CardActions';
@@ -18,8 +19,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 function ProductDetail(props) {
     const [product, setProduct] = useState({});
-    const [productName, setProductName] = useState("");
-    const [productPrice, setProductPrice] = useState("");
+    const [stockQ, setStockQ] = useState(0);
+    const [productPrice, setProductPrice] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(() => {
@@ -29,107 +31,129 @@ function ProductDetail(props) {
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.location.id);
+        let urlString = 'vendor-product-m/' + props.match.params.productId;
+        console.log(apiUrl + urlString);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         };
-        fetch(apiUrl + 'product/' + props.location.id, requestOptions)
+        fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setProduct(data);
-                console.log(data.title);
+                setProductPrice(data.product.price);
+                setStockQ(data.stockQuantity);
             }
             );
     }, []);
     const handleSubmit = async (event) => {
         event.preventDefault();
-        let productdata = { title: productName, price: productPrice };
-        console.log(productName + ":" + productPrice);
+        let productdata = {
+            "productId": product.product.id,
+            "vendorProductId": props.match.params.productId,
+            "price": productPrice,
+            "stockQuantity": stockQ
+        };
+        console.log(stockQ + ":" + productPrice);
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
-        console.log(props.location.id);
+        console.log(props.match.params.productId);
+        let urlString = "vendor-product-m/" + props.match.params.vendorId + "/update";
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(productdata)
         };
-        await fetch(apiUrl + 'product/' + props.location.id, requestOptions)
+        await fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setProduct(data);
-                console.log(data.title);
             }
             ).then(history.goBack);
-
     }
     const detail = (val) => {
-
         let jsonVal = val ? JSON.parse(val) : ""
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
     }
     let total = 0;
+    const styles = theme => ({
+        textField: {
+            width: '90%',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            paddingBottom: 0,
+            marginTop: 0,
+            fontWeight: 500
+        },
+        input: {
+            color: 'white'
+        }
+    });
     return (
         <div>
-            <Container maxWidth="md" fixed={true}>
-                <Grid>
-                    <Item />
-                </Grid>
-                <Box m={2} />
-                <Table>
-                    <TableContainer>
-                        <TableRow>
-                            <TableCell style={{ borderBottom: "none" }}>
-                                <FormLabel style={{ color: 'wheat' }}> Product Id
-                                    : {props.location.id} </FormLabel>
-                            </TableCell>
-                            <TableCell style={{ borderBottom: "none" }}>
-                                <FormLabel style={{ color: 'wheat' }}> Name
-                                    : {detail(product.title)} </FormLabel>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell style={{ borderBottom: "none" }}>
-                                <FormLabel style={{ color: 'wheat' }}> Price :
-                                    Rs {product.price} </FormLabel>
-                            </TableCell>
-                            <TableCell style={{ borderBottom: "none" }}>
-                                <FormLabel style={{ color: 'wheat' }}> Stock Quantity
-                                    : {product.stockQuantity} </FormLabel>
-                            </TableCell>
-                        </TableRow>
-                    </TableContainer>
-                </Table>
-                <Divider />
-                <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Card style={{ minWidth: 300 }}>
-                        <Stack spacing={2}>
-                            <CardContent style={{ marginBottom: -20 }}>
-                                <Typography variant="h5" component="div">
-                                    Edit Product
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <TextField
-                                    id="productName"
-                                    label="Enter Product Name"
-                                    value={productName}
-                                    onChange={(event) => setProductName(event.target.value)}
-                                    variant='filled'
-                                />
-                                <TextField
-                                    id="productName"
-                                    label="Enter Product Price"
-                                    value={productPrice}
-                                    onChange={(event) => setProductPrice(event.target.value)}
-                                    variant='filled'
-                                />
-                                <Button variant='contained' color="primary" onClick={(ev) => handleSubmit(ev)}
-                                >Submit</Button>
-                            </CardActions>
-                        </Stack>
-                    </Card>
-                </Box>
-            </Container>
+            {Object.keys(product).length > 2 && !(loading) ?
+                <Container maxWidth="md" fixed={true}>
+                    <Grid>
+                        <Item />
+                    </Grid>
+                    <Box m={2} />
+                    <Table>
+                        <TableContainer>
+                            <TableRow>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <FormLabel style={{ color: 'wheat' }}> Name
+                                        : {detail(product.product.title)} </FormLabel>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="productName"
+                                        label="Enter Product Price"
+                                        value={productPrice}
+                                        onChange={(event) => setProductPrice(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="productName"
+                                        label="Enter Stock Quantity"
+                                        value={stockQ}
+                                        onChange={(event) => setStockQ(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <Button variant='contained' color="success" onClick={(ev) => {
+                                        setLoading(true);
+                                        handleSubmit(ev);
+                                    }}
+                                    >Submit</Button>
+                                </TableCell>
+                            </TableRow>
+                        </TableContainer>
+                    </Table>
+                </Container> :
+                <center>
+                    <CircularProgress />
+                </center>}
         </div>
     )
 }

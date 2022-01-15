@@ -23,17 +23,12 @@ function ProductList(props) {
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const handlePageClick = (event, value) => {
-        value = value - 1 < 0 ? 0 : value - 1
-        setOffSet(value);
-        receivedData();
-    };
-    const receivedData = () => {
+    const receivedData = (val) => {
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === ":vendorId"
                 ? "product/"
-                : "vendor-product-m/" + props.match.params.vendorId + "/query?size=10&page=1";
+                : "vendor-product-m/" + props.match.params.vendorId + "/query?size=10&page=" + val;
         }
 
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
@@ -45,8 +40,6 @@ function ProductList(props) {
                 'Content-Type': 'application/json',
             },
         }
-
-
         fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
@@ -59,10 +52,8 @@ function ProductList(props) {
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(() => {
-        receivedData();
-    }, []);
-
-
+        receivedData(offSet);
+    }, [offSet]);
     const handleButtonClick = () => {
         receivedData()
     }
@@ -114,7 +105,7 @@ function ProductList(props) {
             <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-                    onChange={handlePageClick} />
+                    onChange={(event, value) => setOffSet(value - 1)} />
             </Grid>
             <Box m={2} />
         </div>
