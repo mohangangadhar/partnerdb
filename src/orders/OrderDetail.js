@@ -67,7 +67,7 @@ function OrderDetail(props) {
             .then(data => {
                 setLoading(false);
             }
-            ).then(history.goBack);
+            );
     }
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
@@ -93,6 +93,9 @@ function OrderDetail(props) {
                                 </TableCell>
                                 <TableCell>
                                     <FormLabel style={{ color: 'wheat' }}>Date: {order.createdAt} </FormLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <FormLabel style={{ color: 'wheat' }}>Current Status: {order.deliveryStatus} </FormLabel>
                                 </TableCell>
                                 <TableCell>
                                     <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
