@@ -25,6 +25,7 @@ function OrderDetail(props) {
     const [loading, setLoading] = useState(false);
     const [user] = useAuthState(auth);
     const history = useHistory();
+    let userId = auth.currentUser.uid;
     useEffect(() => {
         if (!user) {
             history.push("/");
@@ -98,24 +99,41 @@ function OrderDetail(props) {
                                     <FormLabel style={{ color: 'wheat' }}>Current Status: {order.deliveryStatus} </FormLabel>
                                 </TableCell>
                                 <TableCell>
-                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-required-label"
-                                            id="demo-simple-select-disabled"
-                                            value={status}
-                                            onChange={(event) => setStatus(event.target.value)}
-                                            label="Enter Status"
-                                        >
-                                            <MenuItem value="Out For Delivery">
-                                                Out For Delivery
-                                            </MenuItem>
-                                            <MenuItem value="Order Received">Order Received</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                    {userId == "GHS5sVHoRShSE2KmLtvVCGue8X82" ?
+                                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-required-label"
+                                                id="demo-simple-select-disabled"
+                                                value={status}
+                                                onChange={(event) => setStatus(event.target.value)}
+                                                label="Enter Status"
+                                            >
+                                                <MenuItem value="Accepted">
+                                                    Accepted
+                                                </MenuItem>
+                                                <MenuItem value="Cancelled">Cancelled</MenuItem>
+                                            </Select>
+                                        </FormControl> :
+                                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-required-label"
+                                                id="demo-simple-select-disabled"
+                                                value={status}
+                                                onChange={(event) => setStatus(event.target.value)}
+                                                label="Enter Status"
+                                            >
+                                                <MenuItem value="Out For Delivery">
+                                                    Out For Delivery
+                                                </MenuItem>
+                                                <MenuItem value="Order Received">Order Received</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    }
                                 </TableCell>
                             </TableRow>
-                            {props.match.params.vendorId == "GHS5sVHoRShSE2KmLtvVCGue8X82" &&
+                            {userId == "GHS5sVHoRShSE2KmLtvVCGue8X82" &&
                                 <TableRow style={{}}>
                                     <TableCell>
                                         <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
