@@ -4,17 +4,25 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import CircularProgress from '@mui/material/CircularProgress';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
+import { styled } from '@mui/material/styles';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Container, Divider, FormLabel } from "@material-ui/core";
+import { Container, Divider, FormLabel, Button } from "@material-ui/core";
 import { Item } from "../components/Item";
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
+    const [status, setStatus] = useState("");
     const [orderProductList, setOrderProductList] = useState([]);
     const [userData, setUserData] = useState({});
+    const [loading, setLoading] = useState(false);
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(() => {
@@ -38,7 +46,29 @@ function OrderDetail(props) {
                 setUserData(data.user);
             }
             );
-    }, []);
+    }, [loading]);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        console.log(status);
+        let orderdata = {
+            "id": order.id,
+            "status": status.toString()
+        };
+        let apiUrl;
+        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/status`;
+        console.log(props.match.params.productId);
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderdata)
+        };
+        await fetch(apiUrl, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setLoading(false);
+            }
+            ).then(history.goBack);
+    }
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
@@ -50,38 +80,59 @@ function OrderDetail(props) {
     }
     return (
         <div>
-            <Container maxWidth="md" fixed={false}>
-                <Table className="table" aria-label="spanning table">
-                    <TableHead >
-                        <TableRow>
-                            <TableCell>
-                                <Item />
-                            </TableCell>
-                            <TableCell>
-                                <FormLabel style={{ color: 'wheat' }}> Order No : {props.location.id} </FormLabel>
-                            </TableCell>
-                            <TableCell>
-                                <FormLabel style={{ color: 'wheat' }}>Date: {order.createdAt} </FormLabel>
-                            </TableCell>
-                            <TableCell>
-                                <FormLabel style={{ color: 'wheat' }}>Status: {order.deliveryStatus} </FormLabel>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow style={{}}>
-                            <TableCell>
-                                <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
-                            </TableCell>
-                            <TableCell>
-                                <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
-                            </TableCell>
-                            <TableCell>
-                                <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
-                            </TableCell>
-
-                        </TableRow>
-                    </TableHead>
-                </Table>
-            </Container>
+            {Object.keys(order).length > 2 && !(loading) ?
+                <Container maxWidth="md" fixed={false}>
+                    <Table className="table" aria-label="spanning table">
+                        <TableHead >
+                            <TableRow>
+                                <TableCell>
+                                    <Item />
+                                </TableCell>
+                                <TableCell>
+                                    <FormLabel style={{ color: 'wheat' }}> Order No : {props.location.id} </FormLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <FormLabel style={{ color: 'wheat' }}>Date: {order.createdAt} </FormLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-required-label"
+                                            id="demo-simple-select-disabled"
+                                            value={status}
+                                            onChange={(event) => setStatus(event.target.value)}
+                                            label="Enter Status"
+                                        >
+                                            <MenuItem value="Out For Delivery">
+                                                Out For Delivery
+                                            </MenuItem>
+                                            <MenuItem value="Order Received">Order Received</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </TableCell>
+                            </TableRow>
+                            {props.match.params.vendorId == "GHS5sVHoRShSE2KmLtvVCGue8X82" &&
+                                <TableRow style={{}}>
+                                    <TableCell>
+                                        <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
+                                    </TableCell>
+                                </TableRow>
+                            }
+                        </TableHead>
+                    </Table>
+                </Container>
+                :
+                <center>
+                    <CircularProgress />
+                </center>
+            }
             <Divider />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
@@ -104,16 +155,6 @@ function OrderDetail(props) {
                                 <TableCell align="center">{row.total}</TableCell>
                             </TableRow>
                         )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
-                        {/*<TableRow>*/}
-                        {/*    <TableCell rowSpan={3}/>*/}
-                        {/*    <TableCell colSpan={2}>Subtotal</TableCell>*/}
-                        {/*    <TableCell align="right">{120}</TableCell>*/}
-                        {/*</TableRow>*/}
-                        {/*<TableRow>*/}
-                        {/*    <TableCell>Tax</TableCell>*/}
-                        {/*    <TableCell align="right">{`${(0.5 * 100).toFixed(0)} %`}</TableCell>*/}
-                        {/*    <TableCell align="right">{100}</TableCell>*/}
-                        {/*</TableRow>*/}
                         <TableRow>
                             <TableCell rowSpan={3} />
                             <TableCell colSpan={2}>Total</TableCell>
@@ -122,6 +163,13 @@ function OrderDetail(props) {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                <Button variant='contained' color="success" onClick={(ev) => {
+                    setLoading(true);
+                    handleSubmit(ev);
+                }}
+                >Submit</Button>
+            </Container>
         </div>
     )
 }
