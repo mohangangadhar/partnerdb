@@ -7,6 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import Picker from "../components/Picker";
@@ -23,12 +24,7 @@ function OrderList(props) {
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const handlePageClick = (event, value) => {
-        value = value - 1 < 0 ? 0 : value - 1
-        setOffSet(value);
-        receivedData();
-    };
-    const receivedData = () => {
+    const receivedData = (val) => {
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
@@ -40,7 +36,7 @@ function OrderList(props) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "pageNumber": offSet,
+                "pageNumber": val,
                 "pageSize": perPage,
                 "sortDirection": "asc",
                 "sortByKey": "id",
@@ -60,12 +56,12 @@ function OrderList(props) {
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(async () => {
-        if (!user) {
-            console.log(user);
-            history.replace("/");
-        }
-        receivedData()
-    }, []);
+        // if (!user) {
+        //     console.log(user);
+        //     history.replace("/");
+        // }
+        receivedData(offSet)
+    }, [offSet]);
 
 
     const handleButtonClick = () => {
@@ -134,30 +130,36 @@ function OrderList(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={row.id}>
-                                {/*<TableCell align="left">{index + 1}</TableCell>*/}
-                                <TableCell>
-                                    <Link to={{
-                                        pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
-                                        id: row.id
-                                    }}>{row.id}</Link>
-                                </TableCell>
-                                <TableCell >{row.userId}</TableCell>
-                                <TableCell align="center">{row.createdAt}</TableCell>
-                                <TableCell align="center">{row.total}</TableCell>
-                                <TableCell align="center">{row.deliveryStatus}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
+                    {rows.length > 2 ?
+                        <TableBody>
+                            {rows.map((row, index) => (
+                                <TableRow key={row.id}>
+                                    {/*<TableCell align="left">{index + 1}</TableCell>*/}
+                                    <TableCell>
+                                        <Link to={{
+                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
+                                            id: row.id
+                                        }}>{row.id}</Link>
+                                    </TableCell>
+                                    <TableCell >{row.userId}</TableCell>
+                                    <TableCell align="center">{row.createdAt}</TableCell>
+                                    <TableCell align="center">{row.total}</TableCell>
+                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                        :
+                        <center>
+                            <CircularProgress />
+                        </center>
+                    }
                 </Table>
             </TableContainer>
             <Box m={2} />
             <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-                    onChange={handlePageClick} />
+                    onChange={(event, value) => setOffSet(value - 1)} />
             </Grid>
             <Box m={2} />
         </div>

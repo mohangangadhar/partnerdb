@@ -19,7 +19,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 function ProductDetail(props) {
     const [product, setProduct] = useState({});
-    const [stockQ, setStockQ] = useState(0);
+    const [stockQ, setStockQ] = useState("");
     const [productPrice, setProductPrice] = useState(0);
     const [loading, setLoading] = useState(false);
     const [user] = useAuthState(auth);
@@ -42,19 +42,19 @@ function ProductDetail(props) {
             .then(data => {
                 setProduct(data);
                 setProductPrice(data.product.price);
-                setStockQ(data.stockQuantity);
+                setStockQ(data.product.stockQuantity);
             }
             );
     }, []);
     const handleSubmit = async (event) => {
         event.preventDefault();
         let productdata = {
-            "productId": product.product.id,
-            "vendorProductId": props.match.params.productId,
             "price": productPrice,
-            "stockQuantity": stockQ
+            "productId": product.product.id,
+            "stockQuantity": stockQ.toString(),
+            "vendorProductId": product.id.toString()
         };
-        console.log(stockQ + ":" + productPrice);
+        console.log(productdata);
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.match.params.productId);
@@ -67,7 +67,7 @@ function ProductDetail(props) {
         await fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
-                setProduct(data);
+                // setProduct(data);
             }
             ).then(history.goBack);
     }
@@ -76,19 +76,6 @@ function ProductDetail(props) {
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
     }
     let total = 0;
-    const styles = theme => ({
-        textField: {
-            width: '90%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            paddingBottom: 0,
-            marginTop: 0,
-            fontWeight: 500
-        },
-        input: {
-            color: 'white'
-        }
-    });
     return (
         <div>
             {Object.keys(product).length > 2 && !(loading) ?
