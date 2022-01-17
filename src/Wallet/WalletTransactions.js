@@ -25,6 +25,8 @@ function WalletTransactions({ walletid }) {
                         <TableRow>
                             <TableCell >Amount</TableCell>
                             <TableCell >Type</TableCell>
+                            <TableCell >Current Balance</TableCell>
+                            <TableCell >Date</TableCell>
                             <TableCell >Description</TableCell>
                         </TableRow>
                     </TableHead>
@@ -33,6 +35,8 @@ function WalletTransactions({ walletid }) {
                             <TableRow key={index}>
                                 <TableCell>{data.amount}</TableCell>
                                 <TableCell>{data.type}</TableCell>
+                                <TableCell>{data.currentBalance}</TableCell>
+                                <TableCell>{data.createdAt}</TableCell>
                                 <TableCell>{detail(data.meta)}</TableCell>
                             </TableRow>
                         ))}
