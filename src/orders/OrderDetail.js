@@ -196,7 +196,7 @@ function OrderDetail(props) {
             {Object.keys(order).length > 2 && !(isLoading) ?
                 <div>
                     <PDFDownloadLink document={<Invoice order={order} orderProductList={orderProductList}
-                        userData={userData} />} fileName={order.id}>
+                        userData={userData} userId={userId} />} fileName={order.id}>
                         {({ blob, url, loading, error }) => (loading ? 'Loading...' : <Button variant='contained' color="success">Generate Invoice</Button>)}
                     </PDFDownloadLink>
                 </div> : <b>""</b>
