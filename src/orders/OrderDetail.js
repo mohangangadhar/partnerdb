@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { auth } from '../firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
@@ -11,18 +11,20 @@ import TableHead from '@material-ui/core/TableHead';
 import { styled } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import { PDFDownloadLink, Document, Page } from '@react-pdf/renderer';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Container, Divider, FormLabel, Button } from "@material-ui/core";
 import { Item } from "../components/Item";
+import Invoice from '../components/Invoice';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
     const [orderProductList, setOrderProductList] = useState([]);
     const [userData, setUserData] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setisLoading] = useState(false);
     const [user] = useAuthState(auth);
     const history = useHistory();
     let userId = auth.currentUser.uid;
@@ -47,7 +49,7 @@ function OrderDetail(props) {
                 setUserData(data.user);
             }
             );
-    }, [loading]);
+    }, [isLoading]);
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(status);
@@ -66,7 +68,7 @@ function OrderDetail(props) {
         await fetch(apiUrl, requestOptions)
             .then(response => response.json())
             .then(data => {
-                setLoading(false);
+                setisLoading(false);
             }
             );
     }
@@ -81,7 +83,7 @@ function OrderDetail(props) {
     }
     return (
         <div>
-            {Object.keys(order).length > 2 && !(loading) ?
+            {Object.keys(order).length > 2 && !(isLoading) ?
                 <Container maxWidth="md" fixed={false}>
                     <Table className="table" aria-label="spanning table">
                         <TableHead >
@@ -186,12 +188,20 @@ function OrderDetail(props) {
             </TableContainer>
             <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
                 <Button variant='contained' color="success" onClick={(ev) => {
-                    setLoading(true);
+                    setisLoading(true);
                     handleSubmit(ev);
                 }}
                 >Submit</Button>
             </Container>
-        </div>
+            {Object.keys(order).length > 2 && !(isLoading) ?
+                <div>
+                    <PDFDownloadLink document={<Invoice order={order} orderProductList={orderProductList}
+                        userData={userData} />} fileName={order.id}>
+                        {({ blob, url, loading, error }) => (loading ? 'Loading...' : <Button variant='contained' color="success">Generate Invoice</Button>)}
+                    </PDFDownloadLink>
+                </div> : <b>""</b>
+            }
+        </div >
     )
 }
 
