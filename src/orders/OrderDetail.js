@@ -111,10 +111,12 @@ function OrderDetail(props) {
                                                 onChange={(event) => setStatus(event.target.value)}
                                                 label="Enter Status"
                                             >
-                                                <MenuItem value="Accepted">
+                                                <MenuItem value="accepted">
                                                     Accepted
                                                 </MenuItem>
-                                                <MenuItem value="Cancelled">Cancelled</MenuItem>
+                                                <MenuItem value="cancelled">Cancelled</MenuItem>
+                                                <MenuItem value="failed">Failed</MenuItem>
+                                                <MenuItem value="pending">Pending</MenuItem>
                                             </Select>
                                         </FormControl> :
                                         <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>

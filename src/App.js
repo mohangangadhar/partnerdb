@@ -1,5 +1,6 @@
 import './App.css';
 import OrderDetail from "./orders/OrderDetail";
+import Dashboard from './dashboard/Dashboard';
 import { HashRouter, Link } from 'react-router-dom';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
 import OrderList from "./orders/OrderList";
@@ -23,6 +24,7 @@ import LunchDining from "@mui/icons-material/LunchDining";
 import { Box, Container } from "@material-ui/core";
 import ProductList from "./products/ProductList";
 import { ShoppingCart } from "@material-ui/icons";
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import ProductDetail from "./products/ProductDetail";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Wallet from "./Wallet/Wallet";
@@ -156,6 +158,18 @@ export default function MiniDrawer() {
                         <Divider />
                         <List>
                             <HashRouter>
+                                <ListItem style={{ color: "wheat" }} button key="DashBoard">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/dashboard',
+                                            id: "3"
+                                        }}><DashboardIcon /></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/dashboard',
+                                        id: "3"
+                                    }}><ListItemText primary="DashBoard" /></Link>
+                                </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="User">
                                     <ListItemIcon>
                                         <Link to={{
@@ -224,9 +238,10 @@ export default function MiniDrawer() {
                         <Container maxWidth="md">
                             <HashRouter>
                                 <Switch>
-                                    <Route path="/" exact render={() => <Redirect to="/app/user" />} />
+                                    <Route path="/" exact render={() => <Redirect to="/app/dashboard" />} />
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
+                                    <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/detail/order" exact component={DetailOrderList} />
                                     <Route path="/app/:vendorId" exact component={OrderList} />
@@ -237,7 +252,6 @@ export default function MiniDrawer() {
                                     {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
                                     {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
                                     <Redirect from="*" to="/app/user" />
-
                                 </Switch>
                                 <NotificationContainer />
                             </HashRouter>
