@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
+import TableCell, { tableCellClasses } from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -13,7 +13,11 @@ import CardContent from '@mui/material/CardContent';
 import { Box, Container, Divider, Typography, Button, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
 import { Item } from "../components/Item";
 import { Grid, Stack } from "@mui/material";
-import CustomTextField from "../CustomTextField";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 import { auth } from '../firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
@@ -21,6 +25,20 @@ function ProductDetail(props) {
     const [product, setProduct] = useState({});
     const [stockQ, setStockQ] = useState("");
     const [productPrice, setProductPrice] = useState(0);
+    const [gstrate, setGstRate] = useState(0);
+    const [brandName, setBrandName] = useState("");
+    const [manufacturer, setManufacturer] = useState("");
+    const [shelflife, setShelfLife] = useState("");
+    const [instructions, setInstructions] = useState("");
+    const [usages, setUsages] = useState("");
+    const [saleprice, setSalePrice] = useState(0);
+    const [regularprice, setRegularPrice] = useState(0);
+    const [certification, setCertification] = useState("");
+    const [localname, setLocalName] = useState("");
+    const [isNatural, setIsNatural] = useState("");
+    const [uniqueness, setUniqueness] = useState("");
+    const [seed, setSeed] = useState("");
+    const [about, setAbout] = useState("");
     const [loading, setLoading] = useState(false);
     const [user] = useAuthState(auth);
     const history = useHistory();
@@ -43,6 +61,20 @@ function ProductDetail(props) {
                 setProduct(data);
                 setProductPrice(data.product.price);
                 setStockQ(data.product.stockQuantity);
+                setGstRate(data.product.gstRate);
+                setBrandName(data.product.brandName === null ? "" : data.product.brandName);
+                setManufacturer(data.product.manufacturer);
+                setAbout(data.product.about);
+                setShelfLife(data.product.shelfLife);
+                setInstructions(data.product.instructionsToStore);
+                setUsages(data.product.usages);
+                setCertification(data.product.certification);
+                setSeed(data.product.seed);
+                setSalePrice(data.product.salePrice);
+                setRegularPrice(data.product.regularPrice);
+                setUniqueness(data.product.uniqueness);
+                setIsNatural(data.product.isNaturalProduct == 1 ? "Y" : "N");
+                setLocalName(data.product.localName);
             }
             );
     }, []);
@@ -52,7 +84,21 @@ function ProductDetail(props) {
             "price": productPrice,
             "productId": product.product.id,
             "stockQuantity": stockQ.toString(),
-            "vendorProductId": product.id.toString()
+            "vendorProductId": product.id.toString(),
+            "gstRate": gstrate,
+            "brandName": brandName,
+            "manufacturer": manufacturer,
+            "about": about,
+            "shelfLife": shelflife,
+            "instructionsToStore": instructions,
+            "usages": usages,
+            "certification": certification,
+            "seed": seed,
+            "salePrice": saleprice,
+            "regularPrice": regularprice,
+            "localName": localname,
+            "isNaturalProduct": isNatural,
+            "uniqueness": uniqueness
         };
         console.log(productdata);
         let apiUrl;
@@ -112,10 +158,272 @@ function ProductDetail(props) {
                                 </TableCell>
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <TextField
-                                        id="productName"
+                                        id="stockQ"
                                         label="Enter Stock Quantity"
                                         value={stockQ}
                                         onChange={(event) => setStockQ(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="brandName"
+                                        label="Enter BrandName"
+                                        value={brandName}
+                                        onChange={(event) => setBrandName(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="gstrate"
+                                        label="Enter GST Rate"
+                                        value={gstrate}
+                                        onChange={(event) => setGstRate(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="manufacturer"
+                                        label="Manufacturer:"
+                                        multiline
+                                        value={manufacturer}
+                                        onChange={(event) => setManufacturer(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="shelflife"
+                                        label="ShelfLife:"
+                                        multiline
+                                        value={shelflife}
+                                        onChange={(event) => setShelfLife(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={2}>
+                                    <TextField
+                                        fullWidth
+                                        id="instructions"
+                                        label="Instructions To Store:"
+                                        multiline
+                                        value={instructions}
+                                        onChange={(event) => setInstructions(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell >
+                                    <TextField
+                                        id="usages"
+                                        label="Usages:"
+                                        multiline
+                                        value={usages}
+                                        onChange={(event) => setUsages(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="certification"
+                                        label="Enter Certification"
+                                        value={certification}
+                                        onChange={(event) => setCertification(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="seed"
+                                        label="Seed:"
+                                        multiline
+                                        value={seed}
+                                        onChange={(event) => setSeed(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="saleprice"
+                                        label="Sale Price:"
+                                        multiline
+                                        value={saleprice}
+                                        onChange={(event) => setSalePrice(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="regularprice"
+                                        label="Enter Regular Price"
+                                        value={regularprice}
+                                        onChange={(event) => setRegularPrice(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="localname"
+                                        label="Local Name:"
+                                        multiline
+                                        value={localname}
+                                        onChange={(event) => setLocalName(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-required-label"
+                                            id="demo-simple-select-disabled"
+                                            value={isNatural}
+                                            onChange={(event) => setIsNatural(event.target.value)}
+                                            label="Is it Natural?"
+                                        >
+                                            <MenuItem value="Y">
+                                                {isNatural == "Y" ? "Yes" : "Yes"}
+                                            </MenuItem>
+                                            <MenuItem value="N">{isNatural == "N" ? "No" : "No"}</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={3}>
+                                    <TextField
+                                        fullWidth
+                                        id="about"
+                                        label="Write About..."
+                                        multiline
+                                        value={about}
+                                        onChange={(event) => setAbout(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={2}>
+                                    <TextField
+                                        fullWidth
+                                        id="uniqueness"
+                                        label="Write Uniqueness..."
+                                        multiline
+                                        value={uniqueness}
+                                        onChange={(event) => setUniqueness(event.target.value)}
                                         InputProps={{
                                             style: {
                                                 color: "white",
