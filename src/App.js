@@ -342,7 +342,7 @@ export default function MiniDrawer() {
     }
     else {
         return (
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Box component="main">
                 <HashRouter>
                     <Switch>
                         <Route path="/login" exact component={Login} />
