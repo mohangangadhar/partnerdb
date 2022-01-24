@@ -7,6 +7,11 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Grid, Typography } from "@material-ui/core";
@@ -20,12 +25,16 @@ function OrderList(props) {
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
     const [perPage, setPerPage] = useState(10);
+    const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+    const [status, setStatus] = useState("");
+    const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     let userId = auth.currentUser.uid;
-    const receivedData = (val) => {
+    const receivedData = (val, perPageVal) => {
+        console.log(perPageVal);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
@@ -38,18 +47,46 @@ function OrderList(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "pageNumber": val,
-                "pageSize": perPage,
+                "pageSize": perPageVal,
                 "sortDirection": "asc",
                 "sortByKey": "id",
                 "startDate": startDate,
                 "endDate": endDate
             })
         };
-
+        const checkData = (rows) => {
+            if (rows.length == 0) {
+                console.log("Hii");
+                setSearchNotFound(true);
+                setisLoading(false);
+            }
+        }
         fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
-                setRows(data.content);
+                switch (status) {
+                    case "accepted":
+                        setRows(data.content.filter(order => order.deliveryStatus == "accepted"));
+                        checkData(data.content.filter(order => order.deliveryStatus == "accepted"));
+                        break;
+                    case "pending":
+                        setRows(data.content.filter(order => order.deliveryStatus == "pending"));
+                        checkData(data.content.filter(order => order.deliveryStatus == "pending"))
+                        break;
+                    case "failed":
+                        setRows(data.content.filter(order => order.deliveryStatus == "failed"));
+                        checkData(data.content.filter(order => order.deliveryStatus == "failed"))
+                        break;
+                    case "cancelled":
+                        setRows(data.content.filter(order => order.deliveryStatus == "cancelled"));
+                        checkData(data.content.filter(order => order.deliveryStatus == "cancelled"))
+                        break;
+                    default:
+                        setRows(data.content);
+                        checkData(data.content)
+                        break;
+                }
+                setisLoading(false);
                 setTotalPages(data.totalPages);
             });
         console.log(rows, totalPages);
@@ -57,12 +94,12 @@ function OrderList(props) {
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(async () => {
-        // if (!user) {
-        //     console.log(user);
-        //     history.replace("/");
-        // }
-        receivedData(offSet)
-    }, [offSet]);
+        setSearchNotFound(false);
+        if (status == "all" || status == "") { setPerPage(perPage == 50 ? 10 : 10); console.log("all" + perPage) }
+        else { setPerPage(50); }
+        setisLoading(true);
+        receivedData(offSet, perPage);
+    }, [offSet, status, perPage]);
 
 
     const handleButtonClick = () => {
@@ -107,9 +144,32 @@ function OrderList(props) {
     }
     return (
         <div>
-            <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
-                Orders
-            </Typography>
+            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
+                    Orders
+                </Typography>
+                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Status</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-required-label"
+                        style={{ height: 50, color: 'white' }}
+                        id="demo-simple-select-disabled"
+                        value={status}
+                        onChange={(event) => setStatus(event.target.value)}
+                        label="Enter Status"
+                    >
+                        <MenuItem value="all">
+                            All
+                        </MenuItem>
+                        <MenuItem value="accepted">
+                            Accepted
+                        </MenuItem>
+                        <MenuItem value="cancelled">Cancelled</MenuItem>
+                        <MenuItem value="failed">Failed</MenuItem>
+                        <MenuItem value="pending">Pending</MenuItem>
+                    </Select>
+                </FormControl>
+            </div>
             <Grid container justifyContent="flex-end" component={Paper}>
                 <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
                 <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
@@ -131,7 +191,7 @@ function OrderList(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
-                    {rows.length > 2 ?
+                    {rows.length > 2 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (
                                 <TableRow key={row.id}>
@@ -150,9 +210,11 @@ function OrderList(props) {
                             ))}
                         </TableBody>
                         :
-                        <center>
-                            <CircularProgress />
-                        </center>
+                        <div>
+                            <center>
+                                {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
+                            </center>
+                        </div>
                     }
                 </Table>
             </TableContainer>

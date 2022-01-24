@@ -135,7 +135,7 @@ function ProductList(props) {
                         id="searchquery"
                         label="Search"
                         value={searchquery}
-                        onChange={(event) => setSearchQuery(event.target.value)}
+                        onChange={(event) => setSearchQuery((event.target.value).toLowerCase())}
                         InputProps={{
                             style: {
                                 color: "white",

@@ -34,6 +34,7 @@ import Login from "./Login";
 import UserList from "./users/UserList";
 import Button from '@mui/material/Button';
 import PeopleIcon from '@mui/icons-material/People';
+import * as Constants from './constants/Constants'
 import AodIcon from '@mui/icons-material/Aod';
 import { auth } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -115,7 +116,7 @@ export default function MiniDrawer() {
         alert("Signed Out");
         auth.signOut();
     };
-    console.log(id);
+    console.log(Constants.NAMES[0]);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -145,6 +146,9 @@ export default function MiniDrawer() {
                             </IconButton>
                             <Typography style={{ flex: 1 }} variant="h6" noWrap component="div">
                                 Jeevamrut Partner Dashboard
+                            </Typography>
+                            <Typography style={{ fontSize: 20, marginRight: 15, fontStyle: 'italic' }}>
+                                Hii {Constants.NAMES.get(id)}
                             </Typography>
                             <Button variant="contained" onClick={logout}>LogOut</Button>
                         </Toolbar>
@@ -280,6 +284,9 @@ export default function MiniDrawer() {
                         </IconButton>
                         <Typography style={{ flex: 1 }} variant="h6" noWrap component="div">
                             Jeevamrut Partner Dashboard
+                        </Typography>
+                        <Typography style={{ fontSize: 20, marginRight: 15, fontStyle: 'italic' }}>
+                            Hii {Constants.NAMES.get(id)}
                         </Typography>
                         <Button variant="contained" onClick={logout}>LogOut</Button>
                     </Toolbar>
