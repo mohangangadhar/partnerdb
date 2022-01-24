@@ -19,11 +19,12 @@ function OrderList(props) {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
-    const [perPage, serPerPage] = useState(0);
+    const [perPage, setPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    let userId = auth.currentUser.uid;
     const receivedData = (val) => {
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
@@ -71,7 +72,7 @@ function OrderList(props) {
     const downloadCsvFile = () => {
 
         let urlString;
-        if (this.props.match.params.hasOwnProperty("vendorId")) {
+        if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = id === "order"
                 ? "export/"
                 : "export/" + id + "/order/"
