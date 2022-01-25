@@ -7,6 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
+import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -14,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import Picker from "../components/Picker";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
@@ -145,30 +146,58 @@ function OrderList(props) {
     return (
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
-                <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
-                    Orders
-                </Typography>
-                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Status</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-required-label"
-                        style={{ height: 50, color: 'white' }}
-                        id="demo-simple-select-disabled"
-                        value={status}
-                        onChange={(event) => setStatus(event.target.value)}
-                        label="Enter Status"
-                    >
-                        <MenuItem value="all">
-                            All
-                        </MenuItem>
-                        <MenuItem value="accepted">
-                            Accepted
-                        </MenuItem>
-                        <MenuItem value="cancelled">Cancelled</MenuItem>
-                        <MenuItem value="failed">Failed</MenuItem>
-                        <MenuItem value="pending">Pending</MenuItem>
-                    </Select>
-                </FormControl>
+                <div>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "all") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("all");
+                        }
+
+                    }}
+                    >ALL</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "accepted") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("accepted");
+                        }
+
+                    }}
+                    >Accepted</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "cancelled") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("cancelled");
+                        }
+
+                    }}
+                    >Cancelled</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "failed") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("failed");
+                        }
+
+                    }}
+                    >Failed</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "pending") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("pending");
+                        }
+
+                    }}
+                    >Pending</Button>
+                </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
                 <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />

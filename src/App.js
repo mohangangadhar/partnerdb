@@ -113,7 +113,7 @@ export default function MiniDrawer() {
     const history = useHistory();
     let id;
     const logout = () => {
-        alert("Signed Out");
+        history.replace("/login/");
         auth.signOut();
     };
     console.log(Constants.NAMES[0]);
@@ -179,7 +179,8 @@ export default function MiniDrawer() {
                                         <Link to={{
                                             pathname: '/app/user',
                                             id: "3"
-                                        }}><PeopleIcon /></Link>
+                                        }}><PeopleIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Users</h6></Link>
+
                                     </ListItemIcon>
                                     <Link to={{
                                         pathname: '/app/user',
@@ -191,7 +192,8 @@ export default function MiniDrawer() {
                                         <Link to={{
                                             pathname: `/app/${id}/product`,
                                             id: "1"
-                                        }}><LunchDining /></Link>
+                                        }}><LunchDining />
+                                            <h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Products</h6></Link>
                                     </ListItemIcon>
                                     <Link to={{
                                         pathname: `/app/${id}/product`,
@@ -203,7 +205,7 @@ export default function MiniDrawer() {
                                         <Link to={{
                                             pathname: `/app/order`,
                                             id: "2"
-                                        }}><ShoppingCart /></Link>
+                                        }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Orders</h6></Link>
                                     </ListItemIcon>
                                     <Link to={{
                                         pathname: `/app/order`,
@@ -215,7 +217,7 @@ export default function MiniDrawer() {
                                         <Link to={{
                                             pathname: '/app/wallet',
                                             id: "3"
-                                        }}><AccountBalanceWalletIcon /></Link>
+                                        }}><AccountBalanceWalletIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Wallet</h6></Link>
                                     </ListItemIcon>
                                     <Link to={{
                                         pathname: '/app/wallet',
@@ -227,7 +229,7 @@ export default function MiniDrawer() {
                                         <Link to={{
                                             pathname: '/app/detail/order',
                                             id: "4"
-                                        }}><AodIcon /></Link>
+                                        }}><AodIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Detail Order</h6></Link>
                                     </ListItemIcon>
                                     <Link to={{
                                         pathname: '/app/detail/order',
@@ -305,8 +307,9 @@ export default function MiniDrawer() {
                                     <Link to={{
                                         pathname: `/app/${id}/product`,
                                         id: "1"
-                                    }}><LunchDining /></Link>
+                                    }}><LunchDining /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Products</h6></Link>
                                 </ListItemIcon>
+
                                 <Link to={{
                                     pathname: `/app/${id}/product`,
                                     id: "1"
@@ -317,7 +320,7 @@ export default function MiniDrawer() {
                                     <Link to={{
                                         pathname: `/app/${id}`,
                                         id: "2"
-                                    }}><ShoppingCart /></Link>
+                                    }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Orders</h6></Link>
                                 </ListItemIcon>
                                 <Link to={{
                                     pathname: `/app/${id}`,
