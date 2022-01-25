@@ -299,6 +299,7 @@ function ProductList(props) {
                             <TableCell align="left" style={{ color: 'wheat' }}>Title</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Price</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Stock Quantity</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
