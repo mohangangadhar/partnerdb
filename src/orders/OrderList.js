@@ -166,7 +166,7 @@ function OrderList(props) {
                         }
 
                     }}
-                    >Accepted</Button>
+                    >Processing</Button>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
                         if (status == "cancelled") { return; }
@@ -215,8 +215,8 @@ function OrderList(props) {
                             {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
                             <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>

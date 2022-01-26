@@ -18,12 +18,18 @@ import Paper from '@material-ui/core/Paper';
 import { Container, Divider, FormLabel, Button } from "@material-ui/core";
 import { Item } from "../components/Item";
 import Invoice from '../components/Invoice';
+import EditableRow from './EditableRow';
+import ReadOnlyRow from './ReadOnlyRow';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
     const [orderProductList, setOrderProductList] = useState([]);
     const [userData, setUserData] = useState({});
     const [isLoading, setisLoading] = useState(false);
+    const [editContactId, setEditContactId] = useState(null);
+    const [addFormData, setAddFormData] = useState({
+        quantity: 0,
+    });
     const [user] = useAuthState(auth);
     const history = useHistory();
     let userId = auth.currentUser.uid;
@@ -74,6 +80,29 @@ function OrderDetail(props) {
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
+    }
+    const handleEditFormChange = (event) => {
+        event.preventDefault();
+
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+
+        const newFormData = { ...addFormData };
+        newFormData[fieldName] = fieldValue;
+
+        setAddFormData(newFormData);
+    };
+    const handleEditClick = (event, row, index) => {
+        event.preventDefault();
+        setAddFormData({
+            quantity: row.quantity,
+        });
+        setEditContactId(index);
+    }
+
+    const handleFormSubmit = async (event, row) => {
+        event.preventDefault();
+        setEditContactId(null);
     }
     let total = 0;
 
@@ -167,17 +196,16 @@ function OrderDetail(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Qty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Unit Cost</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {orderProductList.length > 0 ? orderProductList.map((row, index) => (
-                            <TableRow key={row.vendorProduct.product.title}>
-                                <TableCell align="left">{index + 1}</TableCell>
-                                <TableCell>{detail(row.vendorProduct.product.title)}</TableCell>
-                                <TableCell align="center">{row.quantity}</TableCell>
-                                <TableCell align="center">{row.vendorProduct.product.price}</TableCell>
-                                <TableCell align="center">{row.total}</TableCell>
-                            </TableRow>
+                            <Fragment>
+                                {editContactId === index ? (
+                                    <EditableRow row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
+                                    <ReadOnlyRow row={row} index={index} handleEditClick={handleEditClick} />}
+                            </Fragment>
                         )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
                         <TableRow>
                             <TableCell rowSpan={3} />

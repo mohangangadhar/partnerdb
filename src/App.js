@@ -28,6 +28,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ProductDetail from "./products/ProductDetail";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Wallet from "./Wallet/Wallet";
+import PersonIcon from '@mui/icons-material/Person';
 import 'react-notifications/lib/notifications.css';
 import { NotificationContainer } from 'react-notifications';
 import Login from "./Login";
@@ -40,6 +41,8 @@ import { auth } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Reset from './Reset'
 import DetailOrderList from './DetailOrder/DetailOrderList';
+import SellerDashBoard from './dashboard/SellerDashboard';
+import SellerProfile from './Profile/SellerProfile';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -302,30 +305,54 @@ export default function MiniDrawer() {
                     <Divider />
                     <List>
                         <HashRouter>
+                            <ListItem style={{ color: "wheat" }} button key="DashBoard">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/sellerdashboard',
+                                        id: "1"
+                                    }}><DashboardIcon /></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: '/app/sellerdashboard',
+                                    id: "1"
+                                }}><ListItemText primary="DashBoard" /></Link>
+                            </ListItem>
                             <ListItem style={{ color: "wheat" }} button key="Product">
                                 <ListItemIcon>
                                     <Link to={{
                                         pathname: `/app/${id}/product`,
-                                        id: "1"
+                                        id: "2"
                                     }}><LunchDining /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Products</h6></Link>
                                 </ListItemIcon>
 
                                 <Link to={{
                                     pathname: `/app/${id}/product`,
-                                    id: "1"
+                                    id: "2"
                                 }}><ListItemText primary="Product" /></Link>
                             </ListItem>
                             <ListItem button key="Orders">
                                 <ListItemIcon>
                                     <Link to={{
                                         pathname: `/app/${id}`,
-                                        id: "2"
+                                        id: "3"
                                     }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Orders</h6></Link>
                                 </ListItemIcon>
                                 <Link to={{
                                     pathname: `/app/${id}`,
-                                    id: "2"
+                                    id: "3"
                                 }}><ListItemText primary="Orders" /></Link>
+                            </ListItem>
+                            <ListItem button key="Orders">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/sellerprofile`,
+                                        id: "4"
+                                    }}><PersonIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Profile</h6></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: `/app/sellerprofile`,
+                                    id: "4"
+                                }}><ListItemText primary="Profile" /></Link>
                             </ListItem>
                         </HashRouter>
                     </List>
@@ -335,7 +362,9 @@ export default function MiniDrawer() {
                     <Container maxWidth="md">
                         <HashRouter>
                             <Switch>
-                                <Route path="/" exact render={() => <h1 style={{ color: "white" }}>Welcome to Jeevamrut</h1>} />
+                                <Route path="/" exact render={() => <Redirect to="/app/sellerdashboard" />} />
+                                <Route path="/app/sellerdashboard" exact component={SellerDashBoard} />
+                                <Route path="/app/sellerprofile" exact component={SellerProfile} />
                                 <Route path="/app/:vendorId" exact component={OrderList} />
                                 <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                 <Route path="/app/:vendorId/product/" exact component={ProductList} />
