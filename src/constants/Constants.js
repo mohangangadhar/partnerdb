@@ -6,6 +6,6 @@ export const NAMES = new Map([
     ["NIgOuTnuZzUOnf23oLisxVFzUfs1", "Organic India"],
     ["lCeqJeaPl6Qh6rDfr12zid1TD243", "Karshaka"],
     ["TgtjQonHYGcCsRlI6jrvo6fFxd23", "Dhriti Organics"],
-    ["dTzOBmhW4PZ0zL0dLWBiCiHzom42", "jeevamrut foods"],
+    ["dTzOBmhW4PZ0zL0dLWBiCiHzom42", "jeevamrut Foods"],
     ["GHS5sVHoRShSE2KmLtvVCGue8X82", "Admin"]
 ]);

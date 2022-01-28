@@ -193,21 +193,24 @@ function ProductDetail(props) {
                             </TableRow>
                             <TableRow>
                                 <TableCell style={{ borderBottom: "none" }}>
-                                    <TextField
-                                        id="gstrate"
-                                        label="Enter GST Rate"
-                                        value={gstrate}
-                                        onChange={(event) => setGstRate(event.target.value)}
-                                        InputProps={{
-                                            style: {
-                                                color: "white",
-                                            }
-                                        }}
-                                        InputLabelProps={{
-                                            style: { color: '#fff' },
-                                        }}
-                                        variant='outlined'
-                                    />
+                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">GST Rate</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-required-label"
+                                            style={{ height: 50, color: 'white' }}
+                                            id="demo-simple-select-disabled"
+                                            value={gstrate}
+                                            onChange={(event) => setGstRate(event.target.value)}
+                                            label="GST Rate"
+                                        >
+                                            <MenuItem value="0">
+                                                0
+                                            </MenuItem>
+                                            <MenuItem value="5">5</MenuItem>
+                                            <MenuItem value="10">10</MenuItem>
+                                            <MenuItem value="20">20</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </TableCell>
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <TextField
@@ -382,6 +385,7 @@ function ProductDetail(props) {
                                         <Select
                                             labelId="demo-simple-select-required-label"
                                             id="demo-simple-select-disabled"
+                                            style={{ height: 50, color: 'white' }}
                                             value={isNatural}
                                             onChange={(event) => setIsNatural(event.target.value)}
                                             label="Is it Natural?"

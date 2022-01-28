@@ -206,6 +206,31 @@ function ProductList(props) {
                 });
         }
     }
+    const downloadCsvFile = () => {
+
+        let urlString;
+        if (props.match.params.hasOwnProperty("vendorId")) {
+            urlString = "export/" + props.match.params.vendorId + "/productexport/";
+        }
+
+        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(apiUrl + urlString, requestOptions)
+            .then(response => {
+                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+                response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+                });
+            });
+    }
     return (
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
@@ -288,7 +313,7 @@ function ProductList(props) {
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
                 <ArrowDownwardOutlinedIcon fontSize={"large"} style={{ marginRight: "5px" }}
-                    onClick={() => { }} />
+                    onClick={() => downloadCsvFile()} />
             </Grid>
             <Box m={1} />
             <TableContainer component={Paper}>
