@@ -94,9 +94,6 @@ function OrderDetail(props) {
     };
     const handleEditClick = (event, row, index) => {
         event.preventDefault();
-        setAddFormData({
-            quantity: row.quantity,
-        });
         setEditContactId(index);
     }
 
@@ -196,6 +193,7 @@ function OrderDetail(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Qty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Unit Cost</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Delivered Quantity</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -204,7 +202,7 @@ function OrderDetail(props) {
                             <Fragment>
                                 {editContactId === index ? (
                                     <EditableRow row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
-                                    <ReadOnlyRow row={row} index={index} handleEditClick={handleEditClick} />}
+                                    <ReadOnlyRow row={row} index={index} addFormData={addFormData} handleEditClick={handleEditClick} />}
                             </Fragment>
                         )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
                         <TableRow>

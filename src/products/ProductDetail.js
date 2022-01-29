@@ -43,9 +43,6 @@ function ProductDetail(props) {
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(() => {
-        // if (!user) {
-        //     history.push("/");
-        // }
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.location.id);
@@ -77,7 +74,7 @@ function ProductDetail(props) {
                 setLocalName(data.product.localName);
             }
             );
-    }, []);
+    }, [loading]);
     const handleSubmit = async (event) => {
         event.preventDefault();
         let productdata = {
@@ -113,9 +110,9 @@ function ProductDetail(props) {
         await fetch(apiUrl + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
-                // setProduct(data);
+                setLoading(false);
             }
-            ).then(history.goBack);
+            );
     }
     const detail = (val) => {
         let jsonVal = val ? JSON.parse(val) : ""

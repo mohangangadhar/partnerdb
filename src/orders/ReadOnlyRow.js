@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 const ReadOnlyRow = ({
     row,
     index,
+    addFormData,
     handleEditClick
 }) => {
     const detail = (val) => {
@@ -19,6 +20,7 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.quantity}</TableCell>
             <TableCell align="center">{row.vendorProduct.product.price}</TableCell>
             <TableCell align="center">{row.total}</TableCell>
+            <TableCell align="center">{addFormData.quantity}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row, index)}>Edit</Button></TableCell>
         </TableRow>
     );

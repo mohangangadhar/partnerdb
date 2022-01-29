@@ -22,6 +22,7 @@ function UserList(props) {
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [errFound, setErrFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
     const receivedData = (val) => {
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
@@ -43,8 +44,10 @@ function UserList(props) {
             .then(data => {
                 setRows(data.content);
                 setTotalPages(data.totalPages);
+                setErrFound(false);
                 setisLoading(false);
-            });
+            }
+            ).catch(err => setErrFound(true));
 
         console.log(rows, totalPages);
     }
@@ -70,7 +73,6 @@ function UserList(props) {
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
-                            {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
                             <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
                             <TableCell style={{ color: 'wheat' }}>Name</TableCell>
                             <TableCell align="left" style={{ color: 'wheat' }}>Email</TableCell>
@@ -102,7 +104,7 @@ function UserList(props) {
                         </TableBody> :
                         <div>
                             <center>
-                                <CircularProgress />
+                                {errFound ? <h1 style={{ color: 'black' }}>Something Gone Wrong</h1> : <CircularProgress />}
                             </center>
                         </div>
                     }

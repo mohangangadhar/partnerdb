@@ -19,15 +19,16 @@ const EditableRow = ({
         <TableRow key={row.vendorProduct.product.title}>
             <TableCell align="left">{index + 1}</TableCell>
             <TableCell>{detail(row.vendorProduct.product.title)}</TableCell>
+            <TableCell>{detail(row.quantity)}</TableCell>
+            <TableCell align="center">{row.vendorProduct.product.price}</TableCell>
+            <TableCell align="center">{row.total}</TableCell>
             <TableCell align="center"><input
                 type="text"
-                placeholder="Enter a name..."
+                placeholder="Enter Delivered Quantity"
                 name="quantity"
                 value={addFormData.quantity}
                 onChange={handleEditFormChange}
             ></input></TableCell>
-            <TableCell align="center">{row.vendorProduct.product.price}</TableCell>
-            <TableCell align="center">{row.total}</TableCell>
             <TableCell align="center"><Button variant="contained" on color="success" onClick={(event) => handleFormSubmit(event, row, index)}>Save</Button></TableCell>
         </TableRow>
     );
