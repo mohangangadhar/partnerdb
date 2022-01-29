@@ -41,7 +41,7 @@ const EditableRow = ({
                     value={addFormData.stockQuantity}
                     onChange={handleEditFormChange}
                 ></input></TableCell>
-            <TableCell align="center"><Button variant="text" color="success">Active</Button></TableCell>
+            {/* <TableCell align="center"><Button variant="text" color="success">Active</Button></TableCell> */}
             <TableCell align="center"><Button variant="contained" on color="success" onClick={(event) => handleFormSubmit(event, row)}>Save</Button></TableCell>
         </TableRow>
     );

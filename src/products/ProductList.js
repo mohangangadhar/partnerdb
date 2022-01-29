@@ -23,7 +23,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
 import CircularProgress from '@mui/material/CircularProgress';
-import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
 function ProductList(props) {
@@ -325,7 +324,7 @@ function ProductList(props) {
                             <TableCell align="left" style={{ color: 'wheat' }}>Title</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Price</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Stock Quantity</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
+                            {/* <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell> */}
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
