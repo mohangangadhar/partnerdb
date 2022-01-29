@@ -28,6 +28,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ProductDetail from "./products/ProductDetail";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Wallet from "./Wallet/Wallet";
+import Wrapper from "./Wrapper"
 import PersonIcon from '@mui/icons-material/Person';
 import 'react-notifications/lib/notifications.css';
 import { NotificationContainer } from 'react-notifications';
@@ -247,7 +248,11 @@ export default function MiniDrawer() {
                         <Container maxWidth="md">
                             <HashRouter>
                                 <Switch>
-                                    <Route path="/" exact render={() => <Redirect to="/app/dashboard" />} />
+                                    <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
+                                    <Route path="/app/wrapper" exact component={Wrapper} />
+                                    <Route path="/app/login" exact component={Login} />
+                                    <Route exact path="/app/reset" component={Reset} />
+
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/dashboard" exact component={Dashboard} />
@@ -260,7 +265,7 @@ export default function MiniDrawer() {
                                     {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
                                     {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
                                     {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
-                                    <Redirect from="*" to="/app/user" />
+                                    {/* <Redirect from="*" to="/app/wrapper" /> */}
                                 </Switch>
                                 <NotificationContainer />
                             </HashRouter>
@@ -362,14 +367,17 @@ export default function MiniDrawer() {
                     <Container maxWidth="md">
                         <HashRouter>
                             <Switch>
-                                <Route path="/" exact render={() => <Redirect to="/app/sellerdashboard" />} />
+                                <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
+                                <Route path="/app/wrapper" exact component={Wrapper} />
+                                <Route path="/app/login" exact component={Login} />
+                                <Route exact path="/app/reset" component={Reset} />
                                 <Route path="/app/sellerdashboard" exact component={SellerDashBoard} />
                                 <Route path="/app/sellerprofile" exact component={SellerProfile} />
                                 <Route path="/app/:vendorId" exact component={OrderList} />
                                 <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                 <Route path="/app/:vendorId/product/" exact component={ProductList} />
                                 <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
-                                <Redirect from="*" to="/" />
+                                {/* <Redirect from="*" to="/app/wrapper" /> */}
                             </Switch>
                             <NotificationContainer />
                         </HashRouter>
@@ -384,9 +392,18 @@ export default function MiniDrawer() {
             <Box component="main">
                 <HashRouter>
                     <Switch>
-                        <Route path="/login" exact component={Login} />
-                        <Route exact path="/reset" component={Reset} />
-                        <Redirect from="*" to="/login" />
+                        <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
+                        <Route path="/app/wrapper" exact component={Wrapper} />
+                        <Route path="/app/login" exact component={Login} />
+                        <Route exact path="/app/reset" component={Reset} />
+                        <Route path="/app/sellerdashboard" exact component={SellerDashBoard} />
+                        <Route path="/app/dashboard" exact component={Dashboard} />
+                        <Route path="/app/sellerprofile" exact component={SellerProfile} />
+                        <Route path="/app/:vendorId" exact component={OrderList} />
+                        <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
+                        <Route path="/app/:vendorId/product/" exact component={ProductList} />
+                        <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                        <Redirect from="*" to="/app/wrapper" />
                     </Switch>
                 </HashRouter>
             </Box>

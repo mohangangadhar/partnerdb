@@ -55,7 +55,15 @@ export default function Login() {
         }
     };
     useEffect(() => {
-        if (user) history.replace("/dashboard");
+
+        if (user) {
+            if (user.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
+                history.replace("/app/dashboard")
+            }
+            else {
+                history.replace("/app/sellerdashboard");
+            }
+        }
     }, [user]);
     if (loading) {
         return (

@@ -210,10 +210,11 @@ function ProductList(props) {
 
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = "export/" + props.match.params.vendorId + "/productexport/";
+            urlString = props.match.params.vendorId == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "export/admin/productexport" : "export/" + props.match.params.vendorId + "/productexport/";
         }
 
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
+        console.log(apiUrl + urlString);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -312,8 +313,8 @@ function ProductList(props) {
                 </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
-                <ArrowDownwardOutlinedIcon fontSize={"large"} style={{ marginRight: "5px" }}
-                    onClick={() => downloadCsvFile()} />
+                <Button variant='contained' color="success" onClick={() => downloadCsvFile()}
+                >Download</Button>
             </Grid>
             <Box m={1} />
             <TableContainer component={Paper}>
