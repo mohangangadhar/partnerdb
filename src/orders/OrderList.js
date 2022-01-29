@@ -35,8 +35,7 @@ function OrderList(props) {
     const [endDate, setEndDate] = useState("");
     let userId = auth.currentUser.uid;
     const receivedData = (val, perPageVal, statusVal) => {
-
-        console.log(statusVal)
+        setSearchNotFound(false);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
@@ -63,6 +62,7 @@ function OrderList(props) {
                 setTotalPages(data.totalPages);
                 console.log(rows, totalPages);
                 setisLoading(false);
+                if (data.content.length == 0) { setSearchNotFound(true) }
             });
 
     }
@@ -117,7 +117,7 @@ function OrderList(props) {
     }
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 5 }}>
                 <div>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
@@ -129,6 +129,16 @@ function OrderList(props) {
 
                     }}
                     >ALL</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "new") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("new");
+                        }
+
+                    }}
+                    >New</Button>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
                         if (status == "accepted") { return; }

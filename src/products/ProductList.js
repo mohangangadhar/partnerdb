@@ -170,18 +170,18 @@ function ProductList(props) {
     }
     const handleSearch = async (event, query) => {
         event.preventDefault();
-        setSearchNotFound(false);
-        setisLoading(true);
+
         console.log(query);
         if (query == "" || query.length == 0) {
             console.log(query.length);
             receivedData(offSet);
             return;
-        } else {
+        } else if (query.length > 2) {
+            setSearchNotFound(false);
+            setisLoading(true);
             if (props.match.params.hasOwnProperty("vendorId")) {
-                urlString = props.match.params.vendorId === ":vendorId"
-                    ? "product/"
-                    : "vendor-product-m/" + props.match.params.vendorId + "/query?size=50&page=0";
+                urlString
+                    = "vendor-product-m/" + props.match.params.vendorId + "/query/";
             }
             let requestOptions;
             console.log(apiUrl + urlString);
@@ -192,14 +192,14 @@ function ProductList(props) {
                 },
             }
             const searchProducts = (data) => {
-                let xyz = data.content.filter((eachprod) =>
-                    detail(eachprod.product.title.toLowerCase()).includes(query));
-                return xyz;
+                console.log(data.length);
+                return data;
             }
-            await fetch(apiUrl + urlString, requestOptions)
+            await fetch(apiUrl + urlString + query, requestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    setRows(searchProducts(data));
+                    console.log(data);
+                    setRows(data);
                     if (searchProducts(data).length == 0) { setSearchNotFound(true); setisLoading(false); console.log("hii"); }
                     setisLoading(false);
                 });
@@ -288,7 +288,10 @@ function ProductList(props) {
                         value={searchquery}
                         onChange={(event) => {
                             setSearchQuery((event.target.value).toLowerCase());
+
                             handleSearch(event, (event.target.value).toLowerCase());
+
+
                         }}
                         InputProps={{
                             style: {
@@ -304,11 +307,6 @@ function ProductList(props) {
                         variant='outlined'
 
                     />
-                    {/* <IconButton onClick={async (ev) => {
-                        handleSearch(ev);
-                    }} type="submit" sx={{ marginTop: 0.8, color: 'white' }} aria-label="search">
-                        <SearchIcon />
-                    </IconButton> */}
                 </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
