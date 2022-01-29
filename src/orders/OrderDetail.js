@@ -32,13 +32,13 @@ function OrderDetail(props) {
     });
     const [user] = useAuthState(auth);
     const history = useHistory();
+
     let userId = auth.currentUser.uid;
+
     useEffect(() => {
-        if (!user) {
-            history.push("/");
+        if (auth.user) {
+            userId = auth.currentUser.uid;
         }
-    }, []);
-    useEffect(() => {
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.location.id);

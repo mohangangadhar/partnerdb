@@ -34,11 +34,12 @@ function OrderList(props) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     let userId = auth.currentUser.uid;
-    const receivedData = (val, perPageVal, status) => {
-        setRows([]);
+    const receivedData = (val, perPageVal, statusVal) => {
+
+        console.log(statusVal)
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = props.match.params.vendorId === "GHS5sVHoRShSE2KmLtvVCGue8X82"
+            urlString = props.match.params.vendorId === "order"
                 ? "order/status/"
                 : "vendor/" + props.match.params.vendorId + "/order/"
         } console.log(urlString);
@@ -55,7 +56,7 @@ function OrderList(props) {
                 "endDate": endDate
             })
         };
-        fetch(apiUrl + urlString + status, requestOptions)
+        fetch(apiUrl + urlString + statusVal, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
@@ -69,6 +70,7 @@ function OrderList(props) {
     const history = useHistory();
     useEffect(async () => {
         setSearchNotFound(false);
+        setRows("");
         // if (status == "all" || status == "") { setPerPage(perPage == 50 ? 10 : 10); console.log("all" + perPage) }
         // else { setPerPage(50); }
         setisLoading(true);
@@ -137,6 +139,16 @@ function OrderList(props) {
 
                     }}
                     >Processing</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "completed") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("complete");
+                        }
+
+                    }}
+                    >Completed</Button>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
                         if (status == "cancelled") { return; }
@@ -167,6 +179,17 @@ function OrderList(props) {
 
                     }}
                     >Delivered</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "prepared") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("prepared");
+                        }
+
+                    }}
+                    >Out for Delivery</Button>
+
                 </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
@@ -188,11 +211,10 @@ function OrderList(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
-                    {rows.length > 2 && !(isLoading) ?
+                    {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (
                                 <TableRow key={row.id}>
-                                    {/*<TableCell align="left">{index + 1}</TableCell>*/}
                                     <TableCell>
                                         <Link to={{
                                             pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
