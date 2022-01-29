@@ -28,18 +28,18 @@ function OrderList(props) {
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState("");
+    const [status, setStatus] = useState("all");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     let userId = auth.currentUser.uid;
-    const receivedData = (val, perPageVal) => {
-        console.log(perPageVal);
+    const receivedData = (val, perPageVal, status) => {
+        setRows([]);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = props.match.params.vendorId === "order"
-                ? "order/"
+            urlString = props.match.params.vendorId === "GHS5sVHoRShSE2KmLtvVCGue8X82"
+                ? "order/status/"
                 : "vendor/" + props.match.params.vendorId + "/order/"
         } console.log(urlString);
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
@@ -48,64 +48,34 @@ function OrderList(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "pageNumber": val,
-                "pageSize": perPageVal,
+                "pageSize": 30,
                 "sortDirection": "asc",
                 "sortByKey": "id",
                 "startDate": startDate,
                 "endDate": endDate
             })
         };
-        const checkData = (rows) => {
-            if (rows.length == 0) {
-                console.log("Hii");
-                setSearchNotFound(true);
-                setisLoading(false);
-            }
-        }
-        fetch(apiUrl + urlString, requestOptions)
+        fetch(apiUrl + urlString + status, requestOptions)
             .then(response => response.json())
             .then(data => {
-                switch (status) {
-                    case "accepted":
-                        setRows(data.content.filter(order => order.deliveryStatus == "accepted"));
-                        checkData(data.content.filter(order => order.deliveryStatus == "accepted"));
-                        break;
-                    case "pending":
-                        setRows(data.content.filter(order => order.deliveryStatus == "pending"));
-                        checkData(data.content.filter(order => order.deliveryStatus == "pending"))
-                        break;
-                    case "failed":
-                        setRows(data.content.filter(order => order.deliveryStatus == "failed"));
-                        checkData(data.content.filter(order => order.deliveryStatus == "failed"))
-                        break;
-                    case "cancelled":
-                        setRows(data.content.filter(order => order.deliveryStatus == "cancelled"));
-                        checkData(data.content.filter(order => order.deliveryStatus == "cancelled"))
-                        break;
-                    default:
-                        setRows(data.content);
-                        checkData(data.content)
-                        break;
-                }
-                setisLoading(false);
+                setRows(data.content);
                 setTotalPages(data.totalPages);
+                console.log(rows, totalPages);
+                setisLoading(false);
             });
-        console.log(rows, totalPages);
+
     }
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(async () => {
         setSearchNotFound(false);
-        if (status == "all" || status == "") { setPerPage(perPage == 50 ? 10 : 10); console.log("all" + perPage) }
-        else { setPerPage(50); }
+        // if (status == "all" || status == "") { setPerPage(perPage == 50 ? 10 : 10); console.log("all" + perPage) }
+        // else { setPerPage(50); }
         setisLoading(true);
-        receivedData(offSet, perPage);
+        receivedData(offSet, perPage, status);
     }, [offSet, status, perPage]);
 
 
-    const handleButtonClick = () => {
-        receivedData()
-    }
 
     const downloadCsvFile = () => {
 
@@ -196,16 +166,14 @@ function OrderList(props) {
                         }
 
                     }}
-                    >Pending</Button>
+                    >Delivered</Button>
                 </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
                 <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
                 <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
                 <Button variant={"contained"} color={"primary"} size={"small"} style={{ marginRight: "5px" }}
-                    onClick={() => handleButtonClick()}>Show</Button>
-                <ArrowDownwardOutlinedIcon fontSize={"large"} style={{ marginRight: "5px" }}
-                    onClick={() => downloadCsvFile()} />
+                    onClick={() => downloadCsvFile()}>Download</Button>
             </Grid>
             <Box m={1} />
             <TableContainer component={Paper}>
