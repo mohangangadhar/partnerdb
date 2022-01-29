@@ -7,7 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import { Link } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import Picker from "../components/Picker";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -22,12 +22,8 @@ function UserList(props) {
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const handlePageClick = (event, value) => {
-        value = value - 1 < 0 ? 0 : value - 1
-        setOffSet(value);
-        receivedData();
-    };
-    const receivedData = () => {
+    const [isLoading, setisLoading] = useState(false);
+    const receivedData = (val) => {
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
@@ -47,18 +43,17 @@ function UserList(props) {
             .then(data => {
                 setRows(data.content);
                 setTotalPages(data.totalPages);
+                setisLoading(false);
             });
+
         console.log(rows, totalPages);
     }
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(async () => {
-        if (!user) {
-            console.log(user);
-            history.replace("/");
-        }
-        receivedData()
-    }, []);
+        setisLoading(true);
+        receivedData(offSet);
+    }, [offSet]);
 
 
     const handleButtonClick = () => {
@@ -85,32 +80,39 @@ function UserList(props) {
 
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={row.id}>
-                                <TableCell>
-                                    {/*<Link to={{*/}
-                                    {/*    pathname: '/app/'+this.props.match.params.vendorId+'/order/'+row.id,*/}
-                                    {/*    id: row.id*/}
-                                    {/*}}>*/}
-                                    {row.id}
-                                    {/*</Link>*/}
-                                </TableCell>
-                                <TableCell >{row.name}</TableCell>
-                                <TableCell align="left">{row.email}</TableCell>
-                                <TableCell align="center">{row.mobileNumber}</TableCell>
-                                <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
-                                <TableCell align="center">{row.createdAt}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
+                    {rows.length > 0 && !(isLoading) ?
+                        <TableBody>
+                            {rows.map((row, index) => (
+                                <TableRow key={row.id}>
+                                    <TableCell>
+                                        {/*<Link to={{*/}
+                                        {/*    pathname: '/app/'+this.props.match.params.vendorId+'/order/'+row.id,*/}
+                                        {/*    id: row.id*/}
+                                        {/*}}>*/}
+                                        {row.id}
+                                        {/*</Link>*/}
+                                    </TableCell>
+                                    <TableCell >{row.name}</TableCell>
+                                    <TableCell align="left">{row.email}</TableCell>
+                                    <TableCell align="center">{row.mobileNumber}</TableCell>
+                                    <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
+                                    <TableCell align="center">{row.createdAt}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody> :
+                        <div>
+                            <center>
+                                <CircularProgress />
+                            </center>
+                        </div>
+                    }
                 </Table>
             </TableContainer>
             <Box m={2} />
             <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-                    onChange={handlePageClick} />
+                    onChange={(event, value) => setOffSet(value - 1)} />
             </Grid>
             <Box m={2} />
         </div>

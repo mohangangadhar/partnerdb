@@ -6,7 +6,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
-import { Box, TextField } from "@material-ui/core";
+import { Box, CircularProgress, TextField } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { SearchOutlined } from "@material-ui/icons";
 import TableBody from "@material-ui/core/TableBody";
@@ -17,22 +17,25 @@ import { auth } from "../firebase";
 function Wallet() {
     const [inputValue, setInputValue] = useState("");
     const [data, setData] = useState("");
+    const [isLoading, setisLoading] = useState(false);
+    let mobile = "+91"
     const updateInputValue = (event) => {
-        setInputValue(event.target.value);
+        setInputValue(mobile + event.target.value.trim());
     }
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(async () => {
-        if (!user) {
-            console.log(user);
-            history.replace("/");
-        }
+        // if (!user) {
+        //     console.log(user);
+        //     history.replace("/");
+        // }
     }, []);
     const searchOrder = () => {
         setData("");
-
+        let verifyNumber = inputValue.trim();
+        console.log(verifyNumber);
         // this.set State({loading: true});
-        fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + inputValue)
+        fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + verifyNumber)
             .then(res => res.json())
             .then((data) => {
                 NotificationManager.success('Found it!', 'Successful!', 1000);
@@ -58,6 +61,9 @@ function Wallet() {
                                 defaultValue="Enter Phone Number"
                                 onChange={(evt) => updateInputValue(evt)}
                                 InputProps={{
+                                    startAdornment: (
+                                        <p>+91</p>
+                                    ),
                                     endAdornment: (
                                         <IconButton>
                                             <SearchOutlined
@@ -72,9 +78,13 @@ function Wallet() {
             </Table>
             <Box m={2} />
             {(data.name !== undefined || data !== "") ?
-                <WalletInfo data={data} /> : ""}
+                <WalletInfo data={data} /> :
+                <div>
+                    {inputValue.length <= 5 ? <center><h3>Enter Mobile Number</h3></center> :
+                        <CircularProgress />
+                    }
+                </div>}
             <Box m={2} />
-            { }
         </TableContainer>
     )
 }
