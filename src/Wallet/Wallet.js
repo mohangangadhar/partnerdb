@@ -58,7 +58,6 @@ function Wallet() {
                                 fullWidth
                                 id="standard-bare"
                                 variant="outlined"
-                                defaultValue="Enter Phone Number"
                                 onChange={(evt) => updateInputValue(evt)}
                                 InputProps={{
                                     startAdornment: (

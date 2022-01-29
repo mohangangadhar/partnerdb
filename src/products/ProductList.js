@@ -206,10 +206,10 @@ function ProductList(props) {
         }
     }
     const downloadCsvFile = () => {
-
+        setisLoading(true);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = props.match.params.vendorId == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "export/admin/productexport" : "export/" + props.match.params.vendorId + "/productexport/";
+            urlString = props.match.params.vendorId == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "export/admin/productexport/" : "export/" + props.match.params.vendorId + "/productexport/";
         }
 
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
@@ -229,6 +229,7 @@ function ProductList(props) {
                     a.download = filename;
                     a.click();
                 });
+                setisLoading(false);
             });
     }
     return (

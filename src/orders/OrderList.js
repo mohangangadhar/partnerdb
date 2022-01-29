@@ -33,7 +33,10 @@ function OrderList(props) {
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    let userId = auth.currentUser.uid;
+    let userId;
+    if (auth.user) {
+        userId = auth.currentUser.uid;
+    }
     const receivedData = (val, perPageVal, statusVal) => {
         setSearchNotFound(false);
         let urlString;
@@ -117,7 +120,7 @@ function OrderList(props) {
     }
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 5 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 <div>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
@@ -136,7 +139,6 @@ function OrderList(props) {
                             setisLoading(true);
                             setStatus("new");
                         }
-
                     }}
                     >New</Button>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
@@ -149,6 +151,26 @@ function OrderList(props) {
 
                     }}
                     >Processing</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "prepared") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("prepared");
+                        }
+
+                    }}
+                    >Out for Delivery</Button>
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                        ev.preventDefault();
+                        if (status == "pending") { return; }
+                        else {
+                            setisLoading(true);
+                            setStatus("pending");
+                        }
+
+                    }}
+                    >Delivered</Button>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
                         if (status == "completed") { return; }
@@ -176,29 +198,8 @@ function OrderList(props) {
                             setisLoading(true);
                             setStatus("failed");
                         }
-
                     }}
                     >Failed</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (status == "pending") { return; }
-                        else {
-                            setisLoading(true);
-                            setStatus("pending");
-                        }
-
-                    }}
-                    >Delivered</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (status == "prepared") { return; }
-                        else {
-                            setisLoading(true);
-                            setStatus("prepared");
-                        }
-
-                    }}
-                    >Out for Delivery</Button>
 
                 </div>
             </div>
