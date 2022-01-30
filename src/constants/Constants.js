@@ -1,6 +1,6 @@
 
 export const NAMES = new Map([
-    ["cStk5cgFV1PtEeDVb6KDY7GTVjt2", "Prachin"],
+    ["tBsugnxftHgm4otLNN9RPGUnJYq1", "Prachin"],
     ["nyIhUGpMiUdMMz6CAlKclghdlVg1", "Timios"],
     ["DpbbL6nZrAVUAdo3JXfPvaqvWkN2", "Back To Roots"],
     ["NIgOuTnuZzUOnf23oLisxVFzUfs1", "Organic India"],
