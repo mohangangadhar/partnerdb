@@ -4,7 +4,7 @@ export const NAMES = new Map([
     ["nyIhUGpMiUdMMz6CAlKclghdlVg1", "Timios"],
     ["DpbbL6nZrAVUAdo3JXfPvaqvWkN2", "Back To Roots"],
     ["NIgOuTnuZzUOnf23oLisxVFzUfs1", "Organic India"],
-    ["lCeqJeaPl6Qh6rDfr12zid1TD243", "Karshaka"],
+    ["riwdTSGv8zWuMnAY3kDbJgP6TBI3", "Karshaka"],
     ["TgtjQonHYGcCsRlI6jrvo6fFxd23", "Dhriti Organics"],
     ["dTzOBmhW4PZ0zL0dLWBiCiHzom42", "jeevamrut Foods"],
     ["GHS5sVHoRShSE2KmLtvVCGue8X82", "Admin"]

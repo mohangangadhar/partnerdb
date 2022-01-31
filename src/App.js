@@ -24,6 +24,7 @@ import LunchDining from "@mui/icons-material/LunchDining";
 import { Box, Container } from "@material-ui/core";
 import ProductList from "./products/ProductList";
 import { ShoppingCart } from "@material-ui/icons";
+import PhoneIcon from '@mui/icons-material/Phone';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ProductDetail from "./products/ProductDetail";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -44,6 +45,8 @@ import Reset from './Reset'
 import DetailOrderList from './DetailOrder/DetailOrderList';
 import SellerDashBoard from './dashboard/SellerDashboard';
 import SellerProfile from './Profile/SellerProfile';
+import UserProfile from './Profile/UserProfile';
+import ContactUs from './Contact/ContactUs';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -352,11 +355,35 @@ export default function MiniDrawer() {
                                     <Link to={{
                                         pathname: `/app/sellerprofile`,
                                         id: "4"
-                                    }}><PersonIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Profile</h6></Link>
+                                    }}><PersonIcon /><p style={{ fontSize: 10, fontWeight: 'bold', marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -9 }}>Seller Profile</p></Link>
                                 </ListItemIcon>
                                 <Link to={{
                                     pathname: `/app/sellerprofile`,
                                     id: "4"
+                                }}><ListItemText primary="Profile" /></Link>
+                            </ListItem>
+                            <ListItem button key="Orders">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/userprofile`,
+                                        id: "5"
+                                    }}><PersonIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>User Profile</h6></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: `/app/userprofile`,
+                                    id: "5"
+                                }}><ListItemText primary="Profile" /></Link>
+                            </ListItem>
+                            <ListItem button key="Orders">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/contactus`,
+                                        id: "6"
+                                    }}><PhoneIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Contact Us</h6></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: `/app/contactus`,
+                                    id: "6"
                                 }}><ListItemText primary="Profile" /></Link>
                             </ListItem>
                         </HashRouter>
@@ -373,6 +400,8 @@ export default function MiniDrawer() {
                                 <Route exact path="/app/reset" component={Reset} />
                                 <Route path="/app/sellerdashboard" exact component={SellerDashBoard} />
                                 <Route path="/app/sellerprofile" exact component={SellerProfile} />
+                                <Route path="/app/userprofile" exact component={UserProfile} />
+                                <Route path="/app/contactus" exact component={ContactUs} />
                                 <Route path="/app/:vendorId" exact component={OrderList} />
                                 <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                 <Route path="/app/:vendorId/product/" exact component={ProductList} />
@@ -384,7 +413,7 @@ export default function MiniDrawer() {
                     </Container>
 
                 </Box>
-            </Box>
+            </Box >
         );
     }
     else {
@@ -397,6 +426,9 @@ export default function MiniDrawer() {
                         <Route path="/app/login" exact component={Login} />
                         <Route exact path="/app/reset" component={Reset} />
                         <Route path="/app/sellerdashboard" exact component={SellerDashBoard} />
+                        <Route path="/app/sellerprofile" exact component={SellerProfile} />
+                        <Route path="/app/userprofile" exact component={UserProfile} />
+                        <Route path="/app/contactus" exact component={ContactUs} />
                         <Route path="/app/dashboard" exact component={Dashboard} />
                         <Route path="/app/sellerprofile" exact component={SellerProfile} />
                         <Route path="/app/:vendorId" exact component={OrderList} />
