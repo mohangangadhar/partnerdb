@@ -20,18 +20,20 @@ import * as Constants from "../constants/Constants";
 function SellerDashBoard() {
     const [orderdata, setOrderData] = useState({});
     const [status, setStatus] = useState("accepted");
+    const [searchNotFound, setSearchNotFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
     const [user] = useAuthState(auth);
     // const history = useHistory();
     let userId;
     let vendorName;
-    if (auth) {
+    if (auth.user) {
         userId = auth.currentUser.uid;
         vendorName = Constants.NAMES.get(userId);
     }
-    console.log(orderdata);
     useEffect(() => {
         let apiUrl;
+        let check = false;
+        setSearchNotFound(false);
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/summary/${status}`;
         console.log(apiUrl);
         const requestOptions = {
@@ -44,11 +46,13 @@ function SellerDashBoard() {
                 data.map(data => {
                     if (data.vendorName == vendorName) {
                         setOrderData(data);
+                        check = true;
                     }
                 });
+                if (!check) { setSearchNotFound(true) }
                 setisLoading(false);
             }
-            );
+            ).catch(err => setSearchNotFound(true));
     }, [status]);
     return (
         <div>
@@ -96,7 +100,12 @@ function SellerDashBoard() {
                                 <TableCell align="center">{orderdata.totalDelivery}</TableCell>
                                 <TableCell align="center">{orderdata.total}</TableCell>
                             </TableRow>
-                            : <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>}
+                            : <div>
+                                <center>
+                                    {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
+                                </center>
+                            </div>
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>

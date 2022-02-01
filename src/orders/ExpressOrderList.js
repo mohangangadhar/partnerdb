@@ -43,7 +43,7 @@ function ExpressOrderList(props) {
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
                 ? "order/express/status/"
-                : "vendor/" + props.match.params.vendorId + "/order/"
+                : "vendor/" + props.match.params.vendorId + "/order/express/"
         } console.log(urlString);
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {

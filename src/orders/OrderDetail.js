@@ -157,6 +157,7 @@ function OrderDetail(props) {
                                                     Out For Delivery
                                                 </MenuItem>
                                                 <MenuItem value="Order Received">Order Received</MenuItem>
+                                                <MenuItem value="cancelled">Cancelled</MenuItem>
                                             </Select>
                                         </FormControl>
                                     }
