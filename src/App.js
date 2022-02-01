@@ -120,6 +120,7 @@ export default function MiniDrawer() {
     const [user, error] = useAuthState(auth);
     const history = useHistory();
     let id;
+    let orderStyle = { fontWeight: 'bold', marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -9 };
     const logout = () => {
         history.replace("/login/");
         auth.signOut();
@@ -213,7 +214,11 @@ export default function MiniDrawer() {
                                         <Link to={{
                                             pathname: `/app/order`,
                                             id: "2"
-                                        }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Orders</h6></Link>
+                                        }}><ShoppingCart />
+                                            <div >
+                                                <h6 style={orderStyle}>Regular</h6>
+                                                <h6 style={orderStyle}>Orders</h6>
+                                            </div></Link>
                                     </ListItemIcon>
                                     <Link to={{
                                         pathname: `/app/order`,
@@ -225,7 +230,11 @@ export default function MiniDrawer() {
                                         <Link to={{
                                             pathname: `/app/order/express`,
                                             id: "5"
-                                        }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
+                                        }}><ShoppingCart />
+                                            <div >
+                                                <h6 style={orderStyle}>Express</h6>
+                                                <h6 style={orderStyle}>Orders</h6>
+                                            </div></Link>
                                     </ListItemIcon>
                                     <Link to={{
                                         pathname: `/app/order/express`,
@@ -289,7 +298,7 @@ export default function MiniDrawer() {
                         </Container>
 
                     </Box>
-                </Box>
+                </Box >
             );
         }
         return (
@@ -357,7 +366,11 @@ export default function MiniDrawer() {
                                     <Link to={{
                                         pathname: `/app/${id}`,
                                         id: "3"
-                                    }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Orders</h6></Link>
+                                    }}><ShoppingCart />
+                                        <div >
+                                            <h6 style={orderStyle}>Regular</h6>
+                                            <h6 style={orderStyle}>Orders</h6>
+                                        </div></Link>
                                 </ListItemIcon>
                                 <Link to={{
                                     pathname: `/app/${id}`,
@@ -369,7 +382,12 @@ export default function MiniDrawer() {
                                     <Link to={{
                                         pathname: `/app/${id}/express`,
                                         id: "3"
-                                    }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
+                                    }}><ShoppingCart />
+                                        <div >
+                                            <h6 style={orderStyle}>Express</h6>
+                                            <h6 style={orderStyle}>Orders</h6>
+                                        </div>
+                                    </Link>
                                 </ListItemIcon>
                                 <Link to={{
                                     pathname: `/app/${id}/express`,

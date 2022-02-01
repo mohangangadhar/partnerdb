@@ -225,7 +225,7 @@ function ProductList(props) {
                 response.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
-                    a.href = url;
+                    a.href = url
                     a.download = filename;
                     a.click();
                 });
@@ -234,6 +234,7 @@ function ProductList(props) {
     }
     return (
         <div>
+            <center><h2 style={{ marginTop: -9, marginBottom: 0, fontStyle: 'italic', color: 'white' }}>Products</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
                     <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">{size} Products per Page</InputLabel>
