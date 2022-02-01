@@ -47,6 +47,7 @@ import SellerDashBoard from './dashboard/SellerDashboard';
 import SellerProfile from './Profile/SellerProfile';
 import UserProfile from './Profile/UserProfile';
 import ContactUs from './Contact/ContactUs';
+import ExpressOrderList from './orders/ExpressOrderList';
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -219,6 +220,18 @@ export default function MiniDrawer() {
                                         id: "2"
                                     }}><ListItemText primary="Orders" /></Link>
                                 </ListItem>
+                                <ListItem button key="Orders">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: `/app/order/express`,
+                                            id: "5"
+                                        }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/order/express`,
+                                        id: "5"
+                                    }}><ListItemText primary="Orders" /></Link>
+                                </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="Wallet">
                                     <ListItemIcon>
                                         <Link to={{
@@ -262,6 +275,7 @@ export default function MiniDrawer() {
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/detail/order" exact component={DetailOrderList} />
                                     <Route path="/app/:vendorId" exact component={OrderList} />
+                                    <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                     <Route path="/app/:vendorId/product/" exact component={ProductList} />
                                     <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
@@ -353,6 +367,18 @@ export default function MiniDrawer() {
                             <ListItem button key="Orders">
                                 <ListItemIcon>
                                     <Link to={{
+                                        pathname: `/app/${id}/express`,
+                                        id: "3"
+                                    }}><ShoppingCart /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: `/app/${id}/express`,
+                                    id: "3"
+                                }}><ListItemText primary="Orders" /></Link>
+                            </ListItem>
+                            <ListItem button key="Orders">
+                                <ListItemIcon>
+                                    <Link to={{
                                         pathname: `/app/sellerprofile`,
                                         id: "4"
                                     }}><PersonIcon /><p style={{ fontSize: 10, fontWeight: 'bold', marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -9 }}>Seller Profile</p></Link>
@@ -403,6 +429,7 @@ export default function MiniDrawer() {
                                 <Route path="/app/userprofile" exact component={UserProfile} />
                                 <Route path="/app/contactus" exact component={ContactUs} />
                                 <Route path="/app/:vendorId" exact component={OrderList} />
+                                <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                                 <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                 <Route path="/app/:vendorId/product/" exact component={ProductList} />
                                 <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
