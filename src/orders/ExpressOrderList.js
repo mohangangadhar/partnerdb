@@ -34,9 +34,9 @@ function ExpressOrderList(props) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     let userId;
-    if (auth.user) {
-        userId = auth.currentUser.uid;
-    }
+    useEffect(() => {
+        setStatus(props.match.params.vendorId === "order" ? "all" : status);
+    }, []);
     const receivedData = (val, perPageVal, statusVal) => {
         setSearchNotFound(false);
         let urlString;

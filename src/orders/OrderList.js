@@ -34,9 +34,20 @@ function OrderList(props) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     let userId;
-    if (auth.user) {
-        userId = auth.currentUser.uid;
-    }
+
+
+    useEffect(() => {
+        setStatus(props.match.params.vendorId === "order" ? "all" : status);
+    }, []);
+    // if (auth.user) {
+    //     userId = auth.currentUser.uid;
+    //     console.log(userId);
+    //     // if (userId == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
+    //     //     console.log("admin");
+    //     //     setStatus("all");
+    //     // }
+    // }
+
     const receivedData = (val, perPageVal, statusVal) => {
         setSearchNotFound(false);
         console.log(statusVal);
@@ -64,7 +75,6 @@ function OrderList(props) {
             .then(data => {
                 setRows(data.content);
                 setTotalPages(data.totalPages);
-                console.log(rows, totalPages);
                 setisLoading(false);
                 if (data.content.length == 0) { setSearchNotFound(true) }
             });
@@ -237,7 +247,7 @@ function OrderList(props) {
                                     </TableCell>
                                     <TableCell >{row.userId}</TableCell>
                                     <TableCell align="center">
-                                        {row.createdAt}
+                                        {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
                                     </TableCell>
                                     <TableCell align="center" >{row.deliveryDate}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
