@@ -24,6 +24,7 @@ const EditableRow = ({
                 }}>{row.id}</Link>
             </TableCell>
             <TableCell align="left">{detail(row.product.title)}</TableCell>
+            <TableCell>{row.product.express == 0 ? "NO" : "Yes"}</TableCell>
             <TableCell align="center">
                 <input
                     type="text"

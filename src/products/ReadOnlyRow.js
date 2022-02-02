@@ -21,6 +21,7 @@ const ReadOnlyRow = ({
                 }}>{row.id}</Link>
             </TableCell>
             <TableCell align="left">{detail(row.product.title)}</TableCell>
+            <TableCell>{row.product.express == 0 ? "NO" : "Yes"}</TableCell>
             <TableCell align="center">{row.product.price}</TableCell>
             <TableCell align="center">{row.product.stockQuantity}</TableCell>
             {/* <TableCell align="center"><Button variant="text" color="success">Active</Button></TableCell> */}
