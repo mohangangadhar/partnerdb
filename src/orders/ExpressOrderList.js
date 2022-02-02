@@ -28,7 +28,7 @@ function ExpressOrderList(props) {
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState("all");
+    const [status, setStatus] = useState("accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");

@@ -28,7 +28,7 @@ function OrderList(props) {
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState("all");
+    const [status, setStatus] = useState("accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
@@ -39,6 +39,7 @@ function OrderList(props) {
     }
     const receivedData = (val, perPageVal, statusVal) => {
         setSearchNotFound(false);
+        console.log(statusVal);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
@@ -235,7 +236,9 @@ function OrderList(props) {
                                         }}>{row.id}</Link>
                                     </TableCell>
                                     <TableCell >{row.userId}</TableCell>
-                                    <TableCell align="center">{row.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}</TableCell>
+                                    <TableCell align="center">
+                                        {row.createdAt}
+                                    </TableCell>
                                     <TableCell align="center" >{row.deliveryDate}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
                                     <TableCell align="center">{row.deliveryStatus}</TableCell>
