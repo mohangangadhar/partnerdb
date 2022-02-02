@@ -39,6 +39,7 @@ function DashBoard() {
     }, [status]);
     return (
         <div>
+            <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>DashBoard</h2></center>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>

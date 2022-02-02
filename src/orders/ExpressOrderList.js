@@ -219,6 +219,7 @@ function ExpressOrderList(props) {
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
                             <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
@@ -235,6 +236,7 @@ function ExpressOrderList(props) {
                                     </TableCell>
                                     <TableCell >{row.userId}</TableCell>
                                     <TableCell align="center">{row.createdAt}</TableCell>
+                                    <TableCell align="center" >{row.deliveryDate}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
                                     <TableCell align="center">{row.deliveryStatus}</TableCell>
                                 </TableRow>
