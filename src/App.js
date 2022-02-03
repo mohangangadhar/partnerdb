@@ -442,7 +442,7 @@ export default function MiniDrawer() {
                                 <Route path="/app/wrapper" exact component={Wrapper} />
                                 <Route path="/app/login" exact component={Login} />
                                 <Route exact path="/app/reset" component={Reset} />
-                                <Route path="/app/sellerdashboard" exact component={SellerDashBoard} />
+                                <Route path="/app/sellerdashboard" exact render={(props) => <SellerDashBoard userId={id} {...props} />} />
                                 <Route path="/app/sellerprofile" exact component={SellerProfile} />
                                 <Route path="/app/userprofile" exact component={UserProfile} />
                                 <Route path="/app/contactus" exact component={ContactUs} />

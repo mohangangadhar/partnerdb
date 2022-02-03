@@ -17,19 +17,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@mui/material/Button';
 import * as Constants from "../constants/Constants";
-function SellerDashBoard() {
+const SellerDashBoard = ({ userId }) => {
     const [orderdata, setOrderData] = useState({});
     const [status, setStatus] = useState("accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
     const [user] = useAuthState(auth);
     // const history = useHistory();
-    let userId;
-    let vendorName;
-    if (auth.user) {
-        userId = auth.currentUser.uid;
-        vendorName = Constants.NAMES.get(userId);
-    }
+
+    let vendorName = Constants.NAMES.get(userId);
+    console.log(vendorName);
     useEffect(() => {
         let apiUrl;
         let check = false;
