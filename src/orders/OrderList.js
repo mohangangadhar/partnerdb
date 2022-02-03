@@ -35,7 +35,7 @@ const OrderList = (props) => {
 
     // useEffect(() => {
 
-    //     // setstatusvalue("all");
+    //     // setStatus("all");
     //     setStatus(props.match.params.vendorId === "order" ? "all" : "accepted");
     //     console.log(status);
     // }, []);
@@ -131,7 +131,7 @@ const OrderList = (props) => {
                         if (status == "all") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("all");
+                            setStatus("all");
                         }
 
                     }}
@@ -141,7 +141,7 @@ const OrderList = (props) => {
                         if (status == "new") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("new");
+                            setStatus("new");
                         }
                     }}
                     >New</Button>
@@ -150,7 +150,7 @@ const OrderList = (props) => {
                         if (status == "accepted") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("accepted");
+                            setStatus("accepted");
                         }
 
                     }}
@@ -160,7 +160,7 @@ const OrderList = (props) => {
                         if (status == "prepared") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("prepared");
+                            setStatus("prepared");
                         }
 
                     }}
@@ -170,7 +170,7 @@ const OrderList = (props) => {
                         if (status == "pending") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("pending");
+                            setStatus("pending");
                         }
 
                     }}
@@ -180,7 +180,7 @@ const OrderList = (props) => {
                         if (status == "completed") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("complete");
+                            setStatus("complete");
                         }
 
                     }}
@@ -190,7 +190,7 @@ const OrderList = (props) => {
                         if (status == "cancelled") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("cancelled");
+                            setStatus("cancelled");
                         }
 
                     }}
@@ -200,7 +200,7 @@ const OrderList = (props) => {
                         if (status == "failed") { return; }
                         else {
                             setisLoading(true);
-                            setstatusvalue("failed");
+                            setStatus("failed");
                         }
                     }}
                     >Failed</Button>
@@ -230,21 +230,25 @@ const OrderList = (props) => {
                     {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (
-                                <TableRow key={row.id}>
-                                    <TableCell>
-                                        <Link to={{
-                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
-                                            id: row.id
-                                        }}>{row.id}</Link>
-                                    </TableCell>
-                                    <TableCell >{row.userId}</TableCell>
-                                    <TableCell align="center">
-                                        {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
-                                    </TableCell>
-                                    <TableCell align="center" >{row.deliveryDate}</TableCell>
-                                    <TableCell align="center">{row.total}</TableCell>
-                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
-                                </TableRow>
+                                <>
+                                    {row.express == 0 &&
+                                        <TableRow key={row.id}>
+                                            <TableCell>
+                                                <Link to={{
+                                                    pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
+                                                    id: row.id
+                                                }}>{row.id}</Link>
+                                            </TableCell>
+                                            <TableCell >{row.userId}</TableCell>
+                                            <TableCell align="center">
+                                                {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
+                                            </TableCell>
+                                            <TableCell align="center" >{row.deliveryDate}</TableCell>
+                                            <TableCell align="center">{row.total}</TableCell>
+                                            <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                        </TableRow>
+                                    }
+                                </>
                             ))}
                         </TableBody>
                         :
@@ -273,7 +277,7 @@ const OrderList = (props) => {
 // };
 // const mapDispatchToProps = (dispatch) => {
 //     return {
-//         setstatusvalue: () => dispatch(setstatusvalue()),
+//         setStatus: () => dispatch(setStatus()),
 //     };
 // };
 export default OrderList;
