@@ -123,7 +123,6 @@ const OrderList = (props) => {
     }
     return (
         <div>
-            <Button variant="contained" onClick={(e) => setstatusvalue(1)}>Increment</Button>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Regular Orders</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 <div>
