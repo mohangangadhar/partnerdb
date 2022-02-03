@@ -1,18 +1,28 @@
-export const setstatusvalue = (value) => async dispatch => {
+const setstatusvalue = (value) => async dispatch => {
     dispatch({
         type: "SETSTATUS",
         payload: value
     })
 }
-export const AddProduct = (value) => async dispatch => {
+const setstatusresetvalue = () => async dispatch => {
     dispatch({
-        type: "ADD",
+        type: "RESETSTATUS"
+    })
+}
+const setexpressstatusvalue = (value) => async dispatch => {
+    dispatch({
+        type: "SETEXPRESSSTATUS",
         payload: value
     })
 }
-export const RemoveProduct = (value) => async dispatch => {
+const setexpressstatusresetvalue = () => async dispatch => {
     dispatch({
-        type: "REMOVE",
-        payload: { name: value }
+        type: "RESETEXPRESSSTATUS"
     })
+}
+export default {
+    setstatusvalue,
+    setstatusresetvalue,
+    setexpressstatusvalue,
+    setexpressstatusresetvalue
 }

@@ -29,9 +29,9 @@ const SellerDashBoard = ({ userId }) => {
     console.log(vendorName);
     useEffect(() => {
         let apiUrl;
-        let check = false;
         setSearchNotFound(false);
-        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/summary/${status}`;
+        setisLoading(true);
+        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/${userId}/summary/${status}`;
         console.log(apiUrl);
         const requestOptions = {
             method: 'GET',
@@ -40,16 +40,12 @@ const SellerDashBoard = ({ userId }) => {
         fetch(apiUrl, requestOptions)
             .then(response => response.json())
             .then(data => {
-                data.map(data => {
-                    if (data.vendorName == vendorName) {
-                        setOrderData(data);
-                        check = true;
-                    }
-                });
-                if (!check) { setSearchNotFound(true) }
+
+                setOrderData(data);
+
                 setisLoading(false);
             }
-            ).catch(err => setSearchNotFound(true));
+            );
     }, [status]);
     return (
         <div>
@@ -61,9 +57,9 @@ const SellerDashBoard = ({ userId }) => {
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Total Sales</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Total Sales</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Delivery</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>No Of Orders</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
                             <TableCell>
                                 <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
@@ -91,12 +87,12 @@ const SellerDashBoard = ({ userId }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {orderdata.totalSales !== undefined && !(isLoading) ?
+                        {!(isLoading) ?
                             <TableRow>
-                                <TableCell>{orderdata.vendorName}</TableCell>
-                                <TableCell align="center">{orderdata.totalSales}</TableCell>
-                                <TableCell align="center">{orderdata.totalDelivery}</TableCell>
-                                <TableCell align="center">{orderdata.total}</TableCell>
+                                <TableCell align="center">{orderdata.totalSales == null ? 0 : orderdata.totalSales}</TableCell>
+                                <TableCell align="center">{orderdata.totalDelivery == null ? 0 : orderdata.totalDelivery}</TableCell>
+                                <TableCell align="center">{orderdata.noOfOrders == null ? 0 : orderdata.noOfOrders}</TableCell>
+                                <TableCell align="center">{orderdata.total == null ? 0 : orderdata.total}</TableCell>
                             </TableRow>
                             : <div>
                                 <center>

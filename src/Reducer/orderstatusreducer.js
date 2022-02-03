@@ -1,13 +1,13 @@
 const initialState = {
-    status: 0
+    status: ""
 };
 export default function orderstatusreducer(state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
         case "SETSTATUS":
-            return { ...state, status: state.status + payload }
+            return { status: payload }
         case "RESETSTATUS":
-            return { ...state, status: "accepted" }
+            return { status: "" }
         default:
             return state
     }

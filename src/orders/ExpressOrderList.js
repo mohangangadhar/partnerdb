@@ -20,7 +20,9 @@ import Picker from "../components/Picker";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
-import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
+import { useSelector, useDispatch } from 'react-redux'
+import { connect } from "react-redux";
+import setstatus from '../Actions';
 function ExpressOrderList(props) {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -28,16 +30,23 @@ function ExpressOrderList(props) {
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState(props.match.params.vendorId === "order" ? "all" : "accepted");
+    // const [status, setStatus] = useState(props.match.params.vendorId === "order" ? "all" : "accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    let userId;
-    useEffect(() => {
-        setStatus(props.match.params.vendorId === "order" ? "all" : status);
-    }, []);
-    const receivedData = (val, perPageVal, statusVal) => {
+
+    const order = useSelector(state => state.expressstatusreducer);
+    const dispatch = useDispatch();
+    useEffect(async () => {
+        setisLoading(true);
+        if (user && order.expressstatus == "") {
+            dispatch(setstatus.setexpressstatusvalue(auth.currentUser.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "all" : "accepted"));
+            console.log(order.expressstatus);
+            setisLoading(false);
+        }
+    }, [])
+    const receivedData = (val, perPageVal) => {
         setSearchNotFound(false);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
@@ -58,7 +67,7 @@ function ExpressOrderList(props) {
                 "endDate": endDate
             })
         };
-        fetch(apiUrl + urlString + statusVal, requestOptions)
+        fetch(apiUrl + urlString + order.expressstatus, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
@@ -74,11 +83,11 @@ function ExpressOrderList(props) {
     useEffect(async () => {
         setSearchNotFound(false);
         setRows("");
-        // if (status == "all" || status == "") { setPerPage(perPage == 50 ? 10 : 10); console.log("all" + perPage) }
-        // else { setPerPage(50); }
         setisLoading(true);
-        receivedData(offSet, perPage, status);
-    }, [offSet, status, perPage]);
+        if (order.expressstatus != "") {
+            receivedData(offSet, perPage);
+        }
+    }, [offSet, order.expressstatus, perPage]);
 
 
 
@@ -123,81 +132,81 @@ function ExpressOrderList(props) {
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Express Orders</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 <div>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "all") { return; }
+                        if (order.expressstatus == "all") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("all");
+                            dispatch(setstatus.setexpressstatusvalue("all"));
                         }
 
                     }}
                     >ALL</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "new") { return; }
+                        if (order.expressstatus == "new") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("new");
+                            dispatch(setstatus.setexpressstatusvalue("new"));
                         }
                     }}
                     >New</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "accepted") { return; }
+                        if (order.expressstatus == "accepted") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("accepted");
+                            dispatch(setstatus.setexpressstatusvalue("accepted"));
                         }
 
                     }}
                     >Processing</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "prepared") { return; }
+                        if (order.expressstatus == "prepared") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("prepared");
+                            dispatch(setstatus.setexpressstatusvalue("prepared"));
                         }
 
                     }}
                     >Out for Delivery</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "pending") { return; }
+                        if (order.expressstatus == "pending") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("pending");
+                            dispatch(setstatus.setexpressstatusvalue("pending"));
                         }
 
                     }}
                     >Delivered</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "completed") { return; }
+                        if (order.expressstatus == "completed") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("complete");
+                            dispatch(setstatus.setexpressstatusvalue("complete"));
                         }
 
                     }}
                     >Completed</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "cancelled") { return; }
+                        if (order.expressstatus == "cancelled") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("cancelled");
+                            dispatch(setstatus.setexpressstatusvalue("cancelled"));
                         }
 
                     }}
                     >Cancelled</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "failed") { return; }
+                        if (order.expressstatus == "failed") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("failed");
+                            dispatch(setstatus.setexpressstatusvalue("failed"));
                         }
                     }}
                     >Failed</Button>

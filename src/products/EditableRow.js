@@ -28,7 +28,7 @@ const EditableRow = ({
             <TableCell align="center">
                 <input
                     type="text"
-                    placeholder="Enter a name..."
+                    placeholder="Enter Units"
                     name="price"
                     value={addFormData.price}
                     onChange={handleEditFormChange}

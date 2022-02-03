@@ -48,6 +48,7 @@ function DashBoard() {
                             <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
                             <TableCell style={{ color: 'wheat' }}>Total Sales</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Delivery</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>No Of Orders</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
                             <TableCell>
                                 <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
@@ -80,6 +81,7 @@ function DashBoard() {
                                 <TableCell>{row.vendorName}</TableCell>
                                 <TableCell align="center">{row.totalSales}</TableCell>
                                 <TableCell align="center">{row.totalDelivery}</TableCell>
+                                <TableCell align="center">{row.noOfOrders == null ? 0 : row.noOfOrders}</TableCell>
                                 <TableCell align="center">{row.total}</TableCell>
                             </TableRow>
                         )) : <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>}

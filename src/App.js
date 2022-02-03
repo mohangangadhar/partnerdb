@@ -4,7 +4,7 @@ import Dashboard from './dashboard/Dashboard';
 import { HashRouter, Link } from 'react-router-dom';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
 import OrderList from "./orders/OrderList";
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -48,11 +48,12 @@ import SellerProfile from './Profile/SellerProfile';
 import UserProfile from './Profile/UserProfile';
 import ContactUs from './Contact/ContactUs';
 import ExpressOrderList from './orders/ExpressOrderList';
-import CheckRedux from './CheckRedux';
-import Store from "./Store";
-import { Provider } from "react-redux";
+import setstatus from './Actions';
+import { useSelector, useDispatch } from 'react-redux'
+import store from "./Store";
 
 const drawerWidth = 240;
+
 const openedMixin = (theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create('width', {
@@ -61,7 +62,6 @@ const openedMixin = (theme) => ({
     }),
     overflowX: 'hidden',
 });
-
 const closedMixin = (theme) => ({
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
@@ -123,13 +123,17 @@ export default function MiniDrawer() {
     const [member, setMember] = React.useState("");
     const [user, error] = useAuthState(auth);
     const history = useHistory();
+    const order = useSelector(state => state.orderstatusreducer);
+    const dispatch = useDispatch();
     let id;
     let orderStyle = { fontWeight: 'bold', marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -9 };
     const logout = () => {
+        dispatch(setstatus.setstatusresetvalue());
+        dispatch(setstatus.setexpressstatusresetvalue());
         history.replace("/login/");
         auth.signOut();
     };
-    console.log(Constants.NAMES[0]);
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -138,6 +142,7 @@ export default function MiniDrawer() {
         setOpen(false);
     };
     if (user) {
+        // dispatch(setstatus.setstatusvalue(auth.currentUser.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "all" : "accepted"));
         id = auth.currentUser.uid;
         if (id == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
             return (
@@ -275,32 +280,32 @@ export default function MiniDrawer() {
                     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                         <DrawerHeader />
                         <Container maxWidth="md">
-                            <Provider store={Store}>
-                                <HashRouter>
-                                    <Switch>
-                                        <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
-                                        <Route path="/app/wrapper" exact component={Wrapper} />
-                                        <Route path="/app/login" exact component={Login} />
-                                        <Route exact path="/app/reset" component={Reset} />
 
-                                        <Route path="/app/wallet" user={user} exact component={Wallet} />
-                                        <Route path="/app/user" exact component={UserList} />
-                                        <Route path="/app/dashboard" exact component={Dashboard} />
-                                        <Route exact path="/reset" component={Reset} />
-                                        <Route path="/app/detail/order" exact component={DetailOrderList} />
-                                        <Route path="/app/:vendorId" exact component={OrderList} />
-                                        <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
-                                        <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
-                                        <Route path="/app/:vendorId/product/" exact component={ProductList} />
-                                        <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
-                                        {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
-                                        {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
-                                        {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
-                                        {/* <Redirect from="*" to="/app/wrapper" /> */}
-                                    </Switch>
-                                    <NotificationContainer />
-                                </HashRouter>
-                            </Provider>
+                            <HashRouter>
+                                <Switch>
+                                    <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
+                                    <Route path="/app/wrapper" exact component={Wrapper} />
+                                    <Route path="/app/login" exact component={Login} />
+                                    <Route exact path="/app/reset" component={Reset} />
+
+                                    <Route path="/app/wallet" user={user} exact component={Wallet} />
+                                    <Route path="/app/user" exact component={UserList} />
+                                    <Route path="/app/dashboard" exact component={Dashboard} />
+                                    <Route exact path="/reset" component={Reset} />
+                                    <Route path="/app/detail/order" exact component={DetailOrderList} />
+                                    <Route path="/app/:vendorId" exact component={OrderList} />
+                                    <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
+                                    <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
+                                    <Route path="/app/:vendorId/product/" exact component={ProductList} />
+                                    <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                                    {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
+                                    {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
+                                    {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
+                                    {/* <Redirect from="*" to="/app/wrapper" /> */}
+                                </Switch>
+                                <NotificationContainer />
+                            </HashRouter>
+
                         </Container>
 
                     </Box>
@@ -442,28 +447,25 @@ export default function MiniDrawer() {
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
                     <Container maxWidth="md">
-                        <Provider store={Store}>
-                            <HashRouter>
-                                <Switch>
-                                    <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
-                                    <Route path="/app/wrapper" exact component={Wrapper} />
-                                    <Route path="/app/login" exact component={Login} />
-                                    <Route exact path="/app/reset" component={Reset} />
-                                    <Route path="/app/sellerdashboard" exact render={(props) => <SellerDashBoard userId={id} {...props} />} />
-                                    <Route path="/app/sellerprofile" exact component={SellerProfile} />
-                                    <Route path="/app/userprofile" exact component={UserProfile} />
-                                    <Route path="/app/contactus" exact component={ContactUs} />
-                                    <Route path="/app/checkredux/sample" exact component={CheckRedux} />
-                                    <Route path="/app/:vendorId" exact component={OrderList} />
-                                    <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
-                                    <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
-                                    <Route path="/app/:vendorId/product/" exact component={ProductList} />
-                                    <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
-                                    {/* <Redirect from="*" to="/app/wrapper" /> */}
-                                </Switch>
-                                <NotificationContainer />
-                            </HashRouter>
-                        </Provider>
+                        <HashRouter>
+                            <Switch>
+                                <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
+                                <Route path="/app/wrapper" exact component={Wrapper} />
+                                <Route path="/app/login" exact component={Login} />
+                                <Route exact path="/app/reset" component={Reset} />
+                                <Route path="/app/sellerdashboard" exact render={(props) => <SellerDashBoard userId={id} {...props} />} />
+                                <Route path="/app/sellerprofile" exact component={SellerProfile} />
+                                <Route path="/app/userprofile" exact component={UserProfile} />
+                                <Route path="/app/contactus" exact component={ContactUs} />
+                                <Route path="/app/:vendorId" exact component={OrderList} />
+                                <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
+                                <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
+                                <Route path="/app/:vendorId/product/" exact component={ProductList} />
+                                <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                                {/* <Redirect from="*" to="/app/wrapper" /> */}
+                            </Switch>
+                            <NotificationContainer />
+                        </HashRouter>
                     </Container>
                 </Box>
             </Box >

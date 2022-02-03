@@ -15,8 +15,9 @@ import Picker from "../components/Picker";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
+import { useSelector, useDispatch } from 'react-redux'
 import { connect } from "react-redux";
-import { setstatusvalue } from '../Actions';
+import setstatus from '../Actions';
 
 const OrderList = (props) => {
     let { id } = useParams();
@@ -25,30 +26,30 @@ const OrderList = (props) => {
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState(props.match.params.vendorId === "order" ? "all" : "accepted");
+    // const [status, setStatus] = useState(props.match.params.vendorId === "order" ? "all" : "accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    let userId;
 
-
-    // useEffect(() => {
-
-    //     // setStatus("all");
-    //     setStatus(props.match.params.vendorId === "order" ? "all" : "accepted");
-    //     console.log(status);
-    // }, []);
-
-    const receivedData = (val, perPageVal, statusVal) => {
+    const order = useSelector(state => state.orderstatusreducer);
+    const dispatch = useDispatch();
+    useEffect(async () => {
+        setisLoading(true);
+        if (user && order.status == "") {
+            dispatch(setstatus.setstatusvalue(auth.currentUser.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "all" : "accepted"));
+            setisLoading(false);
+        }
+    }, [])
+    const receivedData = (val, perPageVal) => {
         setSearchNotFound(false);
-        console.log(statusVal);
+        console.log(order.status);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
                 ? "order/status/"
                 : "vendor/" + props.match.params.vendorId + "/order/"
-        } console.log(urlString);
+        } console.log(urlString + order.status);
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
@@ -62,13 +63,13 @@ const OrderList = (props) => {
                 "endDate": endDate
             })
         };
-        fetch(apiUrl + urlString + statusVal, requestOptions)
+        fetch(apiUrl + urlString + order.status, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
                 setTotalPages(data.totalPages);
                 setisLoading(false);
-                if (data.content.length == 0) { setSearchNotFound(true) }
+                if (data.content && data.content.length == 0) { setSearchNotFound(true) }
             });
 
     }
@@ -77,16 +78,14 @@ const OrderList = (props) => {
     useEffect(async () => {
         setSearchNotFound(false);
         setRows("");
-        // if (status == "all" || status == "") { setPerPage(perPage == 50 ? 10 : 10); console.log("all" + perPage) }
-        // else { setPerPage(50); }
         setisLoading(true);
-        receivedData(offSet, perPage, status);
-    }, [offSet, status, perPage]);
+        if (order.status != "") {
+            receivedData(offSet, perPage);
+        }
 
-
+    }, [offSet, order.status, perPage]);
 
     const downloadCsvFile = () => {
-
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = id === "order"
@@ -126,81 +125,81 @@ const OrderList = (props) => {
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Regular Orders</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 <div>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "all") { return; }
+                        if (order.status == "all") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("all");
+                            dispatch(setstatus.setstatusvalue("all"));
                         }
 
                     }}
                     >ALL</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "new") { return; }
+                        if (order.status == "new") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("new");
+                            dispatch(setstatus.setstatusvalue("new"));
                         }
                     }}
                     >New</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "accepted") { return; }
+                        if (order.status == "accepted") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("accepted");
+                            dispatch(setstatus.setstatusvalue("accepted"));
                         }
 
                     }}
                     >Processing</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "prepared") { return; }
+                        if (order.status == "prepared") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("prepared");
+                            dispatch(setstatus.setstatusvalue("prepared"));
                         }
 
                     }}
                     >Out for Delivery</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "pending") { return; }
+                        if (order.status == "pending") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("pending");
+                            dispatch(setstatus.setstatusvalue("pending"));
                         }
 
                     }}
                     >Delivered</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "completed") { return; }
+                        if (order.status == "completed") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("complete");
+                            dispatch(setstatus.setstatusvalue("complete"));
                         }
 
                     }}
                     >Completed</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "cancelled") { return; }
+                        if (order.status == "cancelled") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("cancelled");
+                            dispatch(setstatus.setstatusvalue("cancelled"));
                         }
 
                     }}
                     >Cancelled</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "failed") { return; }
+                        if (order.status == "failed") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("failed");
+                            dispatch(setstatus.setstatusvalue("failed"));
                         }
                     }}
                     >Failed</Button>
