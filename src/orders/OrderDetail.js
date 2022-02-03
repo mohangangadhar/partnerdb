@@ -73,8 +73,10 @@ function OrderDetail(props) {
         await fetch(apiUrl, requestOptions)
             .then(response => response.json())
             .then(data => {
-                setisLoading(false);
+                // setisLoading(false);
             }
+            ).then(
+                history.goBack
             );
     }
     const detail = (val) => {
@@ -153,7 +155,7 @@ function OrderDetail(props) {
                                                 onChange={(event) => setStatus(event.target.value)}
                                                 label="Enter Status"
                                             >
-                                                <MenuItem value="Out For Delivery">
+                                                <MenuItem value="prepared">
                                                     Out For Delivery
                                                 </MenuItem>
                                                 <MenuItem value="Order Received">Order Received</MenuItem>
