@@ -15,6 +15,11 @@ const EditableRow = ({
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
     }
+    const styleOptions = {
+        padding: 10,
+        marginBottom: 5,
+        fontSize: 15
+    }
     return (
         <TableRow key={row.product.id}>
             <TableCell>
@@ -24,7 +29,14 @@ const EditableRow = ({
                 }}>{row.id}</Link>
             </TableCell>
             <TableCell align="left">{detail(row.product.title)}</TableCell>
-            <TableCell>{row.product.express == 0 ? "NO" : "Yes"}</TableCell>
+            <TableCell align="center">
+                <select style={{
+                    padding: 5,
+                }} name="express" value={addFormData.express} onChange={handleEditFormChange}>
+                    <option style={styleOptions} value="YES">YES</option>
+                    <option style={styleOptions} value="NO">NO</option>
+                </select>
+            </TableCell>
             <TableCell align="center">
                 <input
                     type="text"

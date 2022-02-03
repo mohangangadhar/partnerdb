@@ -229,25 +229,21 @@ const OrderList = (props) => {
                     {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (
-                                <>
-                                    {row.express == 0 &&
-                                        <TableRow key={row.id}>
-                                            <TableCell>
-                                                <Link to={{
-                                                    pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
-                                                    id: row.id
-                                                }}>{row.id}</Link>
-                                            </TableCell>
-                                            <TableCell >{row.userId}</TableCell>
-                                            <TableCell align="center">
-                                                {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
-                                            </TableCell>
-                                            <TableCell align="center" >{row.deliveryDate}</TableCell>
-                                            <TableCell align="center">{row.total}</TableCell>
-                                            <TableCell align="center">{row.deliveryStatus}</TableCell>
-                                        </TableRow>
-                                    }
-                                </>
+                                <TableRow key={row.id}>
+                                    <TableCell>
+                                        <Link to={{
+                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
+                                            id: row.id
+                                        }}>{row.id}</Link>
+                                    </TableCell>
+                                    <TableCell >{row.userId}</TableCell>
+                                    <TableCell align="center">
+                                        {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
+                                    </TableCell>
+                                    <TableCell align="center" >{row.deliveryDate}</TableCell>
+                                    <TableCell align="center">{row.total}</TableCell>
+                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                </TableRow>
                             ))}
                         </TableBody>
                         :

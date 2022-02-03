@@ -41,6 +41,7 @@ function ProductList(props) {
     const [editContactId, setEditContactId] = useState(null);
     const [addFormData, setAddFormData] = useState({
         price: 0,
+        express: "YES",
         stockQuantity: "",
     });
     let urlString;
@@ -110,6 +111,7 @@ function ProductList(props) {
         event.preventDefault();
         setAddFormData({
             price: row.product.price,
+            express: row.product.express == 0 || null ? "NO" : "YES",
             stockQuantity: row.product.stockQuantity
         });
         setEditContactId(row.id);
@@ -148,7 +150,8 @@ function ProductList(props) {
                     "regularPrice": data.product.regularPrice == null ? 0 : data.regularPrice,
                     "localName": data.product.localName == null || "" ? "" : data.product.localName,
                     "isNaturalProduct": data.product.isNaturalProduct == 1 ? "Y" : "N",
-                    "uniqueness": data.product.uniqueness == null ? null : data.product.uniqueness
+                    "uniqueness": data.product.uniqueness == null ? null : data.product.uniqueness,
+                    "express": addFormData.express == "YES" ? 1 : 0,
                 };
             });
         console.log(productData);
