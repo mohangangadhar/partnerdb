@@ -23,9 +23,13 @@
     "react-firebase-hooks": "^3.0.4",
     "react-notifications": "^1.7.2",
     "react-pro-sidebar": "^0.6.0",
+    "react-redux": "^7.2.6",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.1.2"
   },

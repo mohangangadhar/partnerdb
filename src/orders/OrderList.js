@@ -8,27 +8,24 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import Picker from "../components/Picker";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
-import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
-function OrderList(props) {
+import { connect } from "react-redux";
+import { setstatusvalue } from '../Actions';
+
+const OrderList = (props) => {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState("accepted");
+    const [status, setStatus] = useState(props.match.params.vendorId === "order" ? "all" : "accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
@@ -36,17 +33,12 @@ function OrderList(props) {
     let userId;
 
 
-    useEffect(() => {
-        setStatus(props.match.params.vendorId === "order" ? "all" : status);
-    }, []);
-    // if (auth.user) {
-    //     userId = auth.currentUser.uid;
-    //     console.log(userId);
-    //     // if (userId == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
-    //     //     console.log("admin");
-    //     //     setStatus("all");
-    //     // }
-    // }
+    // useEffect(() => {
+
+    //     // setstatusvalue("all");
+    //     setStatus(props.match.params.vendorId === "order" ? "all" : "accepted");
+    //     console.log(status);
+    // }, []);
 
     const receivedData = (val, perPageVal, statusVal) => {
         setSearchNotFound(false);
@@ -131,6 +123,7 @@ function OrderList(props) {
     }
     return (
         <div>
+            <Button variant="contained" onClick={(e) => setstatusvalue(1)}>Increment</Button>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Regular Orders</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 <div>
@@ -139,7 +132,7 @@ function OrderList(props) {
                         if (status == "all") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("all");
+                            setstatusvalue("all");
                         }
 
                     }}
@@ -149,7 +142,7 @@ function OrderList(props) {
                         if (status == "new") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("new");
+                            setstatusvalue("new");
                         }
                     }}
                     >New</Button>
@@ -158,7 +151,7 @@ function OrderList(props) {
                         if (status == "accepted") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("accepted");
+                            setstatusvalue("accepted");
                         }
 
                     }}
@@ -168,7 +161,7 @@ function OrderList(props) {
                         if (status == "prepared") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("prepared");
+                            setstatusvalue("prepared");
                         }
 
                     }}
@@ -178,7 +171,7 @@ function OrderList(props) {
                         if (status == "pending") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("pending");
+                            setstatusvalue("pending");
                         }
 
                     }}
@@ -188,7 +181,7 @@ function OrderList(props) {
                         if (status == "completed") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("complete");
+                            setstatusvalue("complete");
                         }
 
                     }}
@@ -198,7 +191,7 @@ function OrderList(props) {
                         if (status == "cancelled") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("cancelled");
+                            setstatusvalue("cancelled");
                         }
 
                     }}
@@ -208,7 +201,7 @@ function OrderList(props) {
                         if (status == "failed") { return; }
                         else {
                             setisLoading(true);
-                            setStatus("failed");
+                            setstatusvalue("failed");
                         }
                     }}
                     >Failed</Button>
@@ -274,5 +267,14 @@ function OrderList(props) {
         </div>
     )
 }
-
-export default OrderList
+// const mapStateToProps = (state) => {
+//     return {
+//         status: state.orderstatusreducer.status
+//     };
+// };
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         setstatusvalue: () => dispatch(setstatusvalue()),
+//     };
+// };
+export default OrderList;

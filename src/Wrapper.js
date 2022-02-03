@@ -14,7 +14,7 @@ const Wrapper = () => {
             history.push("/app/login");
         }
     })
-    console.log(window.location.href);
+    // console.log(window.location.href);
     return <div>
         Checking Authentication...
     </div>;
