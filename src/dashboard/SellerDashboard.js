@@ -23,7 +23,12 @@ const SellerDashBoard = ({ userId }) => {
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
     const [user] = useAuthState(auth);
-    // const history = useHistory();
+    const [newCount, setNewCount] = useState("");
+    const [processingCount, setProcessingCount] = useState("");
+    const [pendingCount, setPendingCount] = useState("");
+    const [completeCount, setCompleteCount] = useState("");
+    const [cancelCount, setCancelCount] = useState("");
+    const [total, setTotal] = useState(0);
 
     let vendorName = Constants.NAMES.get(userId);
     console.log(vendorName);
@@ -31,7 +36,7 @@ const SellerDashBoard = ({ userId }) => {
         let apiUrl;
         setSearchNotFound(false);
         setisLoading(true);
-        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/${userId}/summary/${status}`;
+        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/vendor/${userId}/report`;
         console.log(apiUrl);
         const requestOptions = {
             method: 'GET',
@@ -42,57 +47,52 @@ const SellerDashBoard = ({ userId }) => {
             .then(data => {
 
                 setOrderData(data);
+                setNewCount(data.filter(data => data.deliveryStatus == "new"));
+                setProcessingCount(data.filter(data => data.deliveryStatus == "accepted"));
+                setPendingCount(data.filter(data => data.deliveryStatus == "pending"));
+                setCompleteCount(data.filter(data => data.deliveryStatus == "complete"));
+                setCancelCount(data.filter(data => data.deliveryStatus == "cancelled"));
+                let finTotal = 0;
+                for (let i = 0; i < data.length; i++) {
+                    finTotal += data[i].noOfOrders;
+                }
+                setTotal(finTotal);
 
                 setisLoading(false);
             }
             );
-    }, [status]);
+    }, []);
     return (
         <div>
             {/* <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'row', marginBottom: 5 }}>
                 <Button variant="contained" color="success" target="_blank" href="https://jeevamrut.in/seller-profile?vendor_id=9">Go To Store<StorefrontIcon /></Button>
             </div> */}
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>DashBoard</h2></center>
+            <h3 style={{ marginTop: -9, marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Orders :</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total Sales</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total Delivery</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>No Of Orders</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Processing</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                            <TableCell>
-                                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-required-label"
-                                        id="demo-simple-select-disabled"
-                                        style={{ height: 50, color: 'white' }}
-                                        value={status}
-                                        onChange={(event) => {
-                                            setisLoading(true);
-                                            setStatus(event.target.value);
-                                        }}
-                                        label="Enter Status"
-                                    >
-                                        <MenuItem value="accepted">
-                                            Accepted
-                                        </MenuItem>
-                                        <MenuItem value="cancelled">Cancelled</MenuItem>
-                                        <MenuItem value="pending">Pending</MenuItem>
-                                        <MenuItem value="failed">Failed</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {!(isLoading) ?
                             <TableRow>
-                                <TableCell align="center">{orderdata.totalSales == null ? 0 : orderdata.totalSales}</TableCell>
-                                <TableCell align="center">{orderdata.totalDelivery == null ? 0 : orderdata.totalDelivery}</TableCell>
-                                <TableCell align="center">{orderdata.noOfOrders == null ? 0 : orderdata.noOfOrders}</TableCell>
-                                <TableCell align="center">{orderdata.total == null ? 0 : orderdata.total}</TableCell>
+                                <TableCell align="center">{newCount.length >= 1 ? newCount[0].noOfOrders : 0}</TableCell>
+                                <TableCell align="center">{processingCount.length >= 1 ? processingCount[0].noOfOrders : 0}</TableCell>
+                                <TableCell align="center">{completeCount.length >= 1 ? completeCount[0].noOfOrders : 0}</TableCell>
+                                <TableCell align="center">{pendingCount.length >= 1 ? pendingCount[0].noOfOrders : 0}</TableCell>
+                                <TableCell align="center">{cancelCount.length >= 1 ? cancelCount[0].noOfOrders : 0}</TableCell>
+                                <TableCell align="center">{
+
+                                    total
+                                }</TableCell>
                             </TableRow>
                             : <div>
                                 <center>
