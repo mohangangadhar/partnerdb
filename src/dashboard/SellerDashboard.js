@@ -29,7 +29,7 @@ const SellerDashBoard = ({ userId }) => {
     const [completeCount, setCompleteCount] = useState("");
     const [cancelCount, setCancelCount] = useState("");
     const [total, setTotal] = useState(0);
-
+    const [revenueTotal, setRevenueTotal] = useState(0);
     let vendorName = Constants.NAMES.get(userId);
     console.log(vendorName);
     useEffect(() => {
@@ -53,11 +53,17 @@ const SellerDashBoard = ({ userId }) => {
                 setCompleteCount(data.filter(data => data.deliveryStatus == "complete"));
                 setCancelCount(data.filter(data => data.deliveryStatus == "cancelled"));
                 let finTotal = 0;
+                let finrevenueTotal = 0;
                 for (let i = 0; i < data.length; i++) {
+                    if (data[i].deliveryStatus == "cancelled"
+                        || data[i].deliveryStatus == "failed") {
+                        continue;
+                    }
                     finTotal += data[i].noOfOrders;
+                    finrevenueTotal += data[i].total;
                 }
                 setTotal(finTotal);
-
+                setRevenueTotal(finrevenueTotal);
                 setisLoading(false);
             }
             );
@@ -103,7 +109,40 @@ const SellerDashBoard = ({ userId }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
+            <h3 style={{ marginTop: 5, marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Revenue :</h3>
+            <TableContainer component={Paper}>
+                <Table className="table" aria-label="spanning table">
+                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
+                        <TableRow>
+                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Processing</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {!(isLoading) ?
+                            <TableRow>
+                                <TableCell align="center">{newCount.length >= 1 ? newCount[0].total : 0}</TableCell>
+                                <TableCell align="center">{processingCount.length >= 1 ? processingCount[0].total : 0}</TableCell>
+                                <TableCell align="center">{completeCount.length >= 1 ? completeCount[0].total : 0}</TableCell>
+                                <TableCell align="center">{pendingCount.length >= 1 ? pendingCount[0].total : 0}</TableCell>
+                                <TableCell align="center">{cancelCount.length >= 1 ? cancelCount[0].total : 0}</TableCell>
+                                <TableCell align="center">{
+                                    revenueTotal
+                                }</TableCell>
+                            </TableRow>
+                            : <div>
+                                <center>
+                                    {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
+                                </center>
+                            </div>
+                        }
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div >
     )
 }
