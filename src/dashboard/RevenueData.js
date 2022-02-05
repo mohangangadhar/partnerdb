@@ -4,20 +4,20 @@ import { Chart, registerables, ArcElement, Defaults } from "chart.js";
 
 Chart.register(...registerables);
 
-const AdminData = (props) => {
-    const { newOrdersData, processingOrdersData, pendingOrdersData, completeOrdersData, cancelOrdersData } = props;
+const RevenueData = (props) => {
+    const { pendingTotalData, completeTotalData, cancelTotalData, processingTotalData, newTotalData } = props;
     return (
         <div>
             <Bar
                 data={{
-                    labels: [`NEW : ${newOrdersData}`, `PROCESSING : ${processingOrdersData}`,
-                    `PENDING : ${pendingOrdersData}`, `COMPLETED : ${completeOrdersData}`,
-                    `CANCELLED : ${cancelOrdersData}`],
+                    labels: [`NEW : ${newTotalData}`, `PROCESSING : ${processingTotalData}`,
+                    `PENDING : ${pendingTotalData}`, `COMPLETED : ${completeTotalData}`,
+                    `CANCELLED : ${cancelTotalData}`],
                     datasets: [
                         {
-                            label: 'Orders',
-                            data: [newOrdersData, processingOrdersData, pendingOrdersData, completeOrdersData
-                                , cancelOrdersData],
+                            label: 'Revenue',
+                            data: [newTotalData, processingTotalData, pendingTotalData, completeTotalData
+                                , cancelTotalData],
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
                                 'rgba(54, 162, 235, 0.2)',
@@ -81,4 +81,4 @@ const AdminData = (props) => {
     )
 }
 
-export default AdminData
+export default RevenueData
