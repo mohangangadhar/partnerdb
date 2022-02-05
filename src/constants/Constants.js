@@ -8,6 +8,7 @@ export const NAMES = new Map([
     ["mIn2HQgZL7MwJER3dJ8H8O2BVXR2", "Dhriti Organics"],
     ["dTzOBmhW4PZ0zL0dLWBiCiHzom42", "jeevamrut Foods"],
     ["nWI9sKAer6eQTJ3qxTtgRCEyWx43", "Amruthaahaara"],
+    ["3KbSoiJdzYO8ZVZ30lzDZ62XPYU2", "Avani Store"],
     ["GHS5sVHoRShSE2KmLtvVCGue8X82", "Admin"]
 ]);
 export const VENDORNAMES = new Map([
@@ -19,6 +20,7 @@ export const VENDORNAMES = new Map([
     ["Dhriti Organics", "mIn2HQgZL7MwJER3dJ8H8O2BVXR2",],
     ["Jeevamrut Foods", "dTzOBmhW4PZ0zL0dLWBiCiHzom42",],
     ["Amruthaahaara", "nWI9sKAer6eQTJ3qxTtgRCEyWx43",],
+    ["Avani Store", "3KbSoiJdzYO8ZVZ30lzDZ62XPYU2"],
     ["Admin", "GHS5sVHoRShSE2KmLtvVCGue8X82",]
 ]);
 export const COLORS = {
