@@ -47,6 +47,7 @@ function ProductList(props) {
     let urlString;
     let apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
     const receivedData = (val) => {
+        setSearchNotFound(false);
         if (filterInStock == "OUT OF STOCK") { setSize(100); }
         else { setSize(size == 100 ? 50 : size); }
         if (props.match.params.hasOwnProperty("vendorId")) {
@@ -80,6 +81,7 @@ function ProductList(props) {
                         break;
                 }
                 setTotalPages(data.totalPages);
+                if (data.content && data.content.length == 0) { setSearchNotFound(true) }
                 setisLoading(false);
             });
 
