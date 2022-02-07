@@ -37,11 +37,14 @@ function ProductList(props) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [editContactId, setEditContactId] = useState(null);
-    const [addFormData, setAddFormData] = useState([{
+    const [addFormData, setAddFormData] = useState({
+        id: 0,
+        title: "",
         price: 0,
         express: "YES",
         stockQuantity: "",
-    }]);
+    });
+    const [editedRowData, setEditedRowData] = useState([]);
     const RequestOptions = {
         method: 'GET',
         headers: {
@@ -49,7 +52,7 @@ function ProductList(props) {
         },
     };
     let urlString;
-    const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
+    const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
     const receivedData = async (val) => {
         setSearchNotFound(false);
         if (filterInStock == "OUT OF STOCK") { setSize(100); }
@@ -64,27 +67,24 @@ function ProductList(props) {
             .then(data => {
                 switch (filterInStock) {
                     case "ALL":
-                        setRows(data.content);
+                        setEditedRowData(data.content);
                         break;
                     case "IN STOCK":
-                        setRows(data.content.filter(stock => stock.product.stockQuantity > 0));
+                        setEditedRowData(data.content.filter(stock => stock.product.stockQuantity > 0));
                         break;
                     case "OUT OF STOCK":
-                        setRows(data.content.filter(stock => stock.product.stockQuantity == 0));
+                        setEditedRowData(data.content.filter(stock => stock.product.stockQuantity == 0));
                         break;
                     default:
-                        setRows(data.content);
+                        setEditedRowData(data.content);
                         break;
                 }
                 setTotalPages(data.totalPages);
-                if (data.content && data.content.length == 0) { setSearchNotFound(true) }
                 setisLoading(false);
-                setisRowLoading(false);
+                if (data.content && data.content.length == 0) { setSearchNotFound(true) }
             });
 
     }
-    const [user] = useAuthState(auth);
-    const history = useHistory();
     useEffect(() => {
         setisLoading(true);
         setSearchQuery("");
@@ -110,25 +110,24 @@ function ProductList(props) {
     const handleEditClick = (event, row) => {
         event.preventDefault();
         setAddFormData({
+            id: row.product.id,
+            title: row.product.title,
             price: row.product.price,
             express: row.product.express == 0 || null ? "NO" : "YES",
             stockQuantity: row.product.stockQuantity
         });
         setEditContactId(row.id);
     }
-
-    const handleFormSubmit = async (event, row) => {
-        event.preventDefault();
-        setisRowLoading(true);
+    const uploadBackEnd = async (row, tempFormData) => {
         let urlString = 'vendor-product-m/' + row.id;
         let productData;
         await fetch(apiUrl + urlString, RequestOptions)
             .then(response => response.json())
             .then(data => {
                 productData = {
-                    "price": addFormData.price,
+                    "price": tempFormData.price,
                     "productId": data.product.id,
-                    "stockQuantity": addFormData.stockQuantity.toString(),
+                    "stockQuantity": tempFormData.stockQuantity.toString(),
                     "vendorProductId": data.id.toString(),
                     "gstRate": data.product.gstRate == null ? 0 : data.gstrate,
                     "brandName": data.product.brandName == null ? null : data.product.brandName.toString(),
@@ -144,7 +143,7 @@ function ProductList(props) {
                     "localName": data.product.localName == null || "" ? "" : data.product.localName,
                     "isNaturalProduct": data.product.isNaturalProduct == 1 ? "Y" : "N",
                     "uniqueness": data.product.uniqueness == null ? null : data.product.uniqueness,
-                    "express": addFormData.express == "YES" ? 1 : 0,
+                    "express": tempFormData.express == "YES" ? 1 : 0,
                 };
             });
         let urlStringForUpdate = "vendor-product-m/" + props.match.params.vendorId + "/update";
@@ -156,12 +155,30 @@ function ProductList(props) {
         await fetch(apiUrl + urlStringForUpdate, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
-                console.log("put done");
-                setAddFormData("");
             }
-            );
-        receivedData(offSet);
+            ).catch((err) => alert('something wrong' + err));
+    }
+    const handleFormSubmit = async (event, row, tempFormData) => {
+        event.preventDefault();
+        setAddFormData("");
+        setisRowLoading(true);
+        let ind;
+        let xyz = row;
+        xyz = { ...xyz };
+        xyz.product.price = tempFormData.price;
+        xyz.product.stockQuantity = tempFormData.stockQuantity.toString();
+        xyz.product.express = tempFormData.express == "YES" ? 1 : 0;
+        for (let i = 0; i < editedRowData.length; i++) {
+            if (row.id == editedRowData[i].id) {
+                ind = i;
+                break;
+            }
+        }
+        editedRowData[ind] = xyz;
+        console.log(editedRowData[ind]);
         setEditContactId(null);
+        setisRowLoading(false);
+        uploadBackEnd(row, tempFormData);
     }
     const handleSearch = async (event, query) => {
         event.preventDefault();
@@ -184,7 +201,7 @@ function ProductList(props) {
             await fetch(apiUrl + urlString + query, RequestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    setRows(data);
+                    setEditedRowData(data);
                     if (searchProducts(data).length == 0) { setSearchNotFound(true); setisLoading(false); }
                     setisLoading(false);
                 });
@@ -240,15 +257,15 @@ function ProductList(props) {
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableTitles />
-                    {rows.length > 0 && !(isLoading) ?
+                    {editedRowData.length > 0 && !(isLoading) ?
                         <TableBody>
-                            {rows.map((row, index) => (
+                            {editedRowData.map((row, index) => (
                                 <Fragment>
                                     {editContactId === row.id ?
                                         <>
                                             {!(isRowLoading) ?
                                                 <EditableRow row={row} vendorId={props.match.params.vendorId} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />
-                                                : <center>Updating...</center>}</>
+                                                : <TableRow><TableCell>Updating...</TableCell></TableRow>}</>
                                         :
                                         <ReadOnlyRow row={row} vendorId={props.match.params.vendorId} handleEditClick={handleEditClick} />}
                                 </Fragment>
