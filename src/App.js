@@ -51,7 +51,7 @@ import ExpressOrderList from './orders/ExpressOrderList';
 import setstatus from './Actions';
 import { useSelector, useDispatch } from 'react-redux'
 import store from "./Store";
-import AdminData from './dashboard/AdminData';
+
 
 const drawerWidth = 240;
 
@@ -288,7 +288,6 @@ export default function MiniDrawer() {
                                     <Route path="/app/wrapper" exact component={Wrapper} />
                                     <Route path="/app/login" exact component={Login} />
                                     <Route exact path="/app/reset" component={Reset} />
-                                    <Route exact path="/app/checksample" exact component={AdminData} />
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/dashboard" exact component={Dashboard} />

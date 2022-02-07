@@ -1,4 +1,6 @@
-
+import CircularProgress from '@mui/material/CircularProgress';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 export const NAMES = new Map([
     ["tBsugnxftHgm4otLNN9RPGUnJYq1", "Prachin"],
     ["nyIhUGpMiUdMMz6CAlKclghdlVg1", "Timios"],
@@ -32,3 +34,4 @@ export const COLORS = {
     new: "#2563EB",
     complete: "#D97706",
 };
+export const CircularProgressInTable = <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>;

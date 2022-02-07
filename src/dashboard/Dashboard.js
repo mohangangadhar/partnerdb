@@ -5,15 +5,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchTodos } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { VENDORNAMES } from "../constants/Constants";
-import AdminData from './AdminData';
-import RevenueData from './RevenueData';
+import { CircularProgressInTable } from '../constants/Constants';
+import TableTitles from './TableTitles';
+import DetailTableTitles from './DetailTableTitles';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
     const [orderdata, setOrderData] = useState([]);
@@ -21,127 +19,240 @@ function DashBoard() {
     const [orderStatus, setOrderStatus] = useState("new");
     const [statusOrders, setStatusOrders] = useState([]);
     const [isLoading, setisLoading] = useState(false);
-    const [newCount, setNewCount] = useState("");
-    const [processingCount, setProcessingCount] = useState("");
-    const [pendingCount, setPendingCount] = useState("");
-    const [completeCount, setCompleteCount] = useState("");
-    const [cancelCount, setCancelCount] = useState("");
+    const [isSummaryLoading, setisSummaryLoading] = useState(false);
+    const [newCount, setNewCount] = useState({
+        regular: 0,
+        express: 0
+    });
+    const [processingCount, setProcessingCount] = useState({
+        regular: 0,
+        express: 0
+    });
+    const [pendingCount, setPendingCount] = useState({
+        regular: 0,
+        express: 0
+    });
+    const [completeCount, setCompleteCount] = useState({
+        regular: 0,
+        express: 0
+    });
+    const [cancelCount, setCancelCount] = useState({
+        regular: 0,
+        express: 0
+    });
     const [total, setTotal] = useState(0);
     const [revenueTotal, setRevenueTotal] = useState(0);
-    const [newOrdersData, setNewOrdersData] = useState(0);
-    const [newTotalData, setNewTotalData] = useState(0);
-    const [processingOrdersData, setProcessingOrdersData] = useState(0);
-    const [processingTotalData, setProcessingTotalData] = useState(0);
-    const [pendingOrdersData, setPendingOrdersData] = useState(0);
-    const [pendingTotalData, setPendingTotalData] = useState(0);
-    const [completeOrdersData, setCompleteOrdersData] = useState(0);
-    const [completeTotalData, setCompleteTotalData] = useState(0);
-    const [cancelOrdersData, setCancelOrdersData] = useState(0);
-    const [cancelTotalData, setCancelTotalData] = useState(0);
+    const [newOrdersData, setNewOrdersData] = useState({
+        regular: 0,
+        express: 0,
+        regtotal: 0,
+        exptotal: 0
+    });
+    const [processingOrdersData, setProcessingOrdersData] = useState({
+        regular: 0,
+        express: 0,
+        regtotal: 0,
+        exptotal: 0
+    });
+    const [pendingOrdersData, setPendingOrdersData] = useState({
+        regular: 0,
+        express: 0,
+        regtotal: 0,
+        exptotal: 0
+    });
+    const [completeOrdersData, setCompleteOrdersData] = useState({
+        regular: 0,
+        express: 0,
+        regtotal: 0,
+        exptotal: 0
+    });
 
-    const [totalOrdersData, setTotalOrdersData] = useState(0);
-    const [totalRevenueData, setTotalRevenueData] = useState(0);
+    const [cancelOrdersData, setCancelOrdersData] = useState({
+        regular: 0,
+        express: 0,
+        regtotal: 0,
+        exptotal: 0
+    });
+
+    const order = useSelector(state => state.dashboardreducer);
+    const dispatch = useDispatch();
+
     const RequestOptions = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     };
-    const vendorOrderStyle = {
-        color: 'white',
-        marginBottom: -2,
-        textAlign: 'left'
-    }
-    const vendorTitleStyle =
-        { color: 'white', fontStyle: 'italic', textDecoration: 'underline' };
-    const vendorRow = {
-        borderColor: 'black',
-        borderWidth: '20'
-    };
+    const regularOrdersSum = (newCount.regular.length >= 1 && newCount.regular[0].noOfOrders) + (processingCount.regular.length >= 1 && processingCount.regular[0].noOfOrders)
+        + (completeCount.regular.length >= 1 && completeCount.regular[0].noOfOrders) + (pendingCount.regular.length && pendingCount.regular[0].noOfOrders);
+
+    const expressOrdersSum = (newCount.express.length >= 1 && newCount.express[0].noOfOrders) + (processingCount.express.length >= 1 && processingCount.express[0].noOfOrders)
+        + (completeCount.express.length >= 1 && completeCount.express[0].noOfOrders) + (pendingCount.express.length && pendingCount.express[0].noOfOrders);
+
+    const regularRevenueSum = (newCount.regular.length >= 1 && newCount.regular[0].total) + (processingCount.regular.length >= 1 && processingCount.regular[0].total)
+        + (completeCount.regular.length >= 1 && completeCount.regular[0].total) + (pendingCount.regular.length && pendingCount.regular[0].total);
+
+    const expressRevenueSum = (newCount.express.length >= 1 && newCount.express[0].total) + (processingCount.express.length >= 1 && processingCount.express[0].total)
+        + (completeCount.express.length >= 1 && completeCount.express[0].total) + (pendingCount.express.length && pendingCount.express[0].total);
 
     const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/vendor/report`;
 
-    const getData = async (ordStatus) => {
-        let tempNew = 0;
-        await fetch(apiUrl, RequestOptions)
-            .then(response => response.json())
-            .then(data => {
-                switch (ordStatus) {
-                    case "new":
-                        tempNew = data.filter(data => data.deliveryStatus == "new");
-                        for (let i = 0; i < tempNew.length; i++) {
-                            setNewOrdersData(prev => prev + tempNew[i].noOfOrders);
-                            setNewTotalData(prev => prev + tempNew[i].total);
-                        }
-                        break;
-                    case "processing":
-                        tempNew = data.filter(data => data.deliveryStatus == "accepted");
-                        for (let i = 0; i < tempNew.length; i++) {
-                            setProcessingOrdersData(prev => prev + tempNew[i].noOfOrders);
-                            setProcessingTotalData(prev => prev + tempNew[i].total);
-                        }
-                        break;
-                    case "cancelled":
-                        tempNew = data.filter(data => data.deliveryStatus == "cancelled");
-                        for (let i = 0; i < tempNew.length; i++) {
-                            setCancelOrdersData(prev => prev + tempNew[i].noOfOrders);
-                            setCancelTotalData(prev => prev + tempNew[i].total);
-                        }
-                        break;
-                    case "pending":
-                        tempNew = data.filter(data => data.deliveryStatus == "pending");
-                        for (let i = 0; i < tempNew.length; i++) {
-                            setPendingOrdersData(prev => prev + tempNew[i].noOfOrders);
-                            setPendingTotalData(prev => prev + tempNew[i].total);
-                        }
-                        break;
-                    case "complete":
-                        tempNew = data.filter(data => data.deliveryStatus == "complete");
-                        for (let i = 0; i < tempNew.length; i++) {
-                            setCompleteOrdersData(prev => prev + tempNew[i].noOfOrders);
-                            setCompleteTotalData(prev => prev + tempNew[i].total);
-                        }
-                        break;
+    const changeStatus = async (vendorName) => {
+        setisLoading(true);
+        let data = order.apiData;
+        let statusChangeData = data.filter(data => data.vendorName == vendorName);
+        setOrderData(data.filter(data => data.vendorName == vendorName));
+        setNewCount((prev) => ({
+            ...prev,
+            regular: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "REGULAR"),
+            express: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "EXPRESS")
+        }));
+        setProcessingCount((prev) => ({
+            ...prev,
+            regular: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "REGULAR"),
+            express: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "EXPRESS")
+        }));
+        setPendingCount((prev) => ({
+            ...prev,
+            regular: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "REGULAR"),
+            express: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "EXPRESS")
+        }));
+        setCompleteCount((prev) => ({
+            ...prev,
+            regular: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "REGULAR"),
+            express: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "EXPRESS")
+        }));
+        setCancelCount((prev) => ({
+            ...prev,
+            regular: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "REGULAR"),
+            express: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "EXPRESS")
+        }));
+        setisLoading(false);
+    }
+
+    const getData = async () => {
+        let data = order.apiData;
+        setisSummaryLoading(true);
+        changeStatus("Prachin", data);
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].deliveryStatus == "new") {
+
+                if (data[i].express == "REGULAR") {
+
+                    setNewOrdersData((prevState) => ({
+                        ...prevState,
+                        regular: prevState.regular + data[i].noOfOrders,
+                        regtotal: prevState.regtotal + data[i].total
+                    }
+                    ));
                 }
-            });
+                else if (data[i].express == "EXPRESS") {
+
+                    setNewOrdersData((prevState) => ({
+                        ...prevState,
+                        express: prevState.express + data[i].noOfOrders,
+                        exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+            }
+            if (data[i].deliveryStatus == "accepted") {
+
+                if (data[i].express == "REGULAR") {
+
+                    setProcessingOrdersData((prevState) => ({
+                        ...prevState,
+                        regular: prevState.regular + data[i].noOfOrders,
+                        regtotal: prevState.regtotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].express == "EXPRESS") {
+
+                    setProcessingOrdersData((prevState) => ({
+                        ...prevState,
+                        express: prevState.express + data[i].noOfOrders,
+                        exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+
+            }
+
+
+            if (data[i].deliveryStatus == "cancelled") {
+                if (data[i].express == "REGULAR") {
+                    console.log("reg");
+                    setCancelOrdersData((prevState) => ({
+                        ...prevState,
+                        regular: prevState.regular + data[i].noOfOrders,
+                        regtotal: prevState.regtotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].express == "EXPRESS") {
+                    console.log("expr");
+                    setCancelOrdersData((prevState) => ({
+                        ...prevState,
+                        express: prevState.express + data[i].noOfOrders,
+                        exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+
+            }
+
+            if (data[i].deliveryStatus == "pending") {
+                if (data[i].express == "REGULAR") {
+                    console.log("reg");
+                    setPendingOrdersData((prevState) => ({
+                        ...prevState,
+                        regular: prevState.regular + data[i].noOfOrders,
+                        regtotal: prevState.regtotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].express == "EXPRESS") {
+                    console.log("expr");
+                    setPendingOrdersData((prevState) => ({
+                        ...prevState,
+                        express: prevState.express + data[i].noOfOrders,
+                        exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+            }
+
+            if (data[i].deliveryStatus == "complete") {
+                if (data[i].express == "REGULAR") {
+                    console.log("reg");
+                    setCompleteOrdersData((prevState) => ({
+                        ...prevState,
+                        regular: prevState.regular + data[i].noOfOrders,
+                        regtotal: prevState.regtotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].express == "EXPRESS") {
+                    console.log("expr");
+                    setCompleteOrdersData((prevState) => ({
+                        ...prevState,
+                        express: prevState.express + data[i].noOfOrders,
+                        exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+            }
+
+        }
+        setisSummaryLoading(false);
     }
     useEffect(async () => {
-        const ordStatus = ["new", "processing", "pending", "cancelled", "complete"];
-        setisLoading(true);
-        for (let i = 0; i < ordStatus.length; i++) {
-            getData(ordStatus[i]);
-        }
+        setisSummaryLoading(true);
+        dispatch(fetchTodos);
     }, []);
+    useEffect(() => {
 
-    useEffect(async () => {
-        console.log("st");
-        await fetch(apiUrl, RequestOptions)
-            .then(response => response.json())
-            .then(data => {
-                let statusChangeData = data.filter(data => data.vendorName == status);
-                setBigData(data);
-                console.log(data.filter(data => data.vendorName == status));
-                setOrderData(data.filter(data => data.vendorName == status));
-                setNewCount(statusChangeData.filter(data => data.deliveryStatus == "new"));
-                setProcessingCount(statusChangeData.filter(data => data.deliveryStatus == "accepted"));
-                setPendingCount(statusChangeData.filter(data => data.deliveryStatus == "pending"));
-                setCompleteCount(statusChangeData.filter(data => data.deliveryStatus == "complete"));
-                setCancelCount(statusChangeData.filter(data => data.deliveryStatus == "cancelled"));
-                let finTotal = 0;
-                let finrevenueTotal = 0;
-                for (let i = 0; i < statusChangeData.length; i++) {
-                    if (statusChangeData[i].deliveryStatus == "cancelled"
-                        || statusChangeData[i].deliveryStatus == "failed") {
-                        continue;
-                    }
-                    finTotal += statusChangeData[i].noOfOrders;
-                    finrevenueTotal += statusChangeData[i].total;
-                }
-                setTotal(finTotal);
-                setRevenueTotal(finrevenueTotal);
-                setisLoading(false);
-            }
-            );
-    }, [status]);
-
+        getData();
+    }, [order.apiData.length > 5])
     return (
         <div>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>DashBoard</h2></center>
@@ -149,28 +260,35 @@ function DashBoard() {
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Processing</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                        </TableRow>
+                        <TableTitles />
                     </TableHead>
                     <TableBody>
-                        {orderdata.length > 1 && !(isLoading) ?
-                            <TableRow >
-                                <TableCell align="center">{newOrdersData != 0 ? newOrdersData : 0}</TableCell>
-                                <TableCell align="center">{processingOrdersData != 0 ? processingOrdersData : 0}</TableCell>
-                                <TableCell align="center">{completeOrdersData != 0 ? completeOrdersData : 0}</TableCell>
-                                <TableCell align="center">{pendingOrdersData != 0 ? pendingOrdersData : 0}</TableCell>
-                                <TableCell align="center">{cancelOrdersData != 0 ? cancelOrdersData : 0}</TableCell>
-                                <TableCell align="center">{
-                                    newOrdersData + processingOrdersData + completeOrdersData + pendingOrdersData
-                                }</TableCell>
-                            </TableRow>
-                            : <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>}
+                        {order.apiData.length > 1 && !(isSummaryLoading) ?
+                            <>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
+                                    <TableCell align="center">{newOrdersData.regular != 0 ? newOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center">{processingOrdersData.regular != 0 ? processingOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center">{completeOrdersData.regular != 0 ? completeOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center">{pendingOrdersData.regular != 0 ? pendingOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center">{cancelOrdersData.regular != 0 ? cancelOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        newOrdersData.regular + processingOrdersData.regular + completeOrdersData.regular + pendingOrdersData.regular
+                                    }</TableCell>
+                                </TableRow>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
+                                    <TableCell align="center">{newOrdersData.express != 0 ? newOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center">{processingOrdersData.express != 0 ? processingOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center">{completeOrdersData.express != 0 ? completeOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center">{pendingOrdersData.express != 0 ? pendingOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center">{cancelOrdersData.express != 0 ? cancelOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        newOrdersData.express + processingOrdersData.express + completeOrdersData.express + pendingOrdersData.express
+                                    }</TableCell>
+                                </TableRow>
+                            </>
+                            : CircularProgressInTable}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -178,28 +296,35 @@ function DashBoard() {
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Processing</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                        </TableRow>
+                        <TableTitles />
                     </TableHead>
                     <TableBody>
-                        {orderdata.length > 1 && !(isLoading) ?
-                            <TableRow >
-                                <TableCell align="center">{newTotalData != 0 ? newTotalData : 0}</TableCell>
-                                <TableCell align="center">{processingTotalData != 0 ? processingTotalData : 0}</TableCell>
-                                <TableCell align="center">{completeTotalData != 0 ? completeTotalData : 0}</TableCell>
-                                <TableCell align="center">{pendingTotalData != 0 ? pendingTotalData : 0}</TableCell>
-                                <TableCell align="center">{cancelTotalData != 0 ? cancelTotalData : 0}</TableCell>
-                                <TableCell align="center">{
-                                    newTotalData + processingTotalData + completeTotalData + pendingTotalData
-                                }</TableCell>
-                            </TableRow>
-                            : <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>}
+                        {order.apiData.length > 1 && !(isSummaryLoading) ?
+                            <>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
+                                    <TableCell align="center">{newOrdersData.regtotal != 0 ? newOrdersData.regtotal : 0}</TableCell>
+                                    <TableCell align="center">{processingOrdersData.regtotal != 0 ? processingOrdersData.regtotal : 0}</TableCell>
+                                    <TableCell align="center">{completeOrdersData.regtotal != 0 ? completeOrdersData.regtotal : 0}</TableCell>
+                                    <TableCell align="center">{pendingOrdersData.regtotal != 0 ? pendingOrdersData.regtotal : 0}</TableCell>
+                                    <TableCell align="center">{cancelOrdersData.regtotal != 0 ? cancelOrdersData.regtotal : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        newOrdersData.regtotal + processingOrdersData.regtotal + completeOrdersData.regtotal + pendingOrdersData.regtotal
+                                    }</TableCell>
+                                </TableRow>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
+                                    <TableCell align="center">{newOrdersData.exptotal != 0 ? newOrdersData.exptotal : 0}</TableCell>
+                                    <TableCell align="center">{processingOrdersData.exptotal != 0 ? processingOrdersData.exptotal : 0}</TableCell>
+                                    <TableCell align="center">{completeOrdersData.exptotal != 0 ? completeOrdersData.exptotal : 0}</TableCell>
+                                    <TableCell align="center">{pendingOrdersData.exptotal != 0 ? pendingOrdersData.exptotal : 0}</TableCell>
+                                    <TableCell align="center">{cancelOrdersData.exptotal != 0 ? cancelOrdersData.exptotal : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        newOrdersData.exptotal + processingOrdersData.exptotal + completeOrdersData.exptotal + pendingOrdersData.exptotal
+                                    }</TableCell>
+                                </TableRow>
+                            </>
+                            : CircularProgressInTable}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -207,56 +332,36 @@ function DashBoard() {
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Processing</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                            <TableCell>
-                                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Vendor</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-required-label"
-                                        id="demo-simple-select-disabled"
-                                        value={status}
-                                        onChange={(event) => {
-                                            setisLoading(true);
-                                            setStatus(event.target.value);
-                                        }}
-                                        label="Enter Status"
-                                    >
-                                        <MenuItem value="Prachin">
-                                            Prachin
-                                        </MenuItem>
-                                        <MenuItem value="Timios">Timios</MenuItem>
-                                        <MenuItem value="Jeevamrut Foods">Jeevamrut Foods</MenuItem>
-                                        <MenuItem value="Organic India">Organic India</MenuItem>
-                                        <MenuItem value="Back To Roots">Back To Roots</MenuItem>
-                                        <MenuItem value="Amruthaahaara">Amruthaahaara</MenuItem>
-                                        <MenuItem value="Karshaka">Karshaka</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </TableCell>
-                        </TableRow>
+                        <DetailTableTitles status={status} setStatus={setStatus} changeStatus={changeStatus} bigData={bigData} />
                     </TableHead>
                     <TableBody>
-                        {orderdata.length > 1 && !(isLoading) ?
-                            <TableRow >
-                                <TableCell align="center">{status}</TableCell>
-                                <TableCell align="center">{newCount.length >= 1 ? newCount[0].noOfOrders : 0}</TableCell>
-                                <TableCell align="center">{processingCount.length >= 1 ? processingCount[0].noOfOrders : 0}</TableCell>
-                                <TableCell align="center">{completeCount.length >= 1 ? completeCount[0].noOfOrders : 0}</TableCell>
-                                <TableCell align="center">{pendingCount.length >= 1 ? pendingCount[0].noOfOrders : 0}</TableCell>
-                                <TableCell align="center">{cancelCount.length >= 1 ? cancelCount[0].noOfOrders : 0}</TableCell>
-                                <TableCell align="center">{
-
-                                    total
-                                }</TableCell>
-                            </TableRow>
-                            : <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>}
+                        {order.apiData.length > 1 && !(isLoading) ?
+                            <>
+                                <TableRow >
+                                    <TableCell align="center" rowSpan={2}>{status}</TableCell>
+                                    <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
+                                    <TableCell align="center">{newCount.regular.length >= 1 ? newCount.regular[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{processingCount.regular.length >= 1 ? processingCount.regular[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{completeCount.regular.length >= 1 ? completeCount.regular[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{pendingCount.regular.length >= 1 ? pendingCount.regular[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{cancelCount.regular.length >= 1 ? cancelCount.regular[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        regularOrdersSum
+                                    }</TableCell>
+                                </TableRow>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
+                                    <TableCell align="center">{newCount.express.length >= 1 ? newCount.express[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{processingCount.express.length >= 1 ? processingCount.express[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{completeCount.express.length >= 1 ? completeCount.express[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{pendingCount.express.length >= 1 ? pendingCount.express[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{cancelCount.express.length >= 1 ? cancelCount.express[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        expressOrdersSum
+                                    }</TableCell>
+                                </TableRow>
+                            </>
+                            : CircularProgressInTable}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -265,61 +370,40 @@ function DashBoard() {
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Processing</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                            <TableCell>
-                                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Vendor</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-required-label"
-                                        id="demo-simple-select-disabled"
-                                        value={status}
-                                        onChange={(event) => {
-                                            setisLoading(true);
-                                            setStatus(event.target.value);
-                                        }}
-                                        label="Enter Status"
-                                    >
-                                        <MenuItem value="Prachin">
-                                            Prachin
-                                        </MenuItem>
-                                        <MenuItem value="Timios">Timios</MenuItem>
-                                        <MenuItem value="Jeevamrut Foods">Jeevamrut Foods</MenuItem>
-                                        <MenuItem value="Organic India">Organic India</MenuItem>
-                                        <MenuItem value="Back To Roots">Back To Roots</MenuItem>
-                                        <MenuItem value="Amruthaahaara">Amruthaahaara</MenuItem>
-                                        <MenuItem value="Karshaka">Karshaka</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </TableCell>
-                        </TableRow>
+                        <DetailTableTitles status={status} setStatus={setStatus} changeStatus={changeStatus} bigData={bigData} />
                     </TableHead>
                     <TableBody>
-                        {orderdata.length > 1 && !(isLoading) ?
-                            <TableRow >
-                                <TableCell align="center">{status}</TableCell>
-                                <TableCell align="center">{newCount.length >= 1 ? newCount[0].total : 0}</TableCell>
-                                <TableCell align="center">{processingCount.length >= 1 ? processingCount[0].total : 0}</TableCell>
-                                <TableCell align="center">{completeCount.length >= 1 ? completeCount[0].total : 0}</TableCell>
-                                <TableCell align="center">{pendingCount.length >= 1 ? pendingCount[0].total : 0}</TableCell>
-                                <TableCell align="center">{cancelCount.length >= 1 ? cancelCount[0].total : 0}</TableCell>
-                                <TableCell align="center">{
-                                    revenueTotal
-                                }</TableCell>
-                            </TableRow>
-                            : <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>}
+                        {order.apiData.length > 1 && !(isLoading) ?
+                            <>
+                                <TableRow >
+                                    <TableCell align="center" rowSpan={2}>{status}</TableCell>
+                                    <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
+                                    <TableCell align="center">{newCount.regular.length >= 1 ? newCount.regular[0].total : 0}</TableCell>
+                                    <TableCell align="center">{processingCount.regular.length >= 1 ? processingCount.regular[0].total : 0}</TableCell>
+                                    <TableCell align="center">{completeCount.regular.length >= 1 ? completeCount.regular[0].total : 0}</TableCell>
+                                    <TableCell align="center">{pendingCount.regular.length >= 1 ? pendingCount.regular[0].total : 0}</TableCell>
+                                    <TableCell align="center">{cancelCount.regular.length >= 1 ? cancelCount.regular[0].total : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        regularRevenueSum
+                                    }</TableCell>
+                                </TableRow>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
+                                    <TableCell align="center">{newCount.express.length >= 1 ? newCount.express[0].total : 0}</TableCell>
+                                    <TableCell align="center">{processingCount.express.length >= 1 ? processingCount.express[0].total : 0}</TableCell>
+                                    <TableCell align="center">{completeCount.express.length >= 1 ? completeCount.express[0].total : 0}</TableCell>
+                                    <TableCell align="center">{pendingCount.express.length >= 1 ? pendingCount.express[0].total : 0}</TableCell>
+                                    <TableCell align="center">{cancelCount.express.length >= 1 ? cancelCount.express[0].total : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        expressRevenueSum
+                                    }</TableCell>
+                                </TableRow>
+                            </>
+                            : CircularProgressInTable}
                     </TableBody>
                 </Table>
             </TableContainer>
 
-            {/* {orderdata.length > 2 && !(isLoading) ?
-                <AdminData data={orderdata} /> : <b>...</b>} */}
 
         </div >
     )
