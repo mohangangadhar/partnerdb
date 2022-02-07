@@ -24,6 +24,7 @@ import SearchProducts from './Components/SearchProducts';
 import TableTitles from './Components/TableTitles';
 function ProductList(props) {
     const [rows, setRows] = useState([]);
+    const [isApiLoading, setisApiLoading] = useState(false);
     const [isRowLoading, setisRowLoading] = useState(false);
     const [offSet, setOffSet] = useState(0);
     const [size, setSize] = useState(50);
@@ -121,6 +122,8 @@ function ProductList(props) {
     const uploadBackEnd = async (row, tempFormData) => {
         let urlString = 'vendor-product-m/' + row.id;
         let productData;
+
+        setisApiLoading(true);
         await fetch(apiUrl + urlString, RequestOptions)
             .then(response => response.json())
             .then(data => {
@@ -155,6 +158,7 @@ function ProductList(props) {
         await fetch(apiUrl + urlStringForUpdate, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
+                setisApiLoading(false);
             }
             ).catch((err) => alert('something wrong' + err));
     }
@@ -236,6 +240,7 @@ function ProductList(props) {
     }
     return (
         <div>
+            {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
             <center><h2 style={{ marginTop: -9, marginBottom: 0, fontStyle: 'italic', color: 'white' }}>Products</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 <ProductsPerPage size={size} setSize={setSize} />
