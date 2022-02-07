@@ -7,26 +7,24 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import InputLabel from '@mui/material/InputLabel';
+
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import Select from '@mui/material/Select';
-import { Box, Grid, Typography, TextField } from "@material-ui/core";
-import Picker from "../components/Picker";
-import InputAdornment from '@mui/material/InputAdornment';
+
+import { Box, Grid, TextField } from "@material-ui/core";
+
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
 import CircularProgress from '@mui/material/CircularProgress';
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
+import ProductsPerPage from './Components/ProductsPerPage';
+import FilteredInStock from './Components/FilteredInStock';
+import SearchProducts from './Components/SearchProducts';
+import TableTitles from './Components/TableTitles';
 function ProductList(props) {
     const [rows, setRows] = useState([]);
+    const [isRowLoading, setisRowLoading] = useState(false);
     const [offSet, setOffSet] = useState(0);
     const [size, setSize] = useState(50);
     const [perPage, serPerPage] = useState(0);
@@ -39,14 +37,20 @@ function ProductList(props) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [editContactId, setEditContactId] = useState(null);
-    const [addFormData, setAddFormData] = useState({
+    const [addFormData, setAddFormData] = useState([{
         price: 0,
         express: "YES",
         stockQuantity: "",
-    });
+    }]);
+    const RequestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
     let urlString;
-    let apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
-    const receivedData = (val) => {
+    const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
+    const receivedData = async (val) => {
         setSearchNotFound(false);
         if (filterInStock == "OUT OF STOCK") { setSize(100); }
         else { setSize(size == 100 ? 50 : size); }
@@ -55,15 +59,7 @@ function ProductList(props) {
                 ? "product/"
                 : "vendor-product-m/" + props.match.params.vendorId + "/query?size=" + size + "&page=" + val;
         }
-        console.log(urlString);
-        let requestOptions;
-        requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }
-        fetch(apiUrl + urlString, requestOptions)
+        await fetch(apiUrl + urlString, RequestOptions)
             .then(response => response.json())
             .then(data => {
                 switch (filterInStock) {
@@ -83,6 +79,7 @@ function ProductList(props) {
                 setTotalPages(data.totalPages);
                 if (data.content && data.content.length == 0) { setSearchNotFound(true) }
                 setisLoading(false);
+                setisRowLoading(false);
             });
 
     }
@@ -94,6 +91,7 @@ function ProductList(props) {
         setSearchNotFound(false);
         receivedData(offSet);
     }, [offSet, filterInStock, size]);
+
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
@@ -121,17 +119,10 @@ function ProductList(props) {
 
     const handleFormSubmit = async (event, row) => {
         event.preventDefault();
-        setisLoading(true);
-        let apiUrl;
-        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
+        setisRowLoading(true);
         let urlString = 'vendor-product-m/' + row.id;
         let productData;
-        console.log(apiUrl + urlString);
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        };
-        await fetch(apiUrl + urlString, requestOptions)
+        await fetch(apiUrl + urlString, RequestOptions)
             .then(response => response.json())
             .then(data => {
                 productData = {
@@ -156,7 +147,6 @@ function ProductList(props) {
                     "express": addFormData.express == "YES" ? 1 : 0,
                 };
             });
-        console.log(productData);
         let urlStringForUpdate = "vendor-product-m/" + props.match.params.vendorId + "/update";
         const requestOptionsForUpdate = {
             method: 'PUT',
@@ -175,10 +165,9 @@ function ProductList(props) {
     }
     const handleSearch = async (event, query) => {
         event.preventDefault();
-
         console.log(query);
         if (query == "" || query.length == 0) {
-            console.log(query.length);
+            setisLoading(true);
             receivedData(offSet);
             return;
         } else if (query.length > 2) {
@@ -188,24 +177,15 @@ function ProductList(props) {
                 urlString
                     = "vendor-product-m/" + props.match.params.vendorId + "/query/";
             }
-            let requestOptions;
-            console.log(apiUrl + urlString);
-            requestOptions = {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
             const searchProducts = (data) => {
                 console.log(data.length);
                 return data;
             }
-            await fetch(apiUrl + urlString + query, requestOptions)
+            await fetch(apiUrl + urlString + query, RequestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     setRows(data);
-                    if (searchProducts(data).length == 0) { setSearchNotFound(true); setisLoading(false); console.log("hii"); }
+                    if (searchProducts(data).length == 0) { setSearchNotFound(true); setisLoading(false); }
                     setisLoading(false);
                 });
         }
@@ -241,79 +221,15 @@ function ProductList(props) {
         <div>
             <center><h2 style={{ marginTop: -9, marginBottom: 0, fontStyle: 'italic', color: 'white' }}>Products</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
-                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">{size} Products per Page</InputLabel>
-                    <Select
-                        style={{ height: 50, color: 'white' }}
-                        labelId="demo-simple-select-required-label"
-                        id="demo-simple-select-disabled"
-                        value={size}
-                        onChange={(event) => {
-                            setSize(event.target.value);
-                        }}
-                        label="Get Products"
-                    >
-                        <MenuItem value="10">10</MenuItem>
-                        <MenuItem value="20">20</MenuItem>
-                        <MenuItem value="50">50</MenuItem>
-                    </Select>
-                </FormControl>
+                <ProductsPerPage size={size} setSize={setSize} />
                 <div>
-                    <Button style={{ marginRight: 10, marginBottom: -50, color: 'white' }} variant={filterInStock == "ALL" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (filterInStock == "ALL") { return; }
-                        else {
-                            setisLoading(true);
-                            setFilterInStock("ALL");
-                        }
-
-                    }}
-                    >ALL</Button>
-                    <Button style={{ marginRight: 10, marginBottom: -50, color: 'white' }} variant={filterInStock == "IN STOCK" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        if (filterInStock == "IN STOCK") { return; }
-                        else {
-                            setisLoading(true);
-                            setFilterInStock("IN STOCK");
-                        }
-
-                    }}
-                    >IN STOCK</Button>
-                    <Button style={{ marginRight: 10, marginBottom: -50, color: 'white' }} variant={filterInStock == "OUT OF STOCK" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        if (filterInStock == "OUT OF STOCK") { return; }
-                        else {
-                            setisLoading(true);
-                            setFilterInStock("OUT OF STOCK");
-                        }
-
-                    }}
-                    >OUT OF STOCK</Button>
+                    <FilteredInStock checkText="ALL" filterInStock={filterInStock} setisLoading={setisLoading} setFilterInStock={setFilterInStock} />
+                    <FilteredInStock checkText="IN STOCK" filterInStock={filterInStock} setisLoading={setisLoading} setFilterInStock={setFilterInStock} />
+                    <FilteredInStock checkText="OUT OF STOCK" filterInStock={filterInStock} setisLoading={setisLoading} setFilterInStock={setFilterInStock} />
                 </div>
                 <div>
-                    <TextField
-                        id="searchquery"
-                        label="Search"
-                        value={searchquery}
-                        onChange={(event) => {
-                            setSearchQuery((event.target.value).toLowerCase());
-
-                            handleSearch(event, (event.target.value).toLowerCase());
-
-
-                        }}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            },
-                            endAdornment: <InputAdornment position="end" style={{ color: "white" }}>
-                                <SearchIcon />
-                            </InputAdornment>
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-
-                    />
+                    <SearchProducts setSearchQuery={setSearchQuery} searchquery={searchquery}
+                        handleSearch={handleSearch} />
                 </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
@@ -323,23 +239,17 @@ function ProductList(props) {
             <Box m={1} />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Product Id</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>Title</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>Express</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Price</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Stock Quantity</TableCell>
-                            {/* <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell> */}
-                            <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles />
                     {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (
                                 <Fragment>
-                                    {editContactId === row.id ? (
-                                        <EditableRow row={row} vendorId={props.match.params.vendorId} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
+                                    {editContactId === row.id ?
+                                        <>
+                                            {!(isRowLoading) ?
+                                                <EditableRow row={row} vendorId={props.match.params.vendorId} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />
+                                                : <center>Updating...</center>}</>
+                                        :
                                         <ReadOnlyRow row={row} vendorId={props.match.params.vendorId} handleEditClick={handleEditClick} />}
                                 </Fragment>
                             ))}
