@@ -42,18 +42,19 @@ function ExpressOrderList(props) {
         setisLoading(true);
         if (user && order.expressstatus == "") {
             dispatch(setstatus.setexpressstatusvalue(auth.currentUser.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "all" : "accepted"));
-            console.log(order.expressstatus);
+
             setisLoading(false);
         }
     }, [])
     const receivedData = (val, perPageVal) => {
         setSearchNotFound(false);
+
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
                 ? "order/express/status/"
                 : "vendor/" + props.match.params.vendorId + "/order/express/"
-        } console.log(urlString);
+        }
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
@@ -84,6 +85,7 @@ function ExpressOrderList(props) {
         setSearchNotFound(false);
         setRows("");
         setisLoading(true);
+        console.log(order);
         if (order.expressstatus != "") {
             receivedData(offSet, perPage);
         }
@@ -224,8 +226,8 @@ function ExpressOrderList(props) {
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
-                            {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>Vendor Id</TableCell>
                             <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
@@ -243,6 +245,7 @@ function ExpressOrderList(props) {
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
+                                    <TableCell >{row.vendorId}</TableCell>
                                     <TableCell >{row.userId}</TableCell>
                                     <TableCell align="center">{row.createdAt}</TableCell>
                                     <TableCell align="center" >{row.deliveryDate}</TableCell>

@@ -26,7 +26,6 @@ const DetailTableTitles = (props) => {
                         id="demo-simple-select-disabled"
                         value={status}
                         onChange={(event) => {
-
                             setStatus(event.target.value);
                             changeStatus(event.target.value);
                         }}

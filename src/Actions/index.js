@@ -4,9 +4,21 @@ const setstatusvalue = (value) => async dispatch => {
         payload: value
     })
 }
+const setpagevalue = (value) => async dispatch => {
+    dispatch({
+        type: "SETPAGE",
+        payload: value
+    })
+}
+
 const setstatusresetvalue = () => async dispatch => {
     dispatch({
         type: "RESETSTATUS"
+    })
+}
+const setpageresetvalue = () => async dispatch => {
+    dispatch({
+        type: "RESETPAGE"
     })
 }
 const setexpressstatusvalue = (value) => async dispatch => {
@@ -39,4 +51,6 @@ export default {
     setstatusresetvalue,
     setexpressstatusvalue,
     setexpressstatusresetvalue,
+    setpagevalue,
+    setpageresetvalue
 }

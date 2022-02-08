@@ -26,13 +26,12 @@ const OrderList = (props) => {
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    // const [status, setStatus] = useState(props.match.params.vendorId === "order" ? "all" : "accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
-    const order = useSelector(state => state.orderstatusreducer);
+    let order = useSelector(state => state.orderstatusreducer);
     const dispatch = useDispatch();
     useEffect(async () => {
         setisLoading(true);
@@ -41,21 +40,24 @@ const OrderList = (props) => {
             setisLoading(false);
         }
     }, [])
-    const receivedData = (val, perPageVal) => {
+    const receivedData = async (pageval) => {
         setSearchNotFound(false);
-        console.log(order.status);
+        setRows("");
+        setisLoading(true);
+        console.log(pageval);
+        console.log(order.page);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
                 ? "order/status/"
                 : "vendor/" + props.match.params.vendorId + "/order/"
-        } console.log(urlString + order.status);
+        }
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "pageNumber": val,
+                "pageNumber": pageval,
                 "pageSize": 30,
                 "sortDirection": "asc",
                 "sortByKey": "id",
@@ -63,7 +65,7 @@ const OrderList = (props) => {
                 "endDate": endDate
             })
         };
-        fetch(apiUrl + urlString + order.status, requestOptions)
+        await fetch(apiUrl + urlString + order.status, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
@@ -75,16 +77,18 @@ const OrderList = (props) => {
     }
     const [user] = useAuthState(auth);
     const history = useHistory();
-    useEffect(async () => {
-        setSearchNotFound(false);
-        setRows("");
-        setisLoading(true);
+    useEffect(() => {
+
         if (order.status != "") {
-            receivedData(offSet, perPage);
+            console.log(order.page);
+            receivedData(order.page);
         }
 
-    }, [offSet, order.status, perPage]);
-
+    }, [order.status]);
+    const handlePageChange = (value) => {
+        dispatch(setstatus.setpagevalue(value));
+        receivedData(value)
+    }
     const downloadCsvFile = () => {
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
@@ -206,19 +210,27 @@ const OrderList = (props) => {
 
                 </div>
             </div>
-            <Grid container justifyContent="flex-end" component={Paper}>
-                <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
-                <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
-                <Button variant={"contained"} color={"primary"} size={"small"} style={{ marginRight: "5px" }}
-                    onClick={() => downloadCsvFile()}>Download</Button>
+
+            <Grid container justifyContent="space-between" component={Paper}>
+                <Pagination variant={"text"} color={"primary"}
+                    count={totalPages}
+                    page={order.page + 1}
+                    onChange={(event, value) => handlePageChange(value - 1)} />
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
+                    <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
+                    <Button variant={"contained"} color={"primary"} size={"small"} style={{ marginRight: "5px" }}
+                        onClick={() => downloadCsvFile()}>Download</Button>
+                </div>
             </Grid>
             <Box m={1} />
+
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
-                            {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>Vendor Id</TableCell>
                             <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
@@ -236,6 +248,7 @@ const OrderList = (props) => {
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
+                                    <TableCell >{row.vendorId}</TableCell>
                                     <TableCell >{row.userId}</TableCell>
                                     <TableCell align="center">
                                         {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
@@ -259,20 +272,12 @@ const OrderList = (props) => {
             <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-                    onChange={(event, value) => setOffSet(value - 1)} />
+                    page={order.page + 1}
+                    onChange={(event, value) => handlePageChange(value - 1)} />
             </Grid>
             <Box m={2} />
         </div>
     )
 }
-// const mapStateToProps = (state) => {
-//     return {
-//         status: state.orderstatusreducer.status
-//     };
-// };
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         setStatus: () => dispatch(setStatus()),
-//     };
-// };
+
 export default OrderList;

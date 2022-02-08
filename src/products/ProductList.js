@@ -179,7 +179,6 @@ function ProductList(props) {
             }
         }
         editedRowData[ind] = xyz;
-        console.log(editedRowData[ind]);
         setEditContactId(null);
         setisRowLoading(false);
         uploadBackEnd(row, tempFormData);
@@ -199,7 +198,6 @@ function ProductList(props) {
                     = "vendor-product-m/" + props.match.params.vendorId + "/query/";
             }
             const searchProducts = (data) => {
-                console.log(data.length);
                 return data;
             }
             await fetch(apiUrl + urlString + query, RequestOptions)
@@ -218,14 +216,8 @@ function ProductList(props) {
             urlString = props.match.params.vendorId == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "export/admin/productexport/" : "export/" + props.match.params.vendorId + "/productexport/";
         }
 
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
-        console.log(apiUrl + urlString);
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        };
 
-        fetch(apiUrl + urlString, requestOptions)
+        fetch(apiUrl + urlString, RequestOptions)
             .then(response => {
                 const filename = response.headers.get('Content-Disposition').split('filename=')[1];
                 response.blob().then(blob => {
