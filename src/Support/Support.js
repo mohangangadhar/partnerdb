@@ -34,34 +34,41 @@ const Support = () => {
         await fetch(apiUrl, RequestOptions)
             .then(response => response.json())
             .then(data => {
-                setMessages(data.data);
+                setMessages(data.data.reverse());
                 setTotalPages(data.meta.last_page)
-                console.log(data.meta.total);
-                console.log(data.data);
             }).catch(err => console.log(err));
         setisLoading(false);
     }
-    useEffect(() => {
-        handleChange(1);
+    useEffect(async () => {
+        setisLoading(true);
+        let apiUrl = `https://admin.ityme.in/api/admin/supports?page=1&per_page=15`;
+        await fetch(apiUrl, RequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                handleChange(data.meta.last_page);
+            }).catch(err => console.log(err));
     }, []);
     return <div>
         <TableContainer component={Paper}>
             <Table className="table" aria-label="spanning table">
                 <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                     <TableRow>
+                        <TableCell style={{ color: 'wheat' }}>Id</TableCell>
                         <TableCell style={{ color: 'wheat' }}>Name</TableCell>
                         <TableCell style={{ color: 'wheat' }}>Email</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Message</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Created At</TableCell>
                     </TableRow>
                 </TableHead>
                 {messages.length > 0 && !(isLoading) ?
                     <TableBody>
                         {messages.map((row, index) => (
                             <TableRow key={row.id}>
-
+                                <TableCell >{row.id}</TableCell>
                                 <TableCell >{row.name}</TableCell>
                                 <TableCell align="center" >{row.email}</TableCell>
                                 <TableCell align="center">{row.message}</TableCell>
+                                <TableCell align="center">{new Date(Date.parse(row.created_at)).toLocaleString()}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -78,10 +85,10 @@ const Support = () => {
         <Grid container justifyContent={"center"}>
             <Pagination variant={"text"} color={"primary"}
                 count={totalPages}
-                onChange={(event, value) => handleChange(value)} />
+                onChange={(event, value) => handleChange(totalPages - value + 1)} />
         </Grid>
         <Box m={2} />
-    </div>;
+    </div >;
 };
 
 export default Support;

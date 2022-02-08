@@ -294,7 +294,6 @@ export default function MiniDrawer() {
                     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                         <DrawerHeader />
                         <Container maxWidth="md">
-
                             <HashRouter>
                                 <Switch>
                                     <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />
@@ -312,10 +311,6 @@ export default function MiniDrawer() {
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                     <Route path="/app/:vendorId/product/" exact component={ProductList} />
                                     <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
-                                    {/*<Route path="/app/:vendorId/product/" exact component={ProductList}/>*/}
-                                    {/*<Route path="/" exact render={() => <Redirect to="/app"/>}/>*/}
-                                    {/*<PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>*/}
-                                    {/* <Redirect from="*" to="/app/wrapper" /> */}
                                 </Switch>
                                 <NotificationContainer />
                             </HashRouter>
