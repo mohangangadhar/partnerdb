@@ -50,7 +50,8 @@ import ContactUs from './Contact/ContactUs';
 import ExpressOrderList from './orders/ExpressOrderList';
 import setstatus from './Actions';
 import { useSelector, useDispatch } from 'react-redux'
-import store from "./Store";
+import HelpIcon from '@mui/icons-material/Help';
+import Support from './Support/Support';
 
 
 const drawerWidth = 240;
@@ -275,6 +276,18 @@ export default function MiniDrawer() {
                                         id: "4"
                                     }}><ListItemText primary="DetailOrders" /></Link>
                                 </ListItem>
+                                <ListItem button key="Support">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/support',
+                                            id: "5"
+                                        }}><HelpIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Support</h6></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/support',
+                                        id: "5"
+                                    }}><ListItemText primary="Support" /></Link>
+                                </ListItem>
                             </HashRouter>
                         </List>
                     </Drawer>
@@ -290,6 +303,7 @@ export default function MiniDrawer() {
                                     <Route exact path="/app/reset" component={Reset} />
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
+                                    <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/detail/order" exact component={DetailOrderList} />

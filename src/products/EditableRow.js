@@ -28,6 +28,7 @@ const EditableRow = ({
                     id: row.product.id
                 }}>{row.id}</Link>
             </TableCell>
+            <TableCell align="left">{row.vendorId}</TableCell>
             <TableCell align="left">{detail(row.product.title)}</TableCell>
             <TableCell align="center">
                 <select style={{
