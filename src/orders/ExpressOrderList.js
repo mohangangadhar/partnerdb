@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import firebase from "../firebase";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -8,11 +9,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Grid, Typography } from "@material-ui/core";
@@ -21,7 +17,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
-import { connect } from "react-redux";
 import setstatus from '../Actions';
 function ExpressOrderList(props) {
     let { id } = useParams();
@@ -30,7 +25,6 @@ function ExpressOrderList(props) {
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    // const [status, setStatus] = useState(props.match.params.vendorId === "order" ? "all" : "accepted");
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
@@ -46,9 +40,10 @@ function ExpressOrderList(props) {
             setisLoading(false);
         }
     }, [])
-    const receivedData = (val, perPageVal) => {
+    const receivedData = (val) => {
         setSearchNotFound(false);
-
+        setRows("");
+        setisLoading(true);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "order"
@@ -82,15 +77,18 @@ function ExpressOrderList(props) {
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(async () => {
-        setSearchNotFound(false);
-        setRows("");
-        setisLoading(true);
-        console.log(order);
-        if (order.expressstatus != "") {
-            receivedData(offSet, perPage);
-        }
-    }, [offSet, order.expressstatus, perPage]);
 
+
+        if (order.expressstatus != "") {
+            receivedData(order.page);
+        }
+    }, [order.expressstatus]);
+
+    const handlePageChange = (event, value) => {
+        event.preventDefault();
+        dispatch(setstatus.setexpresspagevalue(value));
+        receivedData(value);
+    }
 
 
     const downloadCsvFile = () => {
@@ -216,10 +214,16 @@ function ExpressOrderList(props) {
                 </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>
-                <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
-                <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
-                <Button variant={"contained"} color={"primary"} size={"small"} style={{ marginRight: "5px" }}
-                    onClick={() => downloadCsvFile()}>Download</Button>
+                <Pagination variant={"text"} color={"primary"}
+                    count={totalPages}
+                    page={order.page + 1}
+                    onChange={(event, value) => handlePageChange(event, value - 1)} />
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
+                    <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
+                    <Button variant={"contained"} color={"primary"} size={"small"} style={{ marginRight: "5px" }}
+                        onClick={() => downloadCsvFile()}>Download</Button>
+                </div>
             </Grid>
             <Box m={1} />
             <TableContainer component={Paper}>
@@ -267,7 +271,8 @@ function ExpressOrderList(props) {
             <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-                    onChange={(event, value) => setOffSet(value - 1)} />
+                    page={order.page + 1}
+                    onChange={(event, value) => handlePageChange(event, value - 1)} />
             </Grid>
             <Box m={2} />
         </div>

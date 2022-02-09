@@ -80,12 +80,12 @@ const OrderList = (props) => {
     useEffect(() => {
 
         if (order.status != "") {
-            console.log(order.page);
             receivedData(order.page);
         }
 
     }, [order.status]);
-    const handlePageChange = (value) => {
+    const handlePageChange = (event, value) => {
+        event.preventDefault();
         dispatch(setstatus.setpagevalue(value));
         receivedData(value)
     }
@@ -215,7 +215,7 @@ const OrderList = (props) => {
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
                     page={order.page + 1}
-                    onChange={(event, value) => handlePageChange(value - 1)} />
+                    onChange={(event, value) => handlePageChange(event, value - 1)} />
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
                     <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
@@ -273,7 +273,7 @@ const OrderList = (props) => {
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
                     page={order.page + 1}
-                    onChange={(event, value) => handlePageChange(value - 1)} />
+                    onChange={(event, value) => handlePageChange(event, value - 1)} />
             </Grid>
             <Box m={2} />
         </div>

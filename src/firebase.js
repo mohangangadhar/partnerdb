@@ -13,8 +13,7 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const auth = app.auth();
 const db = app.firestore();
-// const [user] = useAuthState(auth);
-// const history = useHistory();
+
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
@@ -82,3 +81,4 @@ export {
   sendPasswordResetEmail,
   logout,
 };
+export default firebase;

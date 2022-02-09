@@ -15,6 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import firebase from "../firebase";
 import { Container, Divider, FormLabel, Button } from "@material-ui/core";
 import { Item } from "../components/Item";
 import Invoice from '../components/Invoice';
@@ -83,6 +84,29 @@ function OrderDetail(props) {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
     }
+    const handleCheck = () => {
+        const todoRef = firebase.database().ref('orders').child(props.location.id).child("data");
+        todoRef.update({
+            status: status,
+        });
+        // const todo = {
+        //     data: {
+        //         address: {
+        //             homes: "Yes",
+        //             Rent: "Now"
+        //         },
+        //         deliveryFee: 0,
+        //         vendor: {
+        //             Gender: "M",
+        //             Status: "Accepted",
+        //             Name: "Navya",
+        //         }
+        //     }
+
+        // };
+
+        // todoRef.push(todo);
+    }
     const handleEditFormChange = (event) => {
         event.preventDefault();
 
@@ -135,7 +159,10 @@ function OrderDetail(props) {
                                                 labelId="demo-simple-select-required-label"
                                                 id="demo-simple-select-disabled"
                                                 value={status}
-                                                onChange={(event) => setStatus(event.target.value)}
+                                                onChange={(event) => {
+                                                    setStatus(event.target.value);
+                                                    handleCheck(event.target.value);
+                                                }}
                                                 label="Enter Status"
                                             >
                                                 <MenuItem value="accepted">
@@ -155,7 +182,9 @@ function OrderDetail(props) {
                                                 labelId="demo-simple-select-required-label"
                                                 id="demo-simple-select-disabled"
                                                 value={status}
-                                                onChange={(event) => setStatus(event.target.value)}
+                                                onChange={(event) => {
+                                                    setStatus(event.target.value);
+                                                }}
                                                 label="Enter Status"
                                             >
                                                 <MenuItem value="prepared">
@@ -190,6 +219,7 @@ function OrderDetail(props) {
                 </center>
             }
             <Divider />
+            <Button color="primary" onClick={handleCheck}>Check</Button>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>

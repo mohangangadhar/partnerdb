@@ -1,13 +1,18 @@
 const initialState = {
-    expressstatus: ""
+    expressstatus: "",
+    page: 0
 };
 export default function expressstatusreducer(state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
         case "SETEXPRESSSTATUS":
-            return { expressstatus: payload }
+            return { ...state, expressstatus: payload }
+        case "SETEXPRESSPAGE":
+            return { ...state, page: payload }
+        case "RESETEXPRESSPAGE":
+            return { ...state, page: 0 }
         case "RESETEXPRESSSTATUS":
-            return { expressstatus: "" }
+            return { ...state, expressstatus: "" }
         default:
             return state
     }

@@ -27,9 +27,20 @@ const setexpressstatusvalue = (value) => async dispatch => {
         payload: value
     })
 }
+const setexpresspagevalue = (value) => async dispatch => {
+    dispatch({
+        type: "SETTEXPRESSPAGE",
+        payload: value
+    })
+}
 const setexpressstatusresetvalue = () => async dispatch => {
     dispatch({
         type: "RESETEXPRESSSTATUS"
+    })
+}
+const setexpresspageresetvalue = () => async dispatch => {
+    dispatch({
+        type: "RESETEXPRESSPAGE"
     })
 }
 const RequestOptions = {
@@ -52,5 +63,7 @@ export default {
     setexpressstatusvalue,
     setexpressstatusresetvalue,
     setpagevalue,
-    setpageresetvalue
+    setpageresetvalue,
+    setexpresspagevalue,
+    setexpresspageresetvalue
 }
