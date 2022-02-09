@@ -496,6 +496,7 @@ export default function MiniDrawer() {
                         <Route path="/app/dashboard" exact component={Dashboard} />
                         <Route path="/app/sellerprofile" exact component={SellerProfile} />
                         <Route path="/app/:vendorId" exact component={OrderList} />
+                        <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                         <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                         <Route path="/app/:vendorId/product/" exact component={ProductList} />
                         <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />

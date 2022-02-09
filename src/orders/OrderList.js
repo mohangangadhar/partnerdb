@@ -30,7 +30,7 @@ const OrderList = (props) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-
+    const [vendorNames, setVendorNames] = useState([]);
     let order = useSelector(state => state.orderstatusreducer);
     const dispatch = useDispatch();
     useEffect(async () => {
@@ -40,6 +40,7 @@ const OrderList = (props) => {
             setisLoading(false);
         }
     }, [])
+    const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
     const receivedData = async (pageval) => {
         setSearchNotFound(false);
         setRows("");
@@ -52,7 +53,7 @@ const OrderList = (props) => {
                 ? "order/status/"
                 : "vendor/" + props.match.params.vendorId + "/order/"
         }
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -84,6 +85,7 @@ const OrderList = (props) => {
         }
 
     }, [order.status]);
+
     const handlePageChange = (event, value) => {
         event.preventDefault();
         dispatch(setstatus.setpagevalue(value));
@@ -97,8 +99,6 @@ const OrderList = (props) => {
                 : "export/" + id + "/order/"
         }
 
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
-        // const apiUrl = `https://localhost:443/`
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -230,11 +230,11 @@ const OrderList = (props) => {
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Id</TableCell>
                             <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>Vendor Id</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -248,13 +248,13 @@ const OrderList = (props) => {
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
-                                    <TableCell >{row.vendorId}</TableCell>
                                     <TableCell >{row.userId}</TableCell>
                                     <TableCell align="center">
                                         {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
                                     </TableCell>
                                     <TableCell align="center" >{row.deliveryDate}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
+                                    <TableCell >{row.vendorId}</TableCell>
                                     <TableCell align="center">{row.deliveryStatus}</TableCell>
                                 </TableRow>
                             ))}

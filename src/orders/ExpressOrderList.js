@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import firebase from "../firebase";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -231,11 +231,11 @@ function ExpressOrderList(props) {
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Id</TableCell>
                             <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>Vendor Id</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -249,11 +249,11 @@ function ExpressOrderList(props) {
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
-                                    <TableCell >{row.vendorId}</TableCell>
                                     <TableCell >{row.userId}</TableCell>
                                     <TableCell align="center">{row.createdAt}</TableCell>
                                     <TableCell align="center" >{row.deliveryDate}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
+                                    <TableCell >{row.vendorId}</TableCell>
                                     <TableCell align="center">{row.deliveryStatus}</TableCell>
                                 </TableRow>
                             ))}

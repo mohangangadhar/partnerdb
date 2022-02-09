@@ -89,23 +89,6 @@ function OrderDetail(props) {
         todoRef.update({
             status: status,
         });
-        // const todo = {
-        //     data: {
-        //         address: {
-        //             homes: "Yes",
-        //             Rent: "Now"
-        //         },
-        //         deliveryFee: 0,
-        //         vendor: {
-        //             Gender: "M",
-        //             Status: "Accepted",
-        //             Name: "Navya",
-        //         }
-        //     }
-
-        // };
-
-        // todoRef.push(todo);
     }
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -219,7 +202,6 @@ function OrderDetail(props) {
                 </center>
             }
             <Divider />
-            <Button color="primary" onClick={handleCheck}>Check</Button>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>

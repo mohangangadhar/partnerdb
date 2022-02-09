@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react'
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
+
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,9 +12,6 @@ import Button from '@mui/material/Button';
 
 import { Box, Grid, TextField } from "@material-ui/core";
 
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useHistory } from 'react-router-dom';
-import { auth } from "../firebase";
 import CircularProgress from '@mui/material/CircularProgress';
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
