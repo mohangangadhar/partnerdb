@@ -4,7 +4,7 @@ import TableRow from '@material-ui/core/TableRow';
 export const NAMES = new Map([
     ["tBsugnxftHgm4otLNN9RPGUnJYq1", "Prachin"],
     ["nyIhUGpMiUdMMz6CAlKclghdlVg1", "Timios"],
-    ["uImKM4rBPkTGxu8fnZAi1Vd9XHL2", "Back To Roots"],
+    ["1St2bLHjMMg3egWU97mDF3lWFTS2", "Back To Roots"],
     ["NIgOuTnuZzUOnf23oLisxVFzUfs1", "Organic India"],
     ["riwdTSGv8zWuMnAY3kDbJgP6TBI3", "Karshaka"],
     ["mIn2HQgZL7MwJER3dJ8H8O2BVXR2", "Dhriti Organics"],
@@ -17,7 +17,7 @@ export const NAMES = new Map([
 export const VENDORNAMES = new Map([
     ["Prachin", "tBsugnxftHgm4otLNN9RPGUnJYq1",],
     ["Timios", "nyIhUGpMiUdMMz6CAlKclghdlVg1",],
-    ["Back To Roots", "uImKM4rBPkTGxu8fnZAi1Vd9XHL2",],
+    ["Back To Roots", "1St2bLHjMMg3egWU97mDF3lWFTS2",],
     ["Organic India", "NIgOuTnuZzUOnf23oLisxVFzUfs1",],
     ["Karshaka", "riwdTSGv8zWuMnAY3kDbJgP6TBI3",],
     ["Dhriti Organics", "mIn2HQgZL7MwJER3dJ8H8O2BVXR2",],
