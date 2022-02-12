@@ -57,7 +57,7 @@ export default function Login() {
     useEffect(() => {
 
         if (user) {
-            if (user.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
+            if (user.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2") {
                 history.replace("/app/dashboard")
             }
             else {

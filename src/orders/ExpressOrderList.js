@@ -35,7 +35,7 @@ function ExpressOrderList(props) {
     useEffect(async () => {
         setisLoading(true);
         if (user && order.expressstatus == "") {
-            dispatch(setstatus.setexpressstatusvalue(auth.currentUser.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "all" : "accepted"));
+            dispatch(setstatus.setexpressstatusvalue(auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "all" : "accepted"));
 
             setisLoading(false);
         }

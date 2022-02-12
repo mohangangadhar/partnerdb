@@ -144,9 +144,9 @@ export default function MiniDrawer() {
         setOpen(false);
     };
     if (user) {
-        // dispatch(setstatus.setstatusvalue(auth.currentUser.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "all" : "accepted"));
+        // dispatch(setstatus.setstatusvalue(auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "all" : "accepted"));
         id = auth.currentUser.uid;
-        if (id == "GHS5sVHoRShSE2KmLtvVCGue8X82") {
+        if (id == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2") {
             return (
                 <Box sx={{ display: 'flex' }}>
                     <CssBaseline />

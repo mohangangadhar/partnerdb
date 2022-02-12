@@ -1,12 +1,20 @@
 import firebase from "firebase/compat";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBpIys_Eke7q-cT8Oc-cOsdOIcLh-5_zyI",
-  authDomain: "sellerdb-b3f72.firebaseapp.com",
-  projectId: "sellerdb-b3f72",
-  storageBucket: "sellerdb-b3f72.appspot.com",
-  messagingSenderId: "331859779520",
-  appId: "1:331859779520:web:40fe7533974943c479b225"
+  apiKey: "AIzaSyBnfBcR77n4URrn2dv-vWnJAIiJwtQCX9M",
+  authDomain: "ityme-4f997.firebaseapp.com",
+  databaseURL: "https://ityme-4f997-default-rtdb.firebaseio.com",
+  projectId: "ityme-4f997",
+  storageBucket: "ityme-4f997.appspot.com",
+  messagingSenderId: "207933413299",
+  appId: "1:207933413299:web:1a2ddeb7cc96f810739dc6",
+  measurementId: "G-5H798PNV5Z"
+  // apiKey: "AIzaSyBpIys_Eke7q-cT8Oc-cOsdOIcLh-5_zyI",
+  // authDomain: "sellerdb-b3f72.firebaseapp.com",
+  // projectId: "sellerdb-b3f72",
+  // storageBucket: "sellerdb-b3f72.appspot.com",
+  // messagingSenderId: "331859779520",
+  // appId: "1:331859779520:web:40fe7533974943c479b225"
 };
 
 // Initialize Firebase

@@ -210,7 +210,7 @@ function ProductList(props) {
         setisLoading(true);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = props.match.params.vendorId == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "export/admin/productexport/" : "export/" + props.match.params.vendorId + "/productexport/";
+            urlString = props.match.params.vendorId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "export/admin/productexport/" : "export/" + props.match.params.vendorId + "/productexport/";
         }
 
 

@@ -34,7 +34,7 @@ const Invoice = ({ order, orderProductList, userData, userId }) => (
             <Image style={styles.logo} src={Jeevamrut} />
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <InvoiceNo invoice={order} />
-                {userId == "GHS5sVHoRShSE2KmLtvVCGue8X82" &&
+                {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
                     <BillTo invoice={userData} />
                 }
             </View>

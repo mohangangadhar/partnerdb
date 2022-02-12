@@ -58,6 +58,10 @@ function OrderDetail(props) {
     }, [isLoading]);
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const todoRef = firebase.database().ref('orders').child(props.location.id).child("data");
+        await todoRef.update({
+            status: status
+        });
         console.log(status);
         let orderdata = {
             "id": order.id,
@@ -84,12 +88,7 @@ function OrderDetail(props) {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
     }
-    const handleCheck = () => {
-        const todoRef = firebase.database().ref('orders').child(props.location.id).child("data");
-        todoRef.update({
-            status: status,
-        });
-    }
+
     const handleEditFormChange = (event) => {
         event.preventDefault();
 
@@ -135,7 +134,7 @@ function OrderDetail(props) {
                                     <FormLabel style={{ color: 'wheat' }}>Current Status: {order.deliveryStatus} </FormLabel>
                                 </TableCell>
                                 <TableCell>
-                                    {userId == "GHS5sVHoRShSE2KmLtvVCGue8X82" ?
+                                    {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?
                                         <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
                                             <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
                                             <Select
@@ -144,7 +143,6 @@ function OrderDetail(props) {
                                                 value={status}
                                                 onChange={(event) => {
                                                     setStatus(event.target.value);
-                                                    handleCheck(event.target.value);
                                                 }}
                                                 label="Enter Status"
                                             >
@@ -180,7 +178,7 @@ function OrderDetail(props) {
                                     }
                                 </TableCell>
                             </TableRow>
-                            {userId == "GHS5sVHoRShSE2KmLtvVCGue8X82" &&
+                            {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
                                 <TableRow style={{}}>
                                     <TableCell>
                                         <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>

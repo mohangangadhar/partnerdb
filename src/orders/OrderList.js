@@ -36,7 +36,7 @@ const OrderList = (props) => {
     useEffect(async () => {
         setisLoading(true);
         if (user && order.status == "") {
-            dispatch(setstatus.setstatusvalue(auth.currentUser.uid == "GHS5sVHoRShSE2KmLtvVCGue8X82" ? "all" : "accepted"));
+            dispatch(setstatus.setstatusvalue(auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "all" : "accepted"));
             setisLoading(false);
         }
     }, [])
