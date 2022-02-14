@@ -100,8 +100,13 @@ function ProductDetail(props) {
         console.log(productdata);
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
-        console.log(props.match.params.productId);
-        let urlString = "vendor-product-m/" + props.match.params.vendorId + "/update";
+
+        let urlString;
+        if (props.match.params.hasOwnProperty("vendorId")) {
+            urlString = props.match.params.vendorId === "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"
+                ? "vendor-product-m/" + "GHS5sVHoRShSE2KmLtvVCGue8X82" + "/query/"
+                : "vendor-product-m/" + props.match.params.vendorId + "/query";
+        }
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },

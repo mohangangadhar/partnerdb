@@ -56,8 +56,8 @@ function ProductList(props) {
         if (filterInStock == "OUT OF STOCK") { setSize(100); }
         else { setSize(size == 100 ? 50 : size); }
         if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = props.match.params.vendorId === ":vendorId"
-                ? "product/"
+            urlString = props.match.params.vendorId === "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"
+                ? "vendor-product-m/" + "GHS5sVHoRShSE2KmLtvVCGue8X82" + "/query?size=" + size + "&page=" + val
                 : "vendor-product-m/" + props.match.params.vendorId + "/query?size=" + size + "&page=" + val;
         }
         await fetch(apiUrl + urlString, RequestOptions)
@@ -146,7 +146,14 @@ function ProductList(props) {
                     "express": tempFormData.express == "YES" ? 1 : 0,
                 };
             });
-        let urlStringForUpdate = "vendor-product-m/" + props.match.params.vendorId + "/update";
+        let urlStringForUpdate;
+        if (props.match.params.vendorId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2") {
+            urlStringForUpdate = "vendor-product-m/" + "GHS5sVHoRShSE2KmLtvVCGue8X82" + "/update";
+        }
+        else {
+            urlStringForUpdate = "vendor-product-m/" + props.match.params.vendorId + "/update";
+        }
+
         const requestOptionsForUpdate = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -191,8 +198,9 @@ function ProductList(props) {
             setSearchNotFound(false);
             setisLoading(true);
             if (props.match.params.hasOwnProperty("vendorId")) {
-                urlString
-                    = "vendor-product-m/" + props.match.params.vendorId + "/query/";
+                urlString = props.match.params.vendorId === "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"
+                    ? "vendor-product-m/" + "GHS5sVHoRShSE2KmLtvVCGue8X82" + "/query/"
+                    : "vendor-product-m/" + props.match.params.vendorId + "/query";
             }
             const searchProducts = (data) => {
                 return data;
