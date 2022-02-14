@@ -169,8 +169,8 @@ function OrderDetail(props) {
                                                 }}
                                                 label="Enter Status"
                                             >
-                                                <MenuItem value="prepared">
-                                                    Out For Delivery
+                                                <MenuItem value="left from seller warehouse">
+                                                    Left from Warehouse
                                                 </MenuItem>
                                                 <MenuItem value="Order Received">Order Received</MenuItem>
                                                 <MenuItem value="cancelled">Cancelled</MenuItem>
