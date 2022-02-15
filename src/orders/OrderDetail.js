@@ -61,8 +61,10 @@ function OrderDetail(props) {
     const sendEmail = async (e) => {
         e.preventDefault();
         setisLoading(true);
-        console.log("hii");
         await handleSubmit();
+        if (status == "failed") {
+            return;
+        }
         emailjs.sendForm('service_6su3zlp', 'template_7jfisde', e.target, 'user_LJaGxh5HdqkXRo3ivnoRW')
             .then((result) => {
                 NotificationManager.success('Sent Email', 'Successful!', 1000);
@@ -247,11 +249,11 @@ function OrderDetail(props) {
                 <form onSubmit={sendEmail}>
                     <div style={{ display: 'none' }}>
                         <label>Name</label>
-                        <input type="text" name="name" value="Bhavani" />
+                        <input type="text" name="name" value={userData.name} />
                         <label>Email</label>
-                        <input type="email" name="email" value="bhavaniprasadsmart@gmail.com" />
+                        <input type="email" name="email" value={userData.email} />
                         <label>Subject</label>
-                        <input type="text" name="subject" value={status} />
+                        <input type="text" name="orderNo" value={props.location.id} />
                         <label>Message</label>
                         <textarea name="message" value={status} />
                     </div>
