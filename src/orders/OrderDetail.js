@@ -62,15 +62,18 @@ function OrderDetail(props) {
         e.preventDefault();
         setisLoading(true);
         await handleSubmit();
-        if (status == "failed") {
-            return;
-        }
-        emailjs.sendForm('service_6su3zlp', 'template_7jfisde', e.target, 'user_LJaGxh5HdqkXRo3ivnoRW')
-            .then((result) => {
-                NotificationManager.success('Sent Email', 'Successful!', 1000);
-            }).catch(error => {
-                console.log(error.message);
-            });
+        // if (status == "failed") {
+        //     return;
+        // }
+        // if(userId=="MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"){
+        //     emailjs.sendForm('service_6su3zlp', 'template_7jfisde', e.target, 'user_LJaGxh5HdqkXRo3ivnoRW')
+        //     .then((result) => {
+        //         NotificationManager.success('Sent Email', 'Successful!', 1000);
+        //     }).catch(error => {
+        //         console.log(error.message);
+        //     });
+        // }
+
     };
     const handleSubmit = async () => {
 
