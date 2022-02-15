@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react'
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
-
+import { APIURL } from '../constants/Constants';
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
@@ -60,7 +60,7 @@ function ProductList(props) {
                 ? "vendor-product-m/" + "GHS5sVHoRShSE2KmLtvVCGue8X82" + "/query?size=" + size + "&page=" + val
                 : "vendor-product-m/" + props.match.params.vendorId + "/query?size=" + size + "&page=" + val;
         }
-        await fetch(apiUrl + urlString, RequestOptions)
+        await fetch(APIURL + urlString, RequestOptions)
             .then(response => response.json())
             .then(data => {
                 switch (filterInStock) {
@@ -121,7 +121,7 @@ function ProductList(props) {
         let productData;
 
         setisApiLoading(true);
-        await fetch(apiUrl + urlString, RequestOptions)
+        await fetch(APIURL + urlString, RequestOptions)
             .then(response => response.json())
             .then(data => {
                 productData = {
@@ -159,7 +159,7 @@ function ProductList(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(productData)
         };
-        await fetch(apiUrl + urlStringForUpdate, requestOptionsForUpdate)
+        await fetch(APIURL + urlStringForUpdate, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);
@@ -205,7 +205,7 @@ function ProductList(props) {
             const searchProducts = (data) => {
                 return data;
             }
-            await fetch(apiUrl + urlString + query, RequestOptions)
+            await fetch(APIURL + urlString + query, RequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setEditedRowData(data);
@@ -222,7 +222,7 @@ function ProductList(props) {
         }
 
 
-        fetch(apiUrl + urlString, RequestOptions)
+        fetch(APIURL + urlString, RequestOptions)
             .then(response => {
                 const filename = response.headers.get('Content-Disposition').split('filename=')[1];
                 response.blob().then(blob => {

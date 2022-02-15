@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState, useRef } from 'react'
 import { auth } from '../firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
@@ -15,12 +15,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import firebase from "../firebase";
+import emailjs from 'emailjs-com';
 import { Container, Divider, FormLabel, Button } from "@material-ui/core";
 import { Item } from "../components/Item";
 import Invoice from '../components/Invoice';
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
+import { NotificationManager } from "react-notifications";
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
@@ -28,6 +29,7 @@ function OrderDetail(props) {
     const [userData, setUserData] = useState({});
     const [isLoading, setisLoading] = useState(false);
     const [editContactId, setEditContactId] = useState(null);
+    const formClick = useRef();
     const [addFormData, setAddFormData] = useState({
         quantity: 0,
     });
@@ -56,15 +58,26 @@ function OrderDetail(props) {
             }
             );
     }, [isLoading]);
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const sendEmail = async (e) => {
+        e.preventDefault();
+        setisLoading(true);
+        console.log("hii");
+        await handleSubmit();
+        emailjs.sendForm('service_6su3zlp', 'template_7jfisde', e.target, 'user_LJaGxh5HdqkXRo3ivnoRW')
+            .then((result) => {
+                NotificationManager.success('Sent Email', 'Successful!', 1000);
+            }).catch(error => {
+                console.log(error.message);
+            });
+    };
+    const handleSubmit = async () => {
+
 
         let orderdata = {
             "status": status,
         };
         let apiUrl;
         apiUrl = `https://admin.ityme.in/api/admin/orders/${props.location.id}`;
-        console.log(props.match.params.productId);
         const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNDcxMzQxNDQ3NmFjZjMzNmZlZTAzYjk0YTBiNGRkMjJiOWE0NTk3M2U5Y2MyN2M5Y2U1OTdjZjJhMmJhZDIwZTQ4Y2M0OWVjODU0MGVjZTIiLCJpYXQiOjE2NDQzMDYyOTgsIm5iZiI6MTY0NDMwNjI5OCwiZXhwIjoxNjc1ODQyMjk3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.cPLfFwvU-9Ga26YBaGc_dnLKHj1hbDC4ozf8YA6nX-Z72XMN-nOMWN8v-7uchBvIjSWfN-i4_J4k9bQMO0c-o8J1RncvlEu55EUTfTaHd5L8lYovuCiNYp0C5aNlK4uoYg9ms7koMcEt0n4Sd818y9SLWAXOOFJ_aNQHNl69Fpj9fMRs5l2idMonnEK-IMIHbZ-1JQsLo2m5DkjASfFi3sTDywsRJ4Zj78ajN7kvtyOT2yokc4DdDlcYCeFwtHfoNtm7M9yY4uNpiPTtagKDmzBpnB9wRsXcyEO_M8KJVBPLGmB6DzOov5_D0P4Ir61Oae6ZEmyul7upnHqKqBCRPi7w3k-oM1Z8yljgvag7AcVZjNcVdUX4nB8KDt3FQHiBrIf6FN39xZUNivQ_aeBottFLbB6x5-zoYxFB0n4tI7rk5GpuIhHFNEa2-c3Jx5QNKaZ_ohHaPGu8VfTowZ0p9l_Lh6NodHlnTaeMRXDCJgcpTgstEOW-eIOaBjCH7raj3tE6oXSxc47r23Ro1-hGXWsHkcDATDPX5g4HXzLwWUksgkPnQ8ignDAUwrWywcqX_smIpnR2PGVdUXoJNiL9DElpwQs7cwQy4gCsuFdEs_fZOYwYz5OiGhaIxcIKEJsvoGZ-ItuHfWTYVUQqE-sgGPTNpGc7Fa_dqSmbhkK2PNo";
         const requestOptions = {
             method: 'PUT',
@@ -78,11 +91,11 @@ function OrderDetail(props) {
         await fetch(apiUrl, requestOptions)
             .then(response => response.json())
             .then(data => {
-                // setisLoading(false);
+                setisLoading(false);
+                NotificationManager.success('Updated Status', 'Successful!', 1000);
             }
-            ).then(
-                history.goBack
-            );
+            ).then(history.goBack());
+
     }
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
@@ -231,11 +244,18 @@ function OrderDetail(props) {
                 </Table>
             </TableContainer>
             <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                <Button variant='contained' color="success" onClick={(ev) => {
-                    setisLoading(true);
-                    handleSubmit(ev);
-                }}
-                >Submit</Button>
+                <form onSubmit={sendEmail}>
+                    <div style={{ display: 'none' }}>
+                        <label>Name</label>
+                        <input type="text" name="name" value="Bhavani" />
+                        <label>Email</label>
+                        <input type="email" name="email" value="bhavaniprasadsmart@gmail.com" />
+                        <label>Subject</label>
+                        <input type="text" name="subject" value={status} />
+                        <label>Message</label>
+                        <textarea name="message" value={status} />
+                    </div>
+                    <input style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="submit" /></form>
             </Container>
             {Object.keys(order).length > 2 && !(isLoading) ?
                 <div>
@@ -245,6 +265,7 @@ function OrderDetail(props) {
                     </PDFDownloadLink>
                 </div> : <b>""</b>
             }
+
         </div >
     )
 }

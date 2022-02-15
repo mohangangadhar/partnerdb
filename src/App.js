@@ -52,6 +52,7 @@ import setstatus from './Actions';
 import { useSelector, useDispatch } from 'react-redux'
 import HelpIcon from '@mui/icons-material/Help';
 import Support from './Support/Support';
+import dummy from './dummy';
 
 
 const drawerWidth = 240;
@@ -303,6 +304,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
+                                    <Route path="/app/dummy" exact component={dummy} />
                                     <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/detail/order" exact component={DetailOrderList} />

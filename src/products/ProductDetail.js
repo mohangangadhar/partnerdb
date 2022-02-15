@@ -6,10 +6,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CircularProgress from '@mui/material/CircularProgress';
-import Paper from '@material-ui/core/Paper';
-import Card from '@material-ui/core/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+import { APIURL } from '../constants/Constants';
 import { Box, Container, Divider, Typography, Button, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
 import { Item } from "../components/Item";
 import { Grid, Stack } from "@mui/material";
@@ -43,16 +40,13 @@ function ProductDetail(props) {
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(() => {
-        let apiUrl;
-        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
-        console.log(props.location.id);
         let urlString = 'vendor-product-m/' + props.match.params.productId;
-        console.log(apiUrl + urlString);
+        console.log(APIURL + urlString);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         };
-        fetch(apiUrl + urlString, requestOptions)
+        fetch(APIURL + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setProduct(data);
@@ -98,9 +92,6 @@ function ProductDetail(props) {
             "uniqueness": uniqueness
         };
         console.log(productdata);
-        let apiUrl;
-        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
-
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"
@@ -112,7 +103,7 @@ function ProductDetail(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(productdata)
         };
-        await fetch(apiUrl + urlString, requestOptions)
+        await fetch(APIURL + urlString, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setLoading(false);

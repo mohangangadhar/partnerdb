@@ -1,6 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+export const APIURL = "https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/";
 export const NAMES = new Map([
     ["rmD3GlROgVa05wuO4FL69kSTW2h1", "Prachin"],
     ["R3YblWKbKKdKMHql49Old8poLV33", "Timios"],

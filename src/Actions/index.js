@@ -1,3 +1,4 @@
+import { APIURL } from '../constants/Constants';
 const setstatusvalue = (value) => async dispatch => {
     dispatch({
         type: "SETSTATUS",
@@ -47,10 +48,9 @@ const RequestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
 };
-const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/vendor/report`;
 
 export async function fetchTodos(dispatch, getState) {
-    const response = await fetch(apiUrl, RequestOptions)
+    const response = await fetch(APIURL, RequestOptions)
         .then(response => response.json());
     dispatch({ type: 'GETDATA', payload: response })
 }
