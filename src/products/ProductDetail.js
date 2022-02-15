@@ -104,8 +104,8 @@ function ProductDetail(props) {
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"
-                ? "vendor-product-m/" + "GHS5sVHoRShSE2KmLtvVCGue8X82" + "/query/"
-                : "vendor-product-m/" + props.match.params.vendorId + "/query";
+                ? "vendor-product-m/" + "GHS5sVHoRShSE2KmLtvVCGue8X82" + "/update"
+                : "vendor-product-m/" + props.match.params.vendorId + "/update";
         }
         const requestOptions = {
             method: 'PUT',
