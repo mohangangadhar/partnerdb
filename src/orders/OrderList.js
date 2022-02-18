@@ -18,7 +18,8 @@ import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
 import { connect } from "react-redux";
 import setstatus from '../Actions';
-
+import SearchOrders from './SearchOrders';
+import { APIURL } from '../constants/Constants';
 const OrderList = (props) => {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -30,7 +31,10 @@ const OrderList = (props) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [searchquery, setSearchQuery] = useState(0);
+    const [queryLoad, setQueryLoad] = useState(false);
     const [vendorNames, setVendorNames] = useState([]);
+    const [searchOrder, setSearchOrder] = useState({});
     let order = useSelector(state => state.orderstatusreducer);
     const dispatch = useDispatch();
     useEffect(async () => {
@@ -66,7 +70,7 @@ const OrderList = (props) => {
                 "endDate": endDate
             })
         };
-        await fetch(apiUrl + urlString + order.status, requestOptions)
+        await fetch(APIURL + urlString + order.status, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
@@ -128,90 +132,122 @@ const OrderList = (props) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
     }
+    const handleSearch = async (event, query) => {
+        event.preventDefault();
+        if (query == "" || query == 0) {
+            setQueryLoad(false);
+            receivedData(order.page);
+            return;
+        } else if (query.length >= 1) {
+            setQueryLoad(true);
+            setisLoading(true);
+            setSearchNotFound(false);
+            const requestOptions = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            };
+
+            fetch(apiUrl + 'order/' + query, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setSearchOrder(data);
+                    if (data.order == null) { setSearchNotFound(true); setisLoading(false); }
+                    setisLoading(false);
+                });
+        }
+    }
     return (
         <div>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Regular Orders</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                {queryLoad ?
+                    <h4 style={{ color: 'white' }}>Clear the Search to see Options...</h4>
+                    :
+
+                    <div>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "all") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("all"));
+                            }
+
+                        }}
+                        >ALL</Button>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "new") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("new"));
+                            }
+                        }}
+                        >New</Button>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "accepted") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("accepted"));
+                            }
+
+                        }}
+                        >Processing</Button>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "prepared") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("prepared"));
+                            }
+
+                        }}
+                        >Out for Delivery</Button>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "pending") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("pending"));
+                            }
+
+                        }}
+                        >Delivered</Button>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "completed") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("complete"));
+                            }
+
+                        }}
+                        >Completed</Button>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "cancelled") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("cancelled"));
+                            }
+
+                        }}
+                        >Cancelled</Button>
+                        <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                            ev.preventDefault();
+                            if (order.status == "failed") { return; }
+                            else {
+                                setisLoading(true);
+                                dispatch(setstatus.setstatusvalue("failed"));
+                            }
+                        }}
+                        >Failed</Button>
+                    </div>
+                }
                 <div>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "all") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("all"));
-                        }
-
-                    }}
-                    >ALL</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "new") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("new"));
-                        }
-                    }}
-                    >New</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "accepted") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("accepted"));
-                        }
-
-                    }}
-                    >Processing</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "prepared") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("prepared"));
-                        }
-
-                    }}
-                    >Out for Delivery</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "pending") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("pending"));
-                        }
-
-                    }}
-                    >Delivered</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "completed") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("complete"));
-                        }
-
-                    }}
-                    >Completed</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "cancelled") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("cancelled"));
-                        }
-
-                    }}
-                    >Cancelled</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                        ev.preventDefault();
-                        if (order.status == "failed") { return; }
-                        else {
-                            setisLoading(true);
-                            dispatch(setstatus.setstatusvalue("failed"));
-                        }
-                    }}
-                    >Failed</Button>
-
+                    <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
+                        handleSearch={handleSearch} />
                 </div>
             </div>
 
@@ -242,43 +278,73 @@ const OrderList = (props) => {
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
-                    {rows.length > 0 && !(isLoading) ?
-                        <TableBody>
-                            {rows.map((row, index) => (
-                                <TableRow key={row.id}>
-                                    <TableCell>
-                                        <Link to={{
-                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
-                                            id: row.id
-                                        }}>{row.id}</Link>
-                                    </TableCell>
-                                    <TableCell >{row.user.name}</TableCell>
-                                    <TableCell align="center">
-                                        {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
-                                    </TableCell>
-                                    <TableCell align="center" >{row.deliveryDate}</TableCell>
-                                    <TableCell align="center">{row.total}</TableCell>
-                                    <TableCell >{detail(row.vendor.name)}</TableCell>
-                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
+                    {queryLoad ?
+                        <>
+                            {searchOrder.order != null && Object.keys(searchOrder.order).length > 2 && !(isLoading) ?
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell align="center">
+                                            <Link to={{
+                                                pathname: '/app/' + props.match.params.vendorId + '/order/' + searchOrder.order.id,
+                                                id: searchOrder.order.id
+                                            }}> {searchOrder.order.id}</Link></TableCell>
+                                        <TableCell align="center" >{searchOrder.order.user.name}</TableCell>
+                                        <TableCell align="center" > {new Date(Date.parse(searchOrder.order.createdAt + " UTC")).toLocaleString()}</TableCell>
+                                        <TableCell align="center" >---</TableCell>
+                                        <TableCell align="center" >{searchOrder.order.total}</TableCell>
+                                        <TableCell align="center" >{detail(searchOrder.order.vendor.name)}</TableCell>
+                                        <TableCell align="center" >{searchOrder.order.deliveryStatus}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                                :
+                                <center>
+                                    {searchNotFound ? <h1 style={{ color: 'black' }}>Not Found</h1> : <CircularProgress />}
+                                </center>
+                            }
+                        </>
+
                         :
-                        <div>
-                            <center>
-                                {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
-                            </center>
-                        </div>
-                    }
+                        <>
+                            {rows.length > 0 && !(isLoading) ?
+                                <TableBody>
+                                    {rows.map((row, index) => (
+                                        <TableRow key={row.id}>
+                                            <TableCell>
+                                                <Link to={{
+                                                    pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
+                                                    id: row.id
+                                                }}>{row.id}</Link>
+                                            </TableCell>
+                                            <TableCell >{row.user.name}</TableCell>
+                                            <TableCell align="center">
+                                                {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
+                                            </TableCell>
+                                            <TableCell align="center" >{row.deliveryDate}</TableCell>
+                                            <TableCell align="center">{row.total}</TableCell>
+                                            <TableCell >{detail(row.vendor.name)}</TableCell>
+                                            <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                                :
+                                <div>
+                                    <center>
+                                        {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
+                                    </center>
+                                </div>
+                            }
+                        </>}
                 </Table>
             </TableContainer>
             <Box m={2} />
-            <Grid container justifyContent={"center"}>
-                <Pagination variant={"text"} color={"primary"}
-                    count={totalPages}
-                    page={order.page + 1}
-                    onChange={(event, value) => handlePageChange(event, value - 1)} />
-            </Grid>
+            {!queryLoad &&
+                <Grid container justifyContent={"center"}>
+                    <Pagination variant={"text"} color={"primary"}
+                        count={totalPages}
+                        page={order.page + 1}
+                        onChange={(event, value) => handlePageChange(event, value - 1)} />
+                </Grid>
+            }
             <Box m={2} />
         </div>
     )
