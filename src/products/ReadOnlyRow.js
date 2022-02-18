@@ -20,7 +20,7 @@ const ReadOnlyRow = ({
                     id: row.product.id
                 }}>{row.id}</Link>
             </TableCell>
-            <TableCell align="left">{row.vendorId}</TableCell>
+            <TableCell align="left">{detail(row.vendor.name)}</TableCell>
             <TableCell align="left">{detail(row.product.title)}</TableCell>
             <TableCell>{row.product.express == 0 ? "NO" : "Yes"}</TableCell>
             <TableCell align="center">{row.product.price}</TableCell>

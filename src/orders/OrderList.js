@@ -124,6 +124,10 @@ const OrderList = (props) => {
                 });
             });
     }
+    const detail = (val) => {
+        let jsonVal = JSON.parse(val)
+        return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
+    }
     return (
         <div>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Regular Orders</h2></center>
@@ -230,11 +234,11 @@ const OrderList = (props) => {
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>User Name</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Id</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -248,13 +252,13 @@ const OrderList = (props) => {
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
-                                    <TableCell >{row.userId}</TableCell>
+                                    <TableCell >{row.user.name}</TableCell>
                                     <TableCell align="center">
                                         {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
                                     </TableCell>
                                     <TableCell align="center" >{row.deliveryDate}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
-                                    <TableCell >{row.vendorId}</TableCell>
+                                    <TableCell >{detail(row.vendor.name)}</TableCell>
                                     <TableCell align="center">{row.deliveryStatus}</TableCell>
                                 </TableRow>
                             ))}

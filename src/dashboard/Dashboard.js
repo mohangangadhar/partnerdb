@@ -93,7 +93,6 @@ function DashBoard() {
     const expressRevenueSum = (newCount.express.length >= 1 && newCount.express[0].total) + (processingCount.express.length >= 1 && processingCount.express[0].total)
         + (completeCount.express.length >= 1 && completeCount.express[0].total) + (pendingCount.express.length && pendingCount.express[0].total);
 
-    const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/order/vendor/report`;
 
     const changeStatus = async (vendorName) => {
         setisLoading(true);
@@ -250,7 +249,6 @@ function DashBoard() {
         dispatch(fetchTodos);
     }, []);
     useEffect(() => {
-
         getData();
     }, [order.apiData.length > 5])
     return (

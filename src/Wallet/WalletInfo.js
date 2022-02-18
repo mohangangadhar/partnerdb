@@ -67,7 +67,7 @@ const WalletInfo = ({ data }) => {
         }
         data.wallet = wallet;
         data.wallet.meta = wallet.meta;
-        console.log(data);
+
         fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${wallet.walletId}/transaction`, {
             method: 'POST', // or 'PUT'
             headers: {

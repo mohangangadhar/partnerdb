@@ -21,6 +21,7 @@ import { useHistory } from 'react-router-dom';
 function ProductDetail(props) {
     const [product, setProduct] = useState({});
     const [stockQ, setStockQ] = useState("");
+    const [express, setExpress] = useState("YES");
     const [productPrice, setProductPrice] = useState(0);
     const [gstrate, setGstRate] = useState(0);
     const [brandName, setBrandName] = useState("");
@@ -57,6 +58,7 @@ function ProductDetail(props) {
                 setManufacturer(data.product.manufacturer);
                 setAbout(data.product.about);
                 setShelfLife(data.product.shelfLife);
+                setExpress(data.product.express == 0 || null ? "NO" : "YES",)
                 setInstructions(data.product.instructionsToStore);
                 setUsages(data.product.usages);
                 setCertification(data.product.certification);
@@ -89,7 +91,8 @@ function ProductDetail(props) {
             "regularPrice": regularprice,
             "localName": localname,
             "isNaturalProduct": isNatural,
-            "uniqueness": uniqueness
+            "uniqueness": uniqueness,
+            "express": express == "YES" ? 1 : 0,
         };
         console.log(productdata);
         let urlString;
@@ -243,9 +246,8 @@ function ProductDetail(props) {
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell colSpan={2}>
+                                <TableCell>
                                     <TextField
-                                        fullWidth
                                         id="instructions"
                                         label="Instructions To Store:"
                                         multiline
@@ -262,7 +264,25 @@ function ProductDetail(props) {
                                         variant='outlined'
                                     />
                                 </TableCell>
-                                <TableCell >
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Express Product?</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-required-label"
+                                            id="demo-simple-select-disabled"
+                                            style={{ height: 50, color: 'white' }}
+                                            value={express}
+                                            onChange={(event) => setExpress(event.target.value)}
+                                            label="Express or Regular?"
+                                        >
+                                            <MenuItem value="YES">
+                                                {express == "YES" ? "Yes" : 'Yes'}
+                                            </MenuItem>
+                                            <MenuItem value="NO">{express == "NO" ? "No" : "No"}</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
                                     <TextField
                                         id="usages"
                                         label="Usages:"
@@ -445,8 +465,9 @@ function ProductDetail(props) {
                 </Container> :
                 <center>
                     <CircularProgress />
-                </center>}
-        </div>
+                </center>
+            }
+        </div >
     )
 }
 
