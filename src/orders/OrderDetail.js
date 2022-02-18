@@ -146,7 +146,7 @@ function OrderDetail(props) {
                                     <FormLabel style={{ color: 'wheat' }}> Order No : {props.location.id} </FormLabel>
                                 </TableCell>
                                 <TableCell>
-                                    <FormLabel style={{ color: 'wheat' }}>Date: {order.createdAt} </FormLabel>
+                                    <FormLabel style={{ color: 'wheat' }}>Date: {new Date(Date.parse(order.createdAt + " UTC")).toLocaleString()} </FormLabel>
                                 </TableCell>
                                 <TableCell>
                                     <FormLabel style={{ color: 'wheat' }}>Current Status: {order.deliveryStatus} </FormLabel>
@@ -200,13 +200,13 @@ function OrderDetail(props) {
                             {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
                                 <TableRow style={{}}>
                                     <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
+                                        <FormLabel style={{ color: 'wheat' }}> Name : {order.user.name} </FormLabel>
                                     </TableCell>
                                     <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
+                                        <FormLabel style={{ color: 'wheat' }}> Mobile : {order.user.mobileNumber} </FormLabel>
                                     </TableCell>
                                     <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
+                                        <FormLabel style={{ color: 'wheat' }}> Email : {order.user.email} </FormLabel>
                                     </TableCell>
                                 </TableRow>
                             }
