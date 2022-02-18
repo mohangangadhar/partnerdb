@@ -37,11 +37,13 @@ function OrderDetail(props) {
     const history = useHistory();
 
     let userId = auth.currentUser.uid;
-
     useEffect(() => {
         if (auth.user) {
             userId = auth.currentUser.uid;
         }
+    }, []);
+    useEffect(() => {
+
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.location.id);
@@ -54,7 +56,7 @@ function OrderDetail(props) {
             .then(data => {
                 setOrder(data.order);
                 setOrderProductList(data.orderProductList);
-                setUserData(data.user);
+                setUserData(data.order.user);
             }
             );
     }, [isLoading]);
@@ -200,13 +202,13 @@ function OrderDetail(props) {
                             {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
                                 <TableRow style={{}}>
                                     <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Name : {order.user.name} </FormLabel>
+                                        <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
                                     </TableCell>
                                     <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Mobile : {order.user.mobileNumber} </FormLabel>
+                                        <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
                                     </TableCell>
                                     <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Email : {order.user.email} </FormLabel>
+                                        <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
                                     </TableCell>
                                 </TableRow>
                             }
