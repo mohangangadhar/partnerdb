@@ -22,6 +22,7 @@ import Invoice from '../components/Invoice';
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
 import { NotificationManager } from "react-notifications";
+import { APIURL } from '../constants/Constants';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
@@ -51,7 +52,7 @@ function OrderDetail(props) {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         };
-        fetch(apiUrl + 'order/' + props.location.id, requestOptions)
+        fetch(APIURL + 'order/' + props.location.id, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setOrder(data.order);

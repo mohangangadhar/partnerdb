@@ -63,8 +63,7 @@ function ProductDetail(props) {
                 setUsages(data.product.usages);
                 setCertification(data.product.certification);
                 setSeed(data.product.seed);
-                setSalePrice(data.product.salePrice);
-                setRegularPrice(data.product.regularPrice);
+                setSalePrice(data.salePrice);
                 setUniqueness(data.product.uniqueness);
                 setIsNatural(data.product.isNaturalProduct == 1 ? "Y" : "N");
                 setLocalName(data.product.localName);
@@ -88,7 +87,6 @@ function ProductDetail(props) {
             "certification": certification,
             "seed": seed,
             "salePrice": saleprice,
-            "regularPrice": regularprice,
             "localName": localname,
             "isNaturalProduct": isNatural,
             "uniqueness": uniqueness,
@@ -246,9 +244,10 @@ function ProductDetail(props) {
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>
+                                <TableCell colSpan={2}>
                                     <TextField
                                         id="instructions"
+                                        fullWidth
                                         label="Instructions To Store:"
                                         multiline
                                         value={instructions}
@@ -264,24 +263,7 @@ function ProductDetail(props) {
                                         variant='outlined'
                                     />
                                 </TableCell>
-                                <TableCell style={{ borderBottom: "none" }}>
-                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Express Product?</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-required-label"
-                                            id="demo-simple-select-disabled"
-                                            style={{ height: 50, color: 'white' }}
-                                            value={express}
-                                            onChange={(event) => setExpress(event.target.value)}
-                                            label="Express or Regular?"
-                                        >
-                                            <MenuItem value="YES">
-                                                {express == "YES" ? "Yes" : 'Yes'}
-                                            </MenuItem>
-                                            <MenuItem value="NO">{express == "NO" ? "No" : "No"}</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </TableCell>
+
                                 <TableCell>
                                     <TextField
                                         id="usages"
@@ -358,21 +340,22 @@ function ProductDetail(props) {
                             </TableRow>
                             <TableRow>
                                 <TableCell style={{ borderBottom: "none" }}>
-                                    <TextField
-                                        id="regularprice"
-                                        label="Enter Regular Price"
-                                        value={regularprice}
-                                        onChange={(event) => setRegularPrice(event.target.value)}
-                                        InputProps={{
-                                            style: {
-                                                color: "white",
-                                            }
-                                        }}
-                                        InputLabelProps={{
-                                            style: { color: '#fff' },
-                                        }}
-                                        variant='outlined'
-                                    />
+                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Express Product?</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-required-label"
+                                            id="demo-simple-select-disabled"
+                                            style={{ height: 50, color: 'white' }}
+                                            value={express}
+                                            onChange={(event) => setExpress(event.target.value)}
+                                            label="Express or Regular?"
+                                        >
+                                            <MenuItem value="YES">
+                                                {express == "YES" ? "Yes" : 'Yes'}
+                                            </MenuItem>
+                                            <MenuItem value="NO">{express == "NO" ? "No" : "No"}</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </TableCell>
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <TextField
