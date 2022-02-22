@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -12,43 +12,113 @@ import Pagination from '@material-ui/lab/Pagination';
 import Button from '@mui/material/Button';
 
 import { Box, Grid, TextField } from "@material-ui/core";
+import EditableRow from './EditableRow';
+import ReadOnlyRow from './ReadOnlyRow';
 
 
 const Support = () => {
-    const [messages, setMessages] = useState([]);
-    // const [page, setPage] = useState(1);
     const [perPage, setPerPage] = useState(15);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNDcxMzQxNDQ3NmFjZjMzNmZlZTAzYjk0YTBiNGRkMjJiOWE0NTk3M2U5Y2MyN2M5Y2U1OTdjZjJhMmJhZDIwZTQ4Y2M0OWVjODU0MGVjZTIiLCJpYXQiOjE2NDQzMDYyOTgsIm5iZiI6MTY0NDMwNjI5OCwiZXhwIjoxNjc1ODQyMjk3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.cPLfFwvU-9Ga26YBaGc_dnLKHj1hbDC4ozf8YA6nX-Z72XMN-nOMWN8v-7uchBvIjSWfN-i4_J4k9bQMO0c-o8J1RncvlEu55EUTfTaHd5L8lYovuCiNYp0C5aNlK4uoYg9ms7koMcEt0n4Sd818y9SLWAXOOFJ_aNQHNl69Fpj9fMRs5l2idMonnEK-IMIHbZ-1JQsLo2m5DkjASfFi3sTDywsRJ4Zj78ajN7kvtyOT2yokc4DdDlcYCeFwtHfoNtm7M9yY4uNpiPTtagKDmzBpnB9wRsXcyEO_M8KJVBPLGmB6DzOov5_D0P4Ir61Oae6ZEmyul7upnHqKqBCRPi7w3k-oM1Z8yljgvag7AcVZjNcVdUX4nB8KDt3FQHiBrIf6FN39xZUNivQ_aeBottFLbB6x5-zoYxFB0n4tI7rk5GpuIhHFNEa2-c3Jx5QNKaZ_ohHaPGu8VfTowZ0p9l_Lh6NodHlnTaeMRXDCJgcpTgstEOW-eIOaBjCH7raj3tE6oXSxc47r23Ro1-hGXWsHkcDATDPX5g4HXzLwWUksgkPnQ8ignDAUwrWywcqX_smIpnR2PGVdUXoJNiL9DElpwQs7cwQy4gCsuFdEs_fZOYwYz5OiGhaIxcIKEJsvoGZ-ItuHfWTYVUQqE-sgGPTNpGc7Fa_dqSmbhkK2PNo";
+    const [editContactId, setEditContactId] = useState(null);
+    const [isApiLoading, setisApiLoading] = useState(false);
+    const [isRowLoading, setisRowLoading] = useState(false);
+    const [addFormData, setAddFormData] = useState({
+        status: "",
+        resolution: "",
+    });
+    const [editedRowData, setEditedRowData] = useState([]);
     const RequestOptions = {
         method: 'GET',
         headers: {
-            'Authorization': token,
             'Content-Type': 'application/json',
         },
     };
+
     const handleChange = async (page) => {
         setisLoading(true);
-        let apiUrl = `https://admin.ityme.in/api/admin/supports?page=${page}&per_page=15`;
+        let apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/support/page-query?page=${page}`;
+
         await fetch(apiUrl, RequestOptions)
             .then(response => response.json())
             .then(data => {
-                setMessages(data.data.reverse());
-                setTotalPages(data.meta.last_page)
+                setEditedRowData(data.content.reverse());
+                setTotalPages(data.totalPages - 1);
             }).catch(err => console.log(err));
         setisLoading(false);
     }
     useEffect(async () => {
         setisLoading(true);
-        let apiUrl = `https://admin.ityme.in/api/admin/supports?page=1&per_page=15`;
+        let apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/support/page-query?page=0`;
         await fetch(apiUrl, RequestOptions)
             .then(response => response.json())
             .then(data => {
-                handleChange(data.meta.last_page);
+                console.log(data);
+                handleChange(data.totalPages - 1);
             }).catch(err => console.log(err));
     }, []);
+    const handleEditFormChange = (event) => {
+        event.preventDefault();
+
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+
+        const newFormData = { ...addFormData };
+        newFormData[fieldName] = fieldValue;
+
+        setAddFormData(newFormData);
+    };
+    const handleEditClick = (event, row) => {
+        event.preventDefault();
+        setAddFormData({
+            status: row.status,
+            resolution: row.resolution
+        });
+        setEditContactId(row.id);
+    }
+    const uploadBackEnd = async (row, tempFormData) => {
+        let urlString = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/support/${row.id}`;
+        let supportData = {
+            "status": tempFormData.status,
+            "resolution": tempFormData.resolution
+        };
+
+        setisApiLoading(true);
+
+        const requestOptionsForUpdate = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(supportData)
+        };
+        await fetch(urlString, requestOptionsForUpdate)
+            .then(response => response.json())
+            .then(data => {
+                setisApiLoading(false);
+            }
+            ).catch((err) => alert('something wrong' + err));
+    }
+    const handleFormSubmit = async (event, row, tempFormData) => {
+        event.preventDefault();
+        setAddFormData("");
+        setisRowLoading(true);
+        let ind;
+        let xyz = row;
+        xyz = { ...xyz };
+        xyz.status = tempFormData.status;
+        xyz.resolution = tempFormData.resolution;
+        for (let i = 0; i < editedRowData.length; i++) {
+            if (row.id == editedRowData[i].id) {
+                ind = i;
+                break;
+            }
+        }
+        editedRowData[ind] = xyz;
+        setEditContactId(null);
+        setisRowLoading(false);
+        uploadBackEnd(row, tempFormData);
+    }
     return <div>
+        {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
         <TableContainer component={Paper}>
             <Table className="table" aria-label="spanning table">
                 <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
@@ -58,18 +128,24 @@ const Support = () => {
                         <TableCell style={{ color: 'wheat' }}>Email</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Message</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Created At</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Resolution</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Action</TableCell>
                     </TableRow>
                 </TableHead>
-                {messages.length > 0 && !(isLoading) ?
+                {editedRowData.length > 0 && !(isLoading) ?
                     <TableBody>
-                        {messages.map((row, index) => (
-                            <TableRow key={row.id}>
-                                <TableCell >{row.id}</TableCell>
-                                <TableCell >{row.name}</TableCell>
-                                <TableCell align="center" >{row.email}</TableCell>
-                                <TableCell align="center">{row.message}</TableCell>
-                                <TableCell align="center">{new Date(Date.parse(row.created_at)).toLocaleString()}</TableCell>
-                            </TableRow>
+                        {editedRowData.map((row, index) => (
+                            <Fragment>
+                                {editContactId === row.id ?
+                                    <>
+                                        {!(isRowLoading) ?
+                                            <EditableRow row={row} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />
+                                            : <TableRow><TableCell>Updating...</TableCell></TableRow>}</>
+                                    :
+                                    <ReadOnlyRow row={row} handleEditClick={handleEditClick} />}
+                            </Fragment>
+
                         ))}
                     </TableBody>
                     :
@@ -85,7 +161,7 @@ const Support = () => {
         <Grid container justifyContent={"center"}>
             <Pagination variant={"text"} color={"primary"}
                 count={totalPages}
-                onChange={(event, value) => handleChange(totalPages - value + 1)} />
+                onChange={(event, value) => handleChange(totalPages - value)} />
         </Grid>
         <Box m={2} />
     </div >;
