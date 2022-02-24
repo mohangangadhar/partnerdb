@@ -58,13 +58,7 @@ function DetailOrderList() {
         }
         receivedData()
     }, []);
-    // setStartDate(e) {
-    //     this.setState({startDate: e.target.value})
-    // }
-
-    // setEndDate(e) {
-    //     this.setState({endDate: e.target.value})
-    // }
+   
 
     const handleButtonClick = () => {
         receivedData()

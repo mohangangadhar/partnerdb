@@ -188,7 +188,6 @@ function ProductList(props) {
     }
     const handleSearch = async (event, query) => {
         event.preventDefault();
-        console.log(query);
         if (query == "" || query.length == 0) {
             setisLoading(true);
             receivedData(offSet);

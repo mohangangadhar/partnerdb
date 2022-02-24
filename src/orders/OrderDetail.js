@@ -23,6 +23,7 @@ import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
 import { NotificationManager } from "react-notifications";
 import { APIURL } from '../constants/Constants';
+import OrderEditDialog from './OrderEditDialog';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
@@ -31,6 +32,12 @@ function OrderDetail(props) {
     const [isLoading, setisLoading] = useState(false);
     const [editContactId, setEditContactId] = useState(null);
     const formClick = useRef();
+    const [open, setOpen] = useState(false);
+    const [totalData, setTotalData] = useState(0);
+    const [dialogData, setDialogData] = useState({
+        orderId: 0,
+        userId: 0,
+    })
     const [addFormData, setAddFormData] = useState({
         quantity: 0,
     });
@@ -43,8 +50,8 @@ function OrderDetail(props) {
             userId = auth.currentUser.uid;
         }
     }, []);
+    let total = 0;
     useEffect(() => {
-
         let apiUrl;
         apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
         console.log(props.location.id);
@@ -58,6 +65,15 @@ function OrderDetail(props) {
                 setOrder(data.order);
                 setOrderProductList(data.orderProductList);
                 setUserData(data.order.user);
+                setDialogData({
+                    userId: data.order.user.id,
+                    orderId: data.order.id,
+                })
+                if (data.orderProductList.length > 0) {
+                    data.orderProductList.forEach(row => total = row.total + total)
+                }
+                setTotalData(total);
+                setisLoading(false);
             }
             );
     }, [isLoading]);
@@ -130,11 +146,14 @@ function OrderDetail(props) {
         event.preventDefault();
         setEditContactId(null);
     }
-    let total = 0;
+    const handleClickOpen = (event) => {
+        event.preventDefault();
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
-    if (orderProductList.length > 0) {
-        orderProductList.forEach(row => total = row.total + total)
-    }
     return (
         <div>
             {Object.keys(order).length > 2 && !(isLoading) ?
@@ -211,6 +230,11 @@ function OrderDetail(props) {
                                     <TableCell>
                                         <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
                                     </TableCell>
+                                    <TableCell>
+                                        <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
+                                            Associate
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             }
                         </TableHead>
@@ -246,11 +270,20 @@ function OrderDetail(props) {
                         <TableRow>
                             <TableCell rowSpan={3} />
                             <TableCell colSpan={2}>Total</TableCell>
-                            <TableCell align="right">{total}</TableCell>
+                            <TableCell align="right">{totalData}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Container>
+                <OrderEditDialog
+                    open={open}
+                    onClose={handleClose}
+                    dialogData={dialogData}
+                    total={totalData}
+                    setisLoading={setisLoading}
+                />
+            </Container>
             <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
                 <form onSubmit={sendEmail}>
                     <div style={{ display: 'none' }}>
