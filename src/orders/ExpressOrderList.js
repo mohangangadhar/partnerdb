@@ -20,6 +20,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import setstatus from '../Actions';
 import SearchOrders from './SearchOrders';
 import { APIURL } from '../constants/Constants';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 function ExpressOrderList(props) {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -34,6 +37,7 @@ function ExpressOrderList(props) {
     const [searchquery, setSearchQuery] = useState(0);
     const [queryLoad, setQueryLoad] = useState(false);
     const [searchOrder, setSearchOrder] = useState({});
+    const [isDownloading, setisDownloading] = useState(false);
     const order = useSelector(state => state.expressstatusreducer);
     const dispatch = useDispatch();
     useEffect(async () => {
@@ -95,40 +99,30 @@ function ExpressOrderList(props) {
     }
 
 
-    const downloadCsvFile = () => {
-
+    const downloadCsvFile = (statusType) => {
+        setisDownloading(true);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = id === "order"
-                ? "export/"
-                : "export/" + id + "/order/"
+            urlString = props.match.params.vendorId === "order"
+                ? `export/status/${statusType}`
+                : `export/" + props.match.params.vendorId + "/status/${statusType}`
         }
-
-        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
-        // const apiUrl = `https://localhost:443/`
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "pageNumber": 0, // Offset is default to 0
-                "pageSize": 150, // Currently number of records set to 150
-                "sortDirection": "asc",
-                "sortByKey": "id",
-                "startDate": startDate,
-                "endDate": endDate
-            })
         };
 
-        fetch(apiUrl + urlString, requestOptions)
+        fetch(APIURL + urlString, requestOptions)
             .then(response => {
                 const filename = response.headers.get('Content-Disposition').split('filename=')[1];
                 response.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
-                    a.href = url;
+                    a.href = url
                     a.download = filename;
                     a.click();
-                });
+                    setisDownloading(false);
+                }).catch(err => setisDownloading(false));
             });
     }
     const detail = (val) => {
@@ -161,6 +155,7 @@ function ExpressOrderList(props) {
     }
     return (
         <div>
+            {isDownloading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Downloading Orders</b>}
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Express Orders</h2></center>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                 {queryLoad ?
@@ -261,8 +256,25 @@ function ExpressOrderList(props) {
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <Picker dateChange={(e) => setStartDate(e.target.value)} label={"Start Date"} />
                     <Picker dateChange={(e) => setEndDate(e.target.value)} label={"End Date"} />
-                    <Button variant={"contained"} color={"primary"} size={"small"} style={{ marginRight: "5px" }}
-                        onClick={() => downloadCsvFile()}>Download</Button>
+                    <FormControl sx={{ m: 1, minWidth: 120 }} >
+                        <Select
+                            style={{ height: 20, backgroundColor: "blue", color: 'white' }}
+                            renderValue={() => {
+                                return <em>Download</em>;
+                            }}
+                            value='Download'
+                            onChange={(event) => {
+                                downloadCsvFile(event.target.value)
+                            }}
+                        >
+                            <MenuItem value="accepted">
+                                Accepted
+                            </MenuItem>
+                            <MenuItem value="complete">Completed</MenuItem>
+                            <MenuItem value="accepted">Processing</MenuItem>
+                            <MenuItem value="pending">Pending</MenuItem>
+                        </Select>
+                    </FormControl>
                 </div>
             </Grid>
             <Box m={1} />
