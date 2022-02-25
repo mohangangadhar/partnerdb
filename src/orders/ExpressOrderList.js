@@ -268,10 +268,10 @@ function ExpressOrderList(props) {
                             }}
                         >
                             <MenuItem value="accepted">
-                                Accepted
+                                Processing
                             </MenuItem>
                             <MenuItem value="complete">Completed</MenuItem>
-                            <MenuItem value="accepted">Processing</MenuItem>
+
                             <MenuItem value="pending">Pending</MenuItem>
                         </Select>
                     </FormControl>
