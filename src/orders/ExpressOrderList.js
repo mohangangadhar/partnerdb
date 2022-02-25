@@ -271,7 +271,7 @@ function ExpressOrderList(props) {
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
                             <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>User Name</TableCell>
+                            {auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" && <TableCell style={{ color: 'wheat' }}>User Name</TableCell>}
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
@@ -289,7 +289,7 @@ function ExpressOrderList(props) {
                                                 pathname: '/app/' + props.match.params.vendorId + '/order/' + searchOrder.order.id,
                                                 id: searchOrder.order.id
                                             }}> {searchOrder.order.id}</Link></TableCell>
-                                        <TableCell align="center" >{searchOrder.order.user.name}</TableCell>
+                                        {auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" && <TableCell align="center" >{searchOrder.order.user.name}</TableCell>}
                                         <TableCell align="center" > {new Date(Date.parse(searchOrder.order.createdAt + " UTC")).toLocaleString()}</TableCell>
                                         <TableCell align="center" >---</TableCell>
                                         <TableCell align="center" >{searchOrder.order.total}</TableCell>
@@ -316,7 +316,7 @@ function ExpressOrderList(props) {
                                                     id: row.id
                                                 }}>{row.id}</Link>
                                             </TableCell>
-                                            <TableCell >{row.user.name}</TableCell>
+                                            {auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" && <TableCell >{row.user.name}</TableCell>}
                                             <TableCell align="center">
                                                 {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
                                             </TableCell>

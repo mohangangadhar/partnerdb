@@ -65,7 +65,7 @@ function OrderEditDialog(props) {
         setAddresId(id);
     }
     const submitWallet = async () => {
-        setUpdating(true);
+        
         let walletid = 0;
         await fetch(APIURL + '/wallet/' + mobile)
             .then(res => res.json())
@@ -110,6 +110,7 @@ function OrderEditDialog(props) {
     }
     const handleSubmit = async (ev) => {
         ev.preventDefault();
+        setUpdating(true);
         let reqBody = {
             user: userid,
             id: dialogData.orderId
