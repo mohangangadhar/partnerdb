@@ -31,7 +31,7 @@ function UserList(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "pageNumber": offSet,
-                "pageSize": perPage,
+                "pageSize": 30,
                 "sortDirection": "asc",
                 "sortByKey": "id",
                 "startDate": startDate,
@@ -78,8 +78,8 @@ function UserList(props) {
                             <TableCell align="left" style={{ color: 'wheat' }}>Email</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Mobile</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Verified</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Created</TableCell>
-
                         </TableRow>
                     </TableHead>
                     {rows.length > 0 && !(isLoading) ?
@@ -98,6 +98,7 @@ function UserList(props) {
                                     <TableCell align="left">{row.email}</TableCell>
                                     <TableCell align="center">{row.mobileNumber}</TableCell>
                                     <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
+                                    <TableCell align="center">{row.pincode}</TableCell>
                                     <TableCell align="center">{row.createdAt}</TableCell>
                                 </TableRow>
                             ))}
