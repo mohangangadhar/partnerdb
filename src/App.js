@@ -23,6 +23,7 @@ import ListItemText from '@mui/material/ListItemText';
 import LunchDining from "@mui/icons-material/LunchDining";
 import { Box, Container } from "@material-ui/core";
 import ProductList from "./products/ProductList";
+import ExpressProductList from "./products/ExpressProductList";
 import { ShoppingCart } from "@material-ui/icons";
 import PhoneIcon from '@mui/icons-material/Phone';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -221,6 +222,19 @@ export default function MiniDrawer() {
                                         id: "1"
                                     }}><ListItemText primary="Product" /></Link>
                                 </ListItem>
+                                <ListItem style={{ color: "wheat" }} button key="ExpressProduct">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: `/app/${id}/expressproduct`,
+                                            id: "8"
+                                        }}><LunchDining />
+                                            <h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/${id}/expressproduct`,
+                                        id: "8"
+                                    }}><ListItemText primary="Express" /></Link>
+                                </ListItem>
                                 <ListItem button key="Orders">
                                     <ListItemIcon>
                                         <Link to={{
@@ -313,6 +327,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                     <Route path="/app/:vendorId/product/" exact component={ProductList} />
                                     <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                                    <Route path="/app/:vendorId/expressproduct" exact component={ExpressProductList} />
                                 </Switch>
                                 <NotificationContainer />
                             </HashRouter>
@@ -382,6 +397,19 @@ export default function MiniDrawer() {
                                     pathname: `/app/${id}/product`,
                                     id: "2"
                                 }}><ListItemText primary="Product" /></Link>
+                            </ListItem>
+                            <ListItem style={{ color: "wheat" }} button key="ExpressProduct">
+                                <ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/${id}/expressproduct`,
+                                        id: "8"
+                                    }}><LunchDining />
+                                        <h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
+                                </ListItemIcon>
+                                <Link to={{
+                                    pathname: `/app/${id}/expressproduct`,
+                                    id: "8"
+                                }}><ListItemText primary="Express" /></Link>
                             </ListItem>
                             <ListItem button key="Orders">
                                 <ListItemIcon>
@@ -473,6 +501,7 @@ export default function MiniDrawer() {
                                 <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                 <Route path="/app/:vendorId/product/" exact component={ProductList} />
                                 <Route path="/app/:vendorId/product/:productId" exact component={ProductDetail} />
+                                <Route path="/app/:vendorId/expressproduct" exact component={ExpressProductList} />
                                 {/* <Redirect from="*" to="/app/wrapper" /> */}
                             </Switch>
                             <NotificationContainer />

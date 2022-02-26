@@ -99,7 +99,7 @@ function UserList(props) {
                                     <TableCell align="center">{row.mobileNumber}</TableCell>
                                     <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
                                     <TableCell align="center">{row.pincode}</TableCell>
-                                    <TableCell align="center">{row.createdAt}</TableCell>
+                                    <TableCell align="center">{new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody> :
