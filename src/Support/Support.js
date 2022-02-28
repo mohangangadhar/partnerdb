@@ -26,6 +26,8 @@ const Support = () => {
     const [addFormData, setAddFormData] = useState({
         status: "",
         resolution: "",
+        category: "",
+        resolver: ""
     });
     const [editedRowData, setEditedRowData] = useState([]);
     const RequestOptions = {
@@ -53,7 +55,6 @@ const Support = () => {
         await fetch(apiUrl, RequestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 handleChange(data.totalPages - 1);
             }).catch(err => console.log(err));
     }, []);
@@ -70,9 +71,12 @@ const Support = () => {
     };
     const handleEditClick = (event, row) => {
         event.preventDefault();
+        console.log(row.status);
         setAddFormData({
             status: row.status,
-            resolution: row.resolution
+            resolution: row.resolution,
+            category: row.category,
+            resolver: row.resolver
         });
         setEditContactId(row.id);
     }
@@ -80,7 +84,9 @@ const Support = () => {
         let urlString = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/support/${row.id}`;
         let supportData = {
             "status": tempFormData.status,
-            "resolution": tempFormData.resolution
+            "resolution": tempFormData.resolution,
+            "category": tempFormData.category,
+            "resolver": tempFormData.resolver
         };
 
         setisApiLoading(true);
@@ -106,6 +112,8 @@ const Support = () => {
         xyz = { ...xyz };
         xyz.status = tempFormData.status;
         xyz.resolution = tempFormData.resolution;
+        xyz.category = tempFormData.category;
+        xyz.resolver = tempFormData.resolver;
         for (let i = 0; i < editedRowData.length; i++) {
             if (row.id == editedRowData[i].id) {
                 ind = i;
@@ -130,6 +138,8 @@ const Support = () => {
                         <TableCell align="center" style={{ color: 'wheat' }}>Created At</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Resolution</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Category</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Resolver</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Action</TableCell>
                     </TableRow>
                 </TableHead>

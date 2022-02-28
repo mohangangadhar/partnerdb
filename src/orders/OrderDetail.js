@@ -17,6 +17,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import emailjs from 'emailjs-com';
 import { Container, Divider, FormLabel, Button } from "@material-ui/core";
+import { TextField } from '@mui/material';
 import { Item } from "../components/Item";
 import Invoice from '../components/Invoice';
 import EditableRow from './EditableRow';
@@ -34,6 +35,8 @@ function OrderDetail(props) {
     const formClick = useRef();
     const [open, setOpen] = useState(false);
     const [totalData, setTotalData] = useState(0);
+    const [comment, setComment] = useState("");
+    const [finalTotal, setFinalTotal] = useState(0);
     const [dialogData, setDialogData] = useState({
         orderId: 0,
         userId: 0,
@@ -53,8 +56,6 @@ function OrderDetail(props) {
     let total = 0;
     useEffect(() => {
         let apiUrl;
-        apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`;
-        console.log(props.location.id);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
@@ -72,6 +73,9 @@ function OrderDetail(props) {
                 if (data.orderProductList.length > 0) {
                     data.orderProductList.forEach(row => total = row.total + total)
                 }
+                setComment(data.order.comments);
+                setStatus(data.order.deliveryStatus);
+                setFinalTotal(data.order.finalTotal);
                 setTotalData(total);
                 setisLoading(false);
             }
@@ -94,11 +98,11 @@ function OrderDetail(props) {
         // }
 
     };
-    const handleSubmit = async () => {
+    const handleSubmit = async (val) => {
 
 
         let orderdata = {
-            "status": status,
+            "status": val,
         };
         let apiUrl;
         apiUrl = `https://admin.ityme.in/api/admin/orders/${props.location.id}`;
@@ -153,7 +157,29 @@ function OrderDetail(props) {
     const handleClose = () => {
         setOpen(false);
     };
+    const handleUpdateComment = async () => {
+        console.log(status);
+        let updateBody = {
+            "id": props.location.id,
+            "status": status,
+            "comments": comment,
+            "finalTotal": finalTotal
+        };
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateBody)
+        };
 
+        await fetch(APIURL + "order/status", requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                NotificationManager.success('Updated Status', 'Successful!', 1000);
+            }
+            );
+    }
     return (
         <div>
             {Object.keys(order).length > 2 && !(isLoading) ?
@@ -183,6 +209,7 @@ function OrderDetail(props) {
                                                 value={status}
                                                 onChange={(event) => {
                                                     setStatus(event.target.value);
+                                                    handleSubmit(event.target.value);
                                                 }}
                                                 label="Enter Status"
                                             >
@@ -220,22 +247,55 @@ function OrderDetail(props) {
                                 </TableCell>
                             </TableRow>
                             {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
-                                <TableRow style={{}}>
-                                    <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
-                                    </TableCell>
-                                    <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
-                                    </TableCell>
-                                    <TableCell>
-                                        <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
-                                            Associate
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
+                                <>
+                                    <TableRow style={{}}>
+                                        <TableCell>
+                                            <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
+                                                Associate
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell colSpan={2}>
+                                            <TextField label="Add Comment" value={comment}
+                                                onChange={(ev) => setComment(ev.target.value)
+                                                }
+                                                InputProps={{
+                                                    style: {
+                                                        color: "white",
+                                                    }
+                                                }}
+                                                InputLabelProps={{
+                                                    style: { color: '#fff' },
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField label="Final Total" value={finalTotal}
+                                                onChange={(ev) => setFinalTotal(ev.target.value)}
+                                                InputProps={{
+                                                    style: {
+                                                        color: "white",
+                                                    }
+                                                }}
+                                                InputLabelProps={{
+                                                    style: { color: '#fff' },
+                                                }} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
+                                        </TableCell>
+                                    </TableRow>
+                                </>
                             }
                         </TableHead>
                     </Table>

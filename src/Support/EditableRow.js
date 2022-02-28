@@ -25,14 +25,20 @@ const EditableRow = ({
                 <select style={{
                     padding: 5,
                 }} name="status" value={addFormData.status} onChange={handleEditFormChange}>
-
+                    {!addFormData.status !== null && <option style={styleOptions} value="">Status:</option>}
                     <option style={styleOptions} value="Open">Open</option>
                     <option style={styleOptions} value="In Progress">In Progress</option>
                     <option style={styleOptions} value="Completed">Completed</option>
                 </select>
             </TableCell>
             <TableCell align="center">
-                <textarea name="resolution" value={addFormData.resolution} cols="20" onChange={handleEditFormChange}></textarea>
+                <textarea placeholder="resolution" name="resolution" value={addFormData.resolution} cols="20" onChange={handleEditFormChange}></textarea>
+            </TableCell>
+            <TableCell align="center">
+                <textarea placeholder="category" name="category" value={addFormData.category} cols="20" onChange={handleEditFormChange}></textarea>
+            </TableCell>
+            <TableCell align="center">
+                <textarea placeholder="resolver" name="resolver" value={addFormData.resolver} cols="20" onChange={handleEditFormChange}></textarea>
             </TableCell>
             <TableCell align="center"><Button variant="contained" on color="success"
                 onClick={(event) => handleFormSubmit(event, row, addFormData)}>Save</Button></TableCell>

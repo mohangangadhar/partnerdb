@@ -16,6 +16,8 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.createdAt}</TableCell>
             <TableCell align="center">{row.status}</TableCell>
             <TableCell align="center">{row.resolution}</TableCell>
+            <TableCell align="center">{row.category}</TableCell>
+            <TableCell align="center">{row.resolver}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row)}>Edit</Button></TableCell>
         </TableRow>
     );
