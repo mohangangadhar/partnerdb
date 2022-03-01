@@ -77,19 +77,19 @@ function ProductDetail(props) {
             "productId": product.product.id,
             "stockQuantity": stockQ.toString(),
             "vendorProductId": product.id.toString(),
-            "gstRate": gstrate,
-            "brandName": brandName,
-            "manufacturer": manufacturer,
-            "about": about,
-            "shelfLife": shelflife,
-            "instructionsToStore": instructions,
-            "usages": usages,
-            "certification": certification,
-            "seed": seed,
-            "salePrice": saleprice,
-            "localName": localname,
+            "gstRate": gstrate == null ? 0 : "",
+            "brandName": brandName == null ? "" : brandName,
+            "manufacturer": manufacturer == null ? "" : manufacturer,
+            "about": about == null ? "" : about,
+            "shelfLife": shelflife == null ? "" : shelflife,
+            "instructionsToStore": instructions == null ? "" : instructions,
+            "usages": usages == null ? "" : usages,
+            "certification": certification == null ? "" : certification,
+            "seed": seed == null ? "" : seed,
+            "salePrice": saleprice == null ? 0 : saleprice,
+            "localName": localname == null ? "" : localname,
             "isNaturalProduct": isNatural,
-            "uniqueness": uniqueness,
+            "uniqueness": uniqueness == null ? "" : uniqueness,
             "express": express == "YES" ? 1 : 0,
         };
         console.log(productdata);
@@ -377,7 +377,7 @@ function ProductDetail(props) {
                                 </TableCell>
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
+                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Is Natural?</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-required-label"
                                             id="demo-simple-select-disabled"
