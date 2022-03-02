@@ -54,7 +54,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import HelpIcon from '@mui/icons-material/Help';
 import Support from './Support/Support';
 import dummy from './dummy';
-
+import ServiceZones from './ServiceZones/ServiceZones';
+import ShareLocationIcon from '@mui/icons-material/ShareLocation';
 
 const drawerWidth = 240;
 
@@ -291,6 +292,18 @@ export default function MiniDrawer() {
                                         id: "4"
                                     }}><ListItemText primary="DetailOrders" /></Link>
                                 </ListItem>
+                                <ListItem button key="ServiceZones">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/servicezones',
+                                            id: "4"
+                                        }}><ShareLocationIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Service Zones</h6></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/servicezones',
+                                        id: "4"
+                                    }}><ListItemText primary="Service Zones" /></Link>
+                                </ListItem>
                                 <ListItem button key="Support">
                                     <ListItemIcon>
                                         <Link to={{
@@ -318,6 +331,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
+                                    <Route path="/app/servicezones" exact component={ServiceZones} />
                                     <Route path="/app/dummy" exact component={dummy} />
                                     <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />

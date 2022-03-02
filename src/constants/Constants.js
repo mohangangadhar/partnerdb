@@ -40,3 +40,7 @@ export const COLORS = {
     complete: "#D97706",
 };
 export const CircularProgressInTable = <TableRow> <TableCell align="center"><CircularProgress /></TableCell></TableRow>;
+export const GetRequestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+};
