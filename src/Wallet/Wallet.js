@@ -33,7 +33,7 @@ function Wallet() {
     const searchOrder = () => {
         setData("");
         let verifyNumber = inputValue.trim();
-        console.log(verifyNumber);
+        // console.log(verifyNumber);
         // this.set State({loading: true});
         fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + verifyNumber)
             .then(res => res.json())
@@ -77,7 +77,7 @@ function Wallet() {
             </Table>
             <Box m={2} />
             {(data.name !== undefined || data !== "") ?
-                <WalletInfo data={data} /> :
+                <WalletInfo data={data} searchOrder={searchOrder} /> :
                 <div>
                     {inputValue.length <= 5 ? <center><h3>Enter Mobile Number</h3></center> :
                         <CircularProgress />

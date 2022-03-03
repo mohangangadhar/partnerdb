@@ -8,7 +8,7 @@ import TableRow from "@material-ui/core/TableRow";
 import IconButton from "@material-ui/core/IconButton";
 import { NotificationManager } from "react-notifications";
 import WalletTransactions from "./WalletTransactions";
-const WalletInfo = ({ data }) => {
+const WalletInfo = ({ data, searchOrder }) => {
     const [wallet, setWallet] = useState({
         walletId: "",
         amount: "",
@@ -24,7 +24,7 @@ const WalletInfo = ({ data }) => {
             source_title: "",
         }
     });
-
+    const [toggleData, setToggleData] = useState(true);
 
     const handleChangeWallet = (event) => {
         const value = event.target.value;
@@ -57,6 +57,7 @@ const WalletInfo = ({ data }) => {
         // console.log(wallet.meta);
     }
     const proceedTransaction = () => {
+        // setToggleData(!toggleData);
         wallet.walletId = data.id;
         var source = {
             walletId: wallet.walletId,
@@ -80,6 +81,7 @@ const WalletInfo = ({ data }) => {
             .then(data => {
                 console.log('Success:', data.json());
                 NotificationManager.success('You changes have been updated!', 'Successful!', 1000);
+                searchOrder();
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -190,7 +192,7 @@ const WalletInfo = ({ data }) => {
             <Typography component="h2" variant="h6" style={{ color: 'indianred', }} align={"center"} gutterBottom>
                 Transactions
             </Typography>
-            {data.id && <WalletTransactions walletid={data.id} />}
+            {data.id && <WalletTransactions toggle={toggleData} walletid={data.id} />}
         </div>
     )
 }

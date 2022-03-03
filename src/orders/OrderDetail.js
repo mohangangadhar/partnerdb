@@ -83,8 +83,8 @@ function OrderDetail(props) {
     }, [isLoading]);
     const sendEmail = async (e) => {
         e.preventDefault();
-        setisLoading(true);
-        await handleSubmit();
+        // setisLoading(true);
+        // await handleSubmit();
         // if (status == "failed") {
         //     return;
         // }
@@ -99,8 +99,6 @@ function OrderDetail(props) {
 
     };
     const handleSubmit = async (val) => {
-
-
         let orderdata = {
             "status": val,
         };
@@ -115,7 +113,6 @@ function OrderDetail(props) {
             },
             body: JSON.stringify(orderdata)
         };
-
         await fetch(apiUrl, requestOptions)
             .then(response => response.json())
             .then(data => {
@@ -355,16 +352,18 @@ function OrderDetail(props) {
                         <input type="text" name="orderNo" value={props.location.id} />
                         <label>Message</label>
                         <textarea name="message" value={status} />
+                        <input style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Send Mail" />
                     </div>
-                    <input style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="submit" /></form>
-            </Container>
-            {Object.keys(order).length > 2 && !(isLoading) ?
-                <div>
-                    <PDFDownloadLink document={<Invoice order={order} orderProductList={orderProductList}
-                        userData={userData} userId={userId} />} fileName={order.id}>
-                        {({ blob, url, loading, error }) => (loading ? 'Loading...' : <Button variant='contained' color="success">Generate Invoice</Button>)}
-                    </PDFDownloadLink>
-                </div> : <b>""</b>
+                </form>
+            </Container >
+            {
+                Object.keys(order).length > 2 && !(isLoading) ?
+                    <div>
+                        <PDFDownloadLink document={<Invoice order={order} orderProductList={orderProductList}
+                            userData={userData} userId={userId} />} fileName={order.id}>
+                            {({ blob, url, loading, error }) => (loading ? 'Loading...' : <Button variant='contained' color="success">Generate Invoice</Button>)}
+                        </PDFDownloadLink>
+                    </div> : <b>""</b>
             }
 
         </div >
