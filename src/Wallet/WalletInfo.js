@@ -24,7 +24,7 @@ const WalletInfo = ({ data, searchOrder }) => {
             source_title: "",
         }
     });
-    const [toggleData, setToggleData] = useState(true);
+
 
     const handleChangeWallet = (event) => {
         const value = event.target.value;
@@ -54,10 +54,9 @@ const WalletInfo = ({ data, searchOrder }) => {
             }
 
         })
-        // console.log(wallet.meta);
+
     }
     const proceedTransaction = () => {
-        // setToggleData(!toggleData);
         wallet.walletId = data.id;
         var source = {
             walletId: wallet.walletId,
@@ -192,7 +191,7 @@ const WalletInfo = ({ data, searchOrder }) => {
             <Typography component="h2" variant="h6" style={{ color: 'indianred', }} align={"center"} gutterBottom>
                 Transactions
             </Typography>
-            {data.id && <WalletTransactions toggle={toggleData} walletid={data.id} />}
+            {data.id && <WalletTransactions walletid={data.id} />}
         </div>
     )
 }

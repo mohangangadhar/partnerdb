@@ -37,12 +37,15 @@ function OrderDetail(props) {
     const [totalData, setTotalData] = useState(0);
     const [comment, setComment] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
+    const [isApiLoading, setisApiLoading] = useState(false);
     const [dialogData, setDialogData] = useState({
         orderId: 0,
         userId: 0,
     })
     const [addFormData, setAddFormData] = useState({
-        quantity: 0,
+        deliveredQuantity: 0,
+        refund: 0,
+        productQuality: ""
     });
     const [user] = useAuthState(auth);
     const history = useHistory();
@@ -140,12 +143,56 @@ function OrderDetail(props) {
     };
     const handleEditClick = (event, row, index) => {
         event.preventDefault();
-        setEditContactId(index);
-    }
 
-    const handleFormSubmit = async (event, row) => {
+        setAddFormData({
+            deliveredQuantity: row.deliveredQuantity
+        });
+        setEditContactId(row.id);
+    }
+    const uploadBackEnd = async (row, tempFormData) => {
+        let urlString = APIURL + `/order-product-m/${row.id}`;
+        let orderProductData = {
+            "deliveredQuantity": tempFormData.deliveredQuantity,
+            "refund": tempFormData.refund,
+            "productQuality": tempFormData.productQuality
+        };
+
+        setisApiLoading(true);
+
+        const requestOptionsForUpdate = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderProductData)
+        };
+        await fetch(urlString, requestOptionsForUpdate)
+            .then(response => response.json())
+            .then(data => {
+                setisApiLoading(false);
+            }
+            ).catch((err) => {
+                setisApiLoading(false);
+                console.log(err);
+            }
+            );
+    }
+    const handleFormSubmit = async (event, row, tempFormData) => {
         event.preventDefault();
+        setAddFormData("");
+        let ind;
+        let xyz = row;
+        xyz = { ...xyz };
+        xyz.deliveredQuantity = tempFormData.deliveredQuantity;
+        xyz.refund = tempFormData.refund;
+        xyz.productQuality = tempFormData.productQuality;
+        for (let i = 0; i < orderProductList.length; i++) {
+            if (row.id == orderProductList[i].id) {
+                ind = i;
+                break;
+            }
+        }
+        orderProductList[ind] = xyz;
         setEditContactId(null);
+        uploadBackEnd(row, tempFormData);
     }
     const handleClickOpen = (event) => {
         event.preventDefault();
@@ -179,6 +226,7 @@ function OrderDetail(props) {
     }
     return (
         <div>
+            {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
             {Object.keys(order).length > 2 && !(isLoading) ?
                 <Container maxWidth="md" fixed={false}>
                     <Table className="table" aria-label="spanning table">
@@ -313,13 +361,15 @@ function OrderDetail(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Unit Cost</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivered Quantity</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Refund</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Quality</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {orderProductList.length > 0 ? orderProductList.map((row, index) => (
                             <Fragment>
-                                {editContactId === index ? (
+                                {editContactId === row.id ? (
                                     <EditableRow row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
                                     <ReadOnlyRow row={row} index={index} addFormData={addFormData} handleEditClick={handleEditClick} />}
                             </Fragment>

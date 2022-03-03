@@ -25,11 +25,25 @@ const EditableRow = ({
             <TableCell align="center"><input
                 type="text"
                 placeholder="Enter Delivered Quantity"
-                name="quantity"
-                value={addFormData.quantity}
+                name="deliveredQuantity"
+                value={addFormData.deliveredQuantity}
                 onChange={handleEditFormChange}
             ></input></TableCell>
-            <TableCell align="center"><Button variant="contained" on color="success" onClick={(event) => handleFormSubmit(event, row, index)}>Save</Button></TableCell>
+            <TableCell align="center"><input
+                type="text"
+                placeholder="Enter Refund Amount"
+                name="refund"
+                value={addFormData.refund}
+                onChange={handleEditFormChange}
+            ></input></TableCell>
+            <TableCell align="center"><input
+                type="text"
+                placeholder="Enter Product Quality"
+                name="productQuality"
+                value={addFormData.productQuality}
+                onChange={handleEditFormChange}
+            ></input></TableCell>
+            <TableCell align="center"><Button variant="contained" on color="success" onClick={(event) => handleFormSubmit(event, row, addFormData)}>Save</Button></TableCell>
         </TableRow>
     );
 };
