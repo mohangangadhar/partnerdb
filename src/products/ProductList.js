@@ -129,7 +129,7 @@ function ProductList(props) {
                     "productId": data.product.id,
                     "stockQuantity": tempFormData.stockQuantity.toString(),
                     "vendorProductId": data.id.toString(),
-                    "gstRate": data.product.gstRate == null ? 0 : data.gstrate,
+                    "gstRate": data.product.gstRate == null ? 0 : data.product.gstRate,
                     "brandName": data.product.brandName == null ? "" : data.product.brandName.toString(),
                     "manufacturer": data.product.manufacturer == null ? "" : data.product.manufacturer,
                     "about": data.product.about == null ? "" : data.product.about,

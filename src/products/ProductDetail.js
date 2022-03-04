@@ -77,7 +77,7 @@ function ProductDetail(props) {
             "productId": product.product.id,
             "stockQuantity": stockQ.toString(),
             "vendorProductId": product.id.toString(),
-            "gstRate": gstrate == null ? 0 : "",
+            "gstRate": gstrate == null ? 0 : gstrate,
             "brandName": brandName == null ? "" : brandName,
             "manufacturer": manufacturer == null ? "" : manufacturer,
             "about": about == null ? "" : about,
