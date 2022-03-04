@@ -14,7 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import { NotificationManager } from "react-notifications";
 import { auth } from '../firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
@@ -92,7 +92,6 @@ function ProductDetail(props) {
             "uniqueness": uniqueness == null ? "" : uniqueness,
             "express": express == "YES" ? 1 : 0,
         };
-        console.log(productdata);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
             urlString = props.match.params.vendorId === "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"
@@ -108,6 +107,7 @@ function ProductDetail(props) {
             .then(response => response.json())
             .then(data => {
                 setLoading(false);
+                NotificationManager.success('Updated Status', 'Successful!', 1000);
             }
             );
     }
