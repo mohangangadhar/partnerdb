@@ -39,11 +39,9 @@ import UserList from "./users/UserList";
 import Button from '@mui/material/Button';
 import PeopleIcon from '@mui/icons-material/People';
 import * as Constants from './constants/Constants'
-import AodIcon from '@mui/icons-material/Aod';
 import { auth } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Reset from './Reset'
-import DetailOrderList from './DetailOrder/DetailOrderList';
 import SellerDashBoard from './dashboard/SellerDashboard';
 import SellerProfile from './Profile/SellerProfile';
 import UserProfile from './Profile/UserProfile';
@@ -56,7 +54,8 @@ import Support from './Support/Support';
 import dummy from './dummy';
 import ServiceZones from './ServiceZones/ServiceZones';
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
-
+import PaymentReports from './PaymentReports/PaymentReports';
+import PaymentsIcon from '@mui/icons-material/Payments';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -280,18 +279,6 @@ export default function MiniDrawer() {
                                         id: "3"
                                     }}><ListItemText primary="Wallet" /></Link>
                                 </ListItem>
-                                <ListItem button key="DetailOrders">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: '/app/detail/order',
-                                            id: "4"
-                                        }}><AodIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Detail Order</h6></Link>
-                                    </ListItemIcon>
-                                    <Link to={{
-                                        pathname: '/app/detail/order',
-                                        id: "4"
-                                    }}><ListItemText primary="DetailOrders" /></Link>
-                                </ListItem>
                                 <ListItem button key="ServiceZones">
                                     <ListItemIcon>
                                         <Link to={{
@@ -302,6 +289,18 @@ export default function MiniDrawer() {
                                     <Link to={{
                                         pathname: '/app/servicezones',
                                         id: "4"
+                                    }}><ListItemText primary="Service Zones" /></Link>
+                                </ListItem>
+                                <ListItem button key="PaymentReports">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/paymentreports',
+                                            id: "6"
+                                        }}><PaymentsIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Payment Reports</h6></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/paymentreports',
+                                        id: "6"
                                     }}><ListItemText primary="Service Zones" /></Link>
                                 </ListItem>
                                 <ListItem button key="Support">
@@ -332,10 +331,10 @@ export default function MiniDrawer() {
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
+                                    <Route path="/app/paymentreports" exact component={PaymentReports} />
                                     <Route path="/app/dummy" exact component={dummy} />
                                     <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />
-                                    <Route path="/app/detail/order" exact component={DetailOrderList} />
                                     <Route path="/app/:vendorId" exact component={OrderList} />
                                     <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />

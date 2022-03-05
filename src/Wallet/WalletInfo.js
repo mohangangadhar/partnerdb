@@ -54,7 +54,6 @@ const WalletInfo = ({ data, searchOrder }) => {
             }
 
         })
-
     }
     const proceedTransaction = () => {
         wallet.walletId = data.id;
