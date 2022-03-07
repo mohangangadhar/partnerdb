@@ -1,262 +1,117 @@
-import React from "react";
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
-import Loader from "../components/Loader/Loader";
-import { APIURL, GetRequestOptions } from "../constants/Constants";
-import './paymentreports.css'
-function GlobalFilter({
-    preGlobalFilteredRows,
-    globalFilter,
-    setGlobalFilter,
-}) {
-    const count = preGlobalFilteredRows.length
-    const [value, setValue] = React.useState(globalFilter)
-    const onChange = useAsyncDebounce(value => {
-        setGlobalFilter(value || undefined)
-    }, 200)
+import React, { useEffect, useState } from 'react'
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@material-ui/core/TableBody";
+import Pagination from '@material-ui/lab/Pagination';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
-    return (
-        <span style={{ color: 'white' }}>
-            Search:{' '}
-            <input
-                className="form-control"
-                value={value || ""}
-                style={{ padding: '10px', border: '2px solid' }}
-                onChange={e => {
-                    setValue(e.target.value);
-                    onChange(e.target.value);
-                }}
-                placeholder={`${count} records...`}
-            />
-        </span>
-    )
-}
+import { Box, Grid } from "@material-ui/core";
 
-function DefaultColumnFilter({
-    column: { filterValue, preFilteredRows, setFilter },
-}) {
-    const count = preFilteredRows.length
+import { APIURL, GetRequestOptions } from '../constants/Constants';
 
-    return (
-        <input
-            className="form-control"
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-            placeholder={`Search ${count} records...`}
-        />
-    )
-}
-function Table({ columns, data }) {
-    const defaultColumn = React.useMemo(
-        () => ({
-            // Default Filter UI
-            Filter: DefaultColumnFilter,
-        }),
-        []
-    )
-
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-        state,
-        preGlobalFilteredRows,
-        setGlobalFilter,
-    } = useTable(
-        {
-            columns,
-            data,
-            defaultColumn
-        },
-        useFilters,
-        useGlobalFilter
-    )
-
-    return (
-        <div>
-            <GlobalFilter
-                preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={state.globalFilter}
-                setGlobalFilter={setGlobalFilter}
-            />
-            <table className="serviceTable" {...getTableProps()}>
-                <thead>
-                    {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps()}>
-                                    {column.render('Header')}
-                                    {/* Render the columns filter UI */}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {rows.map(
-                        (row, i) => {
-                            prepareRow(row);
-                            return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map(cell => {
-                                        return (
-                                            <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        }
-                    )}
-                </tbody>
-            </table>
-            <br />
-            {/* <div>Showing the first 20 results of {rows.length} rows</div> */}
-        </div >
-    )
-}
-
+import TableTitles from './Components/TableTitles';
 const PaymentReports = () => {
-    const [apiData, setApiData] = React.useState([]);
-    const [isLoading, setisLoading] = React.useState(false);
-    React.useEffect(async () => {
+    const [rows, setRows] = useState([]);
+    const [offSet, setOffSet] = useState(0);
+    const [perPage, setPerPage] = useState(10);
+    const [isLoading, setisLoading] = useState(false);
+    const [totalPages, setTotalPages] = useState(0);
+    const [searchNotFound, setSearchNotFound] = useState(false);
+    const receivedData = async (pageval) => {
+        setSearchNotFound(false);
+        setRows("");
         setisLoading(true);
-        await fetch(APIURL + "ecommerce-vendor/paymentreports", GetRequestOptions).
-            then(response => response.json()).
-            then(data => {
-                setApiData(data);
+        let urlString = `ecommerce-vendor/paymentreports-page?size=50&page=${pageval}`;
+        await fetch(APIURL + urlString, GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setRows(data.content);
+                setTotalPages(data.totalPages);
                 setisLoading(false);
             }).catch(err => setisLoading(false));
-    }, [])
+    }
+
+    useEffect(() => {
+        receivedData(0);
+    }, []);
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
     }
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: 'Service Zones',
-                columns: [
-                    {
-                        Header: 'Order Type',
-                        accessor: 'orderType',
-                    },
-                    {
-                        Header: 'Vendor Name',
-                        accessor: 'vendorName',
-                    },
-                    {
-                        Header: 'Order Time',
-                        accessor: 'orderTime',
-                    },
-                    {
-                        Header: 'Order Id',
-                        accessor: 'orderId',
-                    },
-                    {
-                        Header: 'Customer Id',
-                        accessor: 'customerId',
-                    },
-                    {
-                        Header: 'Customer Name',
-                        accessor: 'customerName',
-                    },
-                    {
-                        Header: 'Order Status',
-                        accessor: 'orderStatus',
-                    },
-                    {
-                        Header: 'Product Id',
-                        accessor: 'productId',
-                    },
-                    {
-                        Header: 'Product Name',
-                        accessor: 'productName',
-                    },
-                    {
-                        Header: 'Ordered Quantity',
-                        accessor: 'orderedQuantity',
-                    },
-                    {
-                        Header: 'Unit Price',
-                        accessor: 'unitPrice',
-                    },
-                    {
-                        Header: 'Total',
-                        accessor: 'orderedValue',
-                    },
-                    {
-                        Header: 'Delivery Fee',
-                        accessor: 'shippingCost',
-                    },
-                    {
-                        Header: 'Delivered Quantity',
-                        accessor: 'deliveredQuantity',
-                    },
-                    {
-                        Header: 'Product Quality',
-                        accessor: 'productQuality',
-                    },
-                    {
-                        Header: 'Refunds',
-                        accessor: 'refundValue',
-                    },
-                    {
-                        Header: 'Final Value',
-                        accessor: 'finalOrderValue',
-                    },
-                    {
-                        Header: 'GST',
-                        accessor: 'gstRate',
-                    },
-                    {
-                        Header: 'Final Taxable Value',
-                        accessor: 'finalTaxableValue',
-                    },
-                    {
-                        Header: 'Seller Invoice Value',
-                        accessor: 'sellerInvoiceValue',
-                    },
-                ],
-            },
-        ],
-        []
-    )
-    let realData = [];
-    const data = apiData.map(data => {
-        realData.push({
-            "orderType": data.orderType == 0 ? "Regular" : "Express",
-            "vendorName": detail(data.vendorName),
-            "orderTime": data.orderDateTime,
-            "orderId": data.orderId,
-            "customerId": data.customerId,
-            "customerName": data.customerName,
-            "orderStatus": data.orderStatus,
-            "productId": data.productId,
-            "productName": detail(data.productName),
-            "orderedQuantity": data.orderedQuantity,
-            "unitPrice": data.unitPrice,
-            "orderedValue": data.orderedValue,
-            "shippingCost": data.shippingCost,
-            "deliveredQuantity": data.deliveredQuantity,
-            "productQuality": data.productQuality,
-            "refundValue": data.refundValue,
-            "finalOrderValue": data.finalOrderValue,
-            "gstRate": data.gstRate,
-            "finalTaxableValue": data.finalTaxableValue,
-            "sellerInvoiceValue": data.sellerInvoiceValue
-        })
-    });
-
-
     return (
-        <>
-            {isLoading ? <Loader /> :
-                <Table columns={columns} data={realData} />}
-        </>
+        <div>
+            <center><h2 style={{ marginTop: -9, marginBottom: 0, fontStyle: 'italic', color: 'white' }}>Payment Reports</h2></center>
+            <TableContainer component={Paper}>
+                <Table className="table" aria-label="spanning table">
+                    <TableTitles />
+                    {rows.length > 0 && !(isLoading) ?
+                        <TableBody>
+                            {rows.map((row, index) => (
+                                <TableRow key={index}>
+                                    <TableCell align="center">
+                                        {row.orderType == 0 ? "Regular" : "Express"}</TableCell>
+                                    <TableCell align="center">
+                                        {detail(row.vendorName)}</TableCell>
+                                    <TableCell align="center">
+                                        {row.orderDateTime}</TableCell>
+                                    <TableCell align="center">
+                                        {row.orderId}</TableCell>
+                                    <TableCell align="center">
+                                        {row.customerId}</TableCell>
+                                    <TableCell align="center">
+                                        {row.customerName}</TableCell>
+                                    <TableCell align="center">
+                                        {row.orderStatus}</TableCell>
+                                    <TableCell align="center">
+                                        {row.productId}</TableCell>
+                                    <TableCell align="center">
+                                        {detail(row.productName)}</TableCell>
+                                    <TableCell align="center">
+                                        {row.orderedQuantity}</TableCell>
+                                    <TableCell align="center">
+                                        {row.unitPrice}</TableCell>
+                                    <TableCell align="center">
+                                        {row.orderedValue}</TableCell>
+                                    <TableCell align="center">
+                                        {row.shippingCost}</TableCell>
+                                    <TableCell align="center">
+                                        {row.deliveredQuantity}</TableCell>
+                                    <TableCell align="center">
+                                        {row.productQuality}</TableCell>
+                                    <TableCell align="center">
+                                        {row.refundValue}</TableCell>
+                                    <TableCell align="center">
+                                        {row.finalOrderValue}</TableCell>
+                                    <TableCell align="center">
+                                        {row.gstRate}</TableCell>
+                                    <TableCell align="center">
+                                        {row.finalTaxableValue}</TableCell>
+                                    <TableCell align="center">
+                                        {row.sellerInvoiceValue}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody> :
+                        <div>
+                            <center>
+                                <CircularProgress />
+                            </center>
+                        </div>}
+                </Table>
+            </TableContainer>
+            <Box m={2} />
+            <Grid container justifyContent={"center"}>
+                <Pagination variant={"text"} color={"primary"}
+                    count={totalPages}
+                    onChange={(event, value) => receivedData(value - 1)} />
+            </Grid>
+
+            <Box m={2} />
+        </div>
     )
 }
-
 export default PaymentReports;

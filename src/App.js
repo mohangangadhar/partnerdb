@@ -56,6 +56,7 @@ import ServiceZones from './ServiceZones/ServiceZones';
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
 import PaymentReports from './PaymentReports/PaymentReports';
 import PaymentsIcon from '@mui/icons-material/Payments';
+import SeasonalOrders from './orders/SeasonalOrders';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -267,6 +268,22 @@ export default function MiniDrawer() {
                                         id: "5"
                                     }}><ListItemText primary="Orders" /></Link>
                                 </ListItem>
+                                <ListItem button key="Seasonal Orders">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: `/app/order/seasonal`,
+                                            id: "8"
+                                        }}><ShoppingCart />
+                                            <div >
+                                                <h6 style={orderStyle}>Seasonal</h6>
+                                                <h6 style={orderStyle}>Orders</h6>
+                                            </div></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: `/app/order/seasonal`,
+                                        id: "8"
+                                    }}><ListItemText primary="Seasonal Orders" /></Link>
+                                </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="Wallet">
                                     <ListItemIcon>
                                         <Link to={{
@@ -336,6 +353,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/:vendorId" exact component={OrderList} />
+                                    <Route path="/app/:vendorId/seasonal" exact component={SeasonalOrders} />
                                     <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                     <Route path="/app/:vendorId/product/" exact component={ProductList} />
