@@ -76,7 +76,7 @@ function ExpressOrderList(props) {
             .then(data => {
                 setRows(data.content);
                 setTotalPages(data.totalPages);
-                console.log(rows, totalPages);
+   
                 setisLoading(false);
                 if (data.content.length == 0) { setSearchNotFound(true) }
             });

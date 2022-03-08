@@ -29,13 +29,7 @@ const EditableRow = ({
                 value={addFormData.deliveredQuantity}
                 onChange={handleEditFormChange}
             ></input></TableCell>
-            <TableCell align="center"><input
-                type="text"
-                placeholder="Enter Refund Amount"
-                name="refund"
-                value={addFormData.refund}
-                onChange={handleEditFormChange}
-            ></input></TableCell>
+            <TableCell align="center">{row.refund}</TableCell>
             <TableCell align="center"><input
                 type="text"
                 placeholder="Enter Product Quality"

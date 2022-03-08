@@ -62,6 +62,7 @@ const WalletInfo = ({ data, searchOrder }) => {
             amount: wallet.amount,
             type: wallet.type,
             accepted: wallet.accepted,
+            currentBalance: data.balance,
             meta: JSON.stringify(wallet.meta),
         }
         data.wallet = wallet;

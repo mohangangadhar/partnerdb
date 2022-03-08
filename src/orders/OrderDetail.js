@@ -23,7 +23,7 @@ import Invoice from '../components/Invoice';
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
 import { NotificationManager } from "react-notifications";
-import { APIURL } from '../constants/Constants';
+import { APIURL, GetRequestOptions } from '../constants/Constants';
 import OrderEditDialog from './OrderEditDialog';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
@@ -34,7 +34,11 @@ function OrderDetail(props) {
     const [editContactId, setEditContactId] = useState(null);
     const formClick = useRef();
     const [open, setOpen] = useState(false);
-    const [totalData, setTotalData] = useState(0);
+    const [totalData, setTotalData] = useState({
+        total: 0,
+        refundTotal: 0,
+        deliveredTotal: 0
+    });
     const [comment, setComment] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
     const [isApiLoading, setisApiLoading] = useState(false);
@@ -44,7 +48,6 @@ function OrderDetail(props) {
     })
     const [addFormData, setAddFormData] = useState({
         deliveredQuantity: 0,
-        refund: 0,
         productQuality: ""
     });
     const [user] = useAuthState(auth);
@@ -56,14 +59,9 @@ function OrderDetail(props) {
             userId = auth.currentUser.uid;
         }
     }, []);
-    let total = 0;
     useEffect(() => {
-        let apiUrl;
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        };
-        fetch(APIURL + 'order/' + props.location.id, requestOptions)
+
+        fetch(APIURL + 'order/' + props.location.id, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setOrder(data.order);
@@ -73,13 +71,14 @@ function OrderDetail(props) {
                     userId: data.order.user.id,
                     orderId: data.order.id,
                 })
-                if (data.orderProductList.length > 0) {
-                    data.orderProductList.forEach(row => total = row.total + total)
-                }
                 setComment(data.order.comments);
                 setStatus(data.order.deliveryStatus);
                 setFinalTotal(data.order.finalTotal);
-                setTotalData(total);
+                setTotalData({
+                    total: data.order.total + data.order.deliveryFee,
+                    refundTotal: data.order.refundTotal,
+                    deliveredTotal: data.order.deliveredTotal
+                });
                 setisLoading(false);
             }
             );
@@ -145,18 +144,21 @@ function OrderDetail(props) {
         event.preventDefault();
 
         setAddFormData({
-            deliveredQuantity: row.deliveredQuantity
+            deliveredQuantity: row.deliveredQuantity,
+            productQuality: row.productQuality
         });
         setEditContactId(row.id);
     }
+    //Upload backend individual order
     const uploadBackEnd = async (row, tempFormData) => {
+
         let urlString = APIURL + `/order-product-m/${row.id}`;
         let orderProductData = {
             "deliveredQuantity": tempFormData.deliveredQuantity,
-            "refund": tempFormData.refund,
+            "refund": row.refund,
             "productQuality": tempFormData.productQuality
         };
-
+        console.log(orderProductData);
         setisApiLoading(true);
 
         const requestOptionsForUpdate = {
@@ -175,24 +177,28 @@ function OrderDetail(props) {
             }
             );
     }
+    //Form Submit
     const handleFormSubmit = async (event, row, tempFormData) => {
         event.preventDefault();
+        console.log(tempFormData);
         setAddFormData("");
         let ind;
         let xyz = row;
         xyz = { ...xyz };
         xyz.deliveredQuantity = tempFormData.deliveredQuantity;
-        xyz.refund = tempFormData.refund;
-        xyz.productQuality = tempFormData.productQuality;
+        xyz.refund = row.total - (row.quantity - tempFormData.deliveredQuantity) * row.vendorProduct.product.price;
+        xyz.productQuality = tempFormData.productQuality == null ? "" : tempFormData.productQuality;
         for (let i = 0; i < orderProductList.length; i++) {
             if (row.id == orderProductList[i].id) {
                 ind = i;
                 break;
             }
         }
+        console.log(xyz.refund);
         orderProductList[ind] = xyz;
+
         setEditContactId(null);
-        uploadBackEnd(row, tempFormData);
+        uploadBackEnd(xyz, tempFormData);
     }
     const handleClickOpen = (event) => {
         event.preventDefault();
@@ -201,8 +207,81 @@ function OrderDetail(props) {
     const handleClose = () => {
         setOpen(false);
     };
+    //UPLOAD WALLET
+    const uploadWalletBackend = async (refundTotal) => {
+        setisApiLoading(true);
+        let walletId;
+        await fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + userData.mobileNumber)
+            .then(res => res.json())
+            .then((data) => {
+                walletId = data.id;
+                let meta = {
+                    type: "earnings",
+                    source: "order",
+                    source_id: "",
+                    description: `Refunds for Order #${order.id}`,
+                    source_amount: 70,
+                    source_payment_type: "Online",
+                    source_title: ""
+                };
+                var source = {
+                    walletId: data.id,
+                    amount: refundTotal,
+                    type: "deposit",
+                    accepted: "1",
+                    currentBalance: data.balance,
+                    meta: JSON.stringify(meta),
+                }
+                fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${data.id}/transaction`, {
+                    method: 'POST', // or 'PUT'
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Credentials': 'true'
+                    },
+                    body: JSON.stringify(source),
+                })
+                    .then(data => {
+                        console.log('Success:', data.json());
+                        NotificationManager.success('Wallet Updated!', 'Successful!', 1000);
+                        setisApiLoading(false);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        NotificationManager.error('Error occurred while making your changes, contact support!', 'Error!');
+                    });
+            }).catch(err => setisApiLoading(false));
+    }
+    //Handle Update
+    const handleUpdate = async (ev) => {
+        ev.preventDefault();
+        let updateBody = {
+            "id": props.location.id,
+            "status": status,
+            "comments": comment,
+            "finalTotal": finalTotal
+        };
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateBody)
+        };
+
+        await fetch(APIURL + "order/status", requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setisLoading(true);
+                console.log(data.refundTotal);
+                uploadWalletBackend(data.refundTotal);
+                NotificationManager.success('Updated Status', 'Successful!', 1000);
+            }
+            );
+
+    }
     const handleUpdateComment = async () => {
-        console.log(status);
+
         let updateBody = {
             "id": props.location.id,
             "status": status,
@@ -360,7 +439,7 @@ function OrderDetail(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Qty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Unit Cost</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Delivered Quantity</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>UnDelivered Quantity</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Refund</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Quality</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
@@ -375,9 +454,13 @@ function OrderDetail(props) {
                             </Fragment>
                         )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
                         <TableRow>
-                            <TableCell rowSpan={3} />
+
                             <TableCell colSpan={2}>Total</TableCell>
-                            <TableCell align="right">{totalData}</TableCell>
+                            <TableCell align="right">{totalData.total}</TableCell>
+                            <TableCell colSpan={2}>Refunds</TableCell>
+                            <TableCell align="right">{totalData.refundTotal}</TableCell>
+                            <TableCell colSpan={2}>Delivered Total</TableCell>
+                            <TableCell align="right">{totalData.deliveredTotal}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -392,7 +475,7 @@ function OrderDetail(props) {
                 />
             </Container>
             <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                <form onSubmit={sendEmail}>
+                <form onSubmit={(ev) => handleUpdate(ev)}>
                     <div style={{ display: 'none' }}>
                         <label>Name</label>
                         <input type="text" name="name" value={userData.name} />
@@ -402,8 +485,8 @@ function OrderDetail(props) {
                         <input type="text" name="orderNo" value={props.location.id} />
                         <label>Message</label>
                         <textarea name="message" value={status} />
-                        <input style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Send Mail" />
                     </div>
+                    <input disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update" />
                 </form>
             </Container >
             {
