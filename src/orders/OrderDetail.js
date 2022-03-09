@@ -42,6 +42,7 @@ function OrderDetail(props) {
     });
     const [comment, setComment] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
+    const [paymentType, setPaymentType] = useState("");
     const [isApiLoading, setisApiLoading] = useState(false);
     const [dialogData, setDialogData] = useState({
         orderId: 0,
@@ -69,6 +70,7 @@ function OrderDetail(props) {
                 setOrder(data.order);
                 setOrderProductList(data.orderProductList);
                 setUserData(data.order.user);
+                setPaymentType(data.paymentMethodFB.slug);
                 setDialogData({
                     userId: data.order.user.id,
                     orderId: data.order.id,
@@ -389,6 +391,9 @@ function OrderDetail(props) {
                                             <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
                                         </TableCell>
                                         <TableCell>
+                                            <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType} </FormLabel>
+                                        </TableCell>
+                                        <TableCell>
                                             <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
                                                 Associate
                                             </Button>
@@ -396,7 +401,7 @@ function OrderDetail(props) {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell colSpan={2}>
-                                            <TextField label="Add Comment" value={comment}
+                                            <TextField multiline label="Add Comment" value={comment}
                                                 onChange={(ev) => setComment(ev.target.value)
                                                 }
                                                 InputProps={{
