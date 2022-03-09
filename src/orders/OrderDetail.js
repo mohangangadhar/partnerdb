@@ -62,9 +62,8 @@ function OrderDetail(props) {
             userId = auth.currentUser.uid;
         }
     }, []);
-    useEffect(() => {
-
-        fetch(APIURL + 'order/' + props.location.id, GetRequestOptions)
+    const getData = async () => {
+        await fetch(APIURL + 'order/' + props.location.id, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setOrder(data.order);
@@ -84,9 +83,13 @@ function OrderDetail(props) {
                     deliveredTotal: data.order.deliveredTotal,
                     returnRefundTotal: data.order.returnRefundTotal
                 });
-                setisLoading(false);
+
             }
             );
+    }
+    useEffect(async () => {
+        await getData();
+        setisLoading(false);
     }, [isLoading]);
     const sendEmail = async (e) => {
         e.preventDefault();
@@ -147,7 +150,6 @@ function OrderDetail(props) {
     };
     const handleEditClick = (event, row, index) => {
         event.preventDefault();
-
         setAddFormData({
             deliveredQuantity: row.deliveredQuantity,
             productQuality: row.productQuality,
@@ -157,7 +159,7 @@ function OrderDetail(props) {
     }
     //Upload backend individual order
     const uploadBackEnd = async (row, tempFormData) => {
-
+        setisApiLoading(true);
         let urlString = APIURL + `/order-product-m/${row.id}`;
         let orderProductData = {
             "deliveredQuantity": tempFormData.deliveredQuantity,
@@ -166,8 +168,6 @@ function OrderDetail(props) {
             "returnRefund": row.returnRefund,
             "returnQuantity": row.returnQuantity == null ? 0 : row.returnQuantity
         };
-        console.log(orderProductData);
-        setisApiLoading(true);
 
         const requestOptionsForUpdate = {
             method: 'PUT',
@@ -177,6 +177,26 @@ function OrderDetail(props) {
         await fetch(urlString, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
+                let updateBody = {
+                    "id": props.location.id,
+                    "status": status,
+                    "comments": comment,
+                };
+                const requestOptions = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updateBody)
+                };
+
+                fetch(APIURL + "order/status", requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        getData();
+                        NotificationManager.success('Updated Status', 'Successful!', 1000);
+                    }
+                    );
                 setisApiLoading(false);
             }
             ).catch((err) => {
@@ -205,7 +225,12 @@ function OrderDetail(props) {
                 break;
             }
         }
-        console.log(xyz.refund);
+        setTotalData({
+            total: totalData.total,
+            refundTotal: totalData.refundTotal + xyz.refund,
+            deliveredTotal: totalData.total - totalData.deliveredTotal,
+            returnRefundTotal: totalData.returnRefundTotal + xyz.refundTotal
+        });
         orderProductList[ind] = xyz;
 
         setEditContactId(null);
@@ -219,18 +244,18 @@ function OrderDetail(props) {
         setOpen(false);
     };
     //UPLOAD WALLET
-    const uploadWalletBackend = async (refundTotal) => {
+    const uploadWalletBackend = async (refundTotal, type) => {
         setisApiLoading(true);
-        let walletId;
+
         await fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + userData.mobileNumber)
             .then(res => res.json())
             .then((data) => {
-                walletId = data.id;
+
                 let meta = {
                     type: "earnings",
                     source: "order",
                     source_id: "",
-                    description: `Refunds for Order #${order.id}`,
+                    description: `Refunds(${type}) for Order #${order.id}`,
                     source_amount: 70,
                     source_payment_type: "Online",
                     source_title: ""
@@ -282,8 +307,9 @@ function OrderDetail(props) {
         await fetch(APIURL + "order/status", requestOptions)
             .then(response => response.json())
             .then(data => {
-                setisLoading(true);
-                uploadWalletBackend(typeOfRefund == "first" ? data.refundTotal : data.returnRefundTotal);
+                getData();
+                uploadWalletBackend(typeOfRefund == "first" ? data.refundTotal : data.returnRefundTotal,
+                    typeOfRefund == "first" ? "Undelivered Items" : "Post Delivery");
                 NotificationManager.success('Updated Status', 'Successful!', 1000);
             }
             );
