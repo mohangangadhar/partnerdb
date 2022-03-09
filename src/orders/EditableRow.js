@@ -24,12 +24,20 @@ const EditableRow = ({
             <TableCell align="center">{row.total}</TableCell>
             <TableCell align="center"><input
                 type="text"
-                placeholder="Enter Delivered Quantity"
+                placeholder="Enter Not Delivered Quantity"
                 name="deliveredQuantity"
                 value={addFormData.deliveredQuantity}
                 onChange={handleEditFormChange}
             ></input></TableCell>
             <TableCell align="center">{row.refund}</TableCell>
+            <TableCell align="center"><input
+                type="text"
+                placeholder="Enter Returned Quantity"
+                name="returnQuantity"
+                value={addFormData.returnQuantity}
+                onChange={handleEditFormChange}
+            ></input></TableCell>
+            <TableCell align="center">{row.returnRefund}</TableCell>
             <TableCell align="center"><input
                 type="text"
                 placeholder="Enter Product Quality"

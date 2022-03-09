@@ -37,7 +37,8 @@ function OrderDetail(props) {
     const [totalData, setTotalData] = useState({
         total: 0,
         refundTotal: 0,
-        deliveredTotal: 0
+        deliveredTotal: 0,
+        returnRefundTotal: 0
     });
     const [comment, setComment] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
@@ -48,7 +49,8 @@ function OrderDetail(props) {
     })
     const [addFormData, setAddFormData] = useState({
         deliveredQuantity: 0,
-        productQuality: ""
+        productQuality: "",
+        returnQuantity: 0
     });
     const [user] = useAuthState(auth);
     const history = useHistory();
@@ -75,9 +77,10 @@ function OrderDetail(props) {
                 setStatus(data.order.deliveryStatus);
                 setFinalTotal(data.order.finalTotal);
                 setTotalData({
-                    total: data.order.total + data.order.deliveryFee,
+                    total: data.order.total,
                     refundTotal: data.order.refundTotal,
-                    deliveredTotal: data.order.deliveredTotal
+                    deliveredTotal: data.order.deliveredTotal,
+                    returnRefundTotal: data.order.returnRefundTotal
                 });
                 setisLoading(false);
             }
@@ -145,7 +148,8 @@ function OrderDetail(props) {
 
         setAddFormData({
             deliveredQuantity: row.deliveredQuantity,
-            productQuality: row.productQuality
+            productQuality: row.productQuality,
+            returnQuantity: row.returnQuantity
         });
         setEditContactId(row.id);
     }
@@ -156,7 +160,9 @@ function OrderDetail(props) {
         let orderProductData = {
             "deliveredQuantity": tempFormData.deliveredQuantity,
             "refund": row.refund,
-            "productQuality": tempFormData.productQuality
+            "productQuality": tempFormData.productQuality,
+            "returnRefund": row.returnRefund,
+            "returnQuantity": row.returnQuantity == null ? 0 : row.returnQuantity
         };
         console.log(orderProductData);
         setisApiLoading(true);
@@ -186,7 +192,10 @@ function OrderDetail(props) {
         let xyz = row;
         xyz = { ...xyz };
         xyz.deliveredQuantity = tempFormData.deliveredQuantity;
-        xyz.refund = row.total - (row.quantity - tempFormData.deliveredQuantity) * row.vendorProduct.product.price;
+
+        xyz.refund = row.vendorProduct.product.salePrice <= 0 ? tempFormData.deliveredQuantity * row.vendorProduct.product.price : tempFormData.deliveredQuantity * row.vendorProduct.salePrice;
+        xyz.returnQuantity = tempFormData.returnQuantity;
+        xyz.returnRefund = row.vendorProduct.product.salePrice <= 0 ? tempFormData.returnQuantity * row.vendorProduct.product.price : tempFormData.returnQuantity * row.vendorProduct.salePrice;
         xyz.productQuality = tempFormData.productQuality == null ? "" : tempFormData.productQuality;
         for (let i = 0; i < orderProductList.length; i++) {
             if (row.id == orderProductList[i].id) {
@@ -253,7 +262,7 @@ function OrderDetail(props) {
             }).catch(err => setisApiLoading(false));
     }
     //Handle Update
-    const handleUpdate = async (ev) => {
+    const handleUpdate = async (ev, typeOfRefund) => {
         ev.preventDefault();
         let updateBody = {
             "id": props.location.id,
@@ -273,8 +282,7 @@ function OrderDetail(props) {
             .then(response => response.json())
             .then(data => {
                 setisLoading(true);
-                console.log(data.refundTotal);
-                uploadWalletBackend(data.refundTotal);
+                uploadWalletBackend(typeOfRefund == "first" ? data.refundTotal : data.returnRefundTotal);
                 NotificationManager.success('Updated Status', 'Successful!', 1000);
             }
             );
@@ -441,6 +449,8 @@ function OrderDetail(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>UnDelivered Quantity</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Refund</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Return Quantity</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Return Refunds</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Quality</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
@@ -448,23 +458,31 @@ function OrderDetail(props) {
                     <TableBody>
                         {orderProductList.length > 0 ? orderProductList.map((row, index) => (
                             <Fragment>
-                                {editContactId === row.id ? (
+                                {editContactId === row.id && (totalData.refundTotal == 0 && totalData.returnRefundTotal == 0) ? (
                                     <EditableRow row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
                                     <ReadOnlyRow row={row} index={index} addFormData={addFormData} handleEditClick={handleEditClick} />}
                             </Fragment>
                         )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
                         <TableRow>
 
-                            <TableCell colSpan={2}>Total</TableCell>
-                            <TableCell align="right">{totalData.total}</TableCell>
-                            <TableCell colSpan={2}>Refunds</TableCell>
-                            <TableCell align="right">{totalData.refundTotal}</TableCell>
-                            <TableCell colSpan={2}>Delivered Total</TableCell>
-                            <TableCell align="right">{totalData.deliveredTotal}</TableCell>
+                            <TableCell align="left" colSpan={9}>
+                                <ul style={{ textDecoration: 'none' }}>
+                                    <li>Total : {totalData.total}</li>
+                                    <li>Refunds : {totalData.refundTotal}</li>
+                                    <li>Delivered Total : {totalData.deliveredTotal}</li>
+                                    <li>Return Refunds : {totalData.returnRefundTotal}</li>
+                                    <li>Final Total : {finalTotal}</li>
+                                </ul>
+                            </TableCell>
+
                         </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                <input onClick={(ev) => handleUpdate(ev, "first")} disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 1st Refunds" />
+                <input onClick={(ev) => handleUpdate(ev, "second")} disabled={totalData.returnRefundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 2nd Refunds" />
+            </Container>
             <Container>
                 <OrderEditDialog
                     open={open}
@@ -485,8 +503,9 @@ function OrderDetail(props) {
                         <input type="text" name="orderNo" value={props.location.id} />
                         <label>Message</label>
                         <textarea name="message" value={status} />
+                        <input disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update" />
                     </div>
-                    <input disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update" />
+
                 </form>
             </Container >
             {
