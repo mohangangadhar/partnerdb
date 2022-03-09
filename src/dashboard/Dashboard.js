@@ -46,41 +46,48 @@ function DashBoard() {
         regular: 0,
         express: 0,
         regtotal: 0,
-        exptotal: 0
+        exptotal: 0,
+        seasonal: 0,
+        seasonaltotal: 0
     });
     const [processingOrdersData, setProcessingOrdersData] = useState({
         regular: 0,
         express: 0,
         regtotal: 0,
-        exptotal: 0
+        exptotal: 0,
+        seasonal: 0,
+        seasonaltotal: 0
     });
     const [pendingOrdersData, setPendingOrdersData] = useState({
         regular: 0,
         express: 0,
         regtotal: 0,
-        exptotal: 0
+        exptotal: 0,
+        seasonal: 0,
+        seasonaltotal: 0
     });
     const [completeOrdersData, setCompleteOrdersData] = useState({
         regular: 0,
         express: 0,
         regtotal: 0,
-        exptotal: 0
+        exptotal: 0,
+        seasonal: 0,
+        seasonaltotal: 0
     });
 
     const [cancelOrdersData, setCancelOrdersData] = useState({
         regular: 0,
         express: 0,
         regtotal: 0,
-        exptotal: 0
+        exptotal: 0,
+        seasonal: 0,
+        seasonaltotal: 0
     });
 
     const order = useSelector(state => state.dashboardreducer);
     const dispatch = useDispatch();
 
-    const RequestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-    };
+
     const regularOrdersSum = (newCount.regular.length >= 1 && newCount.regular[0].noOfOrders) + (processingCount.regular.length >= 1 && processingCount.regular[0].noOfOrders)
         + (completeCount.regular.length >= 1 && completeCount.regular[0].noOfOrders) + (pendingCount.regular.length && pendingCount.regular[0].noOfOrders);
 
@@ -101,28 +108,28 @@ function DashBoard() {
         setOrderData(data.filter(data => data.vendorName == vendorName));
         setNewCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "REGULAR"),
-            express: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "EXPRESS")
+            regular: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "REGULAR" && data.serviceId != 4),
+            express: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "EXPRESS" && data.serviceId != 4)
         }));
         setProcessingCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "REGULAR"),
-            express: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "EXPRESS")
+            regular: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "REGULAR" && data.serviceId != 4),
+            express: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "EXPRESS" && data.serviceId != 4)
         }));
         setPendingCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "REGULAR"),
-            express: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "EXPRESS")
+            regular: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "REGULAR" && data.serviceId != 4),
+            express: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "EXPRESS" && data.serviceId != 4)
         }));
         setCompleteCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "REGULAR"),
-            express: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "EXPRESS")
+            regular: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "REGULAR" && data.serviceId != 4),
+            express: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "EXPRESS" && data.serviceId != 4)
         }));
         setCancelCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "REGULAR"),
-            express: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "EXPRESS")
+            regular: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "REGULAR" && data.serviceId != 4),
+            express: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "EXPRESS" && data.serviceId != 4)
         }));
         setisLoading(false);
     }
@@ -134,7 +141,7 @@ function DashBoard() {
         for (let i = 0; i < data.length; i++) {
             if (data[i].deliveryStatus == "new") {
 
-                if (data[i].express == "REGULAR") {
+                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
 
                     setNewOrdersData((prevState) => ({
                         ...prevState,
@@ -143,12 +150,21 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS") {
+                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
 
                     setNewOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
                         exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].serviceId == 4) {
+
+                    setNewOrdersData((prevState) => ({
+                        ...prevState,
+                        seasonal: prevState.seasonal + data[i].noOfOrders,
+                        seasonaltotal: prevState.seasonaltotal + data[i].total
                     }
                     ));
                 }
@@ -173,7 +189,15 @@ function DashBoard() {
                     }
                     ));
                 }
+                else if (data[i].serviceId == 4) {
 
+                    setProcessingOrdersData((prevState) => ({
+                        ...prevState,
+                        seasonal: prevState.seasonal + data[i].noOfOrders,
+                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                    }
+                    ));
+                }
             }
 
 
@@ -196,7 +220,15 @@ function DashBoard() {
                     }
                     ));
                 }
+                else if (data[i].serviceId == 4) {
 
+                    setCancelOrdersData((prevState) => ({
+                        ...prevState,
+                        seasonal: prevState.seasonal + data[i].noOfOrders,
+                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                    }
+                    ));
+                }
             }
 
             if (data[i].deliveryStatus == "pending") {
@@ -218,6 +250,15 @@ function DashBoard() {
                     }
                     ));
                 }
+                else if (data[i].serviceId == 4) {
+
+                    setPendingOrdersData((prevState) => ({
+                        ...prevState,
+                        seasonal: prevState.seasonal + data[i].noOfOrders,
+                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                    }
+                    ));
+                }
             }
 
             if (data[i].deliveryStatus == "complete") {
@@ -236,6 +277,15 @@ function DashBoard() {
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
                         exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].serviceId == 4) {
+
+                    setCompleteOrdersData((prevState) => ({
+                        ...prevState,
+                        seasonal: prevState.seasonal + data[i].noOfOrders,
+                        seasonaltotal: prevState.seasonaltotal + data[i].total
                     }
                     ));
                 }
@@ -285,6 +335,17 @@ function DashBoard() {
                                         newOrdersData.express + processingOrdersData.express + completeOrdersData.express + pendingOrdersData.express
                                     }</TableCell>
                                 </TableRow>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Seasonal</TableCell>
+                                    <TableCell align="center">{newOrdersData.seasonal != 0 ? newOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center">{processingOrdersData.seasonal != 0 ? processingOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center">{completeOrdersData.seasonal != 0 ? completeOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center">{pendingOrdersData.seasonal != 0 ? pendingOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center">{cancelOrdersData.seasonal != 0 ? cancelOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        newOrdersData.seasonal + processingOrdersData.seasonal + completeOrdersData.seasonal + pendingOrdersData.seasonal
+                                    }</TableCell>
+                                </TableRow>
                             </>
                             : CircularProgressInTable}
                     </TableBody>
@@ -319,6 +380,17 @@ function DashBoard() {
                                     <TableCell align="center">{cancelOrdersData.exptotal != 0 ? cancelOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{
                                         newOrdersData.exptotal + processingOrdersData.exptotal + completeOrdersData.exptotal + pendingOrdersData.exptotal
+                                    }</TableCell>
+                                </TableRow>
+                                <TableRow >
+                                    <TableCell align="center" style={{ color: 'blue' }}>Seasonal</TableCell>
+                                    <TableCell align="center">{newOrdersData.seasonaltotal != 0 ? newOrdersData.seasonaltotal : 0}</TableCell>
+                                    <TableCell align="center">{processingOrdersData.seasonaltotal != 0 ? processingOrdersData.seasonaltotal : 0}</TableCell>
+                                    <TableCell align="center">{completeOrdersData.seasonaltotal != 0 ? completeOrdersData.seasonaltotal : 0}</TableCell>
+                                    <TableCell align="center">{pendingOrdersData.seasonaltotal != 0 ? pendingOrdersData.seasonaltotal : 0}</TableCell>
+                                    <TableCell align="center">{cancelOrdersData.seasonaltotal != 0 ? cancelOrdersData.seasonaltotal : 0}</TableCell>
+                                    <TableCell align="center">{
+                                        newOrdersData.seasonaltotal + processingOrdersData.seasonaltotal + completeOrdersData.seasonaltotal + pendingOrdersData.seasonaltotal
                                     }</TableCell>
                                 </TableRow>
                             </>
