@@ -193,9 +193,9 @@ function OrderDetail(props) {
         xyz = { ...xyz };
         xyz.deliveredQuantity = tempFormData.deliveredQuantity;
 
-        xyz.refund = row.vendorProduct.product.salePrice <= 0 ? tempFormData.deliveredQuantity * row.vendorProduct.product.price : tempFormData.deliveredQuantity * row.vendorProduct.salePrice;
+        xyz.refund = row.vendorProduct.salePrice <= 0 || null ? tempFormData.deliveredQuantity * row.vendorProduct.product.price : tempFormData.deliveredQuantity * row.vendorProduct.salePrice;
         xyz.returnQuantity = tempFormData.returnQuantity;
-        xyz.returnRefund = row.vendorProduct.product.salePrice <= 0 ? tempFormData.returnQuantity * row.vendorProduct.product.price : tempFormData.returnQuantity * row.vendorProduct.salePrice;
+        xyz.returnRefund = row.vendorProduct.salePrice <= 0 || null ? tempFormData.returnQuantity * row.vendorProduct.product.price : tempFormData.returnQuantity * row.vendorProduct.salePrice;
         xyz.productQuality = tempFormData.productQuality == null ? "" : tempFormData.productQuality;
         for (let i = 0; i < orderProductList.length; i++) {
             if (row.id == orderProductList[i].id) {
@@ -268,7 +268,6 @@ function OrderDetail(props) {
             "id": props.location.id,
             "status": status,
             "comments": comment,
-            "finalTotal": finalTotal
         };
         const requestOptions = {
             method: 'PUT',
@@ -294,7 +293,6 @@ function OrderDetail(props) {
             "id": props.location.id,
             "status": status,
             "comments": comment,
-            "finalTotal": finalTotal
         };
         const requestOptions = {
             method: 'PUT',
@@ -412,18 +410,6 @@ function OrderDetail(props) {
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <TextField label="Final Total" value={finalTotal}
-                                                onChange={(ev) => setFinalTotal(ev.target.value)}
-                                                InputProps={{
-                                                    style: {
-                                                        color: "white",
-                                                    }
-                                                }}
-                                                InputLabelProps={{
-                                                    style: { color: '#fff' },
-                                                }} />
-                                        </TableCell>
-                                        <TableCell>
                                             <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
                                         </TableCell>
                                     </TableRow>
@@ -458,7 +444,7 @@ function OrderDetail(props) {
                     <TableBody>
                         {orderProductList.length > 0 ? orderProductList.map((row, index) => (
                             <Fragment>
-                                {editContactId === row.id && (totalData.refundTotal == 0 && totalData.returnRefundTotal == 0) ? (
+                                {editContactId === row.id ? (
                                     <EditableRow row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
                                     <ReadOnlyRow row={row} index={index} addFormData={addFormData} handleEditClick={handleEditClick} />}
                             </Fragment>
@@ -467,10 +453,10 @@ function OrderDetail(props) {
 
                             <TableCell align="left" colSpan={9}>
                                 <ul style={{ textDecoration: 'none' }}>
-                                    <li>Total : {totalData.total}</li>
-                                    <li>Refunds : {totalData.refundTotal}</li>
-                                    <li>Delivered Total : {totalData.deliveredTotal}</li>
-                                    <li>Return Refunds : {totalData.returnRefundTotal}</li>
+                                    <li>Total Invoice: {totalData.total}</li>
+                                    <li>Undelivered Refund: {totalData.refundTotal}</li>
+                                    <li>Total Delivered amount: {totalData.deliveredTotal}</li>
+                                    <li>Post delivery refund : {totalData.returnRefundTotal}</li>
                                     <li>Final Total : {finalTotal}</li>
                                 </ul>
                             </TableCell>
