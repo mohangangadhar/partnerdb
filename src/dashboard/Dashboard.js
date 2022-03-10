@@ -171,7 +171,7 @@ function DashBoard() {
             }
             if (data[i].deliveryStatus == "accepted") {
 
-                if (data[i].express == "REGULAR") {
+                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
 
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
@@ -180,7 +180,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS") {
+                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
 
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
@@ -202,8 +202,8 @@ function DashBoard() {
 
 
             if (data[i].deliveryStatus == "cancelled") {
-                if (data[i].express == "REGULAR") {
-                    console.log("reg");
+                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
+
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
@@ -211,8 +211,8 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS") {
-                    console.log("expr");
+                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
+
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
@@ -232,7 +232,7 @@ function DashBoard() {
             }
 
             if (data[i].deliveryStatus == "pending") {
-                if (data[i].express == "REGULAR") {
+                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
                     console.log("reg");
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
@@ -241,7 +241,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS") {
+                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
                     console.log("expr");
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
@@ -262,7 +262,7 @@ function DashBoard() {
             }
 
             if (data[i].deliveryStatus == "complete") {
-                if (data[i].express == "REGULAR") {
+                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
                     console.log("reg");
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
@@ -271,7 +271,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS") {
+                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
                     console.log("expr");
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
