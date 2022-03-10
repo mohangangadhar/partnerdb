@@ -11,6 +11,11 @@ const EditableRow = ({
     handleEditFormChange,
     handleFormSubmit
 }) => {
+    const styleOptions = {
+        padding: 10,
+        marginBottom: 5,
+        fontSize: 15
+    }
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
@@ -57,37 +62,38 @@ const EditableRow = ({
                 {row.finalTaxableValue}</TableCell>
             <TableCell align="center">
                 {row.sellerInvoiceValue}</TableCell>
+            <TableCell align="center">
+                <select style={{
+                    padding: 5,
+                }} name="sellerInvoice" value={addFormData.sellerInvoice} onChange={handleEditFormChange}>
+                    <option style={styleOptions} value="paid">Paid</option>
+                    <option style={styleOptions} value="not paid">Not Paid</option>
+                </select>
+            </TableCell>
             <TableCell align="center"><input
                 type="text"
-                placeholder="Enter Not Delivered Quantity"
-                name="sellerInvoice"
-                value={addFormData.sellerInvoice}
-                onChange={handleEditFormChange}
-            ></input></TableCell>
-            <TableCell align="center"><input
-                type="text"
-                placeholder="Enter Not Delivered Quantity"
+                placeholder="Enter Payment Date"
                 name="paymentDate"
                 value={addFormData.paymentDate}
                 onChange={handleEditFormChange}
             ></input></TableCell>
             <TableCell align="center"><input
                 type="text"
-                placeholder="Enter Not Delivered Quantity"
+                placeholder="Enter Payment Ref Number"
                 name="paymentRefNumber"
                 value={addFormData.paymentRefNumber}
                 onChange={handleEditFormChange}
             ></input></TableCell>
             <TableCell align="center"><input
                 type="text"
-                placeholder="Enter Not Delivered Quantity"
+                placeholder="Enter PO Number"
                 name="poNumber"
                 value={addFormData.poNumber}
                 onChange={handleEditFormChange}
             ></input></TableCell>
             <TableCell align="center"><input
                 type="text"
-                placeholder="Enter Not Delivered Quantity"
+                placeholder="Enter Invoice Number"
                 name="invoiceNumber"
                 value={addFormData.invoiceNumber}
                 onChange={handleEditFormChange}

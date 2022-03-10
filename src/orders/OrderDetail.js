@@ -32,6 +32,7 @@ function OrderDetail(props) {
     const [userData, setUserData] = useState({});
     const [isLoading, setisLoading] = useState(false);
     const [editContactId, setEditContactId] = useState(null);
+    const [userAddress, setUserAddress] = useState({});
     const formClick = useRef();
     const [open, setOpen] = useState(false);
     const [totalData, setTotalData] = useState({
@@ -69,6 +70,7 @@ function OrderDetail(props) {
                 setOrder(data.order);
                 setOrderProductList(data.orderProductList);
                 setUserData(data.order.user);
+                setUserAddress(data.ecommerceOrderAddress);
                 setPaymentType(data.paymentMethodFB.slug);
                 setDialogData({
                     userId: data.order.user.id,
@@ -406,7 +408,7 @@ function OrderDetail(props) {
                             </TableRow>
                             {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
                                 <>
-                                    <TableRow style={{}}>
+                                    <TableRow>
                                         <TableCell>
                                             <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
                                         </TableCell>
@@ -423,6 +425,11 @@ function OrderDetail(props) {
                                             <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
                                                 Associate
                                             </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell colSpan={8}>
+                                            <FormLabel style={{ color: 'wheat' }}> Address : {userAddress.formattedAddress} </FormLabel>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>
