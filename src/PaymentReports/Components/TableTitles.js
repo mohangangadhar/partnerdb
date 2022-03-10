@@ -26,6 +26,12 @@ const TableTitles = () => {
                 <TableCell align="center" style={{ color: 'wheat' }}>Gst (%)</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Final Taxable Value</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Seller Invoice Value</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>Seller Invoice</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>Payment Date</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>Payment Reference No</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>PO Number</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>Invoice No</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
             </TableRow>
         </TableHead>
     );
