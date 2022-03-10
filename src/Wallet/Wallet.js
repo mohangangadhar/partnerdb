@@ -18,10 +18,10 @@ function Wallet() {
     const [inputValue, setInputValue] = useState("");
     const [data, setData] = useState("");
     const [isLoading, setisLoading] = useState(false);
-    let mobile = "+91"
-    const updateInputValue = (event) => {
-        setInputValue(mobile + event.target.value.trim());
-    }
+    // let mobile = "+91"
+    // const updateInputValue = (event) => {
+    //     setInputValue(mobile + event.target.value.trim());
+    // }
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(async () => {
@@ -32,13 +32,12 @@ function Wallet() {
     }, []);
     const searchOrder = () => {
         setData("");
-        let verifyNumber = inputValue.trim();
-        // console.log(verifyNumber);
-        // this.set State({loading: true});
-        fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + verifyNumber)
+        // let verifyNumber = inputValue.trim();
+        fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/user/' + inputValue)
             .then(res => res.json())
             .then((data) => {
-                NotificationManager.success('Found it!', 'Successful!', 1000);
+                data.id != null ? NotificationManager.success('Found it!', 'Successful!', 1000) :
+                    NotificationManager.success('Not Found it!', "", 1000);
                 setData(data);
             })
             .catch((error) => {
@@ -58,11 +57,8 @@ function Wallet() {
                                 fullWidth
                                 id="standard-bare"
                                 variant="outlined"
-                                onChange={(evt) => updateInputValue(evt)}
+                                onChange={(evt) => setInputValue(evt.target.value)}
                                 InputProps={{
-                                    startAdornment: (
-                                        <p>+91</p>
-                                    ),
                                     endAdornment: (
                                         <IconButton>
                                             <SearchOutlined
@@ -76,10 +72,10 @@ function Wallet() {
                 </TableHead>
             </Table>
             <Box m={2} />
-            {(data.name !== undefined || data !== "") ?
+            {(data.name !== null && data !== "") ?
                 <WalletInfo data={data} searchOrder={searchOrder} /> :
                 <div>
-                    {inputValue.length <= 5 ? <center><h3>Enter Mobile Number</h3></center> :
+                    {inputValue.length <= 5 ? <center><h3>Enter User Id</h3></center> :
                         <CircularProgress />
                     }
                 </div>}
