@@ -431,27 +431,11 @@ function OrderDetail(props) {
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell colSpan={8}>
+                                        <TableCell colSpan={4}>
                                             <FormLabel style={{ color: 'wheat' }}> Address : {userAddress.formattedAddress} </FormLabel>
                                         </TableCell>
-                                    </TableRow>
-                                    <TableRow>
                                         <TableCell colSpan={2}>
-                                            <TextField multiline label="Add Comment" value={comment}
-                                                onChange={(ev) => setComment(ev.target.value)
-                                                }
-                                                InputProps={{
-                                                    style: {
-                                                        color: "white",
-                                                    }
-                                                }}
-                                                InputLabelProps={{
-                                                    style: { color: '#fff' },
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
+                                            <FormLabel style={{ color: 'wheat' }}> Delivery Fee : {order.deliveryFee} </FormLabel>
                                         </TableCell>
                                     </TableRow>
                                 </>
@@ -509,6 +493,27 @@ function OrderDetail(props) {
             <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
                 <input onClick={(ev) => handleUpdate(ev, "first")} disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 1st Refunds" />
                 <input onClick={(ev) => handleUpdate(ev, "second")} disabled={totalData.returnRefundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 2nd Refunds" />
+            </Container>
+            <Container>
+                <TableRow>
+                    <TableCell colSpan={2}>
+                        <TextField multiline label="Add Comment" value={comment}
+                            onChange={(ev) => setComment(ev.target.value)
+                            }
+                            InputProps={{
+                                style: {
+                                    color: "white",
+                                }
+                            }}
+                            InputLabelProps={{
+                                style: { color: '#fff' },
+                            }}
+                        />
+                    </TableCell>
+                    <TableCell>
+                        <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
+                    </TableCell>
+                </TableRow>
             </Container>
             <Container>
                 <OrderEditDialog
