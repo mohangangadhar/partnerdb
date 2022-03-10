@@ -248,7 +248,7 @@ function OrderDetail(props) {
     //UPLOAD WALLET
     const uploadWalletBackend = async (refundTotal, type) => {
         setisApiLoading(true);
-
+        console.log(refundTotal);
         await fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + userData.mobileNumber)
             .then(res => res.json())
             .then((data) => {
@@ -369,6 +369,9 @@ function OrderDetail(props) {
                                                 value={status}
                                                 onChange={(event) => {
                                                     setStatus(event.target.value);
+                                                    if (event.target.value == "cancelled") {
+                                                        uploadWalletBackend(totalData.total, "Cancelled");
+                                                    }
                                                     handleSubmit(event.target.value);
                                                 }}
                                                 label="Enter Status"
