@@ -369,9 +369,9 @@ function OrderDetail(props) {
                                                 value={status}
                                                 onChange={(event) => {
                                                     setStatus(event.target.value);
-                                                    if (event.target.value == "cancelled") {
-                                                        uploadWalletBackend(totalData.total, "Cancelled");
-                                                    }
+                                                    // if (event.target.value == "cancelled") {
+                                                    //     uploadWalletBackend(totalData.total, "Cancelled");
+                                                    // }
                                                     handleSubmit(event.target.value);
                                                 }}
                                                 label="Enter Status"
