@@ -25,3 +25,8 @@
   background-color: #04aa6d;
   color: white;
 }
+.menu {
+  display: flex;
+  justify-content: space-between;
+  text-decoration: none;
+}

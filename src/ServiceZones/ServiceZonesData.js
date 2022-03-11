@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
 import Loader from "../components/Loader/Loader";
-import { Button, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
-import TableCell, { tableCellClasses } from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+
 import { APIURL, GetRequestOptions } from "../constants/Constants";
-// import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './service.css'
-import { getDate } from "date-fns";
-import ServiceConfig from "./ServiceConfig";
+
 function GlobalFilter({
     preGlobalFilteredRows,
     globalFilter,
@@ -126,16 +121,10 @@ function Table({ columns, data }) {
     )
 }
 
-const ServiceZones = () => {
+const ServiceZonesData = ({ toggle }) => {
     const [apiData, setApiData] = React.useState([]);
     const [isLoading, setisLoading] = React.useState(false);
-    const [toggle, setToggle] = useState(false);
-    const [formData, setFormData] = useState({
-        pincode: "",
-        serviceId: 0,
-        fulfillmentId: 0,
-        status: 1,
-    });
+
     React.useEffect(async () => {
         setisLoading(true);
         await fetch(APIURL + "ecommerce-vendor/pincodezones", GetRequestOptions).
@@ -144,7 +133,7 @@ const ServiceZones = () => {
                 setApiData(data);
                 setisLoading(false);
             }).catch(err => setisLoading(false));
-    }, [])
+    }, [toggle])
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
@@ -194,37 +183,18 @@ const ServiceZones = () => {
             "fulfillmentid": data.fulfillmentId
         })
     });
-
     return (
-        <div>
-            <TableContainer>
-                <TableRow>
+        <>
 
 
-                    <TableCell style={{ borderBottom: "none" }} colSpan={2}>
-                        <Button variant={!toggle ? 'contained' : 'outlined'} color="success" style={{ color: 'blue' }} onClick={(ev) => {
-                            // handleSubmit(ev);
-                            setToggle(false);
-                        }}
-                        >Service Zones</Button>
-                    </TableCell>
-                    <TableCell>
-                        <Button variant={toggle ? 'contained' : 'outlined'} color="success" style={{ color: 'blue' }} onClick={(ev) => {
-                            // handleSubmit(ev);
-                            setToggle(true);
-                        }}
-                        >Configuration</Button>
-                    </TableCell>
-                </TableRow>
-            </TableContainer>
-            {toggle ? <ServiceConfig /> :
-                <>
-                    {isLoading ? <Loader /> :
-                        <Table columns={columns} data={realData} />}
-                </>
-            }
-        </div>
+
+            {isLoading ? <Loader /> :
+                <Table columns={columns} data={realData} />}
+        </>
+
+
+
     )
 }
 
-export default ServiceZones;
+export default ServiceZonesData;
