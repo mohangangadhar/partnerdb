@@ -3,17 +3,20 @@ import TableCell, { tableCellClasses } from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { APIURL, GetRequestOptions } from "../constants/Constants";
+import { APIURL, GetRequestOptions, detail } from "../constants/Constants";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { NotificationManager } from "react-notifications";
 import { Button, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
+//service : 1 => reg and exp&seasonal; 2: reg&seasonal;3 : only Express;4:seasonal;
+//vendorfulfills=2;ours:1
 const ServiceConfig = () => {
 
     const [formData, setFormData] = useState({
         pincode: "",
+        areaName: "",
         serviceId: 0,
         fulfillmentId: 0,
         status: 1,
@@ -21,8 +24,11 @@ const ServiceConfig = () => {
     const [zoneLoading, setZoneLoading] = useState(false);
     const [zoneList, setZoneList] = useState([]);
     const [pincodeList, setPincodeList] = useState([]);
+    const [vendorList, setVendorList] = useState([]);
     const [selectZoneId, setSelectZoneId] = useState(null);
     const [selectPincodeId, setSelectPincodeId] = useState(null);
+    const [selectVendorId, setSelectVendorId] = useState(null);
+    const [selectZoneIdForVendor, setSelectZoneIdForVendor] = useState(null);
     const [isSelected, setIsSelected] = useState(false);
     const getPincodeList = async () => {
         await fetch(APIURL + "ecommerce-pincode", GetRequestOptions).
@@ -31,17 +37,28 @@ const ServiceConfig = () => {
                 setPincodeList(data);
             });
     }
+    const getVendorList = async () => {
+        await fetch(APIURL + "ecommerce-vendor", GetRequestOptions).
+            then(response => response.json()).
+            then(data => {
+                setVendorList(data);
+            });
+    }
     useEffect(async () => {
+        console.log(detail('{"en": "Prachin "}'));
+        setZoneLoading(true);
         await fetch(APIURL + "ecommerce-zone", GetRequestOptions).
             then(response => response.json()).
             then(data => {
                 setZoneList(data);
             });
         await getPincodeList();
+        await getVendorList();
+        setZoneLoading(false);
     }, [])
     const handleChange = (event) => {
         event.preventDefault();
-        var currentdate = new Date();
+
 
         const fieldName = event.target.getAttribute("name");
         const fieldValue = event.target.value;
@@ -50,11 +67,12 @@ const ServiceConfig = () => {
         newFormData[fieldName] = fieldValue;
 
         setFormData(newFormData);
+        console.log(formData);
     };
     const handleAssign = async (ev) => {
         ev.preventDefault();
         if (selectPincodeId != null && selectZoneId != null) {
-            console.log(selectPincodeId + "" + selectZoneId);
+
             let reqBody = {
                 "zone": selectZoneId,
                 "pincode": selectPincodeId
@@ -75,25 +93,50 @@ const ServiceConfig = () => {
         }
 
     }
-    const handleSubmit = async (ev) => {
+    const handleAssignVendor = async (ev) => {
         ev.preventDefault();
-        let currentdate = new Date();
-        var datetime =
-            currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate()
-            + " " + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-        let productdata = {
-            "pincode": formData.pincode,
-            "serviceId": formData.serviceId,
-            "areaName": "Hyderabad",
-            "fulfillmentId": formData.fulfillmentId,
-            "createdAt": datetime,
-            "status": formData.status
+        if (selectVendorId != null && selectZoneIdForVendor != null) {
+
+            let reqBody = {
+                "zoneId": selectZoneIdForVendor,
+                "vendorId": selectVendorId
+            };
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            };
+            await fetch(APIURL + "ecommerce-vendor-zone-m", requestOptions).
+                then(response => response.json()).
+                then(data => {
+                    NotificationManager.success('Assignement of Zone to Vendor', 'Successful!', 1000);
+                }).catch(err => console.log(err));
+        }
+        else {
+            alert("Please select zone and Vendor to assign");
+        }
+
+    }
+    const updatePincode = async (reqBody) => {
+        console.log("Updated");
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reqBody)
         };
+
+        await fetch(APIURL + "ecommerce-pincode", requestOptions).then(response => response.json()).
+            then(data => {
+                NotificationManager.success('You Updated a Pincode!', 'Successful!', 1000);
+                getPincodeList();
+            }).catch(err => console.log(err));
+    }
+    const addPincode = async (reqBody) => {
+        console.log("Added");
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(productdata)
+            body: JSON.stringify(reqBody)
         };
 
         await fetch(APIURL + "ecommerce-pincode", requestOptions).then(response => response.json()).
@@ -102,91 +145,158 @@ const ServiceConfig = () => {
                 getPincodeList();
             }).catch(err => console.log(err));
     }
+    const handleSubmit = async (ev) => {
+        ev.preventDefault();
+        if (formData.fulfillmentId == "" || formData.serviceId == "" || formData.pincode == "" || formData.status == "") {
+            alert("Please add all field");
+        }
+        else {
+            // console.log(formData);
+            let currentdate = new Date();
+            var datetime =
+                currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate()
+                + " " + currentdate.getHours() + ":"
+                + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+            let pincodeData = {
+                "pincode": formData.pincode,
+                "serviceId": formData.serviceId,
+                "areaName": formData.areaName,
+                "fulfillmentId": formData.fulfillmentId,
+                "createdAt": datetime,
+                "status": formData.status
+            };
+            await fetch(APIURL + `ecommerce-pincode/pincode/${formData.pincode}`, GetRequestOptions).
+                then(response => response.json()).
+                then(data => {
+                    if (data.id != null) {
+                        updatePincode(pincodeData);
+                    }
+                    else {
+                        addPincode(pincodeData);
+                    }
+                });
+        }
+    }
     return (
         <div>
             <TableContainer>
-                <TableRow>
-                    <TableCell style={{ borderBottom: "none" }}>
-                        <FormLabel style={{ color: 'wheat' }}> Add Pincode :</FormLabel>
-                    </TableCell>
-                    <TableCell style={{ borderBottom: "none" }}>
-                        <TextField
-                            id="pincode"
-                            name="pincode"
-                            label="Enter Pincode"
-                            value={formData.pincode}
-                            onChange={(ev) => handleChange(ev)}
-                            InputProps={{
-                                style: {
-                                    color: "white",
-                                }
-                            }}
-                            InputLabelProps={{
-                                style: { color: '#fff' },
-                            }}
-                            variant='outlined'
-                        />
-                    </TableCell>
-                    <TableCell style={{ borderBottom: "none" }}>
-                        <TextField
-                            id="serviceId"
-                            name="serviceId"
-                            label="Enter ServiceId"
-                            value={formData.serviceId}
-                            onChange={(ev) => handleChange(ev)}
-                            InputProps={{
-                                style: {
-                                    color: "white",
-                                }
-                            }}
-                            InputLabelProps={{
-                                style: { color: '#fff' },
-                            }}
-                            variant='outlined'
-                        />
-                    </TableCell>
-                    <TableCell style={{ borderBottom: "none" }}>
-                        <TextField
-                            id="fulfillmentId"
-                            name="fulfillmentId"
-                            label="Enter fulfillmentId"
-                            value={formData.fulfillmentId}
-                            onChange={(ev) => handleChange(ev)}
-                            InputProps={{
-                                style: {
-                                    color: "white",
-                                }
-                            }}
-                            InputLabelProps={{
-                                style: { color: '#fff' },
-                            }}
-                            variant='outlined'
-                        />
-                    </TableCell>
-                    <TableCell style={{ borderBottom: "none" }}>
-                        <TextField
-                            id="status"
-                            name="status"
-                            label="Enter status"
-                            value={formData.status}
-                            onChange={(ev) => handleChange(ev)}
-                            InputProps={{
-                                style: {
-                                    color: "white",
-                                }
-                            }}
-                            InputLabelProps={{
-                                style: { color: '#fff' },
-                            }}
-                            variant='outlined'
-                        />
-                    </TableCell>
-                    <TableCell style={{ borderBottom: "none" }}>
-                        <Button variant='contained' color="success" onClick={(ev) => {
-                            handleSubmit(ev);
-                        }}>Submit</Button>
-                    </TableCell>
-                </TableRow>
+                <div style={{ backgroundColor: 'white' }}>
+                    <TableRow>
+                        <TableCell rowSpan={2}>
+                            <FormLabel style={{ color: 'blue' }}> Add Pincode</FormLabel>
+                        </TableCell>
+                        <TableCell >
+                            <TextField
+                                id="pincode"
+                                name="pincode"
+                                label="Enter Pincode"
+                                value={formData.pincode}
+                                onChange={(ev) => handleChange(ev)}
+                                variant='outlined'
+                            />
+                        </TableCell>
+                        <TableCell >
+                            <TextField
+                                id="areaName"
+                                name="areaName"
+                                label="Enter AreaName"
+                                value={formData.areaName}
+                                onChange={(ev) => handleChange(ev)}
+                                variant='outlined'
+                            />
+                        </TableCell>
+                        <TableCell style={{ borderBottom: "none" }}>
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-required-label">Service Id</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-required-label"
+                                    style={{ height: 50 }}
+                                    id="demo-simple-select-disabled"
+                                    name="serviceId"
+                                    value={formData.serviceId}
+                                    onChange={(event) =>
+                                        setFormData(prevState => ({
+                                            ...prevState,
+                                            serviceId: event.target.value
+                                        }))
+                                    }
+                                    label="Enter ServiceId"
+                                >
+
+                                    <MenuItem value={1}>
+                                        1:Regular + Express + Seasonal
+                                    </MenuItem>
+                                    <MenuItem value={2}>
+                                        2:Regular + Express
+                                    </MenuItem>
+
+                                </Select>
+                            </FormControl>
+                        </TableCell>
+                        <TableCell rowSpan={2} style={{ borderBottom: "none" }}>
+                            <Button variant='contained' color="success" onClick={(ev) => {
+                                handleSubmit(ev);
+                            }}>Submit</Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell style={{ borderBottom: "none" }}>
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-required-label">Fulfillment</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-required-label"
+                                    style={{ height: 50 }}
+                                    id="demo-simple-select-disabled"
+                                    name="serviceId"
+                                    value={formData.fulfillmentId}
+                                    onChange={(event) =>
+                                        setFormData(prevState => ({
+                                            ...prevState,
+                                            fulfillmentId: event.target.value
+                                        }))
+                                    }
+                                >
+
+                                    <MenuItem value={1}>
+                                        1:Jeevamrut
+                                    </MenuItem>
+                                    <MenuItem value={2}>
+                                        2:Vendor
+                                    </MenuItem>
+
+                                </Select>
+                            </FormControl>
+                        </TableCell>
+                        <TableCell style={{ borderBottom: "none" }}>
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-required-label">Status</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-required-label"
+                                    style={{ height: 50 }}
+                                    id="demo-simple-select-disabled"
+                                    name="serviceId"
+                                    value={formData.status}
+                                    onChange={(event) =>
+                                        setFormData(prevState => ({
+                                            ...prevState,
+                                            status: event.target.value
+                                        }))
+                                    }
+
+                                >
+
+                                    <MenuItem value={1}>
+                                        Active
+                                    </MenuItem>
+                                    <MenuItem value={0}>
+                                        Not Active
+                                    </MenuItem>
+
+                                </Select>
+                            </FormControl>
+                        </TableCell>
+                    </TableRow>
+                </div>
                 <TableRow>
                     <TableCell style={{ borderBottom: "none" }}>
                         <FormLabel style={{ color: 'wheat' }}> Assign Pincode :</FormLabel>
@@ -206,7 +316,7 @@ const ServiceConfig = () => {
                             >
                                 {zoneList.length > 2 && zoneList.map((zone, index) => (
                                     <MenuItem value={zone.id}>
-                                        {zone.zoneName}
+                                        {zone.id}:{zone.zoneName}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -236,6 +346,58 @@ const ServiceConfig = () => {
                     <TableCell style={{ borderBottom: "none" }}>
                         <Button variant='contained' color="success" onClick={(ev) => {
                             handleAssign(ev);
+                        }}>Assign</Button>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell style={{ borderBottom: "none" }}>
+                        <FormLabel style={{ color: 'wheat' }}> Assign Zone to Vendor :</FormLabel>
+                    </TableCell>
+                    <TableCell style={{ borderBottom: "none" }}>
+                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Zone</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-required-label"
+                                style={{ height: 50, color: 'white' }}
+                                id="demo-simple-select-disabled"
+                                value={selectZoneIdForVendor}
+                                onChange={(event) => {
+                                    setSelectZoneIdForVendor(event.target.value)
+                                }}
+                                label="Select Zone"
+                            >
+                                {zoneList.length > 2 && zoneList.map((zone, index) => (
+                                    <MenuItem value={zone.id}>
+                                        {zone.zoneName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </TableCell>
+                    <TableCell style={{ borderBottom: "none" }}>
+                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Vendor</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-required-label"
+                                style={{ height: 50, color: 'white' }}
+                                id="demo-simple-select-disabled"
+                                value={selectVendorId}
+                                onChange={(event) => {
+                                    setSelectVendorId(event.target.value);
+                                }}
+                                label="Enter Status"
+                            >
+                                {vendorList.length > 2 && vendorList.map((vendor, index) => (
+                                    <MenuItem value={vendor.id}>
+                                        {detail(vendor.name)}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </TableCell>
+                    <TableCell style={{ borderBottom: "none" }}>
+                        <Button variant='contained' color="success" onClick={(ev) => {
+                            handleAssignVendor(ev);
                         }}>Assign</Button>
                     </TableCell>
                 </TableRow>

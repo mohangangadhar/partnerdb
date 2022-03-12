@@ -44,3 +44,7 @@ export const GetRequestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
 };
+export const detail = (val) => {
+    let jsonVal = JSON.parse(val);
+    return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
+};
