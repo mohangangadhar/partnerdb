@@ -30,6 +30,7 @@ const ServiceConfig = () => {
     const [selectVendorId, setSelectVendorId] = useState(null);
     const [selectZoneIdForVendor, setSelectZoneIdForVendor] = useState(null);
     const [isSelected, setIsSelected] = useState(false);
+    const [zonesByPincode, setZonesByPincode] = useState([]);
     const getPincodeList = async () => {
         await fetch(APIURL + "ecommerce-pincode", GetRequestOptions).
             then(response => response.json()).
@@ -82,7 +83,7 @@ const ServiceConfig = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reqBody)
             };
-            await fetch(APIURL + "ecommerce-zone-pincode-m", requestOptions).
+            await fetch(APIURL + "ecommerce-zone-pincode-m/add-update", requestOptions).
                 then(response => response.json()).
                 then(data => {
                     NotificationManager.success('Assignement of Zone to Pincode', 'Successful!', 1000);
@@ -106,7 +107,7 @@ const ServiceConfig = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reqBody)
             };
-            await fetch(APIURL + "ecommerce-vendor-zone-m", requestOptions).
+            await fetch(APIURL + "ecommerce-vendor-zone-m/add-update", requestOptions).
                 then(response => response.json()).
                 then(data => {
                     NotificationManager.success('Assignement of Zone to Vendor', 'Successful!', 1000);
@@ -117,34 +118,7 @@ const ServiceConfig = () => {
         }
 
     }
-    const updatePincode = async (reqBody) => {
-        console.log("Updated");
-        const requestOptions = {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(reqBody)
-        };
 
-        await fetch(APIURL + "ecommerce-pincode", requestOptions).then(response => response.json()).
-            then(data => {
-                NotificationManager.success('You Updated a Pincode!', 'Successful!', 1000);
-                getPincodeList();
-            }).catch(err => console.log(err));
-    }
-    const addPincode = async (reqBody) => {
-        console.log("Added");
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(reqBody)
-        };
-
-        await fetch(APIURL + "ecommerce-pincode", requestOptions).then(response => response.json()).
-            then(data => {
-                NotificationManager.success('You Added a Pincode!', 'Successful!', 1000);
-                getPincodeList();
-            }).catch(err => console.log(err));
-    }
     const handleSubmit = async (ev) => {
         ev.preventDefault();
         if (formData.fulfillmentId == "" || formData.serviceId == "" || formData.pincode == "" || formData.status == "") {
@@ -165,17 +139,36 @@ const ServiceConfig = () => {
                 "createdAt": datetime,
                 "status": formData.status
             };
-            await fetch(APIURL + `ecommerce-pincode/pincode/${formData.pincode}`, GetRequestOptions).
-                then(response => response.json()).
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pincodeData)
+            };
+
+            await fetch(APIURL + "ecommerce-pincode/add-update", requestOptions).then(response => response.json()).
                 then(data => {
-                    if (data.id != null) {
-                        updatePincode(pincodeData);
-                    }
-                    else {
-                        addPincode(pincodeData);
-                    }
-                });
+                    NotificationManager.success('You Added a Pincode!', 'Successful!', 1000);
+                    getPincodeList();
+                }).catch(err => console.log(err));
         }
+    }
+    const handleCheckZones = async (ev) => {
+        await fetch(APIURL + `ecommerce-zone-pincode-m/pincode/${ev}`, GetRequestOptions).then(response => response.json()).
+            then(data => {
+                setZonesByPincode(data);
+                console.log(data);
+            }).catch(err => console.log(err));
+    }
+    const handleDeletePincodeZone = async (id) => {
+        const deleteOptions = {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        }
+        await fetch(APIURL + `ecommerce-pincode/$`, deleteOptions).then(response =>
+            response.json()).then(data => {
+                alert("Deleted");
+            })
+            .catch(err => console.log(err));
     }
     return (
         <div>
@@ -301,6 +294,29 @@ const ServiceConfig = () => {
                     <TableCell style={{ borderBottom: "none" }}>
                         <FormLabel style={{ color: 'wheat' }}> Assign Pincode :</FormLabel>
                     </TableCell>
+
+                    <TableCell style={{ borderBottom: "none" }}>
+                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Pincode</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-required-label"
+                                style={{ height: 50, color: 'white' }}
+                                id="demo-simple-select-disabled"
+                                value={selectPincodeId}
+                                onChange={(event) => {
+                                    setSelectPincodeId(event.target.value);
+                                    handleCheckZones(event.target.value);
+                                }}
+                                label="Enter Status"
+                            >
+                                {pincodeList.length > 2 && pincodeList.map((zone, index) => (
+                                    <MenuItem value={zone.id}>
+                                        {zone.pincode}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </TableCell>
                     <TableCell style={{ borderBottom: "none" }}>
                         <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
                             <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Zone</InputLabel>
@@ -323,30 +339,14 @@ const ServiceConfig = () => {
                         </FormControl>
                     </TableCell>
                     <TableCell style={{ borderBottom: "none" }}>
-                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Pincode</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-required-label"
-                                style={{ height: 50, color: 'white' }}
-                                id="demo-simple-select-disabled"
-                                value={selectPincodeId}
-                                onChange={(event) => {
-                                    setSelectPincodeId(event.target.value);
-                                }}
-                                label="Enter Status"
-                            >
-                                {pincodeList.length > 2 && pincodeList.map((zone, index) => (
-                                    <MenuItem value={zone.id}>
-                                        {zone.pincode}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </TableCell>
-                    <TableCell style={{ borderBottom: "none" }}>
                         <Button variant='contained' color="success" onClick={(ev) => {
                             handleAssign(ev);
                         }}>Assign</Button>
+                    </TableCell>
+                    <TableCell style={{ borderBottom: "none" }}>
+                        <Button variant='contained' color="success" onClick={(ev) => {
+                            console.log("hi");
+                        }}>Delete</Button>
                     </TableCell>
                 </TableRow>
                 <TableRow>
@@ -399,6 +399,11 @@ const ServiceConfig = () => {
                         <Button variant='contained' color="success" onClick={(ev) => {
                             handleAssignVendor(ev);
                         }}>Assign</Button>
+                    </TableCell>
+                    <TableCell style={{ borderBottom: "none" }}>
+                        <Button variant='contained' color="success" onClick={(ev) => {
+                            console.log("hi");
+                        }}>Delete</Button>
                     </TableCell>
                 </TableRow>
             </TableContainer>
