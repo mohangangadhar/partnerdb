@@ -16,6 +16,7 @@ import { auth } from "../firebase";
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 import SearchProducts from '../products/Components/SearchProducts';
 import { APIURL, GetRequestOptions } from '../constants/Constants';
+import SearchByUserName from './SearchByUserName';
 function UserList(props) {
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
@@ -29,8 +30,10 @@ function UserList(props) {
     const [searchquery, setSearchQuery] = useState("");
     const [queryLoad, setQueryLoad] = useState(false);
     const [searchOrder, setSearchOrder] = useState({});
-    const receivedData = (val) => {
+    const [searchUserName, setSearchUserName] = useState("");
+    const receivedData = async (val) => {
         setisLoading(true);
+        setRows([]);
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
@@ -45,7 +48,7 @@ function UserList(props) {
             })
         };
 
-        fetch(apiUrl + 'user/', requestOptions)
+        await fetch(apiUrl + 'user/', requestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
@@ -70,6 +73,7 @@ function UserList(props) {
     }
     const handleSearch = async (event, query) => {
         event.preventDefault();
+        setSearchUserName("");
         if (query == "" || query.length == 0) {
             setQueryLoad(false);
             receivedData(offSet);
@@ -88,13 +92,37 @@ function UserList(props) {
                 });
         }
     }
+    const handleSearchByUserName = async (event, query) => {
+        event.preventDefault();
+        setQueryLoad(false);
+
+        setSearchQuery("");
+        if (query == "" || query.length == 0) {
+            receivedData(offSet);
+            return;
+        } else if (query.length > 0) {
+            setErrFound(false);
+
+            setisLoading(true);
+
+            await fetch(APIURL + "user/query/" + query, GetRequestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setRows(data);
+                    if (data.length == 0) { setErrFound(true); setisLoading(false); }
+                    setisLoading(false);
+                });
+        }
+    }
     return (
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                     Users
                 </Typography>
-                <SearchProducts setSearchQuery={setSearchQuery} searchquery={searchquery}
+                <SearchByUserName setSearchUserName={setSearchUserName} searchUserName={searchUserName}
+                    handleSearchByUserName={handleSearchByUserName} />
+                <SearchProducts label="Search By Id" setSearchQuery={setSearchQuery} searchquery={searchquery}
                     handleSearch={handleSearch} />
             </div>
 

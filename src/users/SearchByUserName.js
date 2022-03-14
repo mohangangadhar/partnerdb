@@ -2,17 +2,17 @@ import React from 'react';
 import { TextField } from "@material-ui/core";
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-const SearchProducts = (props) => {
-    const { searchquery, setSearchQuery, handleSearch, label } = props;
+const SearchByUserName = (props) => {
+    const { searchUserName, setSearchUserName, handleSearchByUserName } = props;
     return (
         <TextField
             id="searchquery"
-            label={label}
-            value={searchquery}
+            label="Search By UserName"
+            value={searchUserName}
             onChange={(event) => {
-                setSearchQuery((event.target.value).toLowerCase());
+                setSearchUserName((event.target.value).toLowerCase());
 
-                handleSearch(event, (event.target.value).toLowerCase());
+                handleSearchByUserName(event, (event.target.value).toLowerCase());
 
 
             }}
@@ -33,4 +33,4 @@ const SearchProducts = (props) => {
     );
 };
 
-export default SearchProducts;
+export default SearchByUserName;

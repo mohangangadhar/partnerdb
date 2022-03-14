@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { NotificationManager } from "react-notifications";
 import { Button, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
+import { CodeSharp } from '@material-ui/icons';
 //service : 1 => reg and exp&seasonal; 2: reg&seasonal;3 : only Express;4:seasonal;
 //vendorfulfills=2;ours:1
 const ServiceConfig = () => {
@@ -60,7 +61,6 @@ const ServiceConfig = () => {
     const handleChange = (event) => {
         event.preventDefault();
 
-
         const fieldName = event.target.getAttribute("name");
         const fieldValue = event.target.value;
 
@@ -70,10 +70,18 @@ const ServiceConfig = () => {
         setFormData(newFormData);
         console.log(formData);
     };
+    const checkAvailability = async (url, requestOptions) => {
+        let id;
+        await fetch(APIURL + url, requestOptions).
+            then(response => response.json()).
+            then(data => {
+                id = data.id;
+            });
+        return id;
+    }
     const handleAssign = async (ev) => {
         ev.preventDefault();
         if (selectPincodeId != null && selectZoneId != null) {
-
             let reqBody = {
                 "zone": selectZoneId,
                 "pincode": selectPincodeId
@@ -83,11 +91,16 @@ const ServiceConfig = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reqBody)
             };
-            await fetch(APIURL + "ecommerce-zone-pincode-m/add-update", requestOptions).
-                then(response => response.json()).
-                then(data => {
-                    NotificationManager.success('Assignement of Zone to Pincode', 'Successful!', 1000);
+            if (await checkAvailability("ecommerce-zone-pincode-m/check-availability", requestOptions) !== null) {
+                NotificationManager.success('Already Configured', 'Successful!', 1000);
+            }
+            else {
+                await fetch(APIURL + "ecommerce-zone-pincode-m/add-update", requestOptions).then(
+                    response => response.json()
+                ).then(data => {
+                    NotificationManager.success('Configured Zone to Pincode', 'Successfully!', 1000);
                 }).catch(err => console.log(err));
+            }
         }
         else {
             alert("Please select zone and pincode to assign");
@@ -107,11 +120,17 @@ const ServiceConfig = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reqBody)
             };
-            await fetch(APIURL + "ecommerce-vendor-zone-m/add-update", requestOptions).
-                then(response => response.json()).
-                then(data => {
-                    NotificationManager.success('Assignement of Zone to Vendor', 'Successful!', 1000);
-                }).catch(err => console.log(err));
+            if (await checkAvailability("ecommerce-vendor-zone-m/check-availability", requestOptions) !== null) {
+                NotificationManager.success('Already Configured', 'Successful!', 1000);
+            }
+            else {
+                await fetch(APIURL + "ecommerce-vendor-zone-m/add-update", requestOptions).
+                    then(response => response.json()).
+                    then(data => {
+                        NotificationManager.success('Assignement of Zone to Vendor', 'Successful!', 1000);
+                    }).catch(err => console.log(err));
+            }
+
         }
         else {
             alert("Please select zone and Vendor to assign");
@@ -159,16 +178,74 @@ const ServiceConfig = () => {
                 console.log(data);
             }).catch(err => console.log(err));
     }
-    const handleDeletePincodeZone = async (id) => {
-        const deleteOptions = {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+    const handleDeletePincodeZone = async () => {
+        if (selectPincodeId == null || selectZoneId == null) {
+            alert("Select All Fields");
         }
-        await fetch(APIURL + `ecommerce-pincode/$`, deleteOptions).then(response =>
-            response.json()).then(data => {
-                alert("Deleted");
-            })
-            .catch(err => console.log(err));
+        else {
+            let reqBody = {
+                "zone": selectZoneId,
+                "pincode": selectPincodeId
+            };
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            };
+            await fetch(APIURL + "ecommerce-zone-pincode-m/check-availability", requestOptions).
+                then(response => response.json()).
+                then(data => {
+                    if (data.id == null) {
+                        NotificationManager.success('No Such Data', 'Exists', 1000);
+                    }
+                    else {
+                        const deleteOptions = {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' }
+                        }
+                        fetch(APIURL + `ecommerce-zone-pincode-m/${data.id}`, deleteOptions).then(response =>
+                            response.json()).then(data => {
+                                NotificationManager.success('Deleted', 'Exists', 1000);
+                            })
+                            .catch(err => NotificationManager.success('Deleted', 'Deleted', 1000));
+                    }
+                });
+        }
+    }
+    const handleDeleteVendorZone = async () => {
+        if (selectVendorId == null || selectZoneIdForVendor == null) {
+            alert("Select All Fields");
+        }
+        else {
+            let reqBody = {
+                "zoneId": selectZoneIdForVendor,
+                "vendorId": selectVendorId
+            };
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            };
+
+            await fetch(APIURL + "ecommerce-vendor-zone-m/check-availability", requestOptions).
+                then(response => response.json()).
+                then(data => {
+                    if (data.id == null) {
+                        NotificationManager.success('No Such Data', 'Exists', 1000);
+                    }
+                    else {
+                        const deleteOptions = {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' }
+                        }
+                        fetch(APIURL + `ecommerce-vendor-zone-m/${data.id}`, deleteOptions).then(response =>
+                            response.json()).then(data => {
+                                NotificationManager.success('Deleted', 'Exists', 1000);
+                            })
+                            .catch(err => NotificationManager.success('Deleted', 'Deleted', 1000));
+                    }
+                });
+        }
     }
     return (
         <div>
@@ -345,7 +422,7 @@ const ServiceConfig = () => {
                     </TableCell>
                     <TableCell style={{ borderBottom: "none" }}>
                         <Button variant='contained' color="success" onClick={(ev) => {
-                            console.log("hi");
+                            handleDeletePincodeZone(ev);
                         }}>Delete</Button>
                     </TableCell>
                 </TableRow>
@@ -402,7 +479,7 @@ const ServiceConfig = () => {
                     </TableCell>
                     <TableCell style={{ borderBottom: "none" }}>
                         <Button variant='contained' color="success" onClick={(ev) => {
-                            console.log("hi");
+                            handleDeleteVendorZone(ev);
                         }}>Delete</Button>
                     </TableCell>
                 </TableRow>
