@@ -43,7 +43,10 @@ function OrderDetail(props) {
     });
     const [comment, setComment] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
-    const [paymentType, setPaymentType] = useState("");
+    const [paymentType, setPaymentType] = useState({
+        method: "",
+        type: ""
+    });
     const [isApiLoading, setisApiLoading] = useState(false);
     const [dialogData, setDialogData] = useState({
         orderId: 0,
@@ -71,7 +74,10 @@ function OrderDetail(props) {
                 setOrderProductList(data.orderProductList);
                 setUserData(data.order.user);
                 setUserAddress(data.ecommerceOrderAddress);
-                setPaymentType(data.paymentMethodFB.slug);
+                setPaymentType({
+                    method: data.paymentMethodFB.slug,
+                    type: data.paymentMethodFB.type
+                });
                 setDialogData({
                     userId: data.order.user.id,
                     orderId: data.order.id,
@@ -413,7 +419,7 @@ function OrderDetail(props) {
                                 <>
                                     <TableRow>
                                         <TableCell>
-                                            <FormLabel style={{ color: 'wheat' }}> Name : {userData.name} </FormLabel>
+                                            <FormLabel style={{ color: 'wheat' }}>[{userData.id}] : {userData.name} </FormLabel>
                                         </TableCell>
                                         <TableCell>
                                             <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
@@ -422,7 +428,7 @@ function OrderDetail(props) {
                                             <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
                                         </TableCell>
                                         <TableCell>
-                                            <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType} </FormLabel>
+                                            <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType.method} [{paymentType.type}] </FormLabel>
                                         </TableCell>
                                         <TableCell>
                                             <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>

@@ -175,6 +175,7 @@ function SeasonalOrders(props) {
                             <TableCell style={{ color: 'wheat' }}>User Name</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
                             <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
@@ -190,11 +191,12 @@ function SeasonalOrders(props) {
                                             id: row.id
                                         }}>{row.id}</Link>
                                     </TableCell>
-                                    <TableCell >{row.user.name}</TableCell>
+                                    <TableCell >{row.user.id} : {row.user.name}</TableCell>
                                     <TableCell align="center">
                                         {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
                                     </TableCell>
                                     <TableCell align="center" >----</TableCell>
+                                    <TableCell align="center" >{row.user.pincode}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
                                     <TableCell >{detail(row.vendor.name)}</TableCell>
                                     <TableCell align="center">{row.deliveryStatus}</TableCell>

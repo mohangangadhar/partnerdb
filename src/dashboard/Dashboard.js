@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchTodos } from '../Actions';
+import { fetchTodos, fetchSupportReport } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { CircularProgressInTable } from '../constants/Constants';
@@ -20,6 +20,13 @@ function DashBoard() {
     const [statusOrders, setStatusOrders] = useState([]);
     const [isLoading, setisLoading] = useState(false);
     const [isSummaryLoading, setisSummaryLoading] = useState(false);
+    const [isSupportSummaryLoading, setisSupportSummaryLoading] = useState(false);
+    const [supportSummary, setSupportSummary] = useState({
+        new: 0,
+        completed: 0,
+        inProgress: 0,
+        open: 0
+    });
     const [newCount, setNewCount] = useState({
         regular: 0,
         express: 0
@@ -85,6 +92,7 @@ function DashBoard() {
     });
 
     const order = useSelector(state => state.dashboardreducer);
+    const supportReport = useSelector(state => state.supportreducer);
     const dispatch = useDispatch();
 
 
@@ -294,13 +302,49 @@ function DashBoard() {
         }
         setisSummaryLoading(false);
     }
+    const getSupportData = async () => {
+        let supportData = supportReport.apiData;
+        setisSupportSummaryLoading(true);
+        for (let i = 0; i < supportData.length; i++) {
+            if (supportData[i].status == null) {
+                setSupportSummary((prevData) => ({
+                    ...prevData,
+                    new: supportData[i].total
+                }))
+            }
+            if (supportData[i].status == "Completed") {
+                setSupportSummary((prevData) => ({
+                    ...prevData,
+                    completed: supportData[i].total
+                }))
+            }
+            if (supportData[i].status == "In Progress") {
+                setSupportSummary((prevData) => ({
+                    ...prevData,
+                    inProgress: supportData[i].total
+                }))
+            }
+            if (supportData[i].status == "Open") {
+                setSupportSummary((prevData) => ({
+                    ...prevData,
+                    open: supportData[i].total
+                }))
+            }
+        }
+        console.log(supportSummary);
+        setisSupportSummaryLoading(false);
+    }
     useEffect(async () => {
         setisSummaryLoading(true);
         dispatch(fetchTodos);
+        dispatch(fetchSupportReport);
     }, []);
     useEffect(() => {
         getData();
     }, [order.apiData.length > 5])
+    useEffect(() => {
+        getSupportData();
+    }, [supportReport.apiData.length > 1])
     return (
         <div>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>DashBoard</h2></center>
@@ -391,6 +435,38 @@ function DashBoard() {
                                     <TableCell align="center">{cancelOrdersData.seasonaltotal != 0 ? cancelOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{
                                         newOrdersData.seasonaltotal + processingOrdersData.seasonaltotal + completeOrdersData.seasonaltotal + pendingOrdersData.seasonaltotal
+                                    }</TableCell>
+                                </TableRow>
+                            </>
+                            : CircularProgressInTable}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Support Summary:</h3>
+            <TableContainer component={Paper}>
+                <Table className="table" aria-label="spanning table">
+                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
+                        <TableRow>
+
+                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Completed</TableCell>
+
+                            <TableCell align="center" style={{ color: 'wheat' }}>In Progress</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Open</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {supportReport.apiData.length > 1 && !(isSupportSummaryLoading) ?
+                            <>
+                                <TableRow >
+                                    <TableCell align="center">{supportSummary.new}</TableCell>
+                                    <TableCell align="center">{supportSummary.completed}</TableCell>
+
+                                    <TableCell align="center">{supportSummary.inProgress}</TableCell>
+                                    <TableCell align="center">{supportSummary.open}</TableCell>
+                                    <TableCell align="center">{
+                                        supportSummary.new + supportSummary.completed + supportSummary.inProgress + supportSummary.open
                                     }</TableCell>
                                 </TableRow>
                             </>
