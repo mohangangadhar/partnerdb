@@ -463,6 +463,7 @@ function OrderDetail(props) {
                             <TableCell style={{ color: 'wheat' }}>Desc</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Qty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Unit Cost</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Sale Price</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>UnDelivered Quantity</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Refund</TableCell>

@@ -47,6 +47,7 @@ const EditableRow = ({
                     onChange={handleEditFormChange}
                 ></input>
             </TableCell>
+            <TableCell align="center">{row.salePrice}</TableCell>
             <TableCell align="center">
                 <input
                     type="text"

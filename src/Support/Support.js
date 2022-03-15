@@ -133,6 +133,7 @@ const Support = () => {
                     <TableRow>
                         <TableCell style={{ color: 'wheat' }}>Id</TableCell>
                         <TableCell style={{ color: 'wheat' }}>Name</TableCell>
+                        <TableCell style={{ color: 'wheat' }}>Mobile Number</TableCell>
                         <TableCell style={{ color: 'wheat' }}>Email</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Message</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Created At</TableCell>

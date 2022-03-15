@@ -11,6 +11,7 @@ const TableTitles = () => {
                 <TableCell align="left" style={{ color: 'wheat' }}>Title</TableCell>
                 <TableCell align="left" style={{ color: 'wheat' }}>Express</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Price</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>Sale Price</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Stock Quantity</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
             </TableRow>

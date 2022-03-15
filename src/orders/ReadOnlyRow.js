@@ -19,6 +19,7 @@ const ReadOnlyRow = ({
             <TableCell>{detail(row.vendorProduct.product.title)}</TableCell>
             <TableCell align="center">{row.quantity}</TableCell>
             <TableCell align="center">{row.vendorProduct.product.price}</TableCell>
+            <TableCell align="center">{row.vendorProduct.salePrice}</TableCell>
             <TableCell align="center">{row.total}</TableCell>
             <TableCell align="center">{row.deliveredQuantity}</TableCell>
             <TableCell align="center">{row.refund}</TableCell>
