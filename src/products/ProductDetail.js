@@ -71,11 +71,12 @@ function ProductDetail(props) {
             );
     }, [loading]);
     const handleSubmit = async (event) => {
+        console.log(stockQ);
         event.preventDefault();
         let productdata = {
             "price": productPrice,
             "productId": product.product.id,
-            "stockQuantity": stockQ.toString(),
+            "stockQuantity": stockQ == null ? "0" : stockQ.toString(),
             "vendorProductId": product.id.toString(),
             "gstRate": gstrate == null ? 0 : gstrate,
             "brandName": brandName == null ? "" : brandName,
@@ -109,7 +110,7 @@ function ProductDetail(props) {
                 setLoading(false);
                 NotificationManager.success('Updated Status', 'Successful!', 1000);
             }
-            );
+            ).catch(err => console.log(err));
     }
     const detail = (val) => {
         let jsonVal = val ? JSON.parse(val) : ""
