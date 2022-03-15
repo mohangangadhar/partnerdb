@@ -17,6 +17,8 @@ import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined'
 import SearchProducts from '../products/Components/SearchProducts';
 import { APIURL, GetRequestOptions } from '../constants/Constants';
 import SearchByUserName from './SearchByUserName';
+import LoadUserNameData from './LoadUserNameData';
+import LoadUserIdData from './LoadUserIdData';
 function UserList(props) {
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
@@ -29,11 +31,15 @@ function UserList(props) {
     const [isLoading, setisLoading] = useState(false);
     const [searchquery, setSearchQuery] = useState("");
     const [queryLoad, setQueryLoad] = useState(false);
+    const [userQueryLoad, setUserQueryLoad] = useState(false);
+    const [userSearchData, setUserSearchData] = useState([]);
     const [searchOrder, setSearchOrder] = useState({});
     const [searchUserName, setSearchUserName] = useState("");
     const receivedData = async (val) => {
         setisLoading(true);
         setRows([]);
+        setUserSearchData([]);
+        setSearchOrder({});
         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
         const requestOptions = {
             method: 'POST',
@@ -73,7 +79,7 @@ function UserList(props) {
     }
     const handleSearch = async (event, query) => {
         event.preventDefault();
-        setSearchUserName("");
+        setUserQueryLoad(false);
         if (query == "" || query.length == 0) {
             setQueryLoad(false);
             receivedData(offSet);
@@ -83,7 +89,7 @@ function UserList(props) {
             setQueryLoad(true);
             setisLoading(true);
 
-            await fetch(APIURL + "user/" + query, GetRequestOptions)
+            fetch(APIURL + "user/" + query, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setSearchOrder(data);
@@ -95,20 +101,21 @@ function UserList(props) {
     const handleSearchByUserName = async (event, query) => {
         event.preventDefault();
         setQueryLoad(false);
-
-        setSearchQuery("");
         if (query == "" || query.length == 0) {
+            setUserQueryLoad(false);
+
             receivedData(offSet);
             return;
         } else if (query.length > 0) {
             setErrFound(false);
-
+            setUserQueryLoad(true);
             setisLoading(true);
 
-            await fetch(APIURL + "user/query/" + query, GetRequestOptions)
+            fetch(APIURL + "user/query/" + query, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    setRows(data);
+                    setUserSearchData(data)
+                    console.log(data);
                     if (data.length == 0) { setErrFound(true); setisLoading(false); }
                     setisLoading(false);
                 });
@@ -140,54 +147,42 @@ function UserList(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Created</TableCell>
                         </TableRow>
                     </TableHead>
-                    {queryLoad ?
-                        <>
-                            {searchOrder.id != null && !(isLoading) ?
-                                <TableBody>
-                                    <TableRow key={searchOrder.id}>
-                                        <TableCell>
-                                            {searchOrder.id}
+                    {userQueryLoad ?
 
-                                        </TableCell>
-                                        <TableCell >{searchOrder.name}</TableCell>
-                                        <TableCell align="left">{searchOrder.email}</TableCell>
-                                        <TableCell align="center">{searchOrder.mobileNumber}</TableCell>
-                                        <TableCell align="center">{searchOrder.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
-                                        <TableCell align="center">{searchOrder.pincode}</TableCell>
-                                        <TableCell align="center">{new Date(Date.parse(searchOrder.createdAt + " UTC")).toLocaleString()}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                                :
-                                <center>
-                                    {errFound ? <h1 style={{ color: 'black' }}>User Not Found</h1> : <CircularProgress />}
-                                </center>
-                            }
-                        </>
+                        <LoadUserNameData errFound={errFound} userSearchData={userSearchData} isLoading={isLoading} />
+
 
                         :
                         <>
-                            {rows.length >= 0 && !(isLoading) ?
-                                <TableBody>
-                                    {rows.map((row, index) => (
-                                        <TableRow key={row.id}>
-                                            <TableCell>
-                                                {row.id}
+                            {queryLoad ?
+                                <LoadUserIdData errFound={errFound} userSearchData={searchOrder} isLoading={isLoading} />
+                                :
+                                <>
+                                    {rows.length >= 0 && !(isLoading) ?
+                                        <TableBody>
+                                            {rows.map((row, index) => (
+                                                <TableRow key={row.id}>
+                                                    <TableCell>
+                                                        {row.id}
 
-                                            </TableCell>
-                                            <TableCell >{row.name}</TableCell>
-                                            <TableCell align="left">{row.email}</TableCell>
-                                            <TableCell align="center">{row.mobileNumber}</TableCell>
-                                            <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
-                                            <TableCell align="center">{row.pincode}</TableCell>
-                                            <TableCell align="center">{new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody> :
-                                <div>
-                                    <center>
-                                        {errFound ? <h1 style={{ color: 'black' }}>User Not Found</h1> : <CircularProgress />}
-                                    </center>
-                                </div>
+                                                    </TableCell>
+                                                    <TableCell >{row.name}</TableCell>
+                                                    <TableCell align="left">{row.email}</TableCell>
+                                                    <TableCell align="center">{row.mobileNumber}</TableCell>
+                                                    <TableCell align="center">{row.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
+                                                    <TableCell align="center">{row.pincode}</TableCell>
+                                                    <TableCell align="center">{new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody> :
+                                        <div>
+                                            <center>
+                                                {errFound ? <h1 style={{ color: 'black' }}>User Not Found</h1> : <CircularProgress />}
+                                            </center>
+                                        </div>
+                                    }
+                                </>
+
                             }
                         </>}
                 </Table>
