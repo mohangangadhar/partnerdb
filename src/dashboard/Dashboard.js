@@ -449,10 +449,12 @@ function DashBoard() {
                         <TableRow>
 
                             <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Completed</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Open</TableCell>
 
                             <TableCell align="center" style={{ color: 'wheat' }}>In Progress</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Open</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Completed</TableCell>
+
+
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
                         </TableRow>
                     </TableHead>
@@ -461,10 +463,9 @@ function DashBoard() {
                             <>
                                 <TableRow >
                                     <TableCell align="center">{supportSummary.new}</TableCell>
-                                    <TableCell align="center">{supportSummary.completed}</TableCell>
-
-                                    <TableCell align="center">{supportSummary.inProgress}</TableCell>
                                     <TableCell align="center">{supportSummary.open}</TableCell>
+                                    <TableCell align="center">{supportSummary.inProgress}</TableCell>
+                                    <TableCell align="center">{supportSummary.completed}</TableCell>
                                     <TableCell align="center">{
                                         supportSummary.new + supportSummary.completed + supportSummary.inProgress + supportSummary.open
                                     }</TableCell>

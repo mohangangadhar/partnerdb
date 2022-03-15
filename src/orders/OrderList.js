@@ -18,10 +18,11 @@ import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
 import setstatus from '../Actions';
 import SearchOrders from './SearchOrders';
-import { APIURL } from '../constants/Constants';
+import { APIURL, GetRequestOptions } from '../constants/Constants';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import SearchOrdersByUserName from './SearchOrdersByUserName';
 const OrderList = (props) => {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -37,6 +38,9 @@ const OrderList = (props) => {
     const [queryLoad, setQueryLoad] = useState(false);
     const [isDownloading, setisDownloading] = useState(false);
     const [searchOrder, setSearchOrder] = useState({});
+    const [userQueryLoad, setUserQueryLoad] = useState(false);
+    const [userSearchData, setUserSearchData] = useState([]);
+    const [userName, setUserName] = useState("");
     let order = useSelector(state => state.orderstatusreducer);
     const dispatch = useDispatch();
     useEffect(async () => {
@@ -49,7 +53,11 @@ const OrderList = (props) => {
     const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
     const receivedData = async (pageval) => {
         setSearchNotFound(false);
+        setQueryLoad(false);
+        setUserQueryLoad(false);
         setRows("");
+        setUserSearchData([]);
+        setSearchOrder({});
         setisLoading(true);
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
@@ -103,12 +111,9 @@ const OrderList = (props) => {
                 ? `export/status/${statusType}`
                 : `export/" + props.match.params.vendorId + "/status/${statusType}`
         }
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        };
 
-        fetch(APIURL + urlString, requestOptions)
+
+        fetch(APIURL + urlString, GetRequestOptions)
             .then(response => {
                 const filename = response.headers.get('Content-Disposition').split('filename=')[1];
                 response.blob().then(blob => {
@@ -127,6 +132,11 @@ const OrderList = (props) => {
     }
     const handleSearch = async (event, query) => {
         event.preventDefault();
+        setUserQueryLoad(false);
+        setUserName("");
+        setSearchOrder({});
+        setRows([]);
+        setUserSearchData([]);
         if (query == "" || query == 0) {
             setQueryLoad(false);
             receivedData(order.page);
@@ -140,11 +150,39 @@ const OrderList = (props) => {
                 headers: { 'Content-Type': 'application/json' }
             };
 
-            fetch(apiUrl + 'order/' + query, requestOptions)
+            await fetch(apiUrl + 'order/' + query, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setSearchOrder(data);
                     if (data.order == null) { setSearchNotFound(true); setisLoading(false); }
+                    setisLoading(false);
+                });
+        }
+
+    }
+    const handleSearchByUserName = async (event) => {
+        event.preventDefault();
+        setQueryLoad(false);
+
+
+        if (userName == "" || userName.length == 0) {
+            setUserQueryLoad(false);
+            receivedData(order.page);
+            return;
+        } else if (userName.length >= 1) {
+            setUserQueryLoad(true);
+            setisLoading(true);
+            setSearchOrder({});
+            setUserSearchData([]);
+            setSearchQuery("");
+            setRows([]);
+            setSearchNotFound(false);
+            await fetch(APIURL + 'order/user-name/' + userName, GetRequestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setUserSearchData(data);
+
+                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
                     setisLoading(false);
                 });
         }
@@ -153,12 +191,12 @@ const OrderList = (props) => {
         <div>
             {isDownloading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Downloading Orders</b>}
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Regular Orders</h2></center>
-            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
-                {queryLoad ?
-                    <h4 style={{ color: 'white' }}>Clear the Search to see Options...</h4>
+            <div>
+                {queryLoad || userQueryLoad ?
+                    <h4 style={{ color: 'white' }}>Clear the Search & Press Search Icon to see Options...</h4>
                     :
 
-                    <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                         <Button style={{ marginRight: 10, color: 'white' }} variant={order.status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                             ev.preventDefault();
                             if (order.status == "all") { return; }
@@ -239,9 +277,11 @@ const OrderList = (props) => {
                         >Failed</Button>
                     </div>
                 }
-                <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
-                        handleSearch={handleSearch} />
+                        handleSearch={handleSearch} label="Search By Order ID" />
+                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName} handleSearch={handleSearchByUserName}
+                        label="Search By User Name" />
                 </div>
             </div>
 
@@ -319,9 +359,9 @@ const OrderList = (props) => {
 
                         :
                         <>
-                            {rows.length > 0 && !(isLoading) ?
+                            {userQueryLoad ?
                                 <TableBody>
-                                    {rows.map((row, index) => (
+                                    {userSearchData.length > 0 && userSearchData.map((row, index) => (
                                         <TableRow key={row.id}>
                                             <TableCell>
                                                 <Link to={{
@@ -341,18 +381,46 @@ const OrderList = (props) => {
                                         </TableRow>
                                     ))}
                                 </TableBody>
+
                                 :
-                                <div>
-                                    <center>
-                                        {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
-                                    </center>
-                                </div>
+                                <>
+                                    {rows.length > 0 && !(isLoading) ?
+                                        <TableBody>
+                                            {rows.map((row, index) => (
+                                                <TableRow key={row.id}>
+                                                    <TableCell>
+                                                        <Link to={{
+                                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
+                                                            id: row.id
+                                                        }}>{row.id}</Link>
+                                                    </TableCell>
+                                                    <TableCell >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{row.user.id} : {row.user.name} </p> : <p>{row.user.id}</p>}</TableCell>
+                                                    <TableCell align="center">
+                                                        {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
+                                                    </TableCell>
+                                                    <TableCell align="center" >{row.deliveryDate}</TableCell>
+                                                    <TableCell align="center" >{row.user.pincode}</TableCell>
+                                                    <TableCell align="center">{row.total}</TableCell>
+                                                    <TableCell >{detail(row.vendor.name)}</TableCell>
+                                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                        :
+                                        <div>
+                                            <center>
+                                                {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
+                                            </center>
+                                        </div>}
+                                </>
                             }
-                        </>}
+                        </>
+                    }
                 </Table>
+
             </TableContainer>
             <Box m={2} />
-            {!queryLoad &&
+            {!queryLoad && !userQueryLoad &&
                 <Grid container justifyContent={"center"}>
                     <Pagination variant={"text"} color={"primary"}
                         count={totalPages}
