@@ -1,0 +1,12 @@
+.userlist {
+  list-style-type: none;
+}
+.userlist li {
+  margin: 3px;
+}
+.userlist li > button {
+  background-color: bisque;
+  border: 2px solid blue;
+  border-radius: 20px;
+  padding: 5px;
+}
