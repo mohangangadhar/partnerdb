@@ -16,7 +16,7 @@ const EditableRow = ({
     return (
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
-            <TableCell >{row.name}</TableCell>
+            <TableCell >{row.userId}:{row.name}</TableCell>
             <TableCell align="center" >{row.mobileNumber}</TableCell>
             <TableCell align="center" >{row.email}</TableCell>
             <TableCell align="center">{row.message}</TableCell>

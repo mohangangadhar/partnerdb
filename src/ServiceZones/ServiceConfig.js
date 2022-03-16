@@ -10,7 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { NotificationManager } from "react-notifications";
 import { Button, FormControlLabel, FormGroup, FormLabel, TextField } from "@material-ui/core";
-import { CodeSharp } from '@material-ui/icons';
+import EcommerceZones from './Components/EcommerceZones';
 //service : 1 => reg and exp&seasonal; 2: reg&seasonal;3 : only Express;4:seasonal;
 //vendorfulfills=2;ours:1
 const ServiceConfig = () => {
@@ -253,7 +253,7 @@ const ServiceConfig = () => {
                 <div style={{ backgroundColor: 'white' }}>
                     <TableRow>
                         <TableCell rowSpan={2}>
-                            <FormLabel style={{ color: 'blue' }}> Add Pincode</FormLabel>
+                            <FormLabel style={{ color: 'blue' }}> Add/Update Pincode</FormLabel>
                         </TableCell>
                         <TableCell >
                             <TextField
@@ -483,7 +483,9 @@ const ServiceConfig = () => {
                         }}>Delete</Button>
                     </TableCell>
                 </TableRow>
+                <EcommerceZones />
             </TableContainer>
+
         </div>
     )
 }
