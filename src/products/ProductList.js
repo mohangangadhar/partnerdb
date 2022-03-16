@@ -143,6 +143,11 @@ function ProductList(props) {
                     "isNaturalProduct": data.product.isNaturalProduct == 1 ? "Y" : "N",
                     "uniqueness": data.product.uniqueness == null ? "" : data.product.uniqueness,
                     "express": tempFormData.express == "YES" ? 1 : 0,
+                    "weight": data.weight == null ? 0.0 : data.weight,
+                    "type": data.type == null ? "" : data.type,
+                    "priority": data.priority == null ? "" : data.priority,
+                    "primarySupplier": data.primarySupplier == null ? "" : data.primarySupplier,
+                    "buffer": data.buffer == null ? 0.0 : data.buffer
                 };
             });
         let urlStringForUpdate;
@@ -246,7 +251,7 @@ function ProductList(props) {
                 </div>
                 <div>
                     <SearchProducts setSearchQuery={setSearchQuery} searchquery={searchquery}
-                        handleSearch={handleSearch} />
+                        handleSearch={handleSearch} label="Search Products" />
                 </div>
             </div>
             <Grid container justifyContent="flex-end" component={Paper}>

@@ -38,6 +38,13 @@ function ProductDetail(props) {
     const [seed, setSeed] = useState("");
     const [about, setAbout] = useState("");
     const [loading, setLoading] = useState(false);
+    const [bufferData, setBufferData] = useState({
+        weight: 0,
+        type: "",
+        priority: "",
+        primarySupplier: "",
+        buffer: 0
+    })
     const [user] = useAuthState(auth);
     const history = useHistory();
     useEffect(() => {
@@ -67,11 +74,17 @@ function ProductDetail(props) {
                 setUniqueness(data.product.uniqueness);
                 setIsNatural(data.product.isNaturalProduct == 1 ? "Y" : "N");
                 setLocalName(data.product.localName);
+                setBufferData({
+                    weight: data.weight,
+                    type: data.type,
+                    priority: data.priority,
+                    primarySupplier: data.primarySupplier,
+                    buffer: data.buffer
+                })
             }
             );
     }, [loading]);
     const handleSubmit = async (event) => {
-        console.log(stockQ);
         event.preventDefault();
         let productdata = {
             "price": productPrice,
@@ -92,6 +105,11 @@ function ProductDetail(props) {
             "isNaturalProduct": isNatural,
             "uniqueness": uniqueness == null ? "" : uniqueness,
             "express": express == "YES" ? 1 : 0,
+            "weight": bufferData.weight == null ? 0.0 : bufferData.weight,
+            "type": bufferData.type == null ? "" : bufferData.type,
+            "priority": bufferData.priority == null ? "" : bufferData.priority,
+            "primarySupplier": bufferData.primarySupplier == null ? "" : bufferData.primarySupplier,
+            "buffer": bufferData.buffer == null ? 0.0 : bufferData.buffer
         };
         let urlString;
         if (props.match.params.hasOwnProperty("vendorId")) {
@@ -208,13 +226,53 @@ function ProductDetail(props) {
                                         </Select>
                                     </FormControl>
                                 </TableCell>
+                                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Express Product?</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-required-label"
+                                        id="demo-simple-select-disabled"
+                                        style={{ height: 50, color: 'white' }}
+                                        value={express}
+                                        onChange={(event) => setExpress(event.target.value)}
+                                        label="Express or Regular?"
+                                    >
+                                        <MenuItem value="YES">
+                                            {express == "YES" ? "Yes" : 'Yes'}
+                                        </MenuItem>
+                                        <MenuItem value="NO">{express == "NO" ? "No" : "No"}</MenuItem>
+                                    </Select>
+                                </FormControl>
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <TextField
-                                        id="manufacturer"
-                                        label="Manufacturer:"
+                                        id="saleprice"
+                                        label="Sale Price:"
                                         multiline
-                                        value={manufacturer}
-                                        onChange={(event) => setManufacturer(event.target.value)}
+                                        value={saleprice}
+                                        onChange={(event) => setSalePrice(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="weight"
+                                        label="Weight:"
+                                        multiline
+                                        value={bufferData.weight}
+                                        onChange={(event) => setBufferData((prev) => ({
+                                            ...prev,
+                                            weight: event.target.value
+                                        }))}
                                         InputProps={{
                                             style: {
                                                 color: "white",
@@ -228,11 +286,14 @@ function ProductDetail(props) {
                                 </TableCell>
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <TextField
-                                        id="shelflife"
-                                        label="ShelfLife:"
+                                        id="Type"
+                                        label="Type:"
                                         multiline
-                                        value={shelflife}
-                                        onChange={(event) => setShelfLife(event.target.value)}
+                                        value={bufferData.type}
+                                        onChange={(event) => setBufferData((prev) => ({
+                                            ...prev,
+                                            type: event.target.value
+                                        }))}
                                         InputProps={{
                                             style: {
                                                 color: "white",
@@ -243,6 +304,91 @@ function ProductDetail(props) {
                                         }}
                                         variant='outlined'
                                     />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="Priority"
+                                        label="Priority:"
+                                        multiline
+                                        value={bufferData.priority}
+                                        onChange={(event) => setBufferData((prev) => ({
+                                            ...prev,
+                                            priority: event.target.value
+                                        }))}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+
+                            </TableRow>
+                            <TableRow>
+
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="supplier"
+                                        label="Primary Supplier:"
+                                        multiline
+                                        value={bufferData.primarySupplier}
+                                        onChange={(event) => setBufferData((prev) => ({
+                                            ...prev,
+                                            primarySupplier: event.target.value
+                                        }))}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <TextField
+                                        id="buffer"
+                                        label="Buffer:"
+                                        multiline
+                                        value={bufferData.buffer}
+                                        onChange={(event) => setBufferData((prev) => ({
+                                            ...prev,
+                                            buffer: event.target.value
+                                        }))}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
+                                </TableCell>
+                                <TableCell style={{ borderBottom: "none" }}>
+                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Is Natural?</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-required-label"
+                                            id="demo-simple-select-disabled"
+                                            style={{ height: 50, color: 'white' }}
+                                            value={isNatural}
+                                            onChange={(event) => setIsNatural(event.target.value)}
+                                            label="Is it Natural?"
+                                        >
+                                            <MenuItem value="Y">
+                                                {isNatural == "Y" ? "Yes" : "Yes"}
+                                            </MenuItem>
+                                            <MenuItem value="N">{isNatural == "N" ? "No" : "No"}</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </TableCell>
                             </TableRow>
                             <TableRow>
@@ -323,11 +469,11 @@ function ProductDetail(props) {
                                 </TableCell>
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <TextField
-                                        id="saleprice"
-                                        label="Sale Price:"
+                                        id="shelflife"
+                                        label="ShelfLife:"
                                         multiline
-                                        value={saleprice}
-                                        onChange={(event) => setSalePrice(event.target.value)}
+                                        value={shelflife}
+                                        onChange={(event) => setShelfLife(event.target.value)}
                                         InputProps={{
                                             style: {
                                                 color: "white",
@@ -341,24 +487,26 @@ function ProductDetail(props) {
                                 </TableCell>
                             </TableRow>
                             <TableRow>
+
                                 <TableCell style={{ borderBottom: "none" }}>
-                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Express Product?</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-required-label"
-                                            id="demo-simple-select-disabled"
-                                            style={{ height: 50, color: 'white' }}
-                                            value={express}
-                                            onChange={(event) => setExpress(event.target.value)}
-                                            label="Express or Regular?"
-                                        >
-                                            <MenuItem value="YES">
-                                                {express == "YES" ? "Yes" : 'Yes'}
-                                            </MenuItem>
-                                            <MenuItem value="NO">{express == "NO" ? "No" : "No"}</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                    <TextField
+                                        id="manufacturer"
+                                        label="Manufacturer:"
+                                        multiline
+                                        value={manufacturer}
+                                        onChange={(event) => setManufacturer(event.target.value)}
+                                        InputProps={{
+                                            style: {
+                                                color: "white",
+                                            }
+                                        }}
+                                        InputLabelProps={{
+                                            style: { color: '#fff' },
+                                        }}
+                                        variant='outlined'
+                                    />
                                 </TableCell>
+
                                 <TableCell style={{ borderBottom: "none" }}>
                                     <TextField
                                         id="localname"
@@ -376,24 +524,6 @@ function ProductDetail(props) {
                                         }}
                                         variant='outlined'
                                     />
-                                </TableCell>
-                                <TableCell style={{ borderBottom: "none" }}>
-                                    <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                        <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Is Natural?</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-required-label"
-                                            id="demo-simple-select-disabled"
-                                            style={{ height: 50, color: 'white' }}
-                                            value={isNatural}
-                                            onChange={(event) => setIsNatural(event.target.value)}
-                                            label="Is it Natural?"
-                                        >
-                                            <MenuItem value="Y">
-                                                {isNatural == "Y" ? "Yes" : "Yes"}
-                                            </MenuItem>
-                                            <MenuItem value="N">{isNatural == "N" ? "No" : "No"}</MenuItem>
-                                        </Select>
-                                    </FormControl>
                                 </TableCell>
                             </TableRow>
                             <TableRow>

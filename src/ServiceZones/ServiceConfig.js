@@ -297,7 +297,7 @@ const ServiceConfig = () => {
                                         1:Regular + Express + Seasonal
                                     </MenuItem>
                                     <MenuItem value={2}>
-                                        2:Regular + Express
+                                        2:Regular + Seasonal
                                     </MenuItem>
 
                                 </Select>
