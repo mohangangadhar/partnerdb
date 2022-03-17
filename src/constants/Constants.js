@@ -16,6 +16,7 @@ export const NAMES = new Map([
     ["MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2", "Admin"],
     ["YemIZZ6WV4bzx3uFY7jJP8nQ9DL2", "Devanna Organics"],
     ["p3xMPOxBQpdUnIXfGJAXJ47JYzu1", "Fresh N Desi"],
+    ["3DCsUYefHxdD43H0Z1WNw2ghdE52", "Jeevamrut Seasonal"]
 ]);
 export const VENDORNAMES = new Map([
     ["Prachin", "rmD3GlROgVa05wuO4FL69kSTW2h1",],
@@ -31,6 +32,7 @@ export const VENDORNAMES = new Map([
     ["Admin", "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2"],
     ["Devanna Organics", "YemIZZ6WV4bzx3uFY7jJP8nQ9DL2"],
     ["Fresh N Desi", "p3xMPOxBQpdUnIXfGJAXJ47JYzu1"],
+    ["Jeevamrut Seasonal", "3DCsUYefHxdD43H0Z1WNw2ghdE52"]
 ]);
 export const COLORS = {
     accepted: "#059669",

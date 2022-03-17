@@ -15,7 +15,7 @@ import { NotificationManager } from "react-notifications";
 
 
 function OrderEditDialog(props) {
-    const { onClose, open, dialogData, total, setisLoading } = props;
+    const { onClose, open, dialogData, total, setisLoading, getData } = props;
     const [loadingAddress, setLoadingAddress] = useState(false);
     const [address, setAddress] = useState([]);
     const [userid, setUserId] = useState(0);
@@ -65,7 +65,7 @@ function OrderEditDialog(props) {
         setAddresId(id);
     }
     const submitWallet = async () => {
-        
+
         let walletid = 0;
         await fetch(APIURL + '/wallet/' + mobile)
             .then(res => res.json())
@@ -100,7 +100,9 @@ function OrderEditDialog(props) {
         })
             .then(data => {
                 setisLoading(true);
+
                 handleClose();
+                getData();
                 NotificationManager.success('You changes have been updated!', 'Successful!', 1000);
             })
             .catch((error) => {

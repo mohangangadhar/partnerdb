@@ -337,20 +337,23 @@ function OrderDetail(props) {
         await fetch(APIURL + "order/status", requestOptions)
             .then(response => response.json())
             .then(data => {
-
                 let depositAmount = 0;
                 let message = "";
+                let value = 0;
                 if (typeOfRefund == "first") {
                     depositAmount = data.refundTotal;
                     message = "Undelivered Items";
+
                 }
                 else if (typeOfRefund == "second") {
                     depositAmount = data.returnRefundTotal;
                     message = "Post Delivery";
+
                 }
                 else {
                     depositAmount = data.discountTotal;
                     message = "Discount"
+
                 }
                 uploadWalletBackend(depositAmount, message);
                 getData();
@@ -539,9 +542,9 @@ function OrderDetail(props) {
                         </Table>
                     </TableContainer>
                     <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                        <input onClick={(ev) => handleUpdate(ev, "first")} disabled={refundCount > 0 ? "disabled" : ""} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Undelivered Refunds" />
-                        <input onClick={(ev) => handleUpdate(ev, "second")} disabled={refundCount > 1 ? "disabled" : ""} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Post Delivery Refunds" />
-                        <input onClick={(ev) => handleUpdate(ev, "discount")} disabled={refundCount > 2 ? "disabled" : ""} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Discount Refunds" />
+                        <input onClick={(ev) => handleUpdate(ev, "first")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Undelivered Refunds" />
+                        <input onClick={(ev) => handleUpdate(ev, "second")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Post Delivery Refunds" />
+                        <input onClick={(ev) => handleUpdate(ev, "discount")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Discount Refunds" />
                     </Container>
                     <Container>
                         <TableRow>
@@ -567,6 +570,7 @@ function OrderDetail(props) {
                     <Container>
                         <OrderEditDialog
                             open={open}
+                            getData={getData}
                             onClose={handleClose}
                             dialogData={dialogData}
                             total={totalData}
