@@ -36,6 +36,7 @@ function OrderDetail(props) {
     const [userAddress, setUserAddress] = useState({});
     const formClick = useRef();
     const [open, setOpen] = useState(false);
+    const [refundCount, setRefundCount] = useState(0);
     const [totalData, setTotalData] = useState({
         total: 0,
         refundTotal: 0,
@@ -88,6 +89,8 @@ function OrderDetail(props) {
                 setComment(data.order.comments);
                 setStatus(data.order.deliveryStatus);
                 setFinalTotal(data.order.finalTotal);
+                setRefundCount(data.order.refundCount == null ? 0 : data.order.refundCount);
+
                 setTotalData({
                     total: data.order.total,
                     refundTotal: data.order.refundTotal,
@@ -215,6 +218,7 @@ function OrderDetail(props) {
                     "id": props.location.id,
                     "status": status,
                     "comments": comment,
+                    "refundCount": refundCount
                 };
                 const requestOptions = {
                     method: 'PUT',
@@ -315,10 +319,12 @@ function OrderDetail(props) {
     //Handle Update
     const handleUpdate = async (ev, typeOfRefund) => {
         ev.preventDefault();
+
         let updateBody = {
             "id": props.location.id,
             "status": status,
-            "comments": typeOfRefund == "first" ? comment + " " + "Deposited 1st refunds" : comment + " " + "Deposited 2nd refunds"
+            "comments": typeOfRefund == "first" ? comment + " " + "Deposited 1st refunds" : comment + " " + "Deposited 2nd refunds",
+            "refundCount": refundCount + 1
         };
         const requestOptions = {
             method: 'PUT',
@@ -331,9 +337,23 @@ function OrderDetail(props) {
         await fetch(APIURL + "order/status", requestOptions)
             .then(response => response.json())
             .then(data => {
+
+                let depositAmount = 0;
+                let message = "";
+                if (typeOfRefund == "first") {
+                    depositAmount = data.refundTotal;
+                    message = "Undelivered Items";
+                }
+                else if (typeOfRefund == "second") {
+                    depositAmount = data.returnRefundTotal;
+                    message = "Post Delivery";
+                }
+                else {
+                    depositAmount = data.discountTotal;
+                    message = "Discount"
+                }
+                uploadWalletBackend(depositAmount, message);
                 getData();
-                uploadWalletBackend(typeOfRefund == "first" ? data.refundTotal : data.returnRefundTotal,
-                    typeOfRefund == "first" ? "Undelivered Items" : "Post Delivery");
                 NotificationManager.success('Updated Status', 'Successful!', 1000);
             }
             );
@@ -345,6 +365,7 @@ function OrderDetail(props) {
             "id": props.location.id,
             "status": status,
             "comments": comment,
+            "refundCount": refundCount
         };
         const requestOptions = {
             method: 'PUT',
@@ -518,8 +539,9 @@ function OrderDetail(props) {
                         </Table>
                     </TableContainer>
                     <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                        <input onClick={(ev) => handleUpdate(ev, "first")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Deposit 1st Refunds" />
-                        <input onClick={(ev) => handleUpdate(ev, "second")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Deposit 2nd Refunds" />
+                        <input onClick={(ev) => handleUpdate(ev, "first")} disabled={refundCount > 0 ? "disabled" : ""} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Undelivered Refunds" />
+                        <input onClick={(ev) => handleUpdate(ev, "second")} disabled={refundCount > 1 ? "disabled" : ""} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Post Delivery Refunds" />
+                        <input onClick={(ev) => handleUpdate(ev, "discount")} disabled={refundCount > 2 ? "disabled" : ""} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Discount Refunds" />
                     </Container>
                     <Container>
                         <TableRow>
