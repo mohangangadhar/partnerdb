@@ -15,6 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Loader from '../components/Loader/Loader';
 import emailjs from 'emailjs-com';
 import { Container, Divider, FormLabel, Button } from "@material-ui/core";
 import { TextField } from '@mui/material';
@@ -40,7 +41,7 @@ function OrderDetail(props) {
         refundTotal: 0,
         deliveredTotal: 0,
         returnRefundTotal: 0,
-
+        discountTotal: 0
     });
     const [comment, setComment] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
@@ -91,7 +92,8 @@ function OrderDetail(props) {
                     total: data.order.total,
                     refundTotal: data.order.refundTotal,
                     deliveredTotal: data.order.deliveredTotal,
-                    returnRefundTotal: data.order.returnRefundTotal
+                    returnRefundTotal: data.order.returnRefundTotal,
+                    discountTotal: data.order.discountTotal
                 });
 
             }
@@ -181,7 +183,9 @@ function OrderDetail(props) {
         setAddFormData({
             deliveredQuantity: row.deliveredQuantity,
             productQuality: row.productQuality,
-            returnQuantity: row.returnQuantity
+            returnQuantity: row.returnQuantity,
+            discountPercentage: row.discountPercentage,
+            discountValue: row.discountValue
         });
         setEditContactId(row.id);
     }
@@ -240,7 +244,7 @@ function OrderDetail(props) {
         event.preventDefault();
         console.log(tempFormData);
         setAddFormData("");
-        let ind;
+
         let xyz = row;
         xyz = { ...xyz };
         xyz.deliveredQuantity = tempFormData.deliveredQuantity;
@@ -251,20 +255,7 @@ function OrderDetail(props) {
         xyz.productQuality = tempFormData.productQuality == null ? "" : tempFormData.productQuality;
         xyz.discountPercentage = tempFormData.discountPercentage == null ? 0 : tempFormData.discountPercentage;
         xyz.discountValue = tempFormData.discountValue == null ? 0 : tempFormData.discountValue;
-        for (let i = 0; i < orderProductList.length; i++) {
-            if (row.id == orderProductList[i].id) {
-                ind = i;
-                break;
-            }
-        }
-        setTotalData({
-            total: totalData.total,
-            refundTotal: totalData.refundTotal + xyz.refund,
-            deliveredTotal: totalData.total - totalData.deliveredTotal,
-            returnRefundTotal: totalData.returnRefundTotal + xyz.refundTotal,
 
-        });
-        orderProductList[ind] = xyz;
 
         setEditContactId(null);
         uploadBackEnd(xyz, tempFormData);
@@ -327,7 +318,7 @@ function OrderDetail(props) {
         let updateBody = {
             "id": props.location.id,
             "status": status,
-            "comments": comment,
+            "comments": typeOfRefund == "first" ? comment + " " + "Deposited 1st refunds" : comment + " " + "Deposited 2nd refunds"
         };
         const requestOptions = {
             method: 'PUT',
@@ -372,220 +363,225 @@ function OrderDetail(props) {
     }
     return (
         <div>
-            {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
-            {Object.keys(order).length > 2 && !(isLoading) ?
-                <Container maxWidth="md" fixed={false}>
-                    <Table className="table" aria-label="spanning table">
-                        <TableHead >
-                            <TableRow>
-                                <TableCell>
-                                    <Item />
-                                </TableCell>
-                                <TableCell>
-                                    <FormLabel style={{ color: 'wheat' }}> Order No : {props.location.id} </FormLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <FormLabel style={{ color: 'wheat' }}>Date: {new Date(Date.parse(order.createdAt + " UTC")).toLocaleString()} </FormLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <FormLabel style={{ color: 'wheat' }}>Current Status: {order.deliveryStatus} </FormLabel>
-                                </TableCell>
-                                <TableCell>
-                                    {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?
-                                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-required-label"
-                                                id="demo-simple-select-disabled"
-                                                value={status}
-                                                onChange={(event) => {
-                                                    setStatus(event.target.value);
-                                                    // if (event.target.value == "cancelled") {
-                                                    //     uploadWalletBackend(totalData.total, "Cancelled");
-                                                    // }
-                                                    handleSubmit(event.target.value);
-                                                }}
-                                                label="Enter Status"
-                                            >
-                                                <MenuItem value="accepted">
-                                                    Accepted
-                                                </MenuItem>
-                                                <MenuItem value="prepared">
-                                                    Out For Delivery
-                                                </MenuItem>
-                                                <MenuItem value="complete">Complete</MenuItem>
-                                                <MenuItem value="cancelled">Cancelled</MenuItem>
-                                                <MenuItem value="failed">Failed</MenuItem>
-                                                <MenuItem value="pending">Pending</MenuItem>
-                                            </Select>
-                                        </FormControl> :
-                                        <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                            <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-required-label"
-                                                id="demo-simple-select-disabled"
-                                                value={status}
-                                                onChange={(event) => {
-                                                    setStatus(event.target.value);
-                                                }}
-                                                label="Enter Status"
-                                            >
-                                                <MenuItem value="left from seller warehouse">
-                                                    Left from Warehouse
-                                                </MenuItem>
-                                                <MenuItem value="Order Received">Order Received</MenuItem>
-                                                <MenuItem value="cancelled">Cancelled</MenuItem>
-                                            </Select>
-                                        </FormControl>
+            {isApiLoading ? <Loader /> :
+                <>
+                    {Object.keys(order).length > 2 && !(isLoading) ?
+                        <Container maxWidth="md" fixed={false}>
+                            <Table className="table" aria-label="spanning table">
+                                <TableHead >
+                                    <TableRow>
+                                        <TableCell>
+                                            <Item />
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormLabel style={{ color: 'wheat' }}> Order No : {props.location.id} </FormLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormLabel style={{ color: 'wheat' }}>Date: {new Date(Date.parse(order.createdAt + " UTC")).toLocaleString()} </FormLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormLabel style={{ color: 'wheat' }}>Current Status: {order.deliveryStatus} </FormLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?
+                                                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
+                                                    <Select
+                                                        labelId="demo-simple-select-required-label"
+                                                        id="demo-simple-select-disabled"
+                                                        value={status}
+                                                        onChange={(event) => {
+                                                            setStatus(event.target.value);
+                                                            // if (event.target.value == "cancelled") {
+                                                            //     uploadWalletBackend(totalData.total, "Cancelled");
+                                                            // }
+                                                            handleSubmit(event.target.value);
+                                                        }}
+                                                        label="Enter Status"
+                                                    >
+                                                        <MenuItem value="accepted">
+                                                            Accepted
+                                                        </MenuItem>
+                                                        <MenuItem value="prepared">
+                                                            Out For Delivery
+                                                        </MenuItem>
+                                                        <MenuItem value="complete">Complete</MenuItem>
+                                                        <MenuItem value="cancelled">Cancelled</MenuItem>
+                                                        <MenuItem value="failed">Failed</MenuItem>
+                                                        <MenuItem value="pending">Pending</MenuItem>
+                                                    </Select>
+                                                </FormControl> :
+                                                <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
+                                                    <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Enter Status</InputLabel>
+                                                    <Select
+                                                        labelId="demo-simple-select-required-label"
+                                                        id="demo-simple-select-disabled"
+                                                        value={status}
+                                                        onChange={(event) => {
+                                                            setStatus(event.target.value);
+                                                        }}
+                                                        label="Enter Status"
+                                                    >
+                                                        <MenuItem value="left from seller warehouse">
+                                                            Left from Warehouse
+                                                        </MenuItem>
+                                                        <MenuItem value="Order Received">Order Received</MenuItem>
+                                                        <MenuItem value="cancelled">Cancelled</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            }
+                                        </TableCell>
+                                    </TableRow>
+                                    {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
+                                        <>
+                                            <TableRow>
+                                                <TableCell>
+                                                    <FormLabel style={{ color: 'wheat' }}>[{userData.id}] : {userData.name} </FormLabel>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType.method} [{paymentType.type !== "" && paymentType.type}] </FormLabel>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
+                                                        Associate
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell colSpan={4}>
+                                                    <FormLabel style={{ color: 'wheat' }}> Address : {userAddress.formattedAddress} </FormLabel>
+                                                </TableCell>
+                                                <TableCell colSpan={2}>
+                                                    <FormLabel style={{ color: 'wheat' }}> Delivery Fee : {order.deliveryFee} </FormLabel>
+                                                </TableCell>
+                                            </TableRow>
+                                        </>
                                     }
-                                </TableCell>
-                            </TableRow>
-                            {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
-                                <>
-                                    <TableRow>
-                                        <TableCell>
-                                            <FormLabel style={{ color: 'wheat' }}>[{userData.id}] : {userData.name} </FormLabel>
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormLabel style={{ color: 'wheat' }}> Mobile : {userData.mobileNumber} </FormLabel>
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType.method} [{paymentType.type !== "" && paymentType.type}] </FormLabel>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
-                                                Associate
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell colSpan={4}>
-                                            <FormLabel style={{ color: 'wheat' }}> Address : {userAddress.formattedAddress} </FormLabel>
-                                        </TableCell>
-                                        <TableCell colSpan={2}>
-                                            <FormLabel style={{ color: 'wheat' }}> Delivery Fee : {order.deliveryFee} </FormLabel>
-                                        </TableCell>
-                                    </TableRow>
-                                </>
-                            }
-                        </TableHead>
-                    </Table>
-                </Container>
-                :
-                <center>
-                    <CircularProgress />
-                </center>
-            }
-            <Divider />
-            <TableContainer component={Paper}>
-                <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Sl.No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Desc</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Qty</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Unit Cost</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Sale Price</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>UnDelivered Quantity</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Refund</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Return Quantity</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Return Refunds</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Discount(%)</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Discount Value</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Quality</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {orderProductList.length > 0 ? orderProductList.map((row, index) => (
-                            <Fragment>
-                                {editContactId === row.id ? (
-                                    <EditableRow row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
-                                    <ReadOnlyRow row={row} index={index} addFormData={addFormData} handleEditClick={handleEditClick} />}
-                            </Fragment>
-                        )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
-                        <TableRow>
+                                </TableHead>
+                            </Table>
+                        </Container>
+                        :
+                        <center>
+                            <CircularProgress />
+                        </center>
+                    }
+                    <Divider />
+                    <TableContainer component={Paper}>
+                        <Table className="table" aria-label="spanning table">
+                            <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
+                                <TableRow>
+                                    <TableCell style={{ color: 'wheat' }}>Sl.No</TableCell>
+                                    <TableCell style={{ color: 'wheat' }}>Desc</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Qty</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Unit Cost</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Sale Price</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>UnDelivered Quantity</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Refund</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Return Quantity</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Return Refunds</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Discount(%)</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Discount Value</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Quality</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {orderProductList.length > 0 ? orderProductList.map((row, index) => (
+                                    <Fragment>
+                                        {editContactId === row.id ? (
+                                            <EditableRow row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
+                                            <ReadOnlyRow row={row} index={index} addFormData={addFormData} handleEditClick={handleEditClick} />}
+                                    </Fragment>
+                                )) : <TableRow> <TableCell align="center" colSpan={4}>No Data Found</TableCell> </TableRow>}
+                                <TableRow>
 
-                            <TableCell align="left" colSpan={9}>
-                                <ul style={{ textDecoration: 'none' }}>
-                                    <li>Total Invoice: {totalData.total}</li>
-                                    <li>Undelivered Refund: {totalData.refundTotal}</li>
-                                    <li>Total Delivered amount: {totalData.deliveredTotal}</li>
-                                    <li>Post delivery refund : {totalData.returnRefundTotal}</li>
-                                    <li>Final Total : {finalTotal}</li>
-                                </ul>
+                                    <TableCell align="left" colSpan={9}>
+                                        <ul style={{ textDecoration: 'none' }}>
+                                            <li>Total Invoice: {totalData.total}</li>
+                                            <li>Undelivered Refund: {totalData.refundTotal}</li>
+                                            <li>Total Delivered amount: {totalData.deliveredTotal}</li>
+                                            <li>Post delivery refund : {totalData.returnRefundTotal}</li>
+                                            <li>Total Discounts : {totalData.discountTotal}</li>
+                                            <li>Final Total : {finalTotal}</li>
+                                        </ul>
+                                    </TableCell>
+
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                        <input onClick={(ev) => handleUpdate(ev, "first")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Deposit 1st Refunds" />
+                        <input onClick={(ev) => handleUpdate(ev, "second")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Deposit 2nd Refunds" />
+                    </Container>
+                    <Container>
+                        <TableRow>
+                            <TableCell colSpan={2}>
+                                <TextField multiline label="Add Comment" value={comment}
+                                    onChange={(ev) => setComment(ev.target.value)
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
                             </TableCell>
-
+                            <TableCell>
+                                <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
+                            </TableCell>
                         </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                <input onClick={(ev) => handleUpdate(ev, "first")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 1st Refunds" />
-                <input onClick={(ev) => handleUpdate(ev, "second")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 2nd Refunds" />
-            </Container>
-            <Container>
-                <TableRow>
-                    <TableCell colSpan={2}>
-                        <TextField multiline label="Add Comment" value={comment}
-                            onChange={(ev) => setComment(ev.target.value)
-                            }
-                            InputProps={{
-                                style: {
-                                    color: "white",
-                                }
-                            }}
-                            InputLabelProps={{
-                                style: { color: '#fff' },
-                            }}
+                    </Container>
+                    <Container>
+                        <OrderEditDialog
+                            open={open}
+                            onClose={handleClose}
+                            dialogData={dialogData}
+                            total={totalData}
+                            setisLoading={setisLoading}
                         />
-                    </TableCell>
-                    <TableCell>
-                        <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
-                    </TableCell>
-                </TableRow>
-            </Container>
-            <Container>
-                <OrderEditDialog
-                    open={open}
-                    onClose={handleClose}
-                    dialogData={dialogData}
-                    total={totalData}
-                    setisLoading={setisLoading}
-                />
-            </Container>
-            <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                <form onSubmit={(ev) => handleUpdate(ev)}>
-                    <div style={{ display: 'none' }}>
-                        <label>Name</label>
-                        <input type="text" name="name" value={userData.name} />
-                        <label>Email</label>
-                        <input type="email" name="email" value={userData.email} />
-                        <label>Subject</label>
-                        <input type="text" name="orderNo" value={props.location.id} />
-                        <label>Message</label>
-                        <textarea name="message" value={status} />
-                        <input disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update" />
-                    </div>
+                    </Container>
+                    <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                        <form onSubmit={(ev) => handleUpdate(ev)}>
+                            <div style={{ display: 'none' }}>
+                                <label>Name</label>
+                                <input type="text" name="name" value={userData.name} />
+                                <label>Email</label>
+                                <input type="email" name="email" value={userData.email} />
+                                <label>Subject</label>
+                                <input type="text" name="orderNo" value={props.location.id} />
+                                <label>Message</label>
+                                <textarea name="message" value={status} />
+                                <input disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update" />
+                            </div>
 
-                </form>
-            </Container >
-            {
-                Object.keys(order).length > 2 && !(isLoading) ?
-                    <div>
-                        <PDFDownloadLink document={<Invoice order={order} orderProductList={orderProductList}
-                            userData={userData} userId={userId} />} fileName={order.id}>
-                            {({ blob, url, loading, error }) => (loading ? 'Loading...' : <Button variant='contained' color="success">Generate Invoice</Button>)}
-                        </PDFDownloadLink>
-                    </div> : <b>""</b>
+                        </form>
+                    </Container >
+                    {
+                        Object.keys(order).length > 2 && !(isLoading) ?
+                            <div>
+                                <PDFDownloadLink document={<Invoice order={order} orderProductList={orderProductList}
+                                    userData={userData} userId={userId} />} fileName={order.id}>
+                                    {({ blob, url, loading, error }) => (loading ? 'Loading...' : <Button variant='contained' color="success">Generate Invoice</Button>)}
+                                </PDFDownloadLink>
+                            </div> : <b>""</b>
+                    }
+                </>
             }
-
         </div >
+
     )
+
 }
 
 export default OrderDetail
