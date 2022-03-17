@@ -25,6 +25,8 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.refund}</TableCell>
             <TableCell align="center">{row.returnQuantity}</TableCell>
             <TableCell align="center">{row.returnRefund}</TableCell>
+            <TableCell align="center">{row.discountPercentage}</TableCell>
+            <TableCell align="center">{row.discountValue}</TableCell>
             <TableCell align="center">{row.productQuality}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row, index)}>Edit</Button></TableCell>
         </TableRow>

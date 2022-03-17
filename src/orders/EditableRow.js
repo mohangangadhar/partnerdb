@@ -41,6 +41,20 @@ const EditableRow = ({
             <TableCell align="center">{row.returnRefund}</TableCell>
             <TableCell align="center"><input
                 type="text"
+                placeholder="Enter Returned Quantity"
+                name="discountPercentage"
+                value={addFormData.discountPercentage}
+                onChange={handleEditFormChange}
+            ></input></TableCell>
+            <TableCell align="center"><input
+                type="text"
+                placeholder="Enter Returned Quantity"
+                name="discountValue"
+                value={addFormData.discountValue}
+                onChange={handleEditFormChange}
+            ></input></TableCell>
+            <TableCell align="center"><input
+                type="text"
                 placeholder="Enter Product Quality"
                 name="productQuality"
                 value={addFormData.productQuality}

@@ -39,7 +39,8 @@ function OrderDetail(props) {
         total: 0,
         refundTotal: 0,
         deliveredTotal: 0,
-        returnRefundTotal: 0
+        returnRefundTotal: 0,
+
     });
     const [comment, setComment] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
@@ -55,7 +56,9 @@ function OrderDetail(props) {
     const [addFormData, setAddFormData] = useState({
         deliveredQuantity: 0,
         productQuality: "",
-        returnQuantity: 0
+        returnQuantity: 0,
+        discountPercentage: 0,
+        discountValue: 0
     });
     const [user] = useAuthState(auth);
     const history = useHistory();
@@ -109,7 +112,6 @@ function OrderDetail(props) {
                     ...prev,
                     type: data.payment.status
                 }));
-                console.log(data.payment.status);
             }).catch(err => console.log(err));
     }
     useEffect(async () => {
@@ -192,7 +194,9 @@ function OrderDetail(props) {
             "refund": row.refund,
             "productQuality": tempFormData.productQuality,
             "returnRefund": row.returnRefund,
-            "returnQuantity": row.returnQuantity == null ? 0 : row.returnQuantity
+            "returnQuantity": row.returnQuantity == null ? 0 : row.returnQuantity,
+            "discountPercentage": row.discountPercentage,
+            "discountValue": row.discountValue
         };
 
         const requestOptionsForUpdate = {
@@ -245,6 +249,8 @@ function OrderDetail(props) {
         xyz.returnQuantity = tempFormData.returnQuantity;
         xyz.returnRefund = row.vendorProduct.salePrice <= 0 || null ? tempFormData.returnQuantity * row.vendorProduct.product.price : tempFormData.returnQuantity * row.vendorProduct.salePrice;
         xyz.productQuality = tempFormData.productQuality == null ? "" : tempFormData.productQuality;
+        xyz.discountPercentage = tempFormData.discountPercentage == null ? 0 : tempFormData.discountPercentage;
+        xyz.discountValue = tempFormData.discountValue == null ? 0 : tempFormData.discountValue;
         for (let i = 0; i < orderProductList.length; i++) {
             if (row.id == orderProductList[i].id) {
                 ind = i;
@@ -255,7 +261,8 @@ function OrderDetail(props) {
             total: totalData.total,
             refundTotal: totalData.refundTotal + xyz.refund,
             deliveredTotal: totalData.total - totalData.deliveredTotal,
-            returnRefundTotal: totalData.returnRefundTotal + xyz.refundTotal
+            returnRefundTotal: totalData.returnRefundTotal + xyz.refundTotal,
+
         });
         orderProductList[ind] = xyz;
 
@@ -487,6 +494,8 @@ function OrderDetail(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Refund</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Return Quantity</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Return Refunds</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Discount(%)</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Discount Value</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Quality</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
@@ -516,8 +525,8 @@ function OrderDetail(props) {
                 </Table>
             </TableContainer>
             <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                <input onClick={(ev) => handleUpdate(ev, "first")} disabled={totalData.refundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 1st Refunds" />
-                <input onClick={(ev) => handleUpdate(ev, "second")} disabled={totalData.returnRefundTotal == 0 ? "" : "disabled"} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 2nd Refunds" />
+                <input onClick={(ev) => handleUpdate(ev, "first")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 1st Refunds" />
+                <input onClick={(ev) => handleUpdate(ev, "second")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Update 2nd Refunds" />
             </Container>
             <Container>
                 <TableRow>
