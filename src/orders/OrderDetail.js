@@ -278,7 +278,6 @@ function OrderDetail(props) {
         await fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + userData.mobileNumber)
             .then(res => res.json())
             .then((data) => {
-
                 let meta = {
                     type: "earnings",
                     source: "order",
@@ -319,11 +318,21 @@ function OrderDetail(props) {
     //Handle Update
     const handleUpdate = async (ev, typeOfRefund) => {
         ev.preventDefault();
+        let message = "";
+        if (typeOfRefund == "first") {
+            message = "Undelivered Items";
+        }
+        else if (typeOfRefund == "second") {
+            message = "Post Delivery";
+        }
+        else {
+            message = "Discount"
 
+        }
         let updateBody = {
             "id": props.location.id,
             "status": status,
-            "comments": typeOfRefund == "first" ? comment + " " + "Deposited 1st refunds" : comment + " " + "Deposited 2nd refunds",
+            "comments": comment + " | " + message + " refunds done ",
             "refundCount": refundCount + 1
         };
         const requestOptions = {
@@ -338,21 +347,20 @@ function OrderDetail(props) {
             .then(response => response.json())
             .then(data => {
                 let depositAmount = 0;
-                let message = "";
+
                 let value = 0;
                 if (typeOfRefund == "first") {
                     depositAmount = data.refundTotal;
-                    message = "Undelivered Items";
+
 
                 }
                 else if (typeOfRefund == "second") {
                     depositAmount = data.returnRefundTotal;
-                    message = "Post Delivery";
 
                 }
                 else {
                     depositAmount = data.discountTotal;
-                    message = "Discount"
+
 
                 }
                 uploadWalletBackend(depositAmount, message);
