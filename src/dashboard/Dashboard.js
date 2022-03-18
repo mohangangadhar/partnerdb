@@ -116,28 +116,28 @@ function DashBoard() {
         setOrderData(data.filter(data => data.vendorName == vendorName));
         setNewCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "REGULAR" && data.serviceId != 4),
-            express: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "EXPRESS" && data.serviceId != 4)
+            regular: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "REGULAR" && data.seasonal == 0),
+            express: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "EXPRESS" && data.seasonal == 0)
         }));
         setProcessingCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "REGULAR" && data.serviceId != 4),
-            express: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "EXPRESS" && data.serviceId != 4)
+            regular: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "REGULAR" && data.seasonal == 0),
+            express: statusChangeData.filter(data => data.deliveryStatus == "accepted" && data.express == "EXPRESS" && data.seasonal == 0)
         }));
         setPendingCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "REGULAR" && data.serviceId != 4),
-            express: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "EXPRESS" && data.serviceId != 4)
+            regular: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "REGULAR" && data.seasonal == 0),
+            express: statusChangeData.filter(data => data.deliveryStatus == "pending" && data.express == "EXPRESS" && data.seasonal == 0)
         }));
         setCompleteCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "REGULAR" && data.serviceId != 4),
-            express: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "EXPRESS" && data.serviceId != 4)
+            regular: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "REGULAR" && data.seasonal == 0),
+            express: statusChangeData.filter(data => data.deliveryStatus == "complete" && data.express == "EXPRESS" && data.seasonal == 0)
         }));
         setCancelCount((prev) => ({
             ...prev,
-            regular: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "REGULAR" && data.serviceId != 4),
-            express: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "EXPRESS" && data.serviceId != 4)
+            regular: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "REGULAR" && data.seasonal == 0),
+            express: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "EXPRESS" && data.seasonal == 0)
         }));
         setisLoading(false);
     }
@@ -149,7 +149,7 @@ function DashBoard() {
         for (let i = 0; i < data.length; i++) {
             if (data[i].deliveryStatus == "new") {
 
-                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
+                if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
 
                     setNewOrdersData((prevState) => ({
                         ...prevState,
@@ -158,7 +158,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
+                else if (data[i].express == "EXPRESS" && data[i].seasonal == 0) {
 
                     setNewOrdersData((prevState) => ({
                         ...prevState,
@@ -167,8 +167,8 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].serviceId == 4) {
-
+                else if (data[i].seasonal == 1) {
+                    console.log(data[i]);
                     setNewOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
@@ -179,7 +179,7 @@ function DashBoard() {
             }
             if (data[i].deliveryStatus == "accepted") {
 
-                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
+                if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
 
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
@@ -188,7 +188,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
+                else if (data[i].express == "EXPRESS" && data[i].seasonal == 0) {
 
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
@@ -197,7 +197,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].serviceId == 4) {
+                else if (data[i].seasonal == 1) {
 
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
@@ -210,7 +210,7 @@ function DashBoard() {
 
 
             if (data[i].deliveryStatus == "cancelled") {
-                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
+                if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
 
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
@@ -219,7 +219,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
+                else if (data[i].express == "EXPRESS" && data[i].seasonal == 0) {
 
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
@@ -228,7 +228,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].serviceId == 4) {
+                else if (data[i].seasonal == 1) {
 
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
@@ -240,7 +240,7 @@ function DashBoard() {
             }
 
             if (data[i].deliveryStatus == "pending") {
-                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
+                if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
                     console.log("reg");
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
@@ -249,7 +249,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
+                else if (data[i].express == "EXPRESS" && data[i].seasonal == 0) {
                     console.log("expr");
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
@@ -258,7 +258,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].serviceId == 4) {
+                else if (data[i].seasonal == 1) {
 
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
@@ -270,8 +270,8 @@ function DashBoard() {
             }
 
             if (data[i].deliveryStatus == "complete") {
-                if (data[i].express == "REGULAR" && data[i].serviceId != 4) {
-                    console.log("reg");
+                if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
+
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
@@ -279,8 +279,8 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].express == "EXPRESS" && data[i].serviceId != 4) {
-                    console.log("expr");
+                else if (data[i].express == "EXPRESS" && data[i].seasonal == 0) {
+
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
@@ -288,7 +288,7 @@ function DashBoard() {
                     }
                     ));
                 }
-                else if (data[i].serviceId == 4) {
+                else if (data[i].seasonal == 1) {
 
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
@@ -331,7 +331,7 @@ function DashBoard() {
                 }))
             }
         }
-        console.log(supportSummary);
+
         setisSupportSummaryLoading(false);
     }
     useEffect(async () => {
@@ -453,8 +453,6 @@ function DashBoard() {
 
                             <TableCell align="center" style={{ color: 'wheat' }}>In Progress</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Completed</TableCell>
-
-
                             <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
                         </TableRow>
                     </TableHead>
