@@ -248,7 +248,6 @@ function OrderDetail(props) {
         event.preventDefault();
         console.log(tempFormData);
         setAddFormData("");
-
         let xyz = row;
         xyz = { ...xyz };
         xyz.deliveredQuantity = tempFormData.deliveredQuantity;

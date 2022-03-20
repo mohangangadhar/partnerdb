@@ -100,7 +100,6 @@ function OrderEditDialog(props) {
         })
             .then(data => {
                 setisLoading(true);
-
                 handleClose();
                 getData();
                 NotificationManager.success('You changes have been updated!', 'Successful!', 1000);

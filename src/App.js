@@ -57,6 +57,7 @@ import ShareLocationIcon from '@mui/icons-material/ShareLocation';
 import PaymentReports from './PaymentReports/PaymentReports';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import SeasonalOrders from './orders/SeasonalOrders';
+import SupplyPlanning from './SupplyPlanning/SupplyPlanning';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -318,7 +319,19 @@ export default function MiniDrawer() {
                                     <Link to={{
                                         pathname: '/app/paymentreports',
                                         id: "6"
-                                    }}><ListItemText primary="Service Zones" /></Link>
+                                    }}><ListItemText primary="Payment Reports" /></Link>
+                                </ListItem>
+                                <ListItem button key="Supply Planning">
+                                    <ListItemIcon>
+                                        <Link to={{
+                                            pathname: '/app/supplyplanning',
+                                            id: "9"
+                                        }}><PaymentsIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Supply Planning</h6></Link>
+                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/supplyplanning',
+                                        id: "9"
+                                    }}><ListItemText primary="Supply Planning" /></Link>
                                 </ListItem>
                                 <ListItem button key="Support">
                                     <ListItemIcon>
@@ -349,6 +362,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
                                     <Route path="/app/paymentreports" exact component={PaymentReports} />
+                                    <Route path="/app/supplyplanning" exact component={SupplyPlanning} />
                                     <Route path="/app/dummy" exact component={dummy} />
                                     <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />
