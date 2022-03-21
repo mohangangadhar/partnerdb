@@ -6,6 +6,9 @@ const TableTitles = () => {
     return (
         <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
             <TableRow>
+                <TableCell style={{ color: 'wheat' }}>
+                    Add
+                </TableCell>
                 <TableCell style={{ color: 'wheat' }}>id</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Article</TableCell>
@@ -19,6 +22,7 @@ const TableTitles = () => {
                 <TableCell align="left" style={{ color: 'wheat' }}>Primary Supplier</TableCell>
                 <TableCell align="left" style={{ color: 'wheat' }}>Ordered Quantity</TableCell>
                 <TableCell align="left" style={{ color: 'wheat' }}>Ordered Uom</TableCell>
+                <TableCell align="left" style={{ color: 'wheat' }}>Actions</TableCell>
             </TableRow>
         </TableHead>
     );

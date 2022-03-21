@@ -6,7 +6,9 @@ import Button from '@mui/material/Button';
 const ReadOnlyRow = ({
     row,
     index,
-    handleEditClick,
+    addFormData,
+    handleEditFormChange,
+    handleFormSubmit,
     addRow
 }) => {
 
@@ -34,13 +36,28 @@ const ReadOnlyRow = ({
                 {row.skuQuantity * row.skuCount}</TableCell>
             <TableCell align="center">
                 {Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100}</TableCell>
-            <TableCell align="center">
-                {row.primarySupplier}</TableCell>
-            <TableCell align="center">
-                {row.orderedQuantity}</TableCell>
-            <TableCell align="center">
-                {row.orderedUom}</TableCell>
-            <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row, index)}>Edit</Button></TableCell>
+            <TableCell align="center"><input
+                type="text"
+                placeholder="Enter Primary Supplier"
+                name="primarySupplier"
+                value={addFormData.primarySupplier}
+                onChange={(event) => handleEditFormChange(event, index)}
+            ></input></TableCell>
+            <TableCell align="center"><input
+                type="text"
+                placeholder="Enter orderedQuantity"
+                name="orderedQuantity"
+                value={addFormData.orderedQuantity}
+                onChange={(event) => handleEditFormChange(event, index)}
+            ></input></TableCell>
+            <TableCell align="center"><input
+                type="text"
+                placeholder="Enter orderedUom"
+                name="orderedUom"
+                value={addFormData.orderedUom}
+                onChange={(event) => handleEditFormChange(event, index)}
+            ></input></TableCell>
+            <TableCell align="center"><Button variant="contained" on color="success" onClick={(event) => handleFormSubmit(event, row, addFormData, index)}>Save</Button></TableCell>
         </TableRow>
     );
 };
