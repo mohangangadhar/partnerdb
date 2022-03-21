@@ -24,7 +24,7 @@ const WalletInfo = ({ data, searchOrder }) => {
             source_title: "",
         }
     });
-
+    const [toggle, setToggle] = useState(false);
 
     const handleChangeWallet = (event) => {
         const value = event.target.value;
@@ -80,7 +80,7 @@ const WalletInfo = ({ data, searchOrder }) => {
             .then(data => {
                 console.log('Success:', data.json());
                 NotificationManager.success('You changes have been updated!', 'Successful!', 1000);
-                searchOrder();
+                setToggle(!toggle);
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -191,7 +191,7 @@ const WalletInfo = ({ data, searchOrder }) => {
             <Typography component="h2" variant="h6" style={{ color: 'indianred', }} align={"center"} gutterBottom>
                 Transactions
             </Typography>
-            {data.id && <WalletTransactions walletid={data.id} />}
+            {data.id && <WalletTransactions toggle={toggle} walletid={data.id} />}
         </div>
     )
 }

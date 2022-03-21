@@ -71,7 +71,7 @@ const OrderList = (props) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "pageNumber": pageval,
-                "pageSize": 5,
+                "pageSize": 30,
                 "sortDirection": "asc",
                 "sortByKey": "id",
                 "startDate": startDate,

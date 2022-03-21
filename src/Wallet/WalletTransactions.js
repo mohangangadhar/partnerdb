@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { TableContainer, Table, TableCell, TableHead, TableBody, TableRow } from '@material-ui/core'
-function WalletTransactions({ walletid }) {
+function WalletTransactions({ walletid, toggle }) {
     const [wallet, setWallet] = useState([]);
     const fetchData = async () => {
         await fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${walletid}/transaction`).
@@ -9,7 +9,7 @@ function WalletTransactions({ walletid }) {
     };
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [toggle]);
 
     const detail = (val) => {
         let jsonVal = JSON.parse(val)

@@ -7,9 +7,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 const LoadUserIdData = ({ errFound, userSearchData, isLoading }) => {
     return (
-        <TableBody>
+        <>
             {userSearchData.id !== null && !(isLoading) ?
-                <TableHead>
+                <TableBody>
 
                     <TableRow key={userSearchData.id}>
                         <TableCell>
@@ -25,13 +25,13 @@ const LoadUserIdData = ({ errFound, userSearchData, isLoading }) => {
                     </TableRow>
 
 
-                </TableHead>
+                </TableBody>
                 :
                 <center>
                     {errFound ? <h1 style={{ color: 'black' }}>User Not Found</h1> : <CircularProgress />}
                 </center>
             }
-        </TableBody>
+        </>
     );
 }
 

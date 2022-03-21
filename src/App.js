@@ -199,147 +199,147 @@ export default function MiniDrawer() {
                                     }}><ListItemText primary="DashBoard" /></Link>
                                 </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="User">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: '/app/user',
-                                            id: "3"
-                                        }}><PeopleIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Users</h6></Link>
 
-                                    </ListItemIcon>
+                                    <Link to={{
+                                        pathname: '/app/user',
+                                        id: "3"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Users</h6></Link>
+
+
                                     <Link to={{
                                         pathname: '/app/user',
                                         id: "3"
                                     }}><ListItemText primary="Users" /></Link>
                                 </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="Product">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: `/app/${id}/product`,
-                                            id: "1"
-                                        }}><LunchDining />
-                                            <h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Products</h6></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: `/app/${id}/product`,
+                                        id: "1"
+                                    }}>
+                                        <h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Products</h6></Link>
+
                                     <Link to={{
                                         pathname: `/app/${id}/product`,
                                         id: "1"
                                     }}><ListItemText primary="Product" /></Link>
                                 </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="ExpressProduct">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: `/app/${id}/expressproduct`,
-                                            id: "8"
-                                        }}><LunchDining />
-                                            <h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: `/app/${id}/expressproduct`,
+                                        id: "8"
+                                    }}>
+                                        <h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Express</h6></Link>
+
                                     <Link to={{
                                         pathname: `/app/${id}/expressproduct`,
                                         id: "8"
                                     }}><ListItemText primary="Express" /></Link>
                                 </ListItem>
                                 <ListItem button key="Orders">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: `/app/order`,
-                                            id: "2"
-                                        }}><ShoppingCart />
-                                            <div >
-                                                <h6 style={orderStyle}>Regular</h6>
-                                                <h6 style={orderStyle}>Orders</h6>
-                                            </div></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: `/app/order`,
+                                        id: "2"
+                                    }}>
+                                        <div >
+                                            <h6 style={orderStyle}>Regular</h6>
+                                            <h6 style={orderStyle}>Orders</h6>
+                                        </div></Link>
+
                                     <Link to={{
                                         pathname: `/app/order`,
                                         id: "2"
                                     }}><ListItemText primary="Orders" /></Link>
                                 </ListItem>
                                 <ListItem button key="Orders">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: `/app/order/express`,
-                                            id: "5"
-                                        }}><ShoppingCart />
-                                            <div >
-                                                <h6 style={orderStyle}>Express</h6>
-                                                <h6 style={orderStyle}>Orders</h6>
-                                            </div></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: `/app/order/express`,
+                                        id: "5"
+                                    }}>
+                                        <div >
+                                            <h6 style={orderStyle}>Express</h6>
+                                            <h6 style={orderStyle}>Orders</h6>
+                                        </div></Link>
+
                                     <Link to={{
                                         pathname: `/app/order/express`,
                                         id: "5"
                                     }}><ListItemText primary="Orders" /></Link>
                                 </ListItem>
                                 <ListItem button key="Seasonal Orders">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: `/app/order/seasonal`,
-                                            id: "8"
-                                        }}><ShoppingCart />
-                                            <div >
-                                                <h6 style={orderStyle}>Seasonal</h6>
-                                                <h6 style={orderStyle}>Orders</h6>
-                                            </div></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: `/app/order/seasonal`,
+                                        id: "8"
+                                    }}>
+                                        <div >
+                                            <h6 style={orderStyle}>Seasonal</h6>
+                                            <h6 style={orderStyle}>Orders</h6>
+                                        </div></Link>
+
                                     <Link to={{
                                         pathname: `/app/order/seasonal`,
                                         id: "8"
                                     }}><ListItemText primary="Seasonal Orders" /></Link>
                                 </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="Wallet">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: '/app/wallet',
-                                            id: "3"
-                                        }}><AccountBalanceWalletIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Wallet</h6></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: '/app/wallet',
+                                        id: "3"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Wallet</h6></Link>
+
                                     <Link to={{
                                         pathname: '/app/wallet',
                                         id: "3"
                                     }}><ListItemText primary="Wallet" /></Link>
                                 </ListItem>
                                 <ListItem button key="ServiceZones">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: '/app/servicezones',
-                                            id: "4"
-                                        }}><ShareLocationIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Service Zones</h6></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: '/app/servicezones',
+                                        id: "4"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Service Zones</h6></Link>
+
                                     <Link to={{
                                         pathname: '/app/servicezones',
                                         id: "4"
                                     }}><ListItemText primary="Service Zones" /></Link>
                                 </ListItem>
                                 <ListItem button key="PaymentReports">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: '/app/paymentreports',
-                                            id: "6"
-                                        }}><PaymentsIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Payment Reports</h6></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: '/app/paymentreports',
+                                        id: "6"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Payment Reports</h6></Link>
+
                                     <Link to={{
                                         pathname: '/app/paymentreports',
                                         id: "6"
                                     }}><ListItemText primary="Payment Reports" /></Link>
                                 </ListItem>
                                 <ListItem button key="Supply Planning">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: '/app/supplyplanning',
-                                            id: "9"
-                                        }}><PaymentsIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Supply Planning</h6></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: '/app/supplyplanning',
+                                        id: "9"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Supply Planning</h6></Link>
+
                                     <Link to={{
                                         pathname: '/app/supplyplanning',
                                         id: "9"
                                     }}><ListItemText primary="Supply Planning" /></Link>
                                 </ListItem>
                                 <ListItem button key="Support">
-                                    <ListItemIcon>
-                                        <Link to={{
-                                            pathname: '/app/support',
-                                            id: "5"
-                                        }}><HelpIcon /><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Support</h6></Link>
-                                    </ListItemIcon>
+
+                                    <Link to={{
+                                        pathname: '/app/support',
+                                        id: "5"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Support</h6></Link>
+
                                     <Link to={{
                                         pathname: '/app/support',
                                         id: "5"
