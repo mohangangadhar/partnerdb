@@ -24,6 +24,7 @@ function OrderEditDialog(props) {
     const [isSelected, setIsSelected] = useState(false);
     const [comment, setComment] = useState("");
     const [mobile, setMobile] = useState("");
+    const [active, setActive] = useState(false);
     const handleClose = () => {
         onClose();
     };
@@ -34,12 +35,13 @@ function OrderEditDialog(props) {
         setisLoading(false);
         setUpdating(false);
         setLoadingAddress(false);
-    })
+    }, [])
     const requestOptions = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     };
     const handleUserChange = async (editeduserid) => {
+        console.log(editeduserid);
         setUpdating(false);
         setUserId(editeduserid);
         setIsSelected(false);
@@ -66,14 +68,14 @@ function OrderEditDialog(props) {
         setAddresId(id);
     }
     const submitWallet = async () => {
-        console.log(mobile);
+
         let walletid = 0;
         await fetch(APIURL + '/wallet/' + mobile)
             .then(res => res.json())
             .then((data) => {
                 walletid = data.id;
             });
-        console.log(walletid);
+
         var meta = {
             type: "earnings",
             source: "order",
@@ -83,6 +85,7 @@ function OrderEditDialog(props) {
             source_payment_type: "Online",
             source_title: "",
         };
+        console.log(meta);
         var source = {
             walletId: walletid,
             amount: total.toString(),
@@ -101,12 +104,14 @@ function OrderEditDialog(props) {
         })
             .then(data => {
                 setisLoading(true);
+                setUpdating(false);
                 handleClose();
                 getData();
                 NotificationManager.success('You changes have been updated!', 'Successful!', 1000);
             })
             .catch((error) => {
                 console.error('Error:', error);
+                setUpdating(false);
                 NotificationManager.error('Error occurred while making your changes, contact support!', 'Error!');
             });
     }
@@ -127,12 +132,15 @@ function OrderEditDialog(props) {
         await fetch(APIURL + `order-m/${addressId}`, requestOptionsForPut).
             then(response => response.json()).then(data => {
                 submitWallet();
-            }).catch(err => console.log(err));
+            }).catch(err => {
+                console.log(err);
+                setUpdating(false);
+            });
     }
     return (
         <Dialog open={open}
             maxWidth>
-            <DialogTitle>{!updating ? "Update The Order" : <h3 style={{ backgroundColor: 'red', color: 'white' }}>Updating</h3>}
+            <DialogTitle>{!updating ? "Update The Order" : <h3 style={{ color: 'red' }}>Updating...</h3>}
                 {onClose ? (
                     <IconButton
                         aria-label="close"
@@ -194,7 +202,7 @@ function OrderEditDialog(props) {
                     onChange={(ev) => setComment(ev.target.value)}
                     variant="filled" color="success" margin="normal" />
             </Box>
-            <Button variant='contained' color="primary" onClick={handleSubmit} >Submit</Button>
+            <Button disabled={updating ? true : false} variant='contained' color="primary" onClick={(ev) => handleSubmit(ev)} >Submit</Button>
         </Dialog>
     );
 }
