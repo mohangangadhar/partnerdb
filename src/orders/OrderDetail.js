@@ -580,7 +580,7 @@ function OrderDetail(props) {
                             getData={getData}
                             onClose={handleClose}
                             dialogData={dialogData}
-                            total={totalData}
+                            total={totalData.total}
                             setisLoading={setisLoading}
                         />
                     </Container>

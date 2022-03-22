@@ -9,9 +9,14 @@ const ReadOnlyRow = ({
     addFormData,
     handleEditFormChange,
     handleFormSubmit,
-    addRow
+    addRow,
+    suppliers
 }) => {
-
+    const styleOptions = {
+        padding: 10,
+        marginBottom: 5,
+        fontSize: 15
+    };
     return (
         <TableRow key={index}>
             <TableCell align="center">
@@ -36,13 +41,18 @@ const ReadOnlyRow = ({
                 {row.skuQuantity * row.skuCount}</TableCell>
             <TableCell align="center">
                 {Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100}</TableCell>
-            <TableCell align="center"><input
-                type="text"
-                placeholder="Enter Primary Supplier"
-                name="primarySupplier"
-                value={addFormData.primarySupplier}
-                onChange={(event) => handleEditFormChange(event, index)}
-            ></input></TableCell>
+            <TableCell align="center">
+                <select style={{
+                    padding: 5,
+                }} name="primarySupplier" value={addFormData.primarySupplier} onChange={(event) => handleEditFormChange(event, index)}>
+                    {!addFormData.primarySupplier !== null && <option style={styleOptions} value="">Primary Supplier:</option>}
+                    <>
+                        {suppliers.map((data, index) => (
+                            <option style={styleOptions} value={data.shortCode}>{data.description}</option>
+                        ))}
+                    </>
+                </select>
+            </TableCell>
             <TableCell align="center"><input
                 type="text"
                 placeholder="Enter orderedQuantity"

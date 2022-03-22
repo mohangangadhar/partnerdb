@@ -130,7 +130,7 @@ const Support = () => {
         <TableContainer component={Paper}>
             <Table className="table" aria-label="spanning table">
                 <TableHead style={{ backgroundColor: 'indianred' }}>
-                    <TableRow className="tableRow">
+                    <TableRow >
                         <TableCell >Id</TableCell>
                         <TableCell >Name</TableCell>
                         <TableCell >Mobile Number</TableCell>

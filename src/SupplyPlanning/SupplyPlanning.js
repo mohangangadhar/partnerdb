@@ -28,6 +28,7 @@ const SupplyPlanning = () => {
     const [editContactId, setEditContactId] = useState(-1);
     const [isApiLoading, setisApiLoading] = useState(false);
     const [rowAdd, setRowAdd] = useState(false);
+    const [suppliers, setSuppliers] = useState([]);
     const [addFormData, setAddFormData] = useState({
         primarySupplier: "",
         orderedQuantity: 0,
@@ -68,9 +69,17 @@ const SupplyPlanning = () => {
                 setisLoading(false);
             }).catch(err => setisLoading(false));
     }
+    const getPrimarySuppliers = async () => {
+        await fetch(APIURL + "primary-supplier", GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setSuppliers(data);
+            })
 
+    }
     useEffect(() => {
         receivedData();
+        getPrimarySuppliers();
     }, []);
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -169,7 +178,7 @@ const SupplyPlanning = () => {
                             {rows.map((row, index) => (
                                 <>
                                     {editContactId === index ? (
-                                        <EditableRow addRow={addRow} row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
+                                        <EditableRow suppliers={suppliers} addRow={addRow} row={row} index={index} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />) :
                                         <ReadOnlyRow addRow={addRow} row={row} index={index} addFormData={addFormData} handleEditClick={handleEditClick} />
                                     }
                                 </>

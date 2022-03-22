@@ -44,6 +44,8 @@
     transform: rotate(360deg);
   }
 }
-.tableRow {
-  color: "white";
+.MuiTableCell-head {
+  color: blue;
+  font-weight: 500;
+  line-height: 1.5rem;
 }

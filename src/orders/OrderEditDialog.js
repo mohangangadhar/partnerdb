@@ -56,6 +56,7 @@ function OrderEditDialog(props) {
         await fetch(APIURL + `user/${editeduserid}`).
             then(response => response.json()).then(data => {
                 setMobile(data.mobileNumber);
+                console.log(data.mobileNumber)
             });
     }
 
@@ -65,7 +66,7 @@ function OrderEditDialog(props) {
         setAddresId(id);
     }
     const submitWallet = async () => {
-
+        console.log(mobile);
         let walletid = 0;
         await fetch(APIURL + '/wallet/' + mobile)
             .then(res => res.json())

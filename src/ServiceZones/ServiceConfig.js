@@ -140,7 +140,8 @@ const ServiceConfig = () => {
 
     const handleSubmit = async (ev) => {
         ev.preventDefault();
-        if (formData.fulfillmentId == "" || formData.serviceId == "" || formData.pincode == "" || formData.status == "") {
+
+        if (formData.fulfillmentId == "" || formData.serviceId == "" || formData.pincode == "") {
             alert("Please add all field");
         }
         else {
