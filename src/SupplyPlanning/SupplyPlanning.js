@@ -17,6 +17,7 @@ import { APIURL, GetRequestOptions } from '../constants/Constants';
 import TableTitles from './Components/TableTitles';
 import ReadOnlyRow from './Components/ReadOnlyRow';
 import EditableRow from './Components/EditableRow';
+import MultipleSelect from './Components/MutlipleSelect';
 
 const SupplyPlanning = () => {
     const [rows, setRows] = useState([]);
@@ -29,6 +30,7 @@ const SupplyPlanning = () => {
     const [isApiLoading, setisApiLoading] = useState(false);
     const [rowAdd, setRowAdd] = useState(false);
     const [suppliers, setSuppliers] = useState([]);
+    const [personName, setPersonName] = React.useState([]);
     const [addFormData, setAddFormData] = useState({
         primarySupplier: "",
         orderedQuantity: 0,
@@ -125,12 +127,22 @@ const SupplyPlanning = () => {
     const finalSave = async () => {
         let finalList = [];
         let poId = uuidv4();
+
+        for (let i = 0; i < personName.length; i++) {
+            finalList.push(rows.filter(row => row.primarySupplier === personName[i]));
+        };
+
+        let checkList = finalList[0];
+        for (let i = 0; i < finalList.length - 1; i++) {
+            checkList = checkList.concat(finalList[i + 1]);
+        }
+        finalList = [];
         var currentdate = new Date();
         var datetime =
             currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate()
             + " " + currentdate.getHours() + ":"
             + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-        rows.map((row) =>
+        checkList.map((row) =>
 
             finalList.push({
                 "skuUom": row.skuUom,
@@ -147,7 +159,7 @@ const SupplyPlanning = () => {
                 "createdAt": datetime
             })
         );
-
+        console.log(finalList);
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -168,7 +180,8 @@ const SupplyPlanning = () => {
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h2 style={{ marginTop: -9, marginBottom: 0, fontStyle: 'italic', color: 'white' }}>Supply Planning</h2>
-                <Button variant="contained" color="success" onClick={finalSave}>Save</Button>
+                {suppliers.length > 1 && <MultipleSelect suppliers={suppliers} personName={personName} setPersonName={setPersonName} />}
+                <Button style={{ maxHeight: '50px', minWidth: '100px' }} variant="contained" color="success" onClick={finalSave}>Save</Button>
             </div>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
