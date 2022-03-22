@@ -44,3 +44,6 @@
     transform: rotate(360deg);
   }
 }
+.tableRow {
+  color: "white";
+}

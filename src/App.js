@@ -350,7 +350,7 @@ export default function MiniDrawer() {
                     </Drawer>
                     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                         <DrawerHeader />
-                        <Container maxWidth="md">
+                        <Container sx={{ maxWidth: '100%' }} maxWidth={false}>
                             <HashRouter>
                                 <Switch>
                                     <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />

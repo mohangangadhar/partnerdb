@@ -19,7 +19,7 @@ const EditableRow = ({
             <TableCell >{row.userId}:{row.name}</TableCell>
             <TableCell align="center" >{row.mobileNumber}</TableCell>
             <TableCell align="center" >{row.email}</TableCell>
-            <TableCell align="center">{row.message}</TableCell>
+            <TableCell align="center" rowSpan={2}>{row.message}</TableCell>
             <TableCell align="center">{row.createdAt}</TableCell>
 
             <TableCell align="center">
