@@ -19,6 +19,7 @@ const EditableRow = ({
             <TableCell >{row.skuUom}</TableCell>
             <TableCell align="center" >{row.staginArea}</TableCell>
             <TableCell align="center" >{row.skuCount}</TableCell>
+            <TableCell align="center" >{row.productName}</TableCell>
             <TableCell align="center">{row.orderIdCount}</TableCell>
             <TableCell align="center">{row.totalQtyReq}</TableCell>
             <TableCell align="center">{row.primarySupplier}</TableCell>
@@ -30,6 +31,9 @@ const EditableRow = ({
             </TableCell>
             <TableCell align="center">
                 <textarea placeholder="Wastage Quantity" name="wastageQty" value={addFormData.wastageQty} cols="20" onChange={handleEditFormChange}></textarea>
+            </TableCell>
+            <TableCell align="center">
+                <textarea placeholder="Missed Quantity" name="missedQty" value={addFormData.missedQty} cols="20" onChange={handleEditFormChange}></textarea>
             </TableCell>
             <TableCell align="center">
                 <textarea placeholder="Quality Rating" name="qualityRating" value={addFormData.qualityRating} cols="20" onChange={handleEditFormChange}></textarea>

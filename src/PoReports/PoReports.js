@@ -38,7 +38,7 @@ function PoReports(props) {
         receivedQty: 0.0,
         wastageQty: 0.0,
         qualityRating: 0,
-
+        missedQty: 0.0,
     });
     const [toggle, setToggle] = useState(true);
     const [podata, setPoData] = useState({});
@@ -90,7 +90,7 @@ function PoReports(props) {
             receivedQty: row.receivedQty,
             wastageQty: row.wastageQty,
             qualityRating: row.qualityRating,
-
+            missedQty: row.missedQty
         });
         setEditContactId(row.id);
     }
@@ -105,7 +105,8 @@ function PoReports(props) {
             receivedQty: tempFormData.receivedQty,
             wastageQty: tempFormData.wastageQty,
             qualityRating: tempFormData.qualityRating,
-            updatedAt: datetime
+            updatedAt: datetime,
+            missedQty: tempFormData.missedQty
         };
 
         setisApiLoading(true);
@@ -120,6 +121,7 @@ function PoReports(props) {
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);
+                console.log(data);
             }
             ).catch((err) => alert('something wrong' + err));
     }
@@ -135,7 +137,7 @@ function PoReports(props) {
         xyz.receivedQty = tempFormData.receivedQty;
         xyz.wastageQty = tempFormData.wastageQty;
         xyz.qualityRating = tempFormData.qualityRating;
-
+        xyz.missedQty = tempFormData.missedQty;
         for (let i = 0; i < rows.length; i++) {
             if (row.id == rows[i].id) {
                 ind = i;
@@ -146,8 +148,9 @@ function PoReports(props) {
         setEditContactId(null);
         uploadBackEnd(row, tempFormData);
     }
-    const handleChangeSupplier = async (name) => {
-        setRows([]);
+    const handleChangeSupplier = async (event, name) => {
+        event.preventDefault();
+        console.log(name);
         if (name == "all") {
             receivedData(offSet);
             return;
@@ -156,6 +159,7 @@ function PoReports(props) {
         await fetch(APIURL + `suppy-planning-snapshot/primary-supplier/${name}`).
             then(response => response.json()).
             then(data => {
+                setRows("");
                 setRows(data);
                 setisLoading(false);
             }).then(err => setErrFound(true));
@@ -205,7 +209,7 @@ function PoReports(props) {
 
             <Box m={1} />
             {toggle ?
-                <button onClick={() => setToggle(false)}>Add</button> :
+                <Button variant="contained" onClick={() => setToggle(false)}>Add</Button> :
 
                 <AddPoData setToggle={setToggle} suppliers={suppliers} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
             }
@@ -217,6 +221,7 @@ function PoReports(props) {
                             <TableCell style={{ color: 'wheat' }}>skuUom</TableCell>
                             <TableCell align="left" style={{ color: 'wheat' }}>staginArea</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>skuCount</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Product Name</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>orderIdCount</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>totalQtyReq</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>primarySupplier</TableCell>
@@ -225,13 +230,14 @@ function PoReports(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>orderedUom</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>receivedQty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>wastageQty</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Missed Quantity</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>qualityRating</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>createdAt</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
 
-                    {rows.length >= 0 && !(isLoading) ?
+                    {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (
                                 <Fragment>
@@ -249,7 +255,7 @@ function PoReports(props) {
                         :
                         <div>
                             <center>
-                                {errFound ? <h1 style={{ color: 'black' }}>User Not Found</h1> : <CircularProgress />}
+                                {errFound ? <h1 style={{ color: 'black' }}>NO DATA</h1> : <CircularProgress />}
                             </center>
                         </div>
 

@@ -37,7 +37,8 @@ const ReadOnlyRow = ({
             <TableCell align="center">
                 {row.primarySupplier}</TableCell>
             <TableCell align="center">
-                {row.orderedQuantity}</TableCell>
+                {row.orderedQuantity == 0 ? Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100
+                    : row.orderedQuantity}</TableCell>
             <TableCell align="center">
                 {row.orderedUom}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row, index)}>Edit</Button></TableCell>

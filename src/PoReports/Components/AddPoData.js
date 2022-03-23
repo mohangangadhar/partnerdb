@@ -256,6 +256,63 @@ const AddPoData = ({
                         variant='outlined'
                     />
                 </TableCell>
+                <TableCell align="center">
+                    <TextField
+                        id="missedQty"
+                        label="missedQty"
+
+                        name="missedQty"
+                        value={poData.missedQty}
+                        onChange={handlePoDataChange}
+                        InputProps={{
+                            style: {
+                                color: "white",
+                            }
+                        }}
+                        InputLabelProps={{
+                            style: { color: '#fff' },
+                        }}
+                        variant='outlined'
+                    />
+                </TableCell>
+                <TableCell align="center">
+                    <TextField
+                        id="productName"
+                        label="productName"
+
+                        name="productName"
+                        value={poData.productName}
+                        onChange={handlePoDataChange}
+                        InputProps={{
+                            style: {
+                                color: "white",
+                            }
+                        }}
+                        InputLabelProps={{
+                            style: { color: '#fff' },
+                        }}
+                        variant='outlined'
+                    />
+                </TableCell>
+                <TableCell align="center">
+                    <TextField
+                        id="vendorName"
+                        label="vendorName"
+
+                        name="vendorName"
+                        value={poData.vendorName}
+                        onChange={handlePoDataChange}
+                        InputProps={{
+                            style: {
+                                color: "white",
+                            }
+                        }}
+                        InputLabelProps={{
+                            style: { color: '#fff' },
+                        }}
+                        variant='outlined'
+                    />
+                </TableCell>
             </TableRow>
             <TableRow>
                 <div>

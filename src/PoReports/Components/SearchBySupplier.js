@@ -10,7 +10,7 @@ const SearchBySupplier = ({ suppliers, handleChangeSupplier }) => {
         <div>
             <select style={{
                 padding: 5,
-            }} name="primarySupplier" onChange={(event) => handleChangeSupplier(event.target.value)}>
+            }} name="primarySupplier" onChange={(event) => handleChangeSupplier(event, event.target.value)}>
                 <option value="" disabled selected>Select Primary Supplier</option>
                 <option value="all">ALL</option>
                 <>

@@ -18,6 +18,7 @@ import TableTitles from './Components/TableTitles';
 import ReadOnlyRow from './Components/ReadOnlyRow';
 import EditableRow from './Components/EditableRow';
 import MultipleSelect from './Components/MutlipleSelect';
+import GetDate from '../components/GetDate';
 
 const SupplyPlanning = () => {
     const [rows, setRows] = useState([]);
@@ -126,6 +127,10 @@ const SupplyPlanning = () => {
         setRows(data);
     }
     const finalSave = async () => {
+        if (personName.length == 0) {
+            alert("Select Suppliers To Save");
+            return;
+        }
         let finalList = [];
         let poId = uuidv4();
 
@@ -138,11 +143,7 @@ const SupplyPlanning = () => {
             checkList = checkList.concat(finalList[i + 1]);
         }
         finalList = [];
-        var currentdate = new Date();
-        var datetime =
-            currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate()
-            + " " + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+        const tempSuggestedQty = (row) => Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100;
         checkList.map((row) =>
 
             finalList.push({
@@ -151,13 +152,13 @@ const SupplyPlanning = () => {
                 "skuCount": row.skuCount,
                 "orderIdCount": row.orderId,
                 "totalQtyReq": row.skuQuantity * row.skuCount,
-                "suggestedQty": Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100,
+                "suggestedQty": tempSuggestedQty(row),
                 "primarySupplier": row.primarySupplier,
-                "orderedQty": row.orderedQuantity,
+                "orderedQty": row.orderedQuantity == 0 ? tempSuggestedQty(row) : row.orderedQuantity,
                 "orderedUom": row.orderedUom,
                 "poNumber": "Po-v" + poId,
                 "poId": poId,
-                "createdAt": datetime
+                "createdAt": GetDate()
             })
         );
         console.log(finalList);

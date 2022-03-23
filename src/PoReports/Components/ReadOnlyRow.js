@@ -13,6 +13,7 @@ const ReadOnlyRow = ({
             <TableCell >{row.skuUom}</TableCell>
             <TableCell align="center" >{row.staginArea}</TableCell>
             <TableCell align="center" >{row.skuCount}</TableCell>
+            <TableCell align="center" >{row.productName}</TableCell>
             <TableCell align="center">{row.orderIdCount}</TableCell>
             <TableCell align="center">{row.totalQtyReq}</TableCell>
             <TableCell align="center">{row.primarySupplier}</TableCell>
@@ -21,6 +22,7 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.orderedUom}</TableCell>
             <TableCell align="center">{row.receivedQty}</TableCell>
             <TableCell align="center">{row.wastageQty}</TableCell>
+            <TableCell align="center">{row.missedQty}</TableCell>
             <TableCell align="center">{row.qualityRating}</TableCell>
             <TableCell align="center">{row.createdAt}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row)}>Edit</Button></TableCell>
