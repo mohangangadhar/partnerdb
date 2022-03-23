@@ -9,7 +9,7 @@ import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Button, Grid, Typography } from "@material-ui/core";
-
+import { v4 as uuidv4 } from "uuid";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
@@ -18,6 +18,8 @@ import { APIURL, GetRequestOptions } from '../constants/Constants';
 import ReadOnlyRow from './Components/ReadOnlyRow';
 import EditableRow from './Components/EditableRow';
 import SearchBySupplier from './Components/SearchBySupplier';
+import AddPoData from './Components/AddPoData';
+import GetDate from '../components/GetDate';
 
 function PoReports(props) {
     const [rows, setRows] = useState([]);
@@ -38,9 +40,12 @@ function PoReports(props) {
         qualityRating: 0,
 
     });
+    const [toggle, setToggle] = useState(true);
+    const [podata, setPoData] = useState({});
     const [editedRowData, setEditedRowData] = useState([]);
     const receivedData = async (val) => {
         setisLoading(true);
+        setToggle(true);
         setRows([]);
         setErrFound(false);
         await fetch(APIURL + `suppy-planning-snapshot/page-query?page=${offSet}&size=30`, GetRequestOptions)
@@ -48,7 +53,6 @@ function PoReports(props) {
             .then(data => {
                 setRows(data.content);
                 setTotalPages(data.totalPages);
-                setErrFound(false);
                 setisLoading(false);
             }
             ).catch(err => setErrFound(true));
@@ -156,6 +160,39 @@ function PoReports(props) {
                 setisLoading(false);
             }).then(err => setErrFound(true));
     }
+    const handleAddPoData = async (event, tempData) => {
+        console.log(tempData);
+        setisApiLoading(true);
+        setToggle(true);
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempData)
+        };
+        await fetch(APIURL + 'suppy-planning-snapshot', requestOptions).then(
+            response => response.json()
+        ).then(
+            data => {
+                setisApiLoading(false);
+                setPoData([]);
+            }
+        ).catch(err => console.log(err));
+    }
+    const handlePoDataChange = (event) => {
+        event.preventDefault();
+
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+
+        const newFormData = { ...podata };
+        newFormData[fieldName] = fieldValue;
+        newFormData["createdAt"] = GetDate();
+        newFormData["updatedAt"] = GetDate();
+        setPoData(newFormData);
+    }
     return (
         <div>
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
@@ -167,6 +204,11 @@ function PoReports(props) {
             </div>
 
             <Box m={1} />
+            {toggle ?
+                <button onClick={() => setToggle(false)}>Add</button> :
+
+                <AddPoData setToggle={setToggle} suppliers={suppliers} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
+            }
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>

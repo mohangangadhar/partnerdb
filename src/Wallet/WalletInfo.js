@@ -88,7 +88,6 @@ const WalletInfo = ({ data, searchOrder }) => {
             });
     }
 
-
     return (
         <div style={{ width: '100%' }}>
             <Typography component="h2" variant="h6" style={{ color: 'indianred', }} align={"center"} gutterBottom>
