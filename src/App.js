@@ -58,6 +58,7 @@ import PaymentReports from './PaymentReports/PaymentReports';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import SeasonalOrders from './orders/SeasonalOrders';
 import SupplyPlanning from './SupplyPlanning/SupplyPlanning';
+import PoReports from './PoReports/PoReports';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -321,6 +322,18 @@ export default function MiniDrawer() {
                                         id: "6"
                                     }}><ListItemText primary="Payment Reports" /></Link>
                                 </ListItem>
+                                <ListItem button key="PaymentReports">
+
+                                    <Link to={{
+                                        pathname: '/app/poreports',
+                                        id: "8"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Po Reports</h6></Link>
+
+                                    <Link to={{
+                                        pathname: '/app/poreports',
+                                        id: "8"
+                                    }}><ListItemText primary="Po Reports" /></Link>
+                                </ListItem>
                                 <ListItem button key="Supply Planning">
 
                                     <Link to={{
@@ -360,6 +373,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
+                                    <Route path="/app/poreports" exact component={PoReports} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
                                     <Route path="/app/paymentreports" exact component={PaymentReports} />
                                     <Route path="/app/supplyplanning" exact component={SupplyPlanning} />
@@ -530,7 +544,7 @@ export default function MiniDrawer() {
                 </Drawer>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
-                    <Container maxWidth="md">
+                    <Container sx={{ maxWidth: '100%' }} maxWidth={false}>
                         <HashRouter>
                             <Switch>
                                 <Route path="/" exact render={() => <Redirect to="/app/wrapper" />} />

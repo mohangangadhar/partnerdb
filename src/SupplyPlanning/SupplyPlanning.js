@@ -31,6 +31,7 @@ const SupplyPlanning = () => {
     const [rowAdd, setRowAdd] = useState(false);
     const [suppliers, setSuppliers] = useState([]);
     const [personName, setPersonName] = React.useState([]);
+    const [toggle, setToggle] = useState(false);
     const [addFormData, setAddFormData] = useState({
         primarySupplier: "",
         orderedQuantity: 0,
@@ -82,7 +83,7 @@ const SupplyPlanning = () => {
     useEffect(() => {
         receivedData();
         getPrimarySuppliers();
-    }, []);
+    }, [toggle]);
     const handleEditFormChange = (event) => {
         event.preventDefault();
 
@@ -171,7 +172,7 @@ const SupplyPlanning = () => {
             then(response => response.json()).
             then(data => {
                 NotificationManager.success('Saved Data', 'Success', 1000);
-                receivedData();
+                setToggle(!toggle)
             }).catch(err => console.log(err));
 
     }
