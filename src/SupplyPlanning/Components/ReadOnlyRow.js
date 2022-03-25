@@ -19,9 +19,8 @@ const ReadOnlyRow = ({
             <TableCell align="center">
                 {row.vendorName}</TableCell>
             <TableCell align="center">
-                {row.article}</TableCell>
-            <TableCell align="center">
-                {row.skuQuantity}</TableCell>
+                {row.productName}</TableCell>
+
             <TableCell align="center">
                 {row.skuUom}</TableCell>
             <TableCell align="center">
@@ -29,19 +28,18 @@ const ReadOnlyRow = ({
             <TableCell align="center">
                 {row.skuCount}</TableCell>
             <TableCell align="center">
-                {row.orderId}</TableCell>
+                {row.orderIdCount}</TableCell>
             <TableCell align="center">
-                {row.skuQuantity * row.skuCount}</TableCell>
+                {row.totalQtyReq}</TableCell>
             <TableCell align="center">
-                {Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100}</TableCell>
+                {row.suggestedQty}</TableCell>
             <TableCell align="center">
                 {row.primarySupplier}</TableCell>
             <TableCell align="center">
-                {row.orderedQuantity == 0 ? Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100
-                    : row.orderedQuantity}</TableCell>
+                {row.orderedQty}</TableCell>
             <TableCell align="center">
                 {row.orderedUom}</TableCell>
-            <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row, index)}>Edit</Button></TableCell>
+            <TableCell align="center"><Button disabled={row.freeze == 1 ? true : false} variant="contained" color="success" onClick={(event) => handleEditClick(event, row, index)}>Edit</Button></TableCell>
         </TableRow>
     );
 };

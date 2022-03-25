@@ -38,6 +38,12 @@ const EditableRow = ({
             <TableCell align="center">
                 <textarea placeholder="Quality Rating" name="qualityRating" value={addFormData.qualityRating} cols="20" onChange={handleEditFormChange}></textarea>
             </TableCell>
+            <TableCell align="center">
+                <textarea placeholder="Total to Pay" name="totalPay" value={addFormData.totalPay} cols="20" onChange={handleEditFormChange}></textarea>
+            </TableCell>
+            <TableCell align="center">
+                <textarea placeholder="Comments" name="comments" value={addFormData.comments} cols="20" onChange={handleEditFormChange}></textarea>
+            </TableCell>
             <TableCell align="center">{row.createdAt}</TableCell>
             <TableCell align="center"><Button variant="contained" on color="success"
                 onClick={(event) => handleFormSubmit(event, row, addFormData)}>Save</Button></TableCell>

@@ -24,6 +24,8 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.wastageQty}</TableCell>
             <TableCell align="center">{row.missedQty}</TableCell>
             <TableCell align="center">{row.qualityRating}</TableCell>
+            <TableCell align="center">{row.totalPay}</TableCell>
+            <TableCell align="center">{row.comments}</TableCell>
             <TableCell align="center">{row.createdAt}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row)}>Edit</Button></TableCell>
         </TableRow>

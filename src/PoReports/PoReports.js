@@ -10,8 +10,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { v4 as uuidv4 } from "uuid";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useHistory } from 'react-router-dom';
+import { NotificationManager } from "react-notifications";
 import { auth } from "../firebase";
 
 import { APIURL, GetRequestOptions } from '../constants/Constants';
@@ -39,6 +38,8 @@ function PoReports(props) {
         wastageQty: 0.0,
         qualityRating: 0,
         missedQty: 0.0,
+        comments: "",
+        totalPay: 0.0
     });
     const [toggle, setToggle] = useState(true);
     const [podata, setPoData] = useState({});
@@ -67,9 +68,72 @@ function PoReports(props) {
             })
 
     }
+    const sendToDatabase = async (checkList) => {
+        let finalList = [];
+        // let poId = getRandom();
+        console.log(checkList);
+        checkList.map((row) =>
+
+            finalList.push({
+                "skuUom": row.skuUom,
+                "staginArea": row.staginArea,
+                "skuCount": row.skuCount,
+                "orderIdCount": row.orderIdCount,
+                "totalQtyReq": row.totalQtyReq,
+                "suggestedQty": row.suggestedQty,
+                "primarySupplier": row.primarySupplier,
+                "orderedQty": row.orderedQty,
+                "orderedUom": row.orderedUom,
+                "productName": row.productName,
+                "productId": row.productId,
+                "vendorName": row.vendorName,
+                "comments": "raw",
+                "poId": "PO-V" + row.spId.substring(4),
+                "createdAt": GetDate(),
+            })
+        );
+        console.log(finalList);
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(finalList)
+        };
+
+        await fetch(APIURL + "suppy-planning-snapshot/saveall", requestOptions).
+            then(response => response.json()).
+            then(data => {
+                NotificationManager.success('Saved Data', 'Success', 1000);
+                setRows(data);
+                setisLoading(false);
+            }).catch(err => console.log(err));
+    }
+    const getLatestReport = async () => {
+        setisLoading(true);
+        await fetch(APIURL + "supply-planning-report", GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                fetch(APIURL + `suppy-planning-snapshot/po-id/${data[0].spId.substring(4)}`).then(
+                    response => response.json()
+                ).then(poIdData => {
+                    if (poIdData.length > 0) {
+                        setRows(poIdData);
+                        setisLoading(false);
+                        return;
+                    }
+                    else {
+                        sendToDatabase(data.filter(report => report.spId == data[0].spId));
+                    }
+                });
+                // setRows(data.filter(report => report.spId == data[0].spId));
+
+            }).catch(err => { console.log(err); setisLoading(false); })
+    }
     useEffect(async () => {
 
-        receivedData(offSet);
+        // handleChangeSupplier("Vishnu")
+        getLatestReport();
         getPrimarySuppliers();
     }, [offSet]);
     const handleEditFormChange = (event) => {
@@ -90,7 +154,9 @@ function PoReports(props) {
             receivedQty: row.receivedQty,
             wastageQty: row.wastageQty,
             qualityRating: row.qualityRating,
-            missedQty: row.missedQty
+            missedQty: row.missedQty,
+            totalPay: row.totalPay,
+            comments: row.comments
         });
         setEditContactId(row.id);
     }
@@ -106,7 +172,9 @@ function PoReports(props) {
             wastageQty: tempFormData.wastageQty,
             qualityRating: tempFormData.qualityRating,
             updatedAt: datetime,
-            missedQty: tempFormData.missedQty
+            missedQty: tempFormData.missedQty,
+            comments: tempFormData.comments,
+            totalPay: tempFormData.totalPay
         };
 
         setisApiLoading(true);
@@ -138,6 +206,8 @@ function PoReports(props) {
         xyz.wastageQty = tempFormData.wastageQty;
         xyz.qualityRating = tempFormData.qualityRating;
         xyz.missedQty = tempFormData.missedQty;
+        xyz.totalPay = tempFormData.totalPay;
+        xyz.comments = tempFormData.comments;
         for (let i = 0; i < rows.length; i++) {
             if (row.id == rows[i].id) {
                 ind = i;
@@ -148,15 +218,15 @@ function PoReports(props) {
         setEditContactId(null);
         uploadBackEnd(row, tempFormData);
     }
-    const handleChangeSupplier = async (event, name) => {
-        event.preventDefault();
+    const handleChangeSupplier = async (name) => {
+
         console.log(name);
         if (name == "all") {
             receivedData(offSet);
             return;
         }
         setisLoading(true);
-        await fetch(APIURL + `suppy-planning-snapshot/primary-supplier/${name}`).
+        await fetch(APIURL + `supply-planning-report/primary-supplier/${name}`).
             then(response => response.json()).
             then(data => {
                 setRows("");
@@ -204,7 +274,7 @@ function PoReports(props) {
                 <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                     PO Reports
                 </Typography>
-                <SearchBySupplier suppliers={suppliers} handleChangeSupplier={handleChangeSupplier} />
+                {/* <SearchBySupplier suppliers={suppliers} handleChangeSupplier={handleChangeSupplier} /> */}
             </div>
 
             <Box m={1} />
@@ -232,6 +302,8 @@ function PoReports(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>wastageQty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Missed Quantity</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>qualityRating</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Total Pay</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Comments</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>createdAt</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
                         </TableRow>
@@ -265,11 +337,11 @@ function PoReports(props) {
                 </Table>
             </TableContainer>
             <Box m={2} />
-            <Grid container justifyContent={"center"}>
+            {/* <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
                     onChange={(event, value) => setOffSet(value - 1)} />
-            </Grid>
+            </Grid> */}
             <Box m={2} />
         </div>
     )

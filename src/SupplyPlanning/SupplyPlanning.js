@@ -35,7 +35,7 @@ const SupplyPlanning = () => {
     const [toggle, setToggle] = useState(false);
     const [addFormData, setAddFormData] = useState({
         primarySupplier: "",
-        orderedQuantity: 0,
+        orderedQty: 0,
         orderedUom: ""
     })
     const modifyInputData = (arr) => {
@@ -56,7 +56,70 @@ const SupplyPlanning = () => {
 
             return r.set(key, item);
         }, new Map).values()];
+        sendToDatabase(result);
         return result;
+    }
+    const updateRunInfo = async (poId) => {
+        let x = {
+
+            "spId": poId,
+            "createdAt": GetDate(),
+            "active": "yes"
+
+        };
+        const requestOptions2 = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(x)
+        };
+        fetch(APIURL + "supply-planning-run-info", requestOptions2).then(
+            response => response.json()
+        ).then(data => {
+            setisLoading(false);
+        }).catch(err => setisLoading(false))
+    }
+    const sendToDatabase = async (checkList) => {
+        let finalList = [];
+        let poId = getRandom();
+        const tempSuggestedQty = (row) => Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100;
+        checkList.map((row) =>
+
+            finalList.push({
+                "skuUom": row.skuUom,
+                "staginArea": row.staginArea,
+                "skuCount": row.skuCount,
+                "orderIdCount": row.orderId,
+                "totalQtyReq": row.skuQuantity * row.skuCount,
+                "suggestedQty": tempSuggestedQty(row),
+                "primarySupplier": row.primarySupplier,
+                "orderedQty": row.orderedQuantity == 0 ? tempSuggestedQty(row) : row.orderedQuantity,
+                "orderedUom": row.orderedUom,
+                "productName": row.productName,
+                "productId": row.productId,
+                "vendorName": row.vendorName,
+                "reportType": "raw",
+                "spId": "SP-V" + poId,
+                "createdAt": GetDate()
+            })
+        );
+        console.log(finalList);
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(finalList)
+        };
+
+        await fetch(APIURL + "supply-planning-report/saveall", requestOptions).
+            then(response => response.json()).
+            then(data => {
+                NotificationManager.success('Saved Data', 'Success', 1000);
+                setRows(data);
+                updateRunInfo(poId);
+            }).catch(err => console.log(err));
     }
     const receivedData = async () => {
         setSearchNotFound(false);
@@ -68,9 +131,9 @@ const SupplyPlanning = () => {
             .then(response => response.json())
             .then(data => {
 
-                setRows(modifyInputData(data));
+                modifyInputData(data);
 
-                setisLoading(false);
+
             }).catch(err => setisLoading(false));
     }
     const getPrimarySuppliers = async () => {
@@ -81,8 +144,22 @@ const SupplyPlanning = () => {
             })
 
     }
+    function getRandom() {
+        let str = (Math.floor(100000 + Math.random() * 900000)).toString();
+        console.log(str);
+        return str;
+    }
+    const getLatestReport = async () => {
+        setisLoading(true);
+        await fetch(APIURL + "supply-planning-report", GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setRows(data.filter(report => report.spId == data[0].spId));
+                setisLoading(false);
+            }).catch(err => { console.log(err); setisLoading(false); })
+    }
     useEffect(() => {
-        receivedData();
+        getLatestReport();
         getPrimarySuppliers();
     }, [toggle]);
     const handleEditFormChange = (event) => {
@@ -101,7 +178,7 @@ const SupplyPlanning = () => {
 
         setAddFormData({
             primarySupplier: row.primarySupplier == null ? "" : row.primarySupplier,
-            orderedQuantity: row.orderedQuantity,
+            orderedQty: row.orderedQty,
             orderedUom: row.orderedUom
         });
         setEditContactId(index);
@@ -114,8 +191,9 @@ const SupplyPlanning = () => {
         let xyz = { ...data };
 
         xyz.primarySupplier = tempFormData.primarySupplier;
-        xyz.orderedQuantity = tempFormData.orderedQuantity;
+        xyz.orderedQty = tempFormData.orderedQty;
         xyz.orderedUom = tempFormData.orderedUom;
+        xyz.freeze = 1;
         rows[index] = xyz;
         setEditContactId(null);
 
@@ -132,7 +210,7 @@ const SupplyPlanning = () => {
             return;
         }
         let finalList = [];
-        let poId = uuidv4();
+        let poId = getRandom();
 
         for (let i = 0; i < personName.length; i++) {
             finalList.push(rows.filter(row => row.primarySupplier === personName[i]));
@@ -143,21 +221,25 @@ const SupplyPlanning = () => {
             checkList = checkList.concat(finalList[i + 1]);
         }
         finalList = [];
-        const tempSuggestedQty = (row) => Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100;
+
         checkList.map((row) =>
 
             finalList.push({
                 "skuUom": row.skuUom,
                 "staginArea": row.staginArea,
                 "skuCount": row.skuCount,
-                "orderIdCount": row.orderId,
-                "totalQtyReq": row.skuQuantity * row.skuCount,
-                "suggestedQty": tempSuggestedQty(row),
+                "orderIdCount": row.orderIdCount,
+                "totalQtyReq": row.totalQtyReq,
+                "suggestedQty": row.suggestedQty,
                 "primarySupplier": row.primarySupplier,
-                "orderedQty": row.orderedQuantity == 0 ? tempSuggestedQty(row) : row.orderedQuantity,
+                "orderedQty": row.orderedQty,
                 "orderedUom": row.orderedUom,
-                "poNumber": "Po-v" + poId,
-                "poId": poId,
+                "productName": row.productName,
+                "productId": row.productId,
+                "vendorName": row.vendorName,
+                "reportType": "updated",
+                "freeze": row.freeze,
+                "spId": "SP-V" + poId,
                 "createdAt": GetDate()
             })
         );
@@ -169,19 +251,24 @@ const SupplyPlanning = () => {
             },
             body: JSON.stringify(finalList)
         };
-        await fetch(APIURL + "suppy-planning-snapshot/saveall", requestOptions).
+        await fetch(APIURL + "supply-planning-report/saveall", requestOptions).
             then(response => response.json()).
             then(data => {
                 NotificationManager.success('Saved Data', 'Success', 1000);
+                updateRunInfo(poId);
                 setToggle(!toggle)
             }).catch(err => console.log(err));
 
+    }
+    const LoadQuery = () => {
+        receivedData();
     }
     return (
         <div>
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h2 style={{ marginTop: -9, marginBottom: 0, fontStyle: 'italic', color: 'white' }}>Supply Planning</h2>
+                <Button style={{ maxHeight: '50px', minWidth: '100px' }} variant="contained" color="success" onClick={LoadQuery}>Load Query</Button>
                 {suppliers.length > 1 && <MultipleSelect suppliers={suppliers} personName={personName} setPersonName={setPersonName} />}
                 <Button style={{ maxHeight: '50px', minWidth: '100px' }} variant="contained" color="success" onClick={finalSave}>Save</Button>
             </div>

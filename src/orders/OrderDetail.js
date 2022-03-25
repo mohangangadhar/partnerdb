@@ -315,8 +315,9 @@ function OrderDetail(props) {
             }).catch(err => setisApiLoading(false));
     }
     //Handle Update
-    const handleUpdate = async (ev, typeOfRefund) => {
+    const handleUpdate = async (ev, typeOfRefund) => { 
         ev.preventDefault();
+        setisApiLoading(true);
         let message = "";
         if (typeOfRefund == "first") {
             message = "Undelivered Items";

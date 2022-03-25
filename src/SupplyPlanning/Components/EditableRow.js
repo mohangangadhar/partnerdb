@@ -26,9 +26,7 @@ const ReadOnlyRow = ({
             <TableCell align="center">
                 {row.vendorName}</TableCell>
             <TableCell align="center">
-                {row.article}</TableCell>
-            <TableCell align="center">
-                {row.skuQuantity}</TableCell>
+                {row.productName}</TableCell>
             <TableCell align="center">
                 {row.skuUom}</TableCell>
             <TableCell align="center">
@@ -36,11 +34,11 @@ const ReadOnlyRow = ({
             <TableCell align="center">
                 {row.skuCount}</TableCell>
             <TableCell align="center">
-                {row.orderId}</TableCell>
+                {row.orderIdCount}</TableCell>
             <TableCell align="center">
-                {row.skuQuantity * row.skuCount}</TableCell>
+                {row.totalQtyReq}</TableCell>
             <TableCell align="center">
-                {Math.round((row.skuQuantity * row.skuCount * (1 + row.buffer)) * 100) / 100}</TableCell>
+                {row.suggestedQty}</TableCell>
             <TableCell align="center">
                 <select style={{
                     padding: 5,
@@ -56,8 +54,8 @@ const ReadOnlyRow = ({
             <TableCell align="center"><input
                 type="text"
                 placeholder="Enter orderedQuantity"
-                name="orderedQuantity"
-                value={addFormData.orderedQuantity}
+                name="orderedQty"
+                value={addFormData.orderedQty}
                 onChange={(event) => handleEditFormChange(event, index)}
             ></input></TableCell>
             <TableCell align="center"><input
@@ -67,7 +65,7 @@ const ReadOnlyRow = ({
                 value={addFormData.orderedUom}
                 onChange={(event) => handleEditFormChange(event, index)}
             ></input></TableCell>
-            <TableCell align="center"><Button variant="contained" on color="success" onClick={(event) => handleFormSubmit(event, row, addFormData, index)}>Save</Button></TableCell>
+            <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleFormSubmit(event, row, addFormData, index)}>Save</Button></TableCell>
         </TableRow>
     );
 };

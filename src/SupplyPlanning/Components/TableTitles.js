@@ -12,7 +12,6 @@ const TableTitles = () => {
                 <TableCell style={{ color: 'wheat' }}>id</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Article</TableCell>
-                <TableCell style={{ color: 'wheat' }}>Sku Quantity</TableCell>
                 <TableCell style={{ color: 'wheat' }}>SKU UOM</TableCell>
                 <TableCell align="left" style={{ color: 'wheat' }}>Stagin Area</TableCell>
                 <TableCell align="left" style={{ color: 'wheat' }}>SKU COUNT</TableCell>

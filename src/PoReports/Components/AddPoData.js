@@ -315,6 +315,47 @@ const AddPoData = ({
                 </TableCell>
             </TableRow>
             <TableRow>
+                <TableCell align="center">
+                    <TextField
+                        id="totalPay"
+                        label="totalPay"
+
+                        name="totalPay"
+                        value={poData.totalPay}
+                        onChange={handlePoDataChange}
+                        InputProps={{
+                            style: {
+                                color: "white",
+                            }
+                        }}
+                        InputLabelProps={{
+                            style: { color: '#fff' },
+                        }}
+                        variant='outlined'
+                    />
+
+                </TableCell>
+                <TableCell align="center">
+                    <TextField
+                        id="comments"
+                        label="Comments"
+
+                        name="comments"
+                        value={poData.comments}
+                        onChange={handlePoDataChange}
+                        InputProps={{
+                            style: {
+                                color: "white",
+                            }
+                        }}
+                        InputLabelProps={{
+                            style: { color: '#fff' },
+                        }}
+                        variant='outlined'
+                    />
+                </TableCell>
+            </TableRow>
+            <TableRow>
                 <div>
                     <TableCell><Button variant="contained"
                         onClick={(event) => handleAddPoData(event, poData)}>Add</Button></TableCell>
