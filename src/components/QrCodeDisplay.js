@@ -55,7 +55,7 @@ const QrCodeDisplay = () => {
                 <Text style={styles.rate}>FeedBack QR Code</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
-                <Image style={styles.qrcode} src={PaymentQr} />
+                <Image style={styles.qrcode} src='../assets/payment_qr.jpeg' />
                 <Image style={styles.qrcode} src={WebsiteQr} />
                 <Image style={styles.qrcode} src={WebsiteQr} />
             </View>

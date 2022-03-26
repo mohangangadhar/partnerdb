@@ -178,6 +178,7 @@ function SeasonalOrders(props) {
                             <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
                             <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>Coupon Code</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -199,6 +200,7 @@ function SeasonalOrders(props) {
                                     <TableCell align="center" >{row.user.pincode}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
                                     <TableCell >{detail(row.vendor.name)}</TableCell>
+                                    <TableCell align="center">{row.couponCode}</TableCell>
                                     <TableCell align="center">{row.deliveryStatus}</TableCell>
                                 </TableRow>
                             ))}
