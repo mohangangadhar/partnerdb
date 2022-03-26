@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import { Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import WebsiteQr from '../assets/website_qr.jpeg';
-import PaymentQr from '../assets/payment_qr.jpeg';
+import PaymentQr from '../assets/paymentqr.jpeg';
+import AppQr from '../assets/app_download.png';
 const borderColor = '#90e5fc'
 const styles = StyleSheet.create({
     row: {
@@ -55,8 +56,8 @@ const QrCodeDisplay = () => {
                 <Text style={styles.rate}>FeedBack QR Code</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
-                <Image style={styles.qrcode} src={WebsiteQr} />
-                <Image style={styles.qrcode} src={WebsiteQr} />
+                <Image style={styles.qrcode} src={AppQr} />
+                <Image style={styles.qrcode} src={PaymentQr} />
                 <Image style={styles.qrcode} src={WebsiteQr} />
             </View>
         </View>
