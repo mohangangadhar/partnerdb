@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import WebsiteQr from '../assets/website_qr.jpeg';
-import PaymentQr from '../assets/paymentqr.jpeg';
+import PaymentQr from '../assets/paymentQrScan.jpeg';
 import AppQr from '../assets/app_download.png';
 const borderColor = '#90e5fc'
 const styles = StyleSheet.create({
