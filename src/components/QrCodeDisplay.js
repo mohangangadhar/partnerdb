@@ -50,12 +50,12 @@ const QrCodeDisplay = () => {
     const rows = (
         <View>
             <View style={styles.row}>
-                <Text style={styles.description}>Payment QR Code</Text>
                 <Text style={styles.qty}>App QR Code</Text>
+                <Text style={styles.description}>Payment QR Code</Text>
                 <Text style={styles.rate}>FeedBack QR Code</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
-                <Image style={styles.qrcode} src='../assets/payment_qr.jpeg' />
+                <Image style={styles.qrcode} src={WebsiteQr} />
                 <Image style={styles.qrcode} src={WebsiteQr} />
                 <Image style={styles.qrcode} src={WebsiteQr} />
             </View>
