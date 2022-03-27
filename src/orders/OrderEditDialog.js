@@ -47,6 +47,7 @@ function OrderEditDialog(props) {
         setIsSelected(false);
         if (editeduserid == "") {
             setLoadingAddress(false);
+            return;
         }
         setLoadingAddress(true);
         await fetch(APIURL + `ecommerce-address/user/${editeduserid}`, requestOptions).

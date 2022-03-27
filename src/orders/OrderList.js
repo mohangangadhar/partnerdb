@@ -379,7 +379,7 @@ const OrderList = (props) => {
                                             <TableCell align="center" >{row.user.pincode}</TableCell>
                                             <TableCell align="center">{row.total}</TableCell>
                                             <TableCell >{detail(row.vendor.name)}</TableCell>
-                                            <TableCell align="center">{row.order.couponCode}</TableCell>
+                                            <TableCell align="center">{row.couponCode}</TableCell>
                                             <TableCell align="center">{row.deliveryStatus}</TableCell>
                                         </TableRow>
                                     ))}
