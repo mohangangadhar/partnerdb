@@ -59,6 +59,7 @@ import PaymentsIcon from '@mui/icons-material/Payments';
 import SeasonalOrders from './orders/SeasonalOrders';
 import SupplyPlanning from './SupplyPlanning/SupplyPlanning';
 import PoReports from './PoReports/PoReports';
+import UgadiOrders from './orders/UgadiOrders';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -257,6 +258,22 @@ export default function MiniDrawer() {
                                 <ListItem button key="Orders">
 
                                     <Link to={{
+                                        pathname: `/app/order/ugadiorders`,
+                                        id: "2"
+                                    }}>
+                                        <div >
+                                            <h6 style={orderStyle}>Ugadi</h6>
+                                            <h6 style={orderStyle}>Orders</h6>
+                                        </div></Link>
+
+                                    <Link to={{
+                                        pathname: `/app/order/ugadiorders`,
+                                        id: "2"
+                                    }}><ListItemText primary="Ugadi Orders" /></Link>
+                                </ListItem>
+                                <ListItem button key="Orders">
+
+                                    <Link to={{
                                         pathname: `/app/order/express`,
                                         id: "5"
                                     }}>
@@ -373,6 +390,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
+
                                     <Route path="/app/poreports" exact component={PoReports} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
                                     <Route path="/app/paymentreports" exact component={PaymentReports} />
@@ -382,6 +400,7 @@ export default function MiniDrawer() {
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/:vendorId" exact component={OrderList} />
                                     <Route path="/app/:vendorId/seasonal" exact component={SeasonalOrders} />
+                                    <Route path="/app/order/ugadiorders" exact component={UgadiOrders} />
                                     <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                     <Route path="/app/:vendorId/product/" exact component={ProductList} />
