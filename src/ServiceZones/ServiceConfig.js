@@ -32,6 +32,7 @@ const ServiceConfig = () => {
     const [selectZoneIdForVendor, setSelectZoneIdForVendor] = useState(null);
     const [isSelected, setIsSelected] = useState(false);
     const [zonesByPincode, setZonesByPincode] = useState([]);
+    const [searchPincode, setSearchPincode] = useState([]);
     const getPincodeList = async () => {
         await fetch(APIURL + "ecommerce-pincode", GetRequestOptions).
             then(response => response.json()).
@@ -248,6 +249,10 @@ const ServiceConfig = () => {
                 });
         }
     }
+    const getPincode = (data) => {
+        console.log(data);
+        setPincodeList(pincodeList.filter(element => element >= data));
+    }
     return (
         <div>
             <TableContainer>
@@ -387,7 +392,8 @@ const ServiceConfig = () => {
                                 }}
                                 label="Enter Status"
                             >
-                                {pincodeList.length > 2 && pincodeList.map((zone, index) => (
+                                {/* <input type="text" onChange={(e) => getPincode(e.target.value)} /> */}
+                                {pincodeList.length > 0 && pincodeList.map((zone, index) => (
                                     <MenuItem value={zone.id}>
                                         {zone.pincode}
                                     </MenuItem>
@@ -487,7 +493,7 @@ const ServiceConfig = () => {
                 <EcommerceZones />
             </TableContainer>
 
-        </div>
+        </div >
     )
 }
 

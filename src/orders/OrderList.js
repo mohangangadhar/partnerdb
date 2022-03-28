@@ -23,6 +23,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import SearchOrdersByUserName from './SearchOrdersByUserName';
+import TableTitles from './TableTitles';
 const OrderList = (props) => {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -319,19 +320,7 @@ const OrderList = (props) => {
 
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "User Name" : "User Id"}</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Coupon Code</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles auth={auth} />
                     {queryLoad ?
                         <>
                             {searchOrder.order != null && Object.keys(searchOrder.order).length > 2 && !(isLoading) ?

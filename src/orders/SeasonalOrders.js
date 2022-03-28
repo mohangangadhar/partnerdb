@@ -12,10 +12,11 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Grid, Typography } from "@material-ui/core";
-
+import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
 
 import { APIURL } from '../constants/Constants';
+import TableTitles from './TableTitles';
 
 function SeasonalOrders(props) {
     let { id } = useParams();
@@ -169,19 +170,7 @@ function SeasonalOrders(props) {
             <Box m={1} />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>User Name</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Coupon Code</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles auth={auth} />
                     {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (

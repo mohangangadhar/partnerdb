@@ -7,12 +7,13 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Badge from '@mui/material/Badge';
-import Button from '@mui/material/Button';
+import { auth } from "../firebase";
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from 'react-router-dom';
 
 
 import { APIURL, detail, GetRequestOptions } from '../constants/Constants';
+import TableTitles from './TableTitles';
 
 const UgadiOrders = (props) => {
     const [rows, setRows] = useState([]);
@@ -43,19 +44,7 @@ const UgadiOrders = (props) => {
 
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            <TableCell style={{ color: 'wheat' }}> User Name</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Coupon Code</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles auth={auth} />
                     {rows.length > 2 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (

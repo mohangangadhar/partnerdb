@@ -15,10 +15,11 @@ import { useHistory } from 'react-router-dom';
 import { auth } from "../firebase";
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 import SearchProducts from '../products/Components/SearchProducts';
-import { APIURL, GetRequestOptions } from '../constants/Constants';
+import { APIURL, GetRequestOptions, usersTabData } from '../constants/Constants';
 import SearchByUserName from './SearchByUserName';
 import LoadUserNameData from './LoadUserNameData';
 import LoadUserIdData from './LoadUserIdData';
+import TableTitles from '../components/TableTitles/TableTitles';
 function UserList(props) {
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
@@ -136,17 +137,7 @@ function UserList(props) {
             <Box m={1} />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>User Id</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Name</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>Email</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Mobile</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Verified</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Created</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles data={usersTabData} />
                     {userQueryLoad ?
 
                         <LoadUserNameData errFound={errFound} userSearchData={userSearchData} isLoading={isLoading} />

@@ -9,8 +9,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchTodos, fetchSupportReport } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgressInTable } from '../constants/Constants';
-import TableTitles from './TableTitles';
+import { CircularProgressInTable, dashboardSummary, supportSummaryData } from '../constants/Constants';
+import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
@@ -131,7 +131,7 @@ function DashBoard() {
         setisLoading(true);
         let data = order.apiData;
         let statusChangeData = data.filter(data => data.vendorName == vendorName);
-        console.log(statusChangeData);
+
         setOrderData(data.filter(data => data.vendorName == vendorName));
         setNewCount((prev) => ({
             ...prev,
@@ -193,7 +193,7 @@ function DashBoard() {
                     ));
                 }
                 else if (data[i].seasonal == 1) {
-                    console.log(data[i]);
+
                     setNewOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
@@ -223,7 +223,7 @@ function DashBoard() {
                     ));
                 }
                 else if (data[i].seasonal == 1) {
-                    console.log(data[i]);
+
                     setPreparedOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
@@ -296,7 +296,7 @@ function DashBoard() {
 
             if (data[i].deliveryStatus == "pending") {
                 if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
-                    console.log("reg");
+
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
@@ -305,7 +305,7 @@ function DashBoard() {
                     ));
                 }
                 else if (data[i].express == "EXPRESS" && data[i].seasonal == 0) {
-                    console.log("expr");
+
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
@@ -406,9 +406,9 @@ function DashBoard() {
             <h3 style={{ marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Orders Summary:</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableTitles />
-                    </TableHead>
+
+                    <TableTitles data={dashboardSummary} />
+
                     <TableBody>
                         {order.apiData.length > 1 && !(isSummaryLoading) ?
                             <>
@@ -456,9 +456,9 @@ function DashBoard() {
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Revenue Summary:</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableTitles />
-                    </TableHead>
+
+                    <TableTitles data={dashboardSummary} />
+
                     <TableBody>
                         {order.apiData.length > 1 && !(isSummaryLoading) ?
                             <>
@@ -506,18 +506,7 @@ function DashBoard() {
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Support Summary:</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-
-                            <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
-
-                            <TableCell align="center" style={{ color: 'wheat' }}>Open</TableCell>
-
-                            <TableCell align="center" style={{ color: 'wheat' }}>In Progress</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Completed</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles data={supportSummaryData} />
                     <TableBody>
                         {supportReport.apiData.length > 1 && !(isSupportSummaryLoading) ?
                             <>

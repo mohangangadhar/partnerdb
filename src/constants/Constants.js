@@ -55,3 +55,43 @@ export const getRandom = () => {
     console.log(str);
     return str;
 }
+export const dashboardSummary = [
+    "Order Type", "New", "Prepared", "Processing", "Complete", "Pending", "Cancelled", "Total"
+];
+export const supportSummaryData = [
+    "New", "Open", "In Progress", "Completed", "Total"
+];
+export const usersTabData = [
+    "User Id", "Name", "Email", "Mobile", "Verified", "Pincode", "Created At"
+];
+export const productsTabData = [
+    "Product Id", "Vendor Name", "Title", "Express", "Price", "Sale Price", "Stock Quantity", "Actions"
+];
+export const supportTabData = [
+    "Id", "Name", "Mobile Number", "Email", "Message", "Created At", "Status", "Resolution",
+    "Category", "Resolver", "Action"
+];
+export const paymentReportsTabData = [
+    "Order Type", "Vendor Name", "Order Date",
+    "Order Id", "Customer Id", "Customer Name",
+    "Order Status", "Product Id", "Product Name",
+    "Ordered Quantity", "Unit Price", "Ordered Value",
+    "Shipping Cost", "Delivered Quantity", "Product Quality",
+    "Refund Value", "Final Ordered Value", "Gst (%)", "Final Taxable Value",
+    "Seller Invoice Value", "Payment Status", "Payment Date",
+    "Payment Reference No", "PO Number", "Invoice No", "Actions"
+];
+export const poReportsTabData = [
+    "Id", "Sku Uom", "Stagin Area", "skuCount", "Product Name",
+    "Order Id Count", "Total Qty Req", "Primary Supplier",
+    "Suggested Qty", "orderedQty", "orderedUom", "receivedQty",
+    "wastageQty", "Missed Quantity", "qualityRating",
+    "Total Pay", "Comments", "createdAt", "Actions"
+];
+export const supplyPlanningTabData = [
+    "ADD", "Id", "Vendor Name", "Article",
+    "SKU UOM", "Stagin Area", "SKU COUNT",
+    "Order Id Count", "Total Quantity Req",
+    "Suggested Quantity", "Primary Supplier",
+    "Ordered Quantity", "Ordered Uom", "Actions"
+];

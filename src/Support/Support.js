@@ -8,12 +8,13 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-
+import TableTitles from "../components/TableTitles/TableTitles";
 import "../App.css"
 
 import { Box, Grid, TextField } from "@material-ui/core";
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
+import { supportTabData } from '../constants/Constants';
 
 
 const Support = () => {
@@ -129,21 +130,7 @@ const Support = () => {
         {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
         <TableContainer component={Paper}>
             <Table className="table" aria-label="spanning table">
-                <TableHead style={{ backgroundColor: 'indianred' }}>
-                    <TableRow >
-                        <TableCell >Id</TableCell>
-                        <TableCell >Name</TableCell>
-                        <TableCell >Mobile Number</TableCell>
-                        <TableCell >Email</TableCell>
-                        <TableCell align="center" >Message</TableCell>
-                        <TableCell align="center" >Created At</TableCell>
-                        <TableCell align="center" >Status</TableCell>
-                        <TableCell align="center" >Resolution</TableCell>
-                        <TableCell align="center" >Category</TableCell>
-                        <TableCell align="center" >Resolver</TableCell>
-                        <TableCell align="center" >Action</TableCell>
-                    </TableRow>
-                </TableHead>
+                <TableTitles data={supportTabData} />
                 {editedRowData.length > 0 && !(isLoading) ?
                     <TableBody>
                         {editedRowData.map((row, index) => (

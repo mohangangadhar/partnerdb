@@ -13,12 +13,13 @@ import { v4 as uuidv4 } from "uuid";
 import { NotificationManager } from "react-notifications";
 import { auth } from "../firebase";
 
-import { APIURL, getRandom, GetRequestOptions } from '../constants/Constants';
+import { APIURL, getRandom, GetRequestOptions, poReportsTabData } from '../constants/Constants';
 import ReadOnlyRow from './Components/ReadOnlyRow';
 import EditableRow from './Components/EditableRow';
 import SearchBySupplier from './Components/SearchBySupplier';
 import AddPoData from './Components/AddPoData';
 import GetDate from '../components/GetDate';
+import TableTitles from '../components/TableTitles/TableTitles';
 
 function PoReports(props) {
     const [rows, setRows] = useState([]);
@@ -339,10 +340,6 @@ function PoReports(props) {
                             </TableRow>
 
                         ))}
-
-
-
-
                     </TableBody>
 
                 </Table>
@@ -361,29 +358,7 @@ function PoReports(props) {
             }
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Id</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>skuUom</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>staginArea</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>skuCount</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Product Name</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>orderIdCount</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>totalQtyReq</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>primarySupplier</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>suggestedQty</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>orderedQty</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>orderedUom</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>receivedQty</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>wastageQty</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Missed Quantity</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>qualityRating</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total Pay</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Comments</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>createdAt</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles data={poReportsTabData} />
 
                     {rows.length > 0 && !(isLoading) ?
                         <TableBody>

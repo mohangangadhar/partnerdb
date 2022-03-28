@@ -23,6 +23,7 @@ import { APIURL } from '../constants/Constants';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import TableTitles from './TableTitles';
 function ExpressOrderList(props) {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -280,19 +281,7 @@ function ExpressOrderList(props) {
             <Box m={1} />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Order No</TableCell>
-                            {auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" && <TableCell style={{ color: 'wheat' }}>User Name</TableCell>}
-                            <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell style={{ color: 'wheat' }}>Coupon Code</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableTitles auth={auth} />
                     {queryLoad ?
                         <>
                             {searchOrder.order != null && Object.keys(searchOrder.order).length > 2 && !(isLoading) ?

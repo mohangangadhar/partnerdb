@@ -12,13 +12,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { v4 as uuidv4 } from "uuid";
 import { NotificationManager } from "react-notifications";
 
-import { APIURL, GetRequestOptions } from '../constants/Constants';
+import { APIURL, getRandom, GetRequestOptions, supplyPlanningTabData } from '../constants/Constants';
 
-import TableTitles from './Components/TableTitles';
 import ReadOnlyRow from './Components/ReadOnlyRow';
 import EditableRow from './Components/EditableRow';
 import MultipleSelect from './Components/MutlipleSelect';
 import GetDate from '../components/GetDate';
+import TableTitles from '../components/TableTitles/TableTitles';
 
 const SupplyPlanning = () => {
     const [rows, setRows] = useState([]);
@@ -144,11 +144,7 @@ const SupplyPlanning = () => {
             })
 
     }
-    function getRandom() {
-        let str = (Math.floor(100000 + Math.random() * 900000)).toString();
-        console.log(str);
-        return str;
-    }
+
     const getLatestReport = async () => {
         setisLoading(true);
         await fetch(APIURL + "supply-planning-report", GetRequestOptions)
@@ -274,7 +270,7 @@ const SupplyPlanning = () => {
             </div>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableTitles />
+                    <TableTitles data={supplyPlanningTabData} />
                     {rows.length > 0 && !(isLoading) && !(rowAdd) ?
                         <TableBody>
                             {rows.map((row, index) => (

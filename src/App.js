@@ -390,7 +390,6 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
-
                                     <Route path="/app/poreports" exact component={PoReports} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
                                     <Route path="/app/paymentreports" exact component={PaymentReports} />

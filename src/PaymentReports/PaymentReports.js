@@ -2,21 +2,19 @@ import React, { useEffect, useState } from 'react'
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import Button from '@mui/material/Button';
+
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { Box, Grid } from "@material-ui/core";
 
-import { APIURL, GetRequestOptions } from '../constants/Constants';
+import { APIURL, GetRequestOptions, paymentReportsTabData } from '../constants/Constants';
 
-import TableTitles from './Components/TableTitles';
 import ReadOnlyRow from './Components/ReadOnlyRow';
 import EditableRow from './Components/EditableRow';
+import TableTitles from '../components/TableTitles/TableTitles';
 const PaymentReports = () => {
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
@@ -130,7 +128,7 @@ const PaymentReports = () => {
             <center><h2 style={{ marginTop: -9, marginBottom: 0, fontStyle: 'italic', color: 'white' }}>Payment Reports</h2></center>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableTitles />
+                    <TableTitles data={paymentReportsTabData} />
                     {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (

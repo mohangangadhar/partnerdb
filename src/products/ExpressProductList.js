@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react'
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
-import { APIURL } from '../constants/Constants';
+import { APIURL, productsTabData } from '../constants/Constants';
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
@@ -18,7 +18,8 @@ import ReadOnlyRow from './ReadOnlyRow';
 import ProductsPerPage from './Components/ProductsPerPage';
 import FilteredInStock from './Components/FilteredInStock';
 import SearchProducts from './Components/SearchProducts';
-import TableTitles from './Components/TableTitles';
+import TableTitles from '../components/TableTitles/TableTitles';
+
 function ExpressProductList(props) {
     const [rows, setRows] = useState([]);
     const [isApiLoading, setisApiLoading] = useState(false);
@@ -256,7 +257,7 @@ function ExpressProductList(props) {
             <Box m={1} />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableTitles />
+                    <TableTitles data={productsTabData} />
                     {editedRowData.length > 0 && !(isLoading) ?
                         <TableBody>
                             {editedRowData.map((row, index) => (
