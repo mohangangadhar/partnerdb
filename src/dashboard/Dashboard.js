@@ -31,6 +31,10 @@ function DashBoard() {
         regular: 0,
         express: 0
     });
+    const [preparedCount, setPreparedCount] = useState({
+        regular: 0,
+        express: 0
+    });
     const [processingCount, setProcessingCount] = useState({
         regular: 0,
         express: 0
@@ -50,6 +54,14 @@ function DashBoard() {
     const [total, setTotal] = useState(0);
     const [revenueTotal, setRevenueTotal] = useState(0);
     const [newOrdersData, setNewOrdersData] = useState({
+        regular: 0,
+        express: 0,
+        regtotal: 0,
+        exptotal: 0,
+        seasonal: 0,
+        seasonaltotal: 0
+    });
+    const [preparedOrdersData, setPreparedOrdersData] = useState({
         regular: 0,
         express: 0,
         regtotal: 0,
@@ -90,22 +102,28 @@ function DashBoard() {
         seasonal: 0,
         seasonaltotal: 0
     });
-
+    const [vendorRevenueSummary, setVendorRevenueSummary] = useState({
+        new: 0,
+        prepared: 0,
+        processing: 0,
+        complete: 0,
+        pending: 0,
+    });
     const order = useSelector(state => state.dashboardreducer);
     const supportReport = useSelector(state => state.supportreducer);
     const dispatch = useDispatch();
 
 
-    const regularOrdersSum = (newCount.regular.length >= 1 && newCount.regular[0].noOfOrders) + (processingCount.regular.length >= 1 && processingCount.regular[0].noOfOrders)
+    const regularOrdersSum = () => (newCount.regular.length >= 1 && newCount.regular[0].noOfOrders) + (preparedCount.regular.length >= 1 && preparedCount.regular[0].noOfOrders) + (processingCount.regular.length >= 1 && processingCount.regular[0].noOfOrders)
         + (completeCount.regular.length >= 1 && completeCount.regular[0].noOfOrders) + (pendingCount.regular.length && pendingCount.regular[0].noOfOrders);
 
-    const expressOrdersSum = (newCount.express.length >= 1 && newCount.express[0].noOfOrders) + (processingCount.express.length >= 1 && processingCount.express[0].noOfOrders)
+    const expressOrdersSum = () => (newCount.express.length >= 1 && newCount.express[0].noOfOrders) + (preparedCount.express.length >= 1 && preparedCount.express[0].noOfOrders) + (processingCount.express.length >= 1 && processingCount.express[0].noOfOrders)
         + (completeCount.express.length >= 1 && completeCount.express[0].noOfOrders) + (pendingCount.express.length && pendingCount.express[0].noOfOrders);
 
-    const regularRevenueSum = (newCount.regular.length >= 1 && newCount.regular[0].total) + (processingCount.regular.length >= 1 && processingCount.regular[0].total)
+    const regularRevenueSum = () => (newCount.regular.length >= 1 && newCount.regular[0].total) + (preparedCount.regular.length >= 1 && preparedCount.regular[0].total) + (processingCount.regular.length >= 1 && processingCount.regular[0].total)
         + (completeCount.regular.length >= 1 && completeCount.regular[0].total) + (pendingCount.regular.length && pendingCount.regular[0].total);
 
-    const expressRevenueSum = (newCount.express.length >= 1 && newCount.express[0].total) + (processingCount.express.length >= 1 && processingCount.express[0].total)
+    const expressRevenueSum = () => (newCount.express.length >= 1 && newCount.express[0].total) + (preparedCount.express.length >= 1 && preparedCount.express[0].total) + (processingCount.express.length >= 1 && processingCount.express[0].total)
         + (completeCount.express.length >= 1 && completeCount.express[0].total) + (pendingCount.express.length && pendingCount.express[0].total);
 
 
@@ -113,11 +131,17 @@ function DashBoard() {
         setisLoading(true);
         let data = order.apiData;
         let statusChangeData = data.filter(data => data.vendorName == vendorName);
+        console.log(statusChangeData);
         setOrderData(data.filter(data => data.vendorName == vendorName));
         setNewCount((prev) => ({
             ...prev,
             regular: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "REGULAR" && data.seasonal == 0),
             express: statusChangeData.filter(data => data.deliveryStatus == "new" && data.express == "EXPRESS" && data.seasonal == 0)
+        }));
+        setPreparedCount((prev) => ({
+            ...prev,
+            regular: statusChangeData.filter(data => data.deliveryStatus == "prepared" && data.express == "REGULAR" && data.seasonal == 0),
+            express: statusChangeData.filter(data => data.deliveryStatus == "prepared" && data.express == "EXPRESS" && data.seasonal == 0)
         }));
         setProcessingCount((prev) => ({
             ...prev,
@@ -139,6 +163,7 @@ function DashBoard() {
             regular: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "REGULAR" && data.seasonal == 0),
             express: statusChangeData.filter(data => data.deliveryStatus == "cancelled" && data.express == "EXPRESS" && data.seasonal == 0)
         }));
+
         setisLoading(false);
     }
 
@@ -170,6 +195,36 @@ function DashBoard() {
                 else if (data[i].seasonal == 1) {
                     console.log(data[i]);
                     setNewOrdersData((prevState) => ({
+                        ...prevState,
+                        seasonal: prevState.seasonal + data[i].noOfOrders,
+                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                    }
+                    ));
+                }
+            }
+            if (data[i].deliveryStatus == "prepared") {
+
+                if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
+
+                    setPreparedOrdersData((prevState) => ({
+                        ...prevState,
+                        regular: prevState.regular + data[i].noOfOrders,
+                        regtotal: prevState.regtotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].express == "EXPRESS" && data[i].seasonal == 0) {
+
+                    setPreparedOrdersData((prevState) => ({
+                        ...prevState,
+                        express: prevState.express + data[i].noOfOrders,
+                        exptotal: prevState.exptotal + data[i].total
+                    }
+                    ));
+                }
+                else if (data[i].seasonal == 1) {
+                    console.log(data[i]);
+                    setPreparedOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
                         seasonaltotal: prevState.seasonaltotal + data[i].total
@@ -360,34 +415,37 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newOrdersData.regular != 0 ? newOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.regular != 0 ? preparedOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.regular != 0 ? processingOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.regular != 0 ? completeOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.regular != 0 ? pendingOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.regular != 0 ? cancelOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{
-                                        newOrdersData.regular + processingOrdersData.regular + completeOrdersData.regular + pendingOrdersData.regular
+                                        newOrdersData.regular + preparedOrdersData.regular + processingOrdersData.regular + completeOrdersData.regular + pendingOrdersData.regular
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newOrdersData.express != 0 ? newOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.express != 0 ? preparedOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.express != 0 ? processingOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.express != 0 ? completeOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.express != 0 ? pendingOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.express != 0 ? cancelOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{
-                                        newOrdersData.express + processingOrdersData.express + completeOrdersData.express + pendingOrdersData.express
+                                        newOrdersData.express + preparedOrdersData.express + processingOrdersData.express + completeOrdersData.express + pendingOrdersData.express
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Seasonal</TableCell>
                                     <TableCell align="center">{newOrdersData.seasonal != 0 ? newOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.seasonal != 0 ? preparedOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.seasonal != 0 ? processingOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.seasonal != 0 ? completeOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.seasonal != 0 ? pendingOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.seasonal != 0 ? cancelOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{
-                                        newOrdersData.seasonal + processingOrdersData.seasonal + completeOrdersData.seasonal + pendingOrdersData.seasonal
+                                        newOrdersData.seasonal + preparedOrdersData.seasonal + processingOrdersData.seasonal + completeOrdersData.seasonal + pendingOrdersData.seasonal
                                     }</TableCell>
                                 </TableRow>
                             </>
@@ -407,34 +465,37 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newOrdersData.regtotal != 0 ? newOrdersData.regtotal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.regtotal != 0 ? preparedOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.regtotal != 0 ? processingOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.regtotal != 0 ? completeOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.regtotal != 0 ? pendingOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.regtotal != 0 ? cancelOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{
-                                        newOrdersData.regtotal + processingOrdersData.regtotal + completeOrdersData.regtotal + pendingOrdersData.regtotal
+                                        newOrdersData.regtotal + preparedOrdersData.regtotal + processingOrdersData.regtotal + completeOrdersData.regtotal + pendingOrdersData.regtotal
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newOrdersData.exptotal != 0 ? newOrdersData.exptotal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.exptotal != 0 ? preparedOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.exptotal != 0 ? processingOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.exptotal != 0 ? completeOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.exptotal != 0 ? pendingOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.exptotal != 0 ? cancelOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{
-                                        newOrdersData.exptotal + processingOrdersData.exptotal + completeOrdersData.exptotal + pendingOrdersData.exptotal
+                                        newOrdersData.exptotal + preparedOrdersData.exptotal + processingOrdersData.exptotal + completeOrdersData.exptotal + pendingOrdersData.exptotal
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Seasonal</TableCell>
                                     <TableCell align="center">{newOrdersData.seasonaltotal != 0 ? newOrdersData.seasonaltotal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.seasonaltotal != 0 ? preparedOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.seasonaltotal != 0 ? processingOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.seasonaltotal != 0 ? completeOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.seasonaltotal != 0 ? pendingOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.seasonaltotal != 0 ? cancelOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{
-                                        newOrdersData.seasonaltotal + processingOrdersData.seasonaltotal + completeOrdersData.seasonaltotal + pendingOrdersData.seasonaltotal
+                                        newOrdersData.seasonaltotal + preparedOrdersData.seasonaltotal + processingOrdersData.seasonaltotal + completeOrdersData.seasonaltotal + pendingOrdersData.seasonaltotal
                                     }</TableCell>
                                 </TableRow>
                             </>
@@ -449,6 +510,7 @@ function DashBoard() {
                         <TableRow>
 
                             <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
+
                             <TableCell align="center" style={{ color: 'wheat' }}>Open</TableCell>
 
                             <TableCell align="center" style={{ color: 'wheat' }}>In Progress</TableCell>
@@ -486,23 +548,25 @@ function DashBoard() {
                                     <TableCell align="center" rowSpan={2}>{status}</TableCell>
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newCount.regular.length >= 1 ? newCount.regular[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.regular.length >= 1 ? preparedCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{processingCount.regular.length >= 1 ? processingCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{completeCount.regular.length >= 1 ? completeCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.regular.length >= 1 ? pendingCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.regular.length >= 1 ? cancelCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{
-                                        regularOrdersSum
+                                        regularOrdersSum()
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newCount.express.length >= 1 ? newCount.express[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.express.length >= 1 ? preparedCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{processingCount.express.length >= 1 ? processingCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{completeCount.express.length >= 1 ? completeCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.express.length >= 1 ? pendingCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.express.length >= 1 ? cancelCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{
-                                        expressOrdersSum
+                                        expressOrdersSum()
                                     }</TableCell>
                                 </TableRow>
                             </>
@@ -524,23 +588,25 @@ function DashBoard() {
                                     <TableCell align="center" rowSpan={2}>{status}</TableCell>
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newCount.regular.length >= 1 ? newCount.regular[0].total : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.regular.length >= 1 ? preparedCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{processingCount.regular.length >= 1 ? processingCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{completeCount.regular.length >= 1 ? completeCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.regular.length >= 1 ? pendingCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.regular.length >= 1 ? cancelCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{
-                                        regularRevenueSum
+                                        regularRevenueSum()
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newCount.express.length >= 1 ? newCount.express[0].total : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.express.length >= 1 ? preparedCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{processingCount.express.length >= 1 ? processingCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{completeCount.express.length >= 1 ? completeCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.express.length >= 1 ? pendingCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.express.length >= 1 ? cancelCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{
-                                        expressRevenueSum
+                                        expressRevenueSum()
                                     }</TableCell>
                                 </TableRow>
                             </>

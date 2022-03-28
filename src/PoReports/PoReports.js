@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import { NotificationManager } from "react-notifications";
 import { auth } from "../firebase";
 
-import { APIURL, GetRequestOptions } from '../constants/Constants';
+import { APIURL, getRandom, GetRequestOptions } from '../constants/Constants';
 import ReadOnlyRow from './Components/ReadOnlyRow';
 import EditableRow from './Components/EditableRow';
 import SearchBySupplier from './Components/SearchBySupplier';
@@ -43,6 +43,7 @@ function PoReports(props) {
     });
     const [toggle, setToggle] = useState(true);
     const [podata, setPoData] = useState({});
+    const [totalPoData, setTotalPoData] = useState([]);
     const [editedRowData, setEditedRowData] = useState([]);
     const receivedData = async (val) => {
         setisLoading(true);
@@ -92,7 +93,7 @@ function PoReports(props) {
                 "createdAt": GetDate(),
             })
         );
-        console.log(finalList);
+
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -198,8 +199,6 @@ function PoReports(props) {
         setAddFormData("");
         setisRowLoading(true);
         let ind;
-
-
         let xyz = row;
         xyz = { ...xyz };
         xyz.receivedQty = tempFormData.receivedQty;
@@ -235,25 +234,26 @@ function PoReports(props) {
             }).then(err => setErrFound(true));
     }
     const handleAddPoData = async (event, tempData) => {
-        console.log(tempData);
-        setisApiLoading(true);
+        setTotalPoData(totalPoData => [...totalPoData, tempData]);
+        // setisApiLoading(true);
+        setPoData([]);
         setToggle(true);
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tempData)
-        };
-        await fetch(APIURL + 'suppy-planning-snapshot', requestOptions).then(
-            response => response.json()
-        ).then(
-            data => {
-                setisApiLoading(false);
-                setPoData([]);
-            }
-        ).catch(err => console.log(err));
+        console.log(totalPoData);
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(tempData)
+        // };
+        // await fetch(APIURL + 'suppy-planning-snapshot', requestOptions).then(
+        //     response => response.json()
+        // ).then(
+        //     data => {
+        //         setisApiLoading(false);
+        //         setPoData([]);
+        //     }
+        // ).catch(err => console.log(err));
     }
     const handlePoDataChange = (event) => {
         event.preventDefault();
@@ -267,6 +267,47 @@ function PoReports(props) {
         newFormData["updatedAt"] = GetDate();
         setPoData(newFormData);
     }
+    const sendTotalPoData = async (checkList) => {
+        let finalList = [];
+        let poId = getRandom();
+        console.log(checkList);
+        checkList.map((row) =>
+
+            finalList.push({
+                "skuUom": row.skuUom,
+                "staginArea": "nm",
+                "skuCount": "2",
+                "orderIdCount": "22",
+                "totalQtyReq": "",
+                "suggestedQty": row.suggestedQty,
+                "primarySupplier": row.primarySupplier,
+                "orderedQty": row.orderedQty,
+                "orderedUom": row.orderedUom,
+                "productName": row.productName,
+                "productId": row.productId,
+                "vendorName": row.vendorName,
+                "comments": "raw",
+                "poId": "PO-V" + poId,
+                "createdAt": GetDate(),
+            })
+        );
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(finalList)
+        };
+
+        await fetch(APIURL + "suppy-planning-snapshot/saveall", requestOptions).
+            then(response => response.json()).
+            then(data => {
+                NotificationManager.success('Saved Data', 'Success', 1000);
+                setTotalPoData([]);
+                setisLoading(false);
+            }).catch(err => console.log(err));
+    }
     return (
         <div>
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
@@ -278,8 +319,43 @@ function PoReports(props) {
             </div>
 
             <Box m={1} />
+            {totalPoData.length > 0 &&
+                <Table className="table" aria-label="spanning table">
+                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
+                        <TableRow>
+                            <TableCell style={{ color: 'wheat' }}>skuUom</TableCell>
+                            <TableCell align="left" style={{ color: 'wheat' }}>staginArea</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>skuCount</TableCell>
+                        </TableRow>
+                    </TableHead>
+
+                    <TableBody>
+
+                        {totalPoData.map((data, index) => (
+                            <TableRow>
+                                <TableCell style={{ color: 'wheat' }}>{data.skuUom}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.staginArea}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.skuCount}</TableCell>
+                            </TableRow>
+
+                        ))}
+
+
+
+
+                    </TableBody>
+
+                </Table>
+            }
+
+
+
             {toggle ?
-                <Button variant="contained" onClick={() => setToggle(false)}>Add</Button> :
+                <>
+                    <Button variant="contained" onClick={() => setToggle(false)}>Add</Button> &nbsp;
+                    {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData)}>Save All</Button>}
+                </>
+                :
 
                 <AddPoData setToggle={setToggle} suppliers={suppliers} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
             }

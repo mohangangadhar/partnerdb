@@ -50,3 +50,8 @@ export const detail = (val) => {
     let jsonVal = JSON.parse(val);
     return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
 };
+export const getRandom = () => {
+    let str = (Math.floor(100000 + Math.random() * 900000)).toString();
+    console.log(str);
+    return str;
+}

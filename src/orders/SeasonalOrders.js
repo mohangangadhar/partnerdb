@@ -33,7 +33,7 @@ function SeasonalOrders(props) {
     const [searchOrder, setSearchOrder] = useState({});
     const [isDownloading, setisDownloading] = useState(false);
     const order = useSelector(state => state.expressstatusreducer);
-    const dispatch = useDispatch();
+
     const receivedData = (val, status) => {
         setSearchNotFound(false);
         setRows("");
@@ -95,18 +95,18 @@ function SeasonalOrders(props) {
 
                     }}
                     >ALL</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (order.expressstatus == "new") { return; }
+                        if (status == "new") { return; }
                         else {
                             setStatus("new");
                             receivedData(0, "new");
                         }
                     }}
                     >New</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (order.expressstatus == "accepted") { return; }
+                        if (status == "accepted") { return; }
                         else {
                             setStatus("accepted");
                             receivedData(0, "accepted");
@@ -114,9 +114,9 @@ function SeasonalOrders(props) {
 
                     }}
                     >Processing</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (order.expressstatus == "prepared") { return; }
+                        if (status == "prepared") { return; }
                         else {
                             setStatus("prepared");
                             receivedData(0, "prepared");
@@ -124,9 +124,9 @@ function SeasonalOrders(props) {
 
                     }}
                     >Out for Delivery</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (order.expressstatus == "pending") { return; }
+                        if (status == "pending") { return; }
                         else {
                             setStatus("pending");
                             receivedData(0, "pending");
@@ -134,9 +134,9 @@ function SeasonalOrders(props) {
 
                     }}
                     >Delivered</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (order.expressstatus == "completed") { return; }
+                        if (status == "completed") { return; }
                         else {
                             setStatus("completed");
                             receivedData(0, "completed");
@@ -144,9 +144,9 @@ function SeasonalOrders(props) {
 
                     }}
                     >Completed</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (order.expressstatus == "cancelled") { return; }
+                        if (status == "cancelled") { return; }
                         else {
                             setStatus("cancelled");
                             receivedData(0, "cancelled");
@@ -154,9 +154,9 @@ function SeasonalOrders(props) {
 
                     }}
                     >Cancelled</Button>
-                    <Button style={{ marginRight: 10, color: 'white' }} variant={order.expressstatus == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
+                    <Button style={{ marginRight: 10, color: 'white' }} variant={status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (order.expressstatus == "failed") { return; }
+                        if (status == "failed") { return; }
                         else {
                             setStatus("failed");
                             receivedData(0, "failed");
