@@ -10,6 +10,7 @@ const ReadOnlyRow = ({
     return (
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
+            <TableCell >{row.poId}</TableCell>
             <TableCell >{row.skuUom}</TableCell>
             <TableCell align="center" >{row.staginArea}</TableCell>
             <TableCell align="center" >{row.skuCount}</TableCell>

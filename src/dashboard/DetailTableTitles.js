@@ -12,8 +12,9 @@ const DetailTableTitles = (props) => {
             <TableCell align="center" style={{ color: 'wheat' }}>Vendor Name</TableCell>
             <TableCell align="center" style={{ color: 'wheat' }}>Order Type</TableCell>
             <TableCell align="center" style={{ color: 'wheat' }}>New</TableCell>
-            <TableCell align="center" style={{ color: 'wheat' }}>Prepared</TableCell>
+
             <TableCell align="center" style={{ color: 'wheat' }}>Processing</TableCell>
+            <TableCell align="center" style={{ color: 'wheat' }}>Prepared</TableCell>
             <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
             <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
             <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>

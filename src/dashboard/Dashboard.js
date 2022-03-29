@@ -465,8 +465,9 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newOrdersData.regtotal != 0 ? newOrdersData.regtotal : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.regtotal != 0 ? preparedOrdersData.regtotal : 0}</TableCell>
+
                                     <TableCell align="center">{processingOrdersData.regtotal != 0 ? processingOrdersData.regtotal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.regtotal != 0 ? preparedOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.regtotal != 0 ? completeOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.regtotal != 0 ? pendingOrdersData.regtotal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.regtotal != 0 ? cancelOrdersData.regtotal : 0}</TableCell>
@@ -477,8 +478,9 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newOrdersData.exptotal != 0 ? newOrdersData.exptotal : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.exptotal != 0 ? preparedOrdersData.exptotal : 0}</TableCell>
+
                                     <TableCell align="center">{processingOrdersData.exptotal != 0 ? processingOrdersData.exptotal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.exptotal != 0 ? preparedOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.exptotal != 0 ? completeOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.exptotal != 0 ? pendingOrdersData.exptotal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.exptotal != 0 ? cancelOrdersData.exptotal : 0}</TableCell>
@@ -489,8 +491,9 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Seasonal</TableCell>
                                     <TableCell align="center">{newOrdersData.seasonaltotal != 0 ? newOrdersData.seasonaltotal : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.seasonaltotal != 0 ? preparedOrdersData.seasonaltotal : 0}</TableCell>
+
                                     <TableCell align="center">{processingOrdersData.seasonaltotal != 0 ? processingOrdersData.seasonaltotal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.seasonaltotal != 0 ? preparedOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.seasonaltotal != 0 ? completeOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.seasonaltotal != 0 ? pendingOrdersData.seasonaltotal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.seasonaltotal != 0 ? cancelOrdersData.seasonaltotal : 0}</TableCell>
@@ -537,8 +540,9 @@ function DashBoard() {
                                     <TableCell align="center" rowSpan={2}>{status}</TableCell>
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newCount.regular.length >= 1 ? newCount.regular[0].noOfOrders : 0}</TableCell>
-                                    <TableCell align="center">{preparedCount.regular.length >= 1 ? preparedCount.regular[0].noOfOrders : 0}</TableCell>
+
                                     <TableCell align="center">{processingCount.regular.length >= 1 ? processingCount.regular[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.regular.length >= 1 ? preparedCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{completeCount.regular.length >= 1 ? completeCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.regular.length >= 1 ? pendingCount.regular[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.regular.length >= 1 ? cancelCount.regular[0].noOfOrders : 0}</TableCell>
@@ -549,8 +553,9 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newCount.express.length >= 1 ? newCount.express[0].noOfOrders : 0}</TableCell>
-                                    <TableCell align="center">{preparedCount.express.length >= 1 ? preparedCount.express[0].noOfOrders : 0}</TableCell>
+
                                     <TableCell align="center">{processingCount.express.length >= 1 ? processingCount.express[0].noOfOrders : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.express.length >= 1 ? preparedCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{completeCount.express.length >= 1 ? completeCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.express.length >= 1 ? pendingCount.express[0].noOfOrders : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.express.length >= 1 ? cancelCount.express[0].noOfOrders : 0}</TableCell>
@@ -577,8 +582,9 @@ function DashBoard() {
                                     <TableCell align="center" rowSpan={2}>{status}</TableCell>
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newCount.regular.length >= 1 ? newCount.regular[0].total : 0}</TableCell>
-                                    <TableCell align="center">{preparedCount.regular.length >= 1 ? preparedCount.regular[0].total : 0}</TableCell>
+
                                     <TableCell align="center">{processingCount.regular.length >= 1 ? processingCount.regular[0].total : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.regular.length >= 1 ? preparedCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{completeCount.regular.length >= 1 ? completeCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.regular.length >= 1 ? pendingCount.regular[0].total : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.regular.length >= 1 ? cancelCount.regular[0].total : 0}</TableCell>
@@ -589,8 +595,9 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newCount.express.length >= 1 ? newCount.express[0].total : 0}</TableCell>
-                                    <TableCell align="center">{preparedCount.express.length >= 1 ? preparedCount.express[0].total : 0}</TableCell>
+
                                     <TableCell align="center">{processingCount.express.length >= 1 ? processingCount.express[0].total : 0}</TableCell>
+                                    <TableCell align="center">{preparedCount.express.length >= 1 ? preparedCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{completeCount.express.length >= 1 ? completeCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{pendingCount.express.length >= 1 ? pendingCount.express[0].total : 0}</TableCell>
                                     <TableCell align="center">{cancelCount.express.length >= 1 ? cancelCount.express[0].total : 0}</TableCell>

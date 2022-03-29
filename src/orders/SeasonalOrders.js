@@ -185,7 +185,7 @@ function SeasonalOrders(props) {
                                     <TableCell align="center">
                                         {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
                                     </TableCell>
-                                    <TableCell align="center" >----</TableCell>
+                                    <TableCell align="center" >{row.dispatchWeek}</TableCell>
                                     <TableCell align="center" >{row.user.pincode}</TableCell>
                                     <TableCell align="center">{row.total}</TableCell>
                                     <TableCell >{detail(row.vendor.name)}</TableCell>

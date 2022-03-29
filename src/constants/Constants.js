@@ -56,7 +56,7 @@ export const getRandom = () => {
     return str;
 }
 export const dashboardSummary = [
-    "Order Type", "New", "Prepared", "Processing", "Complete", "Pending", "Cancelled", "Total"
+    "Order Type", "New", "Processing", "Prepared", "Complete", "Pending", "Cancelled", "Total"
 ];
 export const supportSummaryData = [
     "New", "Open", "In Progress", "Completed", "Total"
@@ -82,7 +82,7 @@ export const paymentReportsTabData = [
     "Payment Reference No", "PO Number", "Invoice No", "Actions"
 ];
 export const poReportsTabData = [
-    "Id", "Sku Uom", "Stagin Area", "skuCount", "Product Name",
+    "Id", "PO Id", "Sku Uom", "Stagin Area", "skuCount", "Product Name",
     "Order Id Count", "Total Qty Req", "Primary Supplier",
     "Suggested Qty", "orderedQty", "orderedUom", "receivedQty",
     "wastageQty", "Missed Quantity", "qualityRating",
