@@ -27,7 +27,7 @@ function PoReports(props) {
     const [perPage, serPerPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [suppliers, setSuppliers] = useState([]);
-
+    const [checkData, setCheckData] = useState([]);
     const [errFound, setErrFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
 
@@ -70,6 +70,18 @@ function PoReports(props) {
             })
 
     }
+    const arrangeData = async (data) => {
+        const supplierData = new Set();
+        data.map((rows, index) => (
+            supplierData.add(rows.primarySupplier)
+        ));
+        let j = 0;
+        for (var i of supplierData) {
+            setCheckData(checkData => [...checkData, i]);
+            console.log(checkData[j++]);
+        }
+        setisLoading(false);
+    }
     const sendToDatabase = async (checkList) => {
         let finalList = [];
         // let poId = getRandom();
@@ -107,8 +119,9 @@ function PoReports(props) {
             then(response => response.json()).
             then(data => {
                 NotificationManager.success('Saved Data', 'Success', 1000);
+                arrangeData(data);
                 setRows(data);
-                setisLoading(false);
+
             }).catch(err => console.log(err));
     }
     const getLatestReport = async () => {
@@ -120,8 +133,8 @@ function PoReports(props) {
                     response => response.json()
                 ).then(poIdData => {
                     if (poIdData.length > 0) {
+                        arrangeData(poIdData);
                         setRows(poIdData);
-                        setisLoading(false);
                         return;
                     }
                     else {
@@ -321,12 +334,18 @@ function PoReports(props) {
 
             <Box m={1} />
             {totalPoData.length > 0 &&
-                <Table className="table" aria-label="spanning table">
+                <>
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>skuUom</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>staginArea</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>skuCount</TableCell>
+                            <TableCell style={{ color: 'wheat' }}>Total Qty Req</TableCell>
+                            <TableCell align="left" style={{ color: 'wheat' }}>Primary Supplier</TableCell>
+
+                            <TableCell align="left" style={{ color: 'wheat' }}>Ordered Qty</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Ordered Uom</TableCell>
+                            <TableCell align="left" style={{ color: 'wheat' }}>Product Name</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Vendor Name</TableCell>
+                            <TableCell align="left" style={{ color: 'wheat' }}>Total pay</TableCell>
+                            <TableCell align="center" style={{ color: 'wheat' }}>Comments</TableCell>
                         </TableRow>
                     </TableHead>
 
@@ -334,15 +353,20 @@ function PoReports(props) {
 
                         {totalPoData.map((data, index) => (
                             <TableRow>
-                                <TableCell style={{ color: 'wheat' }}>{data.skuUom}</TableCell>
-                                <TableCell style={{ color: 'wheat' }}>{data.staginArea}</TableCell>
-                                <TableCell style={{ color: 'wheat' }}>{data.skuCount}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.totalQtyReq}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.primarySupplier}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.orderedQty}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.orderedUom}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.productName}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.vendorName}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.totalPay}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.comments}</TableCell>
                             </TableRow>
 
                         ))}
                     </TableBody>
+                </>
 
-                </Table>
             }
 
 
@@ -356,37 +380,49 @@ function PoReports(props) {
 
                 <AddPoData setToggle={setToggle} suppliers={suppliers} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
             }
-            <TableContainer component={Paper}>
-                <Table className="table" aria-label="spanning table">
-                    <TableTitles data={poReportsTabData} />
+            {checkData.length > 0 ?
+                <>
+                    {checkData.length > 0 && checkData.map((data, index) => (
+                        <>
+                            <h2 style={{ color: 'white' }}>{checkData[index]}</h2>
+                            <TableContainer component={Paper}>
+                                <Table className="table" aria-label="spanning table">
+                                    <TableTitles data={poReportsTabData} />
 
-                    {rows.length > 0 && !(isLoading) ?
-                        <TableBody>
-                            {rows.map((row, index) => (
-                                <Fragment>
-                                    {editContactId === row.id ?
+                                    {rows.length > 0 && !(isLoading) ?
+                                        <TableBody>
+                                            {rows.filter(data => data.primarySupplier === checkData[index]).map((row) => (
+                                                <Fragment>
+                                                    {editContactId === row.id ?
 
 
-                                        <EditableRow row={row} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />
+                                                        <EditableRow row={row} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />
 
+                                                        :
+                                                        <ReadOnlyRow row={row} handleEditClick={handleEditClick} />}
+                                                </Fragment>
+
+                                            ))}
+                                        </TableBody>
                                         :
-                                        <ReadOnlyRow row={row} handleEditClick={handleEditClick} />}
-                                </Fragment>
+                                        <div>
+                                            <center>
+                                                {errFound ? <h1 style={{ color: 'black' }}>NO DATA</h1> : <CircularProgress />}
+                                            </center>
+                                        </div>
 
-                            ))}
-                        </TableBody>
-                        :
-                        <div>
-                            <center>
-                                {errFound ? <h1 style={{ color: 'black' }}>NO DATA</h1> : <CircularProgress />}
-                            </center>
-                        </div>
-
-
+                                    }
+                                </Table>
+                            </TableContainer>
+                        </>
+                    ))
 
                     }
-                </Table>
-            </TableContainer>
+
+                </> : <div>
+                    <center>
+                        {errFound ? <h1 style={{ color: 'black' }}>NO DATA</h1> : <CircularProgress />}
+                    </center></div>}
             <Box m={2} />
             {/* <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}

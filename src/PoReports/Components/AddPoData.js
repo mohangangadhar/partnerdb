@@ -16,84 +16,9 @@ const AddPoData = ({
         fontSize: 15
     }
     return (
-        <Table style={{ border: '2px', backgroundColor: 'grey' }}>
+        <div>
             <TableRow >
-                <TableCell align="center">
-                    <TextField
-                        id="skuUom"
-                        label="SkuUom"
-                        multiline
-                        name="skuUom"
-                        value={poData.skuUom}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="stagingArea"
-                        label="Staging Area"
 
-                        name="staginArea"
-                        value={poData.staginArea}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="skuCount"
-                        label="skuCount"
-
-                        name="skuCount"
-                        value={poData.skuCount}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="stagingArea"
-                        label="Order Id Count"
-
-                        name="orderIdCount"
-                        value={poData.orderIdCount}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
                 <TableCell align="center">
                     <TextField
                         id="totalQtyReq"
@@ -101,27 +26,6 @@ const AddPoData = ({
 
                         name="totalQtyReq"
                         value={poData.totalQtyReq}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
-            </TableRow>
-            <TableRow >
-                <TableCell align="center">
-                    <TextField
-                        id="suggestedQty"
-                        label="suggestedQty"
-
-                        name="suggestedQty"
-                        value={poData.suggestedQty}
                         onChange={handlePoDataChange}
                         InputProps={{
                             style: {
@@ -153,7 +57,6 @@ const AddPoData = ({
                         variant='outlined'
                     />
                 </TableCell>
-
                 <TableCell align="center">
                     <TextField
                         id="orderedQty"
@@ -174,6 +77,7 @@ const AddPoData = ({
                     />
 
                 </TableCell>
+
                 <TableCell align="center"> <TextField
                     id="orderedUom"
                     label="orderedUom"
@@ -193,93 +97,13 @@ const AddPoData = ({
                 />
                 </TableCell>
 
-                <TableCell align="center">
-                    <TextField
-                        id="receivedQty"
-                        label="receivedQty"
-
-                        name="receivedQty"
-                        value={poData.receivedQty}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-
-                </TableCell>
-
-
             </TableRow>
+
             <TableRow>
-                <TableCell align="center">
-                    <TextField
-                        id="wastageQty"
-                        label="wastageQty"
-
-                        name="wastageQty"
-                        value={poData.wastageQty}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="qualityRating"
-                        label="qualityRating"
-
-                        name="qualityRating"
-                        value={poData.qualityRating}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="missedQty"
-                        label="missedQty"
-
-                        name="missedQty"
-                        value={poData.missedQty}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
                 <TableCell align="center">
                     <TextField
                         id="productName"
                         label="productName"
-
                         name="productName"
                         value={poData.productName}
                         onChange={handlePoDataChange}
@@ -313,8 +137,6 @@ const AddPoData = ({
                         variant='outlined'
                     />
                 </TableCell>
-            </TableRow>
-            <TableRow>
                 <TableCell align="center">
                     <TextField
                         id="totalPay"
@@ -333,7 +155,6 @@ const AddPoData = ({
                         }}
                         variant='outlined'
                     />
-
                 </TableCell>
                 <TableCell align="center">
                     <TextField
@@ -363,7 +184,7 @@ const AddPoData = ({
                         onClick={(event) => setToggle(true)}>Cancel</Button></TableCell>
                 </div>
             </TableRow>
-        </Table>
+        </div>
     );
 };
 
