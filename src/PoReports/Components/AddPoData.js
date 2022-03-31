@@ -38,25 +38,7 @@ const AddPoData = ({
                         variant='outlined'
                     />
                 </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="primarySupplier"
-                        label="primarySupplier"
 
-                        name="primarySupplier"
-                        value={poData.primarySupplier}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
                 <TableCell align="center">
                     <TextField
                         id="orderedQty"
@@ -140,7 +122,7 @@ const AddPoData = ({
                 <TableCell align="center">
                     <TextField
                         id="totalPay"
-                        label="totalPay"
+                        label="Price per Uom"
 
                         name="totalPay"
                         value={poData.totalPay}
@@ -156,25 +138,7 @@ const AddPoData = ({
                         variant='outlined'
                     />
                 </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="comments"
-                        label="Comments"
 
-                        name="comments"
-                        value={poData.comments}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
             </TableRow>
             <TableRow>
                 <div>

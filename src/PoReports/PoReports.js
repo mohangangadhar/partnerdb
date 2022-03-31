@@ -30,7 +30,10 @@ function PoReports(props) {
     const [checkData, setCheckData] = useState([]);
     const [errFound, setErrFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
-
+    const [recentPoId, setRecentPoId] = useState({
+        poId: "",
+        createdAt: ""
+    });
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
     const [isRowLoading, setisRowLoading] = useState(false);
@@ -121,7 +124,10 @@ function PoReports(props) {
                 NotificationManager.success('Saved Data', 'Success', 1000);
                 arrangeData(data);
                 setRows(data);
-
+                setRecentPoId({
+                    poId: data[0].poId,
+                    createdAt: data[0].createdAt
+                });
             }).catch(err => console.log(err));
     }
     const getLatestReport = async () => {
@@ -134,6 +140,11 @@ function PoReports(props) {
                 ).then(poIdData => {
                     if (poIdData.length > 0) {
                         arrangeData(poIdData);
+                        setRecentPoId({
+                            poId: poIdData[0].poId,
+                            createdAt: poIdData[0].createdAt
+                        });
+                        console.log(poIdData[0].poId);
                         setRows(poIdData);
                         return;
                     }
@@ -193,7 +204,7 @@ function PoReports(props) {
         };
 
         setisApiLoading(true);
-        console.log(supportData);
+
 
         const requestOptionsForUpdate = {
             method: 'PUT',
@@ -218,7 +229,7 @@ function PoReports(props) {
         xyz.receivedQty = tempFormData.receivedQty;
         xyz.wastageQty = tempFormData.wastageQty;
         xyz.qualityRating = tempFormData.qualityRating;
-        xyz.missedQty = tempFormData.missedQty;
+        xyz.missedQty = tempFormData.receivedQty - tempFormData.wastageQty;
         xyz.totalPay = tempFormData.totalPay;
         xyz.comments = tempFormData.comments;
         for (let i = 0; i < rows.length; i++) {
@@ -294,14 +305,15 @@ function PoReports(props) {
                 "orderIdCount": "22",
                 "totalQtyReq": "",
                 "suggestedQty": row.suggestedQty,
-                "primarySupplier": row.primarySupplier,
+                "primarySupplier": "",
                 "orderedQty": row.orderedQty,
                 "orderedUom": row.orderedUom,
                 "productName": row.productName,
-                "productId": row.productId,
+                "productId": 0,
                 "vendorName": row.vendorName,
                 "comments": "raw",
                 "poId": "PO-V" + poId,
+                "totalPay": row.totalPay * row.orderedQty,
                 "createdAt": GetDate(),
             })
         );
@@ -322,6 +334,13 @@ function PoReports(props) {
                 setisLoading(false);
             }).catch(err => console.log(err));
     }
+    const getTotalCost = (list) => {
+        let sum = 0;
+        list.map((ls) => {
+            sum += ls.totalPay * ls.missedQty;
+        })
+        return sum;
+    };
     return (
         <div>
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
@@ -338,13 +357,13 @@ function PoReports(props) {
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
                             <TableCell style={{ color: 'wheat' }}>Total Qty Req</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>Primary Supplier</TableCell>
+
 
                             <TableCell align="left" style={{ color: 'wheat' }}>Ordered Qty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Ordered Uom</TableCell>
                             <TableCell align="left" style={{ color: 'wheat' }}>Product Name</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Vendor Name</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>Total pay</TableCell>
+                            <TableCell align="left" style={{ color: 'wheat' }}>Price/Uom</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Comments</TableCell>
                         </TableRow>
                     </TableHead>
@@ -354,7 +373,7 @@ function PoReports(props) {
                         {totalPoData.map((data, index) => (
                             <TableRow>
                                 <TableCell style={{ color: 'wheat' }}>{data.totalQtyReq}</TableCell>
-                                <TableCell style={{ color: 'wheat' }}>{data.primarySupplier}</TableCell>
+
                                 <TableCell style={{ color: 'wheat' }}>{data.orderedQty}</TableCell>
                                 <TableCell style={{ color: 'wheat' }}>{data.orderedUom}</TableCell>
                                 <TableCell style={{ color: 'wheat' }}>{data.productName}</TableCell>
@@ -384,7 +403,7 @@ function PoReports(props) {
                 <>
                     {checkData.length > 0 && checkData.map((data, index) => (
                         <>
-                            <h2 style={{ color: 'white' }}>{checkData[index]}</h2>
+                            <h3 style={{ color: 'white' }}>Primary Supplier : {checkData[index]} |   PO Number: {recentPoId.poId} | Created At : {recentPoId.createdAt} | Payment Status: Pending</h3>
                             <TableContainer component={Paper}>
                                 <Table className="table" aria-label="spanning table">
                                     <TableTitles data={poReportsTabData} />
@@ -403,6 +422,9 @@ function PoReports(props) {
                                                 </Fragment>
 
                                             ))}
+                                            <TableRow>
+                                                <TableCell colSpan={10} style={{ fontSize: '20px', textAlign: 'center', width: '100%', fontWeight: 'bolder' }}>Total: Rs {getTotalCost(rows.filter(data => data.primarySupplier === checkData[index]))}/-</TableCell>
+                                            </TableRow>
                                         </TableBody>
                                         :
                                         <div>
@@ -422,7 +444,8 @@ function PoReports(props) {
                 </> : <div>
                     <center>
                         {errFound ? <h1 style={{ color: 'black' }}>NO DATA</h1> : <CircularProgress />}
-                    </center></div>}
+                    </center></div>
+            }
             <Box m={2} />
             {/* <Grid container justifyContent={"center"}>
                 <Pagination variant={"text"} color={"primary"}
@@ -430,7 +453,7 @@ function PoReports(props) {
                     onChange={(event, value) => setOffSet(value - 1)} />
             </Grid> */}
             <Box m={2} />
-        </div>
+        </div >
     )
 }
 

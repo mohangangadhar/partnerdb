@@ -82,11 +82,11 @@ export const paymentReportsTabData = [
     "Payment Reference No", "PO Number", "Invoice No", "Actions"
 ];
 export const poReportsTabData = [
-    "Id", "PO Id", "Sku Uom", "Stagin Area", "skuCount", "Product Name",
-    "Order Id Count", "Total Qty Req", "Primary Supplier",
-    "Suggested Qty", "orderedQty", "orderedUom", "receivedQty",
-    "wastageQty", "Missed Quantity", "qualityRating",
-    "Total Pay", "Comments", "createdAt", "Actions"
+    "Id", "Sku Count", "Product Name", "Sku Uom",
+    "Order Id Count", "Total Qty Req",
+    "Ordered Qty", "Ordered Uom", "Received Qty",
+    "Wastage Qty", "Total Graded Quantity", "Quality Rating",
+    "Cost Per SKU", "Total Cost", "Comments", "Actions"
 ];
 export const supplyPlanningTabData = [
     "ADD", "Id", "Vendor Name", "Article",
