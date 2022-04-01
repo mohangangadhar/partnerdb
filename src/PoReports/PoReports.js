@@ -34,6 +34,7 @@ function PoReports(props) {
         poId: "",
         createdAt: ""
     });
+    var poNumberMap = new Map();
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
     const [isRowLoading, setisRowLoading] = useState(false);
@@ -48,6 +49,7 @@ function PoReports(props) {
     const [toggle, setToggle] = useState(true);
     const [podata, setPoData] = useState({});
     const [totalPoData, setTotalPoData] = useState([]);
+    const [inputPrimarySupplier, setInputPrimarySupplier] = useState("");
     const [editedRowData, setEditedRowData] = useState([]);
     const receivedData = async (val) => {
         setisLoading(true);
@@ -75,40 +77,66 @@ function PoReports(props) {
     }
     const arrangeData = async (data) => {
         const supplierData = new Set();
-        data.map((rows, index) => (
+        data.map((rows, index) => {
             supplierData.add(rows.primarySupplier)
-        ));
+
+
+        });
         let j = 0;
         for (var i of supplierData) {
             setCheckData(checkData => [...checkData, i]);
-            console.log(checkData[j++]);
+
         }
+
         setisLoading(false);
     }
     const sendToDatabase = async (checkList) => {
         let finalList = [];
-        // let poId = getRandom();
-        console.log(checkList);
-        checkList.map((row) =>
+        await arrangeData(checkList);
 
-            finalList.push({
-                "skuUom": row.skuUom,
-                "staginArea": row.staginArea,
-                "skuCount": row.skuCount,
-                "orderIdCount": row.orderIdCount,
-                "totalQtyReq": row.totalQtyReq,
-                "suggestedQty": row.suggestedQty,
-                "primarySupplier": row.primarySupplier,
-                "orderedQty": row.orderedQty,
-                "orderedUom": row.orderedUom,
-                "productName": row.productName,
-                "productId": row.productId,
-                "vendorName": row.vendorName,
-                "comments": "raw",
-                "poId": "PO-V" + row.spId.substring(4),
+        for (var i = 0; i < checkData.length; i++) {
+            let randomPoId = getRandom();
+            console.log(checkData[i]);
+            checkList.filter(data => data.primarySupplier == checkData[i]).map((row) =>
+                finalList.push({
+                    "skuUom": row.skuUom,
+                    "staginArea": row.staginArea,
+                    "skuCount": row.skuCount,
+                    "orderIdCount": row.orderIdCount,
+                    "totalQtyReq": row.totalQtyReq,
+                    "suggestedQty": row.suggestedQty,
+                    "primarySupplier": row.primarySupplier,
+                    "orderedQty": row.orderedQty,
+                    "orderedUom": row.orderedUom,
+                    "productName": row.productName,
+                    "productId": row.productId,
+                    "vendorName": row.vendorName,
+                    "comments": "raw",
+                    "poNumber": "PO-S" + randomPoId,
+                    "poId": "PO-V" + row.spId.substring(4),
+                    "createdAt": GetDate(),
+                })
+
+            );
+            let reqBody = {
+                "poReportId": "PO-S" + randomPoId,
                 "createdAt": GetDate(),
-            })
-        );
+                "comments": "test",
+                "paymentStatus": "Pending",
+                "active": 1
+            }
+            const requestOptionsz = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reqBody)
+            };
+            fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
+                console.log("info added");
+            }).catch(err => alert(err))
+        }
+
 
         const requestOptions = {
             method: 'POST',
@@ -122,13 +150,15 @@ function PoReports(props) {
             then(response => response.json()).
             then(data => {
                 NotificationManager.success('Saved Data', 'Success', 1000);
-                arrangeData(data);
                 setRows(data);
+                console.log(data[0].poId)
                 setRecentPoId({
                     poId: data[0].poId,
                     createdAt: data[0].createdAt
                 });
+                setisLoading(false);
             }).catch(err => console.log(err));
+        setisLoading(false);
     }
     const getLatestReport = async () => {
         setisLoading(true);
@@ -144,15 +174,14 @@ function PoReports(props) {
                             poId: poIdData[0].poId,
                             createdAt: poIdData[0].createdAt
                         });
-                        console.log(poIdData[0].poId);
                         setRows(poIdData);
+                        setisLoading(false);
                         return;
                     }
                     else {
-                        sendToDatabase(data.filter(report => report.spId == data[0].spId));
+                        sendToDatabase(data.filter(report => report.spId == data[0].spId && report.freeze == 1));
                     }
                 });
-                // setRows(data.filter(report => report.spId == data[0].spId));
 
             }).catch(err => { console.log(err); setisLoading(false); })
     }
@@ -243,8 +272,6 @@ function PoReports(props) {
         uploadBackEnd(row, tempFormData);
     }
     const handleChangeSupplier = async (name) => {
-
-        console.log(name);
         if (name == "all") {
             receivedData(offSet);
             return;
@@ -263,7 +290,7 @@ function PoReports(props) {
         // setisApiLoading(true);
         setPoData([]);
         setToggle(true);
-        console.log(totalPoData);
+
         // const requestOptions = {
         //     method: 'POST',
         //     headers: {
@@ -301,19 +328,20 @@ function PoReports(props) {
             finalList.push({
                 "skuUom": row.skuUom,
                 "staginArea": "nm",
-                "skuCount": "2",
-                "orderIdCount": "22",
+                "skuCount": 0,
+                "orderIdCount": 0,
                 "totalQtyReq": "",
-                "suggestedQty": row.suggestedQty,
-                "primarySupplier": "",
+                "suggestedQty": 0,
+                "primarySupplier": inputPrimarySupplier,
                 "orderedQty": row.orderedQty,
                 "orderedUom": row.orderedUom,
                 "productName": row.productName,
                 "productId": 0,
-                "vendorName": row.vendorName,
+                "vendorName": "",
                 "comments": "raw",
-                "poId": "PO-V" + poId,
-                "totalPay": row.totalPay * row.orderedQty,
+                "poId": "PO-V" + recentPoId.poId.substring(4),
+                "poNumber": "PO-S" + poId,
+                "totalPay": row.totalPay,
                 "createdAt": GetDate(),
             })
         );
@@ -330,15 +358,39 @@ function PoReports(props) {
             then(response => response.json()).
             then(data => {
                 NotificationManager.success('Saved Data', 'Success', 1000);
-                setTotalPoData([]);
-                setisLoading(false);
+                let reqBody = {
+                    "poReportId": "PO-V" + poId,
+                    "createdAt": GetDate(),
+                    "comments": "test",
+                    "paymentStatus": "Pending",
+                    "active": 1
+                }
+                const requestOptionsz = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reqBody)
+                };
+                fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
+                    setTotalPoData([]);
+                    setisLoading(false);
+                }).catch(err => alert(err))
+
             }).catch(err => console.log(err));
     }
     const getTotalCost = (list) => {
         let sum = 0;
-        list.map((ls) => {
-            sum += ls.totalPay * ls.missedQty;
+
+        list.map((row) => {
+            if (row.receivedQty > 0) {
+                sum += (row.receivedQty - row.wastageQty) * row.totalPay;
+            }
+            else {
+                sum += row.orderedQty * row.totalPay;
+            }
         })
+
         return sum;
     };
     return (
@@ -356,15 +408,11 @@ function PoReports(props) {
                 <>
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
                         <TableRow>
-                            <TableCell style={{ color: 'wheat' }}>Total Qty Req</TableCell>
-
-
+                            <TableCell align="left" style={{ color: 'wheat' }}>Product Name</TableCell>
                             <TableCell align="left" style={{ color: 'wheat' }}>Ordered Qty</TableCell>
                             <TableCell align="center" style={{ color: 'wheat' }}>Ordered Uom</TableCell>
-                            <TableCell align="left" style={{ color: 'wheat' }}>Product Name</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Vendor Name</TableCell>
                             <TableCell align="left" style={{ color: 'wheat' }}>Price/Uom</TableCell>
-                            <TableCell align="center" style={{ color: 'wheat' }}>Comments</TableCell>
+
                         </TableRow>
                     </TableHead>
 
@@ -372,14 +420,13 @@ function PoReports(props) {
 
                         {totalPoData.map((data, index) => (
                             <TableRow>
-                                <TableCell style={{ color: 'wheat' }}>{data.totalQtyReq}</TableCell>
-
-                                <TableCell style={{ color: 'wheat' }}>{data.orderedQty}</TableCell>
-                                <TableCell style={{ color: 'wheat' }}>{data.orderedUom}</TableCell>
                                 <TableCell style={{ color: 'wheat' }}>{data.productName}</TableCell>
-                                <TableCell style={{ color: 'wheat' }}>{data.vendorName}</TableCell>
+                                <TableCell style={{ color: 'wheat' }}>{data.orderedQty}</TableCell>
+
+                                <TableCell style={{ color: 'wheat' }}>{data.orderedUom}</TableCell>
                                 <TableCell style={{ color: 'wheat' }}>{data.totalPay}</TableCell>
-                                <TableCell style={{ color: 'wheat' }}>{data.comments}</TableCell>
+
+
                             </TableRow>
 
                         ))}
@@ -392,12 +439,14 @@ function PoReports(props) {
 
             {toggle ?
                 <>
-                    <Button variant="contained" onClick={() => setToggle(false)}>Add</Button> &nbsp;
+                    {inputPrimarySupplier.length == 0 && <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />}<Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
                     {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData)}>Save All</Button>}
                 </>
                 :
-
-                <AddPoData setToggle={setToggle} suppliers={suppliers} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
+                <div>
+                    <h3 style={{ color: 'white' }}>{inputPrimarySupplier} :</h3>
+                    <AddPoData setInputPrimarySupplier={setInputPrimarySupplier} setToggle={setToggle} suppliers={suppliers} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
+                </div>
             }
             {checkData.length > 0 ?
                 <>

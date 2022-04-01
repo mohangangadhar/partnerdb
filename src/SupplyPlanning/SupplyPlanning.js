@@ -38,6 +38,7 @@ const SupplyPlanning = () => {
         orderedQty: 0,
         orderedUom: ""
     })
+    var freezeMap = new Map();
     const modifyInputData = (arr) => {
         const result = [...arr.reduce((r, o) => {
             const key = o.vendorName + '-' + o.article + '-' + o.skuQuantity + '-' + o.skuUom;
@@ -189,8 +190,9 @@ const SupplyPlanning = () => {
         xyz.primarySupplier = tempFormData.primarySupplier;
         xyz.orderedQty = tempFormData.orderedQty;
         xyz.orderedUom = tempFormData.orderedUom;
-        xyz.freeze = 1;
+        // xyz.freeze = 1;
         rows[index] = xyz;
+        freezeMap.set(tempFormData.primarySupplier, 1);
         setEditContactId(null);
 
     }
@@ -208,17 +210,17 @@ const SupplyPlanning = () => {
         let finalList = [];
         let poId = getRandom();
 
-        for (let i = 0; i < personName.length; i++) {
-            finalList.push(rows.filter(row => row.primarySupplier === personName[i]));
-        };
+        // for (let i = 0; i < personName.length; i++) {
+        //     finalList.push(rows.filter(row => row.primarySupplier === personName[i]));
+        // };
 
-        let checkList = finalList[0];
-        for (let i = 0; i < finalList.length - 1; i++) {
-            checkList = checkList.concat(finalList[i + 1]);
-        }
-        finalList = [];
+        // let checkList = finalList[0];
+        // for (let i = 0; i < finalList.length - 1; i++) {
+        //     checkList = checkList.concat(finalList[i + 1]);
+        // }
+        // finalList = [];
 
-        checkList.map((row) =>
+        rows.map((row) =>
 
             finalList.push({
                 "skuUom": row.skuUom,
@@ -234,7 +236,7 @@ const SupplyPlanning = () => {
                 "productId": row.productId,
                 "vendorName": row.vendorName,
                 "reportType": "updated",
-                "freeze": row.freeze,
+                "freeze": personName.includes(row.primarySupplier) ? 1 : 0,
                 "spId": "SP-V" + poId,
                 "createdAt": GetDate()
             })

@@ -8,7 +8,8 @@ const AddPoData = ({
     poData,
     handlePoDataChange,
     handleAddPoData,
-    setToggle
+    setToggle,
+    setInputPrimarySupplier
 }) => {
     const styleOptions = {
         padding: 10,
@@ -18,14 +19,54 @@ const AddPoData = ({
     return (
         <div>
             <TableRow >
+                <TableRow>
+                    <TableCell align="center">
+                        <TextField
+                            id="productName"
+                            label="Product Name"
+                            name="productName"
+                            value={poData.productName}
+                            onChange={handlePoDataChange}
+                            InputProps={{
+                                style: {
+                                    color: "white",
+                                }
+                            }}
+                            InputLabelProps={{
+                                style: { color: '#fff' },
+                            }}
+                            variant='outlined'
+                        />
+                    </TableCell>
 
-                <TableCell align="center">
-                    <TextField
-                        id="totalQtyReq"
-                        label="Total Quantity Req"
 
-                        name="totalQtyReq"
-                        value={poData.totalQtyReq}
+                    <TableCell align="center">
+                        <TextField
+                            id="orderedQty"
+                            label="Ordered Qty"
+
+                            name="orderedQty"
+                            value={poData.orderedQty}
+                            onChange={handlePoDataChange}
+                            InputProps={{
+                                style: {
+                                    color: "white",
+                                }
+                            }}
+                            InputLabelProps={{
+                                style: { color: '#fff' },
+                            }}
+                            variant='outlined'
+                        />
+
+                    </TableCell>
+
+                    <TableCell align="center"> <TextField
+                        id="orderedUom"
+                        label="Ordered Uom"
+
+                        name="orderedUom"
+                        value={poData.orderedUom}
                         onChange={handlePoDataChange}
                         InputProps={{
                             style: {
@@ -37,88 +78,12 @@ const AddPoData = ({
                         }}
                         variant='outlined'
                     />
-                </TableCell>
+                    </TableCell>
 
-                <TableCell align="center">
-                    <TextField
-                        id="orderedQty"
-                        label="orderedQty"
+                </TableRow>
 
-                        name="orderedQty"
-                        value={poData.orderedQty}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
 
-                </TableCell>
 
-                <TableCell align="center"> <TextField
-                    id="orderedUom"
-                    label="orderedUom"
-
-                    name="orderedUom"
-                    value={poData.orderedUom}
-                    onChange={handlePoDataChange}
-                    InputProps={{
-                        style: {
-                            color: "white",
-                        }
-                    }}
-                    InputLabelProps={{
-                        style: { color: '#fff' },
-                    }}
-                    variant='outlined'
-                />
-                </TableCell>
-
-            </TableRow>
-
-            <TableRow>
-                <TableCell align="center">
-                    <TextField
-                        id="productName"
-                        label="productName"
-                        name="productName"
-                        value={poData.productName}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="vendorName"
-                        label="vendorName"
-
-                        name="vendorName"
-                        value={poData.vendorName}
-                        onChange={handlePoDataChange}
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            }
-                        }}
-                        InputLabelProps={{
-                            style: { color: '#fff' },
-                        }}
-                        variant='outlined'
-                    />
-                </TableCell>
                 <TableCell align="center">
                     <TextField
                         id="totalPay"
@@ -143,9 +108,12 @@ const AddPoData = ({
             <TableRow>
                 <div>
                     <TableCell><Button variant="contained"
-                        onClick={(event) => handleAddPoData(event, poData)}>Add</Button></TableCell>
+                        onClick={(event) => handleAddPoData(event, poData)}>Add Product</Button></TableCell>
                     <TableCell><Button variant="contained" style={{ backgroundColor: 'red', color: 'white' }}
-                        onClick={(event) => setToggle(true)}>Cancel</Button></TableCell>
+                        onClick={(event) => {
+                            setInputPrimarySupplier("");
+                            setToggle(true);
+                        }}>Cancel</Button></TableCell>
                 </div>
             </TableRow>
         </div>
