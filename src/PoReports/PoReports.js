@@ -375,6 +375,7 @@ function PoReports(props) {
                 fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
                     setisLoading(false);
+                    getLatestReport();
                 }).catch(err => alert(err))
 
             }).catch(err => console.log(err));
@@ -507,3 +508,4 @@ function PoReports(props) {
 }
 
 export default PoReports
+//payment status,active,po number display
