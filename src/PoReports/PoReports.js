@@ -440,7 +440,7 @@ function PoReports(props) {
 
             {toggle ?
                 <>
-                    {inputPrimarySupplier.length == 0 && <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />}<Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
+                    {totalPoData.length == 0 && <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />}<Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
                     {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData)}>Save All</Button>}
                 </>
                 :
