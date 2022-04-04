@@ -137,10 +137,10 @@ function SeasonalOrders(props) {
                     >Delivered</Button>
                     <Button style={{ marginRight: 10, color: 'white' }} variant={status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
                         ev.preventDefault();
-                        if (status == "completed") { return; }
+                        if (status == "complete") { return; }
                         else {
                             setStatus("completed");
-                            receivedData(0, "completed");
+                            receivedData(0, "complete");
                         }
 
                     }}
