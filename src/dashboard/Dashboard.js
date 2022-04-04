@@ -203,7 +203,7 @@ function DashBoard() {
                 }
             }
             if (data[i].deliveryStatus == "prepared") {
-
+                console.log(data[i]);
                 if (data[i].express == "REGULAR" && data[i].seasonal == 0) {
 
                     setPreparedOrdersData((prevState) => ({
@@ -415,8 +415,8 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
                                     <TableCell align="center">{newOrdersData.regular != 0 ? newOrdersData.regular : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.regular != 0 ? preparedOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.regular != 0 ? processingOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.regular != 0 ? preparedOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{completeOrdersData.regular != 0 ? completeOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.regular != 0 ? pendingOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.regular != 0 ? cancelOrdersData.regular : 0}</TableCell>
@@ -427,8 +427,9 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
                                     <TableCell align="center">{newOrdersData.express != 0 ? newOrdersData.express : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.express != 0 ? preparedOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.express != 0 ? processingOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.express != 0 ? preparedOrdersData.express : 0}</TableCell>
+
                                     <TableCell align="center">{completeOrdersData.express != 0 ? completeOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.express != 0 ? pendingOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.express != 0 ? cancelOrdersData.express : 0}</TableCell>
@@ -439,8 +440,9 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Seasonal</TableCell>
                                     <TableCell align="center">{newOrdersData.seasonal != 0 ? newOrdersData.seasonal : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.seasonal != 0 ? preparedOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{processingOrdersData.seasonal != 0 ? processingOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center">{preparedOrdersData.seasonal != 0 ? preparedOrdersData.seasonal : 0}</TableCell>
+
                                     <TableCell align="center">{completeOrdersData.seasonal != 0 ? completeOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{pendingOrdersData.seasonal != 0 ? pendingOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{cancelOrdersData.seasonal != 0 ? cancelOrdersData.seasonal : 0}</TableCell>

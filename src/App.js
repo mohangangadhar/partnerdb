@@ -28,7 +28,7 @@ import { ShoppingCart } from "@material-ui/icons";
 import PhoneIcon from '@mui/icons-material/Phone';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ProductDetail from "./products/ProductDetail";
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+
 import Wallet from "./Wallet/Wallet";
 import Wrapper from "./Wrapper"
 import PersonIcon from '@mui/icons-material/Person';
@@ -37,7 +37,7 @@ import { NotificationContainer } from 'react-notifications';
 import Login from "./Login";
 import UserList from "./users/UserList";
 import Button from '@mui/material/Button';
-import PeopleIcon from '@mui/icons-material/People';
+
 import * as Constants from './constants/Constants'
 import { auth } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -49,17 +49,16 @@ import ContactUs from './Contact/ContactUs';
 import ExpressOrderList from './orders/ExpressOrderList';
 import setstatus from './Actions';
 import { useSelector, useDispatch } from 'react-redux'
-import HelpIcon from '@mui/icons-material/Help';
+
 import Support from './Support/Support';
 import dummy from './dummy';
 import ServiceZones from './ServiceZones/ServiceZones';
-import ShareLocationIcon from '@mui/icons-material/ShareLocation';
+
 import PaymentReports from './PaymentReports/PaymentReports';
-import PaymentsIcon from '@mui/icons-material/Payments';
 import SeasonalOrders from './orders/SeasonalOrders';
 import SupplyPlanning from './SupplyPlanning/SupplyPlanning';
 import PoReports from './PoReports/PoReports';
-import UgadiOrders from './orders/UgadiOrders';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -255,22 +254,7 @@ export default function MiniDrawer() {
                                         id: "2"
                                     }}><ListItemText primary="Orders" /></Link>
                                 </ListItem>
-                                <ListItem button key="Orders">
 
-                                    <Link to={{
-                                        pathname: `/app/order/ugadiorders`,
-                                        id: "2"
-                                    }}>
-                                        <div >
-                                            <h6 style={orderStyle}>Ugadi</h6>
-                                            <h6 style={orderStyle}>Orders</h6>
-                                        </div></Link>
-
-                                    <Link to={{
-                                        pathname: `/app/order/ugadiorders`,
-                                        id: "2"
-                                    }}><ListItemText primary="Ugadi Orders" /></Link>
-                                </ListItem>
                                 <ListItem button key="Orders">
 
                                     <Link to={{
@@ -399,7 +383,6 @@ export default function MiniDrawer() {
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/:vendorId" exact component={OrderList} />
                                     <Route path="/app/:vendorId/seasonal" exact component={SeasonalOrders} />
-                                    <Route path="/app/:vendorId/ugadiorders" exact component={UgadiOrders} />
                                     <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                     <Route path="/app/:vendorId/product/" exact component={ProductList} />

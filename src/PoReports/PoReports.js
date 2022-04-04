@@ -162,6 +162,7 @@ function PoReports(props) {
     }
     const getLatestReport = async () => {
         setisLoading(true);
+        setRows([]);
         await fetch(APIURL + "supply-planning-report", GetRequestOptions)
             .then(response => response.json())
             .then(data => {
