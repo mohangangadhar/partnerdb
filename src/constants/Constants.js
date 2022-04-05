@@ -71,6 +71,10 @@ export const supportTabData = [
     "Id", "Name", "Mobile Number", "Email", "Message", "Created At", "Status", "Resolution",
     "Category", "Resolver", "Action"
 ];
+export const poReportInfoTabData = [
+    "id", "Po Number", "PO Date", "Active", "Payment Status", "Created At",
+    "Actual Total", "PO Total", "Type", "Status", "Comments", "Received Date", "Action"
+];
 export const paymentReportsTabData = [
     "Order Type", "Vendor Name", "Order Date",
     "Order Id", "Customer Id", "Customer Name",

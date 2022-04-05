@@ -9,7 +9,8 @@ const AddPoData = ({
     handlePoDataChange,
     handleAddPoData,
     setToggle,
-    setInputPrimarySupplier
+    setInputPrimarySupplier,
+
 }) => {
     const styleOptions = {
         padding: 10,
@@ -103,8 +104,26 @@ const AddPoData = ({
                         variant='outlined'
                     />
                 </TableCell>
-
+                <TableCell align="center">
+                    <TextField
+                        id="comments"
+                        label="Comments"
+                        name="comments"
+                        value={poData.comments}
+                        onChange={handlePoDataChange}
+                        InputProps={{
+                            style: {
+                                color: "white",
+                            }
+                        }}
+                        InputLabelProps={{
+                            style: { color: '#fff' },
+                        }}
+                        variant='outlined'
+                    />
+                </TableCell>
             </TableRow>
+
             <TableRow>
                 <div>
                     <TableCell><Button variant="contained"

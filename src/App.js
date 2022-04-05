@@ -58,6 +58,7 @@ import PaymentReports from './PaymentReports/PaymentReports';
 import SeasonalOrders from './orders/SeasonalOrders';
 import SupplyPlanning from './SupplyPlanning/SupplyPlanning';
 import PoReports from './PoReports/PoReports';
+import PoReportInfo from './PoReports/PoReportInfo';
 
 const drawerWidth = 240;
 
@@ -326,12 +327,12 @@ export default function MiniDrawer() {
                                 <ListItem button key="PaymentReports">
 
                                     <Link to={{
-                                        pathname: '/app/poreports',
+                                        pathname: '/app/poreportsinfo',
                                         id: "8"
                                     }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Po Reports</h6></Link>
 
                                     <Link to={{
-                                        pathname: '/app/poreports',
+                                        pathname: '/app/poreportsinfo',
                                         id: "8"
                                     }}><ListItemText primary="Po Reports" /></Link>
                                 </ListItem>
@@ -374,7 +375,8 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
-                                    <Route path="/app/poreports" exact component={PoReports} />
+                                    <Route path="/app/:poNumber/poreports" exact component={PoReports} />
+                                    <Route path="/app/poreportsinfo" exact component={PoReportInfo} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
                                     <Route path="/app/paymentreports" exact component={PaymentReports} />
                                     <Route path="/app/supplyplanning" exact component={SupplyPlanning} />

@@ -20,6 +20,7 @@ import SearchBySupplier from './Components/SearchBySupplier';
 import AddPoData from './Components/AddPoData';
 import GetDate from '../components/GetDate';
 import TableTitles from '../components/TableTitles/TableTitles';
+import Picker from '../components/Picker';
 
 function PoReports(props) {
     const [rows, setRows] = useState([]);
@@ -49,7 +50,8 @@ function PoReports(props) {
     const [toggle, setToggle] = useState(true);
     const [podata, setPoData] = useState({});
     const [totalPoData, setTotalPoData] = useState([]);
-    const [inputPrimarySupplier, setInputPrimarySupplier] = useState("");
+    const [inputPrimarySupplier, setInputPrimarySupplier] = useState([]);
+    const [poCreatedDate, setPoCreatedDate] = useState([]);
     const [editedRowData, setEditedRowData] = useState([]);
     const receivedData = async (val) => {
         setisLoading(true);
@@ -339,7 +341,7 @@ function PoReports(props) {
                 "productName": row.productName,
                 "productId": 0,
                 "vendorName": "",
-                "comments": "raw",
+                "comments": row.comments,
                 "poId": "PO-V" + recentPoId.poId.substring(4),
                 "poNumber": "PO-S" + poId,
                 "totalPay": row.totalPay,
@@ -364,7 +366,8 @@ function PoReports(props) {
                     "createdAt": GetDate(),
                     "comments": "test",
                     "paymentStatus": "Pending",
-                    "active": 1
+                    "active": 1,
+                    "poCreatedDate": poCreatedDate
                 }
                 const requestOptionsz = {
                     method: 'POST',
@@ -441,12 +444,21 @@ function PoReports(props) {
 
             {toggle ?
                 <>
-                    {totalPoData.length == 0 && <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />}<Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
+
+                    {totalPoData.length == 0 &&
+                        <div style={{ display: 'flex' }}>
+                            <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />
+                            <Picker color="white" dateChange={(e) => setPoCreatedDate(e.target.value)} label={"Po Created Date"} />
+
+                        </div>
+                    }
+
+                    <Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 && poCreatedDate.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
                     {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData)}>Save All</Button>}
                 </>
                 :
                 <div>
-                    <h3 style={{ color: 'white' }}>{inputPrimarySupplier} :</h3>
+                    <h3 style={{ color: 'white' }}>{inputPrimarySupplier} | PO Created Date : {poCreatedDate}</h3>
                     <AddPoData setInputPrimarySupplier={setInputPrimarySupplier} setToggle={setToggle} suppliers={suppliers} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
                 </div>
             }

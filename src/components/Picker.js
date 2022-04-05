@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
-import {withStyles} from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
 
 const useStyles = (theme) => ({
     container: {
@@ -11,13 +11,13 @@ const useStyles = (theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: 140,
-        fontcolor: 'white',
+        fontColor: 'white',
     },
 });
 
 class Picker extends Component {
     render() {
-        const {classes, dateChange} = this.props;
+        const { classes, color, dateChange } = this.props;
         return (
             <form className={classes.container} noValidate={false}>
                 <TextField
@@ -25,14 +25,22 @@ class Picker extends Component {
                     onChange={dateChange}
                     type="date"
                     defaultValue="2021-07-24"
+                    style={{ color: 'white' }}
                     className={classes.textField}
+                    InputProps={{
+                        style: {
+                            color: color,
+                        }
+                    }}
                     InputLabelProps={{
                         shrink: true,
+                        style: { color: color },
                     }}
+
                 />
             </form>
         );
     }
 }
 
-export default withStyles(useStyles, {withTheme: true})(Picker);
+export default withStyles(useStyles, { withTheme: true })(Picker);
