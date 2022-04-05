@@ -2,6 +2,7 @@ import React from "react";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Button from '@mui/material/Button';
+import { Link } from "react-router-dom";
 const ReadOnlyPoReportInfo = ({
     row,
     handleEditClick
@@ -10,7 +11,11 @@ const ReadOnlyPoReportInfo = ({
     return (
 
         <TableRow key={row.id}>
-            <TableCell >{row.id}</TableCell>
+            <TableCell>
+                <Link to={{
+                    pathname: '/app/' + row.poReportId + '/poreports',
+                    id: row.id
+                }}>{row.id}</Link></TableCell>
 
             <TableCell align="center" >{row.poReportId}</TableCell>
             <TableCell align="center">{row.poCreatedDate}</TableCell>
