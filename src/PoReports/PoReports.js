@@ -26,20 +26,15 @@ import Picker from '../components/Picker';
 function PoReports(props) {
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
-    const [perPage, serPerPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
-    const [suppliers, setSuppliers] = useState([]);
-    const [checkData, setCheckData] = useState([]);
+
     const [errFound, setErrFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
     const [recentPoId, setRecentPoId] = useState({
         poId: "",
         createdAt: ""
     });
-    var poNumberMap = new Map();
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
-    const [isRowLoading, setisRowLoading] = useState(false);
     const [addFormData, setAddFormData] = useState({
         receivedQty: 0.0,
         wastageQty: 0.0,
@@ -48,36 +43,18 @@ function PoReports(props) {
         comments: "",
         totalPay: 0.0
     });
-    const [toggle, setToggle] = useState(true);
-    const [podata, setPoData] = useState({});
-    const [totalPoData, setTotalPoData] = useState([]);
-    const [inputPrimarySupplier, setInputPrimarySupplier] = useState([]);
-    const [poCreatedDate, setPoCreatedDate] = useState([]);
-    const [editedRowData, setEditedRowData] = useState([]);
+    const [poSummary, setPoSummary] = useState("");
     const { poNumber } = useParams();
-    const receivedData = async (val) => {
-        setisLoading(true);
-        setToggle(true);
-        setRows([]);
-        setErrFound(false);
-        await fetch(APIURL + `suppy-planning-snapshot/page-query?page=${offSet}&size=30`, GetRequestOptions)
+
+    const getPoSummary = async () => {
+
+        await fetch(APIURL + "po-report-info/po-number/" + poNumber, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
-                setRows(data.content);
-                setTotalPages(data.totalPages);
+                console.log(data);
+                setPoSummary(data);
                 setisLoading(false);
-            }
-            ).catch(err => setErrFound(true));
-
-
-    }
-    const getPrimarySuppliers = async () => {
-        await fetch(APIURL + "primary-supplier", GetRequestOptions)
-            .then(response => response.json())
-            .then(data => {
-                setSuppliers(data);
-            })
-
+            }).catch(err => setPoSummary({}));
     }
 
 
@@ -88,22 +65,17 @@ function PoReports(props) {
         await fetch(APIURL + `/suppy-planning-snapshot/po-number/${poNumber}`, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
-
+                getPoSummary();
                 setRows(data);
-                setisLoading(false);
-
-
 
             }).catch(err => { console.log(err); setisLoading(false); })
 
 
     }
     useEffect(async () => {
-
-
         getLatestReport();
 
-    }, [offSet]);
+    }, []);
     const handleEditFormChange = (event) => {
         event.preventDefault();
 
@@ -164,7 +136,7 @@ function PoReports(props) {
     const handleFormSubmit = async (event, row, tempFormData) => {
         event.preventDefault();
         setAddFormData("");
-        setisRowLoading(true);
+
         let ind;
         let xyz = row;
         xyz = { ...xyz };
@@ -184,7 +156,20 @@ function PoReports(props) {
         setEditContactId(null);
         uploadBackEnd(row, tempFormData);
     }
+    const getTotalCost = (list) => {
+        let sum = 0;
 
+        list.map((row) => {
+            if (row.receivedQty > 0) {
+                sum += (row.receivedQty - row.wastageQty) * row.totalPay;
+            }
+            else {
+                sum += row.orderedQty * row.totalPay;
+            }
+        })
+
+        return sum;
+    };
 
 
     return (
@@ -192,12 +177,10 @@ function PoReports(props) {
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
-                    PO Reports
+                    PO Reports             {poSummary.id && <b>Primary Supplier : {poSummary.primarySupplier} | Payment Status : {poSummary.paymentStatus}</b>}
                 </Typography>
-                {/* <SearchBySupplier suppliers={suppliers} handleChangeSupplier={handleChangeSupplier} /> */}
+
             </div>
-
-
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableTitles data={poReportsTabData} />
@@ -216,7 +199,9 @@ function PoReports(props) {
                                 </Fragment>
 
                             ))}
-
+                            <TableRow>
+                                <TableCell colSpan={10} style={{ fontSize: '20px', textAlign: 'center', width: '100%', fontWeight: 'bolder' }}>Total: Rs {getTotalCost(rows)}/-</TableCell>
+                            </TableRow>
                         </TableBody>
                         :
                         <div>

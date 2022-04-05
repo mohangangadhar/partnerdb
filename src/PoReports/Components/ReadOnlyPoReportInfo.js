@@ -18,6 +18,7 @@ const ReadOnlyPoReportInfo = ({
                 }}>{row.id}</Link></TableCell>
 
             <TableCell align="center" >{row.poReportId}</TableCell>
+            <TableCell align="center" >{row.primarySupplier}</TableCell>
             <TableCell align="center">{row.poCreatedDate}</TableCell>
             <TableCell align="center" >{row.active}</TableCell>
             <TableCell >{row.paymentStatus}</TableCell>

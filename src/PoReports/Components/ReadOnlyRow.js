@@ -2,6 +2,7 @@ import React from "react";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Button from '@mui/material/Button';
+
 const ReadOnlyRow = ({
     row,
     handleEditClick
@@ -19,7 +20,7 @@ const ReadOnlyRow = ({
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
 
-            <TableCell align="center" >{row.poNumber}</TableCell>
+
             <TableCell align="center" >{row.skuCount}</TableCell>
             <TableCell align="center" >{row.productName}</TableCell>
             <TableCell >{row.skuUom}</TableCell>

@@ -72,7 +72,7 @@ export const supportTabData = [
     "Category", "Resolver", "Action"
 ];
 export const poReportInfoTabData = [
-    "id", "Po Number", "PO Date", "Active", "Payment Status", "Created At",
+    "id", "Po Number", "Primary Supplier", "PO Date", "Active", "Payment Status", "Created At",
     "Actual Total", "PO Total", "Type", "Status", "Comments", "Received Date", "Action"
 ];
 export const paymentReportsTabData = [
@@ -86,7 +86,7 @@ export const paymentReportsTabData = [
     "Payment Reference No", "PO Number", "Invoice No", "Actions"
 ];
 export const poReportsTabData = [
-    "Id", "Po Number", "Sku Count", "Product Name", "Sku Uom",
+    "Id", "Sku Count", "Product Name", "Sku Uom",
     "Order Id Count", "Total Qty Req",
     "Ordered Qty", "Ordered Uom", "Received Qty",
     "Wastage Qty", "Total Graded Quantity", "Quality Rating",

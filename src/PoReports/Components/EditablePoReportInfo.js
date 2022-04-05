@@ -17,6 +17,7 @@ const EditablePoReportInfo = ({
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
             <TableCell align="center" >{row.poReportId}</TableCell>
+            <TableCell align="center" >{row.primarySupplier}</TableCell>
             <TableCell align="center">{row.poCreatedDate}</TableCell>
             <TableCell align="center">
                 <input type="text" placeholder="Active?" name="active" value={addFormData.active} onChange={handleEditFormChange} />

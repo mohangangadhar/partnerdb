@@ -16,7 +16,7 @@ const EditableRow = ({
     return (
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
-            <TableCell align="center" >{row.poNumber}</TableCell>
+
 
             <TableCell align="center" >{row.skuCount}</TableCell>
             <TableCell align="center" >{row.productName}</TableCell>

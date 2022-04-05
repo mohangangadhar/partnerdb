@@ -51,7 +51,6 @@ const PoReportInfo = () => {
     });
     const [editedRowData, setEditedRowData] = useState([]);
 
-    let urlString;
 
     const receivedData = async (val) => {
         setSearchNotFound(false);
@@ -172,6 +171,11 @@ const PoReportInfo = () => {
     }
     const sendTotalPoData = async (checkList) => {
         let finalList = [];
+        let finalSum = 0;
+        totalPoData.map(data => (
+            finalSum += data.totalPay * data.orderedQty
+        ))
+        console.log(finalSum);
         let poId = getRandom();
         console.log(checkList);
         checkList.map((row) =>
@@ -209,6 +213,7 @@ const PoReportInfo = () => {
             then(response => response.json()).
             then(data => {
                 NotificationManager.success('Saved Data', 'Success', 1000);
+
                 let reqBody = {
                     "poReportId": "PO-V" + poId,
                     "createdAt": GetDate(),
@@ -219,7 +224,9 @@ const PoReportInfo = () => {
                     "poType": "Manual",
                     "poStatus": "New",
                     "actualTotal": 0,
-                    "poTotal": 0
+                    "poTotal": finalSum,
+                    "primarySupplier": inputPrimarySupplier,
+                    "poReceivedDate": null
                 }
                 const requestOptionsz = {
                     method: 'POST',
