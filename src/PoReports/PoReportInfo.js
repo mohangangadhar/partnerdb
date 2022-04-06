@@ -169,15 +169,20 @@ const PoReportInfo = () => {
         newFormData["updatedAt"] = GetDate();
         setPoData(newFormData);
     }
-    const sendTotalPoData = async (checkList) => {
-        let finalList = [];
+    const getTotalPay = () => {
         let finalSum = 0;
         totalPoData.map(data => (
             finalSum += data.totalPay * data.orderedQty
         ))
         console.log(finalSum);
+        return finalSum;
+    }
+    const sendTotalPoData = async (checkList) => {
+        let finalList = [];
+
+
         let poId = getRandom();
-        console.log(checkList);
+
         checkList.map((row) =>
 
             finalList.push({
@@ -224,7 +229,7 @@ const PoReportInfo = () => {
                     "poType": "Manual",
                     "poStatus": "New",
                     "actualTotal": 0,
-                    "poTotal": finalSum,
+                    "poTotal": getTotalPay(),
                     "primarySupplier": inputPrimarySupplier,
                     "poReceivedDate": null
                 }

@@ -46,18 +46,52 @@ function PoReports(props) {
     const [poSummary, setPoSummary] = useState("");
     const { poNumber } = useParams();
 
-    const getPoSummary = async () => {
+    const getPoSummary = async (sum) => {
 
         await fetch(APIURL + "po-report-info/po-number/" + poNumber, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
                 setPoSummary(data);
+                let reqBody = {
+                    "active": 1,
+                    "paymentStatus": "",
+                    "actualTotal": sum,
+                    "poType": "",
+                    "poStatus": "",
+                    "comments": "",
+                    "poReceivedDate": ""
+                }
+
+                const requestOptionsForUpdate = {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reqBody)
+                };
+
+                fetch(APIURL + 'po-report-info/' + data.id, requestOptionsForUpdate)
+                    .then(response => {
+                        setisApiLoading(false);
+                    }
+                    ).catch((err) => setisApiLoading(false));
                 setisLoading(false);
             }).catch(err => setPoSummary({}));
+
     }
 
+    const getActualPay = (list) => {
+        let sum = 0;
 
+        list.map((row) => {
+            if (row.receivedQty > 0) {
+                sum += (row.receivedQty - row.wastageQty) * row.totalPay;
+            }
+            else {
+                sum += row.orderedQty * row.totalPay;
+            }
+        })
+        getPoSummary(sum);
+    }
     const getLatestReport = async () => {
 
         setisLoading(true);
@@ -65,16 +99,15 @@ function PoReports(props) {
         await fetch(APIURL + `/suppy-planning-snapshot/po-number/${poNumber}`, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
-                getPoSummary();
-                setRows(data);
 
+                setRows(data);
+                getActualPay(data);
             }).catch(err => { console.log(err); setisLoading(false); })
 
 
     }
     useEffect(async () => {
         getLatestReport();
-
     }, []);
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -101,17 +134,13 @@ function PoReports(props) {
         setEditContactId(row.id);
     }
     const uploadBackEnd = async (row, tempFormData) => {
-        var currentdate = new Date();
-        var datetime =
-            currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate()
-            + " " + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+
         let urlString = `suppy-planning-snapshot/${row.id}`;
         let supportData = {
             receivedQty: tempFormData.receivedQty,
             wastageQty: tempFormData.wastageQty,
             qualityRating: tempFormData.qualityRating,
-            updatedAt: datetime,
+            updatedAt: GetDate(),
             missedQty: tempFormData.missedQty,
             comments: tempFormData.comments,
             totalPay: tempFormData.totalPay
@@ -153,6 +182,7 @@ function PoReports(props) {
             }
         }
         rows[ind] = xyz;
+        getActualPay(rows);
         setEditContactId(null);
         uploadBackEnd(row, tempFormData);
     }
