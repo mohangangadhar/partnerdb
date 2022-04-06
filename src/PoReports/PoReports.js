@@ -22,6 +22,7 @@ import AddPoData from './Components/AddPoData';
 import GetDate from '../components/GetDate';
 import TableTitles from '../components/TableTitles/TableTitles';
 import Picker from '../components/Picker';
+import { Item } from '../components/Item';
 
 function PoReports(props) {
     const [rows, setRows] = useState([]);
@@ -141,7 +142,7 @@ function PoReports(props) {
             wastageQty: tempFormData.wastageQty,
             qualityRating: tempFormData.qualityRating,
             updatedAt: GetDate(),
-            missedQty: tempFormData.missedQty,
+            missedQty: tempFormData.receivedQty - tempFormData.wastageQty,
             comments: tempFormData.comments,
             totalPay: tempFormData.totalPay
         };
@@ -207,7 +208,9 @@ function PoReports(props) {
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
-                    PO Reports             {poSummary.id && <b>Primary Supplier : {poSummary.primarySupplier} | Payment Status : {poSummary.paymentStatus}</b>}
+                    <Grid>
+                        <Item />
+                    </Grid> PO Reports             {poSummary.id && <b>Primary Supplier : {poSummary.primarySupplier} | Payment Status : {poSummary.paymentStatus}</b>}
                 </Typography>
 
             </div>
