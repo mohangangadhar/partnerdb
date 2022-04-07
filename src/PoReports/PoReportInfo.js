@@ -242,7 +242,6 @@ const PoReportInfo = () => {
                 };
                 fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
-                    setisLoading(false);
                     setisApiLoading(false);
                     receivedData(offSet);
                 }).catch(err => alert(err))

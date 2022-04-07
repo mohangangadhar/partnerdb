@@ -210,9 +210,8 @@ function PoReports(props) {
                 <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                     <Grid>
                         <Item />
-                    </Grid> PO Reports             {poSummary.id && <b>Primary Supplier : {poSummary.primarySupplier} | Payment Status : {poSummary.paymentStatus}</b>}
+                    </Grid> PO Reports {poSummary.id && <b>Primary Supplier : {poSummary.primarySupplier} | Payment Status : {poSummary.paymentStatus}</b>}
                 </Typography>
-
             </div>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">

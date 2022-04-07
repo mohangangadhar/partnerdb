@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 const GetDate = () => {
     var currentdate = new Date();

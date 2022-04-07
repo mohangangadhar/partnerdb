@@ -12,6 +12,8 @@ import Paper from '@material-ui/core/Paper';
 import { CircularProgressInTable, dashboardSummary, poSummaryData, supportSummaryData } from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
+import Tooltip from '../components/ToolTip/tooltip';
+import CustomTooltip from '../components/ToolTip/tooltip';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
     const [orderdata, setOrderData] = useState([]);
@@ -503,11 +505,11 @@ function DashBoard() {
                             <>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Regular</TableCell>
-                                    <TableCell align="center">{newOrdersData.regular != 0 ? newOrdersData.regular : 0}</TableCell>
-                                    <TableCell align="center">{processingOrdersData.regular != 0 ? processingOrdersData.regular : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.regular != 0 ? preparedOrdersData.regular : 0}</TableCell>
-                                    <TableCell align="center">{completeOrdersData.regular != 0 ? completeOrdersData.regular : 0}</TableCell>
-                                    <TableCell align="center">{pendingOrdersData.regular != 0 ? pendingOrdersData.regular : 0}</TableCell>
+                                    <TableCell align="center"><CustomTooltip type="regular" status="new" id={newOrdersData.regular != 0 ? newOrdersData.regular : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="regular" status="accepted" id={processingOrdersData.regular != 0 ? processingOrdersData.regular : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="regular" status="prepared" id={preparedOrdersData.regular != 0 ? preparedOrdersData.regular : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="regular" status="complete" id={completeOrdersData.regular != 0 ? completeOrdersData.regular : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="regular" status="pending" id={pendingOrdersData.regular != 0 ? pendingOrdersData.regular : 0} /></TableCell>
                                     <TableCell align="center">{cancelOrdersData.regular != 0 ? cancelOrdersData.regular : 0}</TableCell>
                                     <TableCell align="center">{
                                         newOrdersData.regular + preparedOrdersData.regular + processingOrdersData.regular + completeOrdersData.regular + pendingOrdersData.regular
@@ -515,12 +517,12 @@ function DashBoard() {
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Express</TableCell>
-                                    <TableCell align="center">{newOrdersData.express != 0 ? newOrdersData.express : 0}</TableCell>
-                                    <TableCell align="center">{processingOrdersData.express != 0 ? processingOrdersData.express : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.express != 0 ? preparedOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center"><CustomTooltip type="express" status="new" id={newOrdersData.express != 0 ? newOrdersData.express : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="express" status="accepted" id={processingOrdersData.express != 0 ? processingOrdersData.express : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="express" status="prepared" id={preparedOrdersData.express != 0 ? preparedOrdersData.express : 0} /></TableCell>
 
-                                    <TableCell align="center">{completeOrdersData.express != 0 ? completeOrdersData.express : 0}</TableCell>
-                                    <TableCell align="center">{pendingOrdersData.express != 0 ? pendingOrdersData.express : 0}</TableCell>
+                                    <TableCell align="center"><CustomTooltip type="express" status="complete" id={completeOrdersData.express != 0 ? completeOrdersData.express : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="express" status="pending" id={pendingOrdersData.express != 0 ? pendingOrdersData.express : 0} /></TableCell>
                                     <TableCell align="center">{cancelOrdersData.express != 0 ? cancelOrdersData.express : 0}</TableCell>
                                     <TableCell align="center">{
                                         newOrdersData.express + preparedOrdersData.express + processingOrdersData.express + completeOrdersData.express + pendingOrdersData.express
@@ -528,12 +530,12 @@ function DashBoard() {
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center" style={{ color: 'blue' }}>Seasonal</TableCell>
-                                    <TableCell align="center">{newOrdersData.seasonal != 0 ? newOrdersData.seasonal : 0}</TableCell>
-                                    <TableCell align="center">{processingOrdersData.seasonal != 0 ? processingOrdersData.seasonal : 0}</TableCell>
-                                    <TableCell align="center">{preparedOrdersData.seasonal != 0 ? preparedOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center"><CustomTooltip type="seasonal" status="new" id={newOrdersData.seasonal != 0 ? newOrdersData.seasonal : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="seasonal" status="accepted" id={processingOrdersData.seasonal != 0 ? processingOrdersData.seasonal : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="seasonal" status="prepared" id={preparedOrdersData.seasonal != 0 ? preparedOrdersData.seasonal : 0} /></TableCell>
 
-                                    <TableCell align="center">{completeOrdersData.seasonal != 0 ? completeOrdersData.seasonal : 0}</TableCell>
-                                    <TableCell align="center">{pendingOrdersData.seasonal != 0 ? pendingOrdersData.seasonal : 0}</TableCell>
+                                    <TableCell align="center"><CustomTooltip type="seasonal" status="complete" id={completeOrdersData.seasonal != 0 ? completeOrdersData.seasonal : 0} /></TableCell>
+                                    <TableCell align="center"><CustomTooltip type="seasonal" status="pending" id={pendingOrdersData.seasonal != 0 ? pendingOrdersData.seasonal : 0} /></TableCell>
                                     <TableCell align="center">{cancelOrdersData.seasonal != 0 ? cancelOrdersData.seasonal : 0}</TableCell>
                                     <TableCell align="center">{
                                         newOrdersData.seasonal + preparedOrdersData.seasonal + processingOrdersData.seasonal + completeOrdersData.seasonal + pendingOrdersData.seasonal
@@ -627,6 +629,7 @@ function DashBoard() {
                             <>
 
                                 <TableRow >
+                                    <TableCell align="center">Count</TableCell>
                                     <TableCell align="center">{poSummary.yettodeliver.count}</TableCell>
                                     <TableCell align="center">{poSummary.pastdue.count}</TableCell>
                                     <TableCell align="center">{poSummary.pending.count}</TableCell>
@@ -637,6 +640,7 @@ function DashBoard() {
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
+                                    <TableCell align="center">Amount</TableCell>
                                     <TableCell align="center">{poSummary.yettodeliver.poTotal}</TableCell>
                                     <TableCell align="center">{poSummary.pastdue.poTotal}</TableCell>
                                     <TableCell align="center">{poSummary.pending.poTotal}</TableCell>

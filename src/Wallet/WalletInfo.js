@@ -8,6 +8,7 @@ import TableRow from "@material-ui/core/TableRow";
 import IconButton from "@material-ui/core/IconButton";
 import { NotificationManager } from "react-notifications";
 import WalletTransactions from "./WalletTransactions";
+import Loader from "../components/Loader/Loader";
 const WalletInfo = ({ data, searchOrder }) => {
     const [wallet, setWallet] = useState({
         walletId: "",
@@ -25,7 +26,7 @@ const WalletInfo = ({ data, searchOrder }) => {
         }
     });
     const [toggle, setToggle] = useState(false);
-
+    const [isLoading, setisLoading] = useState(false);
     const handleChangeWallet = (event) => {
         const value = event.target.value;
         setWallet({
@@ -67,7 +68,7 @@ const WalletInfo = ({ data, searchOrder }) => {
         }
         data.wallet = wallet;
         data.wallet.meta = wallet.meta;
-
+        setisLoading(true);
         fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${wallet.walletId}/transaction`, {
             method: 'POST', // or 'PUT'
             headers: {
@@ -81,9 +82,11 @@ const WalletInfo = ({ data, searchOrder }) => {
                 console.log('Success:', data.json());
                 NotificationManager.success('You changes have been updated!', 'Successful!', 1000);
                 setToggle(!toggle);
+                setisLoading(false);
             })
             .catch((error) => {
                 console.error('Error:', error);
+                setisLoading(false);
                 NotificationManager.error('Error occurred while making your changes, contact support!', 'Error!');
             });
     }
@@ -132,60 +135,62 @@ const WalletInfo = ({ data, searchOrder }) => {
             <Typography component="h2" variant="h6" style={{ color: 'blue', marginTop: 20 }} align={"center"} gutterBottom>
                 Wallet Update
             </Typography>
+
             <Table>
-                <TableBody>
-                    <TableRow>
-                        <TableCell style={{ borderBottom: "none" }}>
-                            <FormLabel style={{ color: 'indianred' }}>
-                                Enter Amount
-                            </FormLabel>
-                            <TextField
-                                fullWidth
-                                id="standard-bare"
-                                name="amount"
-                                variant="outlined"
-                                defaultValue={data.balance}
-                                value={wallet.amount}
-                                onChange={evt => handleChangeWallet(evt)}
-                            />
-                        </TableCell>
-                        <TableCell style={{ borderBottom: "none" }}>
-                            <FormControl fullWidth>
+                {!isLoading ?
+                    <TableBody>
+                        <TableRow>
+                            <TableCell style={{ borderBottom: "none" }}>
                                 <FormLabel style={{ color: 'indianred' }}>
-                                    Select Withdraw/Deposit
+                                    Enter Amount
                                 </FormLabel>
-                                <Select name="type" value={wallet.type} onChange={handleChangeType}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    label="transaction"
-                                >
-                                    <MenuItem value="withdraw">Withdraw</MenuItem>
-                                    <MenuItem value="deposit">Deposit</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell style={{ borderBottom: "none" }}>
-                            <TextField variant="outlined" fullWidth name="description"
-                                id="outlined-multiline-static"
-                                label="Enter Description"
-                                multiline
-                                onChange={(event) => handleChangeDescription(event)}
-                                rows={4}
-                                defaultValue="I would like to Withdraw/Deposit xxx for..."
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell style={{ borderBottom: "none", justifyContent: 'center' }}>
-                            <Button color="primary"
-                                variant="contained"
-                                onClick={proceedTransaction}
-                            >Add Transaction</Button>
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
+                                <TextField
+                                    fullWidth
+                                    id="standard-bare"
+                                    name="amount"
+                                    variant="outlined"
+                                    defaultValue={data.balance}
+                                    value={wallet.amount}
+                                    onChange={evt => handleChangeWallet(evt)}
+                                />
+                            </TableCell>
+                            <TableCell style={{ borderBottom: "none" }}>
+                                <FormControl fullWidth>
+                                    <FormLabel style={{ color: 'indianred' }}>
+                                        Select Withdraw/Deposit
+                                    </FormLabel>
+                                    <Select name="type" value={wallet.type} onChange={handleChangeType}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="transaction"
+                                    >
+                                        <MenuItem value="withdraw">Withdraw</MenuItem>
+                                        <MenuItem value="deposit">Deposit</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell style={{ borderBottom: "none" }}>
+                                <TextField variant="outlined" fullWidth name="description"
+                                    id="outlined-multiline-static"
+                                    label="Enter Description"
+                                    multiline
+                                    onChange={(event) => handleChangeDescription(event)}
+                                    rows={4}
+                                    defaultValue="I would like to Withdraw/Deposit xxx for..."
+                                />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell style={{ borderBottom: "none", justifyContent: 'center' }}>
+                                <Button color="primary"
+                                    variant="contained"
+                                    onClick={proceedTransaction}
+                                >Add Transaction</Button>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody> : <Loader />}
             </Table>
             <Typography component="h2" variant="h6" style={{ color: 'indianred', }} align={"center"} gutterBottom>
                 Transactions
