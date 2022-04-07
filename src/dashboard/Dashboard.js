@@ -111,11 +111,26 @@ function DashBoard() {
         pending: 0,
     });
     const [poSummary, setPoSummary] = useState({
-        yettodeliver: 0,
-        pending: 0,
-        pastdue: 0,
-        onhold: 0,
-        cancelled: 0
+        yettodeliver: {
+            count: 0,
+            poTotal: 0
+        },
+        pending: {
+            count: 0,
+            poTotal: 0
+        },
+        pastdue: {
+            count: 0,
+            poTotal: 0
+        },
+        onhold: {
+            count: 0,
+            poTotal: 0
+        },
+        cancelled: {
+            count: 0,
+            poTotal: 0
+        }
     });
     const order = useSelector(state => state.dashboardreducer);
     const poReport = useSelector(state => state.poreducer);
@@ -407,31 +422,51 @@ function DashBoard() {
             if (poData[i].paymentStatus == "yet to deliver") {
                 setPoSummary((prevData) => ({
                     ...prevData,
-                    yettodeliver: poData[i].count
+                    yettodeliver: {
+                        ...prevData,
+                        count: poData[i].count,
+                        poTotal: poData[i].poTotal
+                    }
                 }))
             }
             if (poData[i].paymentStatus == "pending") {
                 setPoSummary((prevData) => ({
                     ...prevData,
-                    pending: poData[i].count
+                    pending: {
+                        ...prevData,
+                        count: poData[i].count,
+                        poTotal: poData[i].poTotal
+                    }
                 }))
             }
             if (poData[i].paymentStatus == "past due") {
                 setPoSummary((prevData) => ({
                     ...prevData,
-                    pastdue: poData[i].count
+                    pastdue: {
+                        ...prevData,
+                        count: poData[i].count,
+                        poTotal: poData[i].poTotal
+                    }
                 }))
             }
             if (poData[i].paymentStatus == "on hold") {
                 setPoSummary((prevData) => ({
                     ...prevData,
-                    onhold: poData[i].count
+                    onhold: {
+                        ...prevData,
+                        count: poData[i].count,
+                        poTotal: poData[i].poTotal
+                    }
                 }))
             }
             if (poData[i].paymentStatus == "cancelled") {
                 setPoSummary((prevData) => ({
                     ...prevData,
-                    cancelled: poData[i].count
+                    cancelled: {
+                        ...prevData,
+                        count: poData[i].count,
+                        poTotal: poData[i].poTotal
+                    }
                 }))
             }
         }
@@ -592,13 +627,23 @@ function DashBoard() {
                             <>
 
                                 <TableRow >
-                                    <TableCell align="center">{poSummary.yettodeliver}</TableCell>
-                                    <TableCell align="center">{poSummary.pastdue}</TableCell>
-                                    <TableCell align="center">{poSummary.pending}</TableCell>
-                                    <TableCell align="center">{poSummary.onhold}</TableCell>
-                                    <TableCell align="center">{poSummary.cancelled}</TableCell>
+                                    <TableCell align="center">{poSummary.yettodeliver.count}</TableCell>
+                                    <TableCell align="center">{poSummary.pastdue.count}</TableCell>
+                                    <TableCell align="center">{poSummary.pending.count}</TableCell>
+                                    <TableCell align="center">{poSummary.onhold.count}</TableCell>
+                                    <TableCell align="center">{poSummary.cancelled.count}</TableCell>
                                     <TableCell align="center">{
-                                        poSummary.yettodeliver + poSummary.pastdue + poSummary.pending + poSummary.onhold + poSummary.cancelled
+                                        poSummary.yettodeliver.count + poSummary.pastdue.count + poSummary.pending.count + poSummary.onhold.count + poSummary.cancelled.count
+                                    }</TableCell>
+                                </TableRow>
+                                <TableRow >
+                                    <TableCell align="center">{poSummary.yettodeliver.poTotal}</TableCell>
+                                    <TableCell align="center">{poSummary.pastdue.poTotal}</TableCell>
+                                    <TableCell align="center">{poSummary.pending.poTotal}</TableCell>
+                                    <TableCell align="center">{poSummary.onhold.poTotal}</TableCell>
+                                    <TableCell align="center">{poSummary.cancelled.poTotal}</TableCell>
+                                    <TableCell align="center">{
+                                        poSummary.yettodeliver.poTotal + poSummary.pastdue.poTotal + poSummary.pending.poTotal + poSummary.onhold.poTotal + poSummary.cancelled.poTotal
                                     }</TableCell>
                                 </TableRow>
 
