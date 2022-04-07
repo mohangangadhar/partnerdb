@@ -139,7 +139,7 @@ function SeasonalOrders(props) {
                         ev.preventDefault();
                         if (status == "complete") { return; }
                         else {
-                            setStatus("completed");
+                            setStatus("complete");
                             receivedData(0, "complete");
                         }
 
