@@ -633,7 +633,7 @@ function DashBoard() {
                                     <TableCell align="center">{poSummary.onhold.count}</TableCell>
                                     <TableCell align="center">{poSummary.cancelled.count}</TableCell>
                                     <TableCell align="center">{
-                                        poSummary.yettodeliver.count + poSummary.pastdue.count + poSummary.pending.count + poSummary.onhold.count + poSummary.cancelled.count
+                                        poSummary.yettodeliver.count + poSummary.pastdue.count + poSummary.pending.count + poSummary.onhold.count
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
@@ -643,7 +643,7 @@ function DashBoard() {
                                     <TableCell align="center">{poSummary.onhold.poTotal}</TableCell>
                                     <TableCell align="center">{poSummary.cancelled.poTotal}</TableCell>
                                     <TableCell align="center">{
-                                        poSummary.yettodeliver.poTotal + poSummary.pastdue.poTotal + poSummary.pending.poTotal + poSummary.onhold.poTotal + poSummary.cancelled.poTotal
+                                        poSummary.yettodeliver.poTotal + poSummary.pastdue.poTotal + poSummary.pending.poTotal + poSummary.onhold.poTotal
                                     }</TableCell>
                                 </TableRow>
 

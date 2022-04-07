@@ -315,7 +315,7 @@ function OrderDetail(props) {
             }).catch(err => setisApiLoading(false));
     }
     //Handle Update
-    const handleUpdate = async (ev, typeOfRefund) => { 
+    const handleUpdate = async (ev, typeOfRefund) => {
         ev.preventDefault();
         setisApiLoading(true);
         let message = "";
@@ -541,7 +541,7 @@ function OrderDetail(props) {
                                             <li>Total Delivered amount: {totalData.deliveredTotal}</li>
                                             <li>Post delivery refund : {totalData.returnRefundTotal}</li>
                                             <li>Total Discounts : {totalData.discountTotal}</li>
-                                            <li>Final Total : {finalTotal}</li>
+                                            <li>Final Total : {finalTotal == 0 ? totalData.total : finalTotal}</li>
                                         </ul>
                                     </TableCell>
 

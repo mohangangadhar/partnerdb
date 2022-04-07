@@ -298,6 +298,7 @@ function ExpressOrderList(props) {
                                         <TableCell align="center" >{searchOrder.user.pincode}</TableCell>
                                         <TableCell align="center" >{searchOrder.order.total}</TableCell>
                                         <TableCell align="center" >{detail(searchOrder.order.vendor.name)}</TableCell>
+                                        <TableCell align="center" >{searchOrder.order.finalTotal == 0 ? searchOrder.order.total : searchOrder.order.finalTotal}</TableCell>
                                         <TableCell align="center" >{searchOrder.order.couponCode}</TableCell>
                                         <TableCell align="center" >{searchOrder.order.deliveryStatus}</TableCell>
                                     </TableRow>
@@ -329,6 +330,7 @@ function ExpressOrderList(props) {
                                             <TableCell align="center" >{row.user.pincode}</TableCell>
                                             <TableCell align="center">{row.total}</TableCell>
                                             <TableCell >{detail(row.vendor.name)}</TableCell>
+                                            <TableCell align="center">{row.finalTotal == 0 ? row.total : row.finalTotal}</TableCell>
                                             <TableCell align="center">{row.couponCode}</TableCell>
                                             <TableCell align="center">{row.deliveryStatus}</TableCell>
                                         </TableRow>
