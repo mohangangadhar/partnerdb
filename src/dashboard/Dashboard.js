@@ -6,10 +6,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchTodos, fetchSupportReport } from '../Actions';
+import { fetchTodos, fetchSupportReport, fetchPoData } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgressInTable, dashboardSummary, supportSummaryData } from '../constants/Constants';
+import { CircularProgressInTable, dashboardSummary, poSummaryData, supportSummaryData } from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
 function DashBoard() {
@@ -20,6 +20,7 @@ function DashBoard() {
     const [statusOrders, setStatusOrders] = useState([]);
     const [isLoading, setisLoading] = useState(false);
     const [isSummaryLoading, setisSummaryLoading] = useState(false);
+    const [isPoSummaryLoading, setisPoSummaryLoading] = useState(false);
     const [isSupportSummaryLoading, setisSupportSummaryLoading] = useState(false);
     const [supportSummary, setSupportSummary] = useState({
         new: 0,
@@ -109,7 +110,15 @@ function DashBoard() {
         complete: 0,
         pending: 0,
     });
+    const [poSummary, setPoSummary] = useState({
+        yettodeliver: 0,
+        pending: 0,
+        pastdue: 0,
+        onhold: 0,
+        cancelled: 0
+    });
     const order = useSelector(state => state.dashboardreducer);
+    const poReport = useSelector(state => state.poreducer);
     const supportReport = useSelector(state => state.supportreducer);
     const dispatch = useDispatch();
 
@@ -357,7 +366,7 @@ function DashBoard() {
         }
         setisSummaryLoading(false);
     }
-    const getSupportData = async () => {
+    const getSupportData = () => {
         let supportData = supportReport.apiData;
         setisSupportSummaryLoading(true);
         for (let i = 0; i < supportData.length; i++) {
@@ -389,17 +398,62 @@ function DashBoard() {
 
         setisSupportSummaryLoading(false);
     }
+
+    const getPoData = () => {
+        let poData = poReport.poData;
+        setisPoSummaryLoading(true);
+
+        for (let i = 0; i < poData.length; i++) {
+            if (poData[i].paymentStatus == "yet to deliver") {
+                setPoSummary((prevData) => ({
+                    ...prevData,
+                    yettodeliver: poData[i].count
+                }))
+            }
+            if (poData[i].paymentStatus == "pending") {
+                setPoSummary((prevData) => ({
+                    ...prevData,
+                    pending: poData[i].count
+                }))
+            }
+            if (poData[i].paymentStatus == "past due") {
+                setPoSummary((prevData) => ({
+                    ...prevData,
+                    pastdue: poData[i].count
+                }))
+            }
+            if (poData[i].paymentStatus == "on hold") {
+                setPoSummary((prevData) => ({
+                    ...prevData,
+                    onhold: poData[i].count
+                }))
+            }
+            if (poData[i].paymentStatus == "cancelled") {
+                setPoSummary((prevData) => ({
+                    ...prevData,
+                    cancelled: poData[i].count
+                }))
+            }
+        }
+        // console.log(poSummary);
+        setisPoSummaryLoading(false);
+    }
     useEffect(async () => {
         setisSummaryLoading(true);
         dispatch(fetchTodos);
+        dispatch(fetchPoData);
         dispatch(fetchSupportReport);
     }, []);
     useEffect(() => {
         getData();
+
     }, [order.apiData.length > 5])
     useEffect(() => {
         getSupportData();
     }, [supportReport.apiData.length > 1])
+    useEffect(() => {
+        getPoData();
+    }, [poReport.poData.length > 2])
     return (
         <div>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>DashBoard</h2></center>
@@ -524,6 +578,30 @@ function DashBoard() {
                                         supportSummary.new + supportSummary.completed + supportSummary.inProgress + supportSummary.open
                                     }</TableCell>
                                 </TableRow>
+                            </>
+                            : CircularProgressInTable}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Po Summary:</h3>
+            <TableContainer component={Paper}>
+                <Table className="table" aria-label="spanning table">
+                    <TableTitles data={poSummaryData} />
+                    <TableBody>
+                        {poReport.poData.length > 1 && !(isPoSummaryLoading) ?
+                            <>
+
+                                <TableRow >
+                                    <TableCell align="center">{poSummary.yettodeliver}</TableCell>
+                                    <TableCell align="center">{poSummary.pastdue}</TableCell>
+                                    <TableCell align="center">{poSummary.pending}</TableCell>
+                                    <TableCell align="center">{poSummary.onhold}</TableCell>
+                                    <TableCell align="center">{poSummary.cancelled}</TableCell>
+                                    <TableCell align="center">{
+                                        poSummary.yettodeliver + poSummary.pastdue + poSummary.pending + poSummary.onhold + poSummary.cancelled
+                                    }</TableCell>
+                                </TableRow>
+
                             </>
                             : CircularProgressInTable}
                     </TableBody>

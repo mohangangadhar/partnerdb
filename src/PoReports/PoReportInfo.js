@@ -179,7 +179,7 @@ const PoReportInfo = () => {
     }
     const sendTotalPoData = async (checkList) => {
         let finalList = [];
-
+        setisApiLoading(true);
 
         let poId = getRandom();
 
@@ -243,9 +243,10 @@ const PoReportInfo = () => {
                 fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
                     setisLoading(false);
+                    setisApiLoading(false);
                     receivedData(offSet);
                 }).catch(err => alert(err))
-
+                setisApiLoading(false);
             }).catch(err => console.log(err));
     }
     return (

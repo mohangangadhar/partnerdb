@@ -25,8 +25,18 @@ const EditablePoReportInfo = ({
 
             <TableCell align="center">{row.poTotal}</TableCell>
             <TableCell align="center">
-                <input type="text" placeholder="poStatus" name="poStatus" value={addFormData.poStatus} onChange={handleEditFormChange} />
+                <select style={{
+                    padding: 5,
+                }} name="poStatus" value={addFormData.poStatus} onChange={handleEditFormChange}>
+                    <option style={styleOptions} disabled>PO Status:</option>
+                    <option style={styleOptions} value="new">New</option>
+                    <option style={styleOptions} value="delivered">Delivered</option>
+                    <option style={styleOptions} value="rejected">Rejected</option>
+                    <option style={styleOptions} value="cancelled">Cancelled</option>
+                    <option style={styleOptions} value="onhold">On Hold</option>
+                </select>
             </TableCell>
+
             <TableCell align="center">
                 <input type="text" placeholder="Received Date" name="poReceivedDate" value={addFormData.poReceivedDate} onChange={handleEditFormChange} />
             </TableCell>
@@ -34,7 +44,16 @@ const EditablePoReportInfo = ({
                 <input type="text" placeholder="actualTotal" name="actualTotal" value={addFormData.actualTotal} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center">
-                <input type="text" placeholder="Payment Status" name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange} />
+                <select style={{
+                    padding: 5,
+                }} name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange}>
+                    <option style={styleOptions} value="" >Payment Status:</option>
+                    <option style={styleOptions} value="yet to deliver">Yet to Deliver</option>
+                    <option style={styleOptions} value="pending">Pending</option>
+                    <option style={styleOptions} value="past due">Past Due</option>
+                    <option style={styleOptions} value="on hold">On Hold</option>
+                    <option style={styleOptions} value="cancelled">Cancelled</option>
+                </select>
             </TableCell>
 
 

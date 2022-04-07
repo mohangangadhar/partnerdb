@@ -52,7 +52,11 @@ export async function fetchTodos(dispatch, getState) {
         .then(response => response.json());
     dispatch({ type: 'GETDATA', payload: response })
 }
-
+export async function fetchPoData(dispatch, getState) {
+    const response = await fetch(APIURL + "po-report-info/po-summary", GetRequestOptions)
+        .then(response => response.json());
+    dispatch({ type: 'GETPODATA', payload: response })
+}
 export async function fetchSupportReport(dispatch, getState) {
     const response = await fetch(APIURL + "support/report", GetRequestOptions)
         .then(response => response.json());

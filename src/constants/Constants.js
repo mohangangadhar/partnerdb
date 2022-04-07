@@ -58,6 +58,9 @@ export const getRandom = () => {
 export const dashboardSummary = [
     "Order Type", "New", "Processing", "Prepared", "Complete", "Pending", "Cancelled", "Total"
 ];
+export const poSummaryData = [
+    "Yet To Deliver", "Pending", "Past Due", "On Hold", "Cancelled", "Total"
+];
 export const supportSummaryData = [
     "New", "Open", "In Progress", "Completed", "Total"
 ];
