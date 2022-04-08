@@ -26,6 +26,7 @@ import ReadOnlyRow from './ReadOnlyRow';
 import { NotificationManager } from "react-notifications";
 import { APIURL, GetRequestOptions } from '../constants/Constants';
 import OrderEditDialog from './OrderEditDialog';
+import CodDeposit from './CodDeposit';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
@@ -575,6 +576,11 @@ function OrderDetail(props) {
                             </TableCell>
                         </TableRow>
                     </Container>
+                    {userData.mobileNumber &&
+                        <TableContainer component={Paper} >
+                            <CodDeposit mobileNumber={userData.mobileNumber} />
+                        </TableContainer>
+                    }
                     <Container>
                         <OrderEditDialog
                             open={open}
