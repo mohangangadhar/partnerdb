@@ -146,11 +146,11 @@ function DashBoard() {
     const expressOrdersSum = () => (newCount.express.length >= 1 && newCount.express[0].noOfOrders) + (preparedCount.express.length >= 1 && preparedCount.express[0].noOfOrders) + (processingCount.express.length >= 1 && processingCount.express[0].noOfOrders)
         + (completeCount.express.length >= 1 && completeCount.express[0].noOfOrders) + (pendingCount.express.length && pendingCount.express[0].noOfOrders);
 
-    const regularRevenueSum = () => (newCount.regular.length >= 1 && newCount.regular[0].total) + (preparedCount.regular.length >= 1 && preparedCount.regular[0].total) + (processingCount.regular.length >= 1 && processingCount.regular[0].total)
-        + (completeCount.regular.length >= 1 && completeCount.regular[0].total) + (pendingCount.regular.length && pendingCount.regular[0].total);
+    const regularRevenueSum = () => (newCount.regular.length >= 1 && newCount.regular[0].totalSales) + (preparedCount.regular.length >= 1 && preparedCount.regular[0].totalSales) + (processingCount.regular.length >= 1 && processingCount.regular[0].totalSales)
+        + (completeCount.regular.length >= 1 && completeCount.regular[0].totalSales) + (pendingCount.regular.length && pendingCount.regular[0].totalSales);
 
-    const expressRevenueSum = () => (newCount.express.length >= 1 && newCount.express[0].total) + (preparedCount.express.length >= 1 && preparedCount.express[0].total) + (processingCount.express.length >= 1 && processingCount.express[0].total)
-        + (completeCount.express.length >= 1 && completeCount.express[0].total) + (pendingCount.express.length && pendingCount.express[0].total);
+    const expressRevenueSum = () => (newCount.express.length >= 1 && newCount.express[0].totalSales) + (preparedCount.express.length >= 1 && preparedCount.express[0].totalSales) + (processingCount.express.length >= 1 && processingCount.express[0].totalSales)
+        + (completeCount.express.length >= 1 && completeCount.express[0].totalSales) + (pendingCount.express.length && pendingCount.express[0].totalSales);
 
 
     const changeStatus = async (vendorName) => {
@@ -205,7 +205,7 @@ function DashBoard() {
                     setNewOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
-                        regtotal: prevState.regtotal + data[i].total
+                        regtotal: prevState.regtotal + data[i].totalSales
                     }
                     ));
                 }
@@ -214,7 +214,7 @@ function DashBoard() {
                     setNewOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
-                        exptotal: prevState.exptotal + data[i].total
+                        exptotal: prevState.exptotal + data[i].totalSales
                     }
                     ));
                 }
@@ -223,7 +223,7 @@ function DashBoard() {
                     setNewOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
-                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                        seasonaltotal: prevState.seasonaltotal + data[i].totalSales
                     }
                     ));
                 }
@@ -235,7 +235,7 @@ function DashBoard() {
                     setPreparedOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
-                        regtotal: prevState.regtotal + data[i].total
+                        regtotal: prevState.regtotal + data[i].totalSales
                     }
                     ));
                 }
@@ -244,7 +244,7 @@ function DashBoard() {
                     setPreparedOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
-                        exptotal: prevState.exptotal + data[i].total
+                        exptotal: prevState.exptotal + data[i].totalSales
                     }
                     ));
                 }
@@ -253,7 +253,7 @@ function DashBoard() {
                     setPreparedOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
-                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                        seasonaltotal: prevState.seasonaltotal + data[i].totalSales
                     }
                     ));
                 }
@@ -265,7 +265,7 @@ function DashBoard() {
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
-                        regtotal: prevState.regtotal + data[i].total
+                        regtotal: prevState.regtotal + data[i].totalSales
                     }
                     ));
                 }
@@ -274,7 +274,7 @@ function DashBoard() {
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
-                        exptotal: prevState.exptotal + data[i].total
+                        exptotal: prevState.exptotal + data[i].totalSales
                     }
                     ));
                 }
@@ -283,7 +283,7 @@ function DashBoard() {
                     setProcessingOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
-                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                        seasonaltotal: prevState.seasonaltotal + data[i].totalSales
                     }
                     ));
                 }
@@ -296,7 +296,7 @@ function DashBoard() {
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
-                        regtotal: prevState.regtotal + data[i].total
+                        regtotal: prevState.regtotal + data[i].totalSales
                     }
                     ));
                 }
@@ -305,7 +305,7 @@ function DashBoard() {
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
-                        exptotal: prevState.exptotal + data[i].total
+                        exptotal: prevState.exptotal + data[i].totalSales
                     }
                     ));
                 }
@@ -314,7 +314,7 @@ function DashBoard() {
                     setCancelOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
-                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                        seasonaltotal: prevState.seasonaltotal + data[i].totalSales
                     }
                     ));
                 }
@@ -326,7 +326,7 @@ function DashBoard() {
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
-                        regtotal: prevState.regtotal + data[i].total
+                        regtotal: prevState.regtotal + data[i].totalSales
                     }
                     ));
                 }
@@ -335,7 +335,7 @@ function DashBoard() {
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
-                        exptotal: prevState.exptotal + data[i].total
+                        exptotal: prevState.exptotal + data[i].totalSales
                     }
                     ));
                 }
@@ -344,7 +344,7 @@ function DashBoard() {
                     setPendingOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
-                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                        seasonaltotal: prevState.seasonaltotal + data[i].totalSales
                     }
                     ));
                 }
@@ -356,7 +356,7 @@ function DashBoard() {
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
                         regular: prevState.regular + data[i].noOfOrders,
-                        regtotal: prevState.regtotal + data[i].total
+                        regtotal: prevState.regtotal + data[i].totalSales
                     }
                     ));
                 }
@@ -365,7 +365,7 @@ function DashBoard() {
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
                         express: prevState.express + data[i].noOfOrders,
-                        exptotal: prevState.exptotal + data[i].total
+                        exptotal: prevState.exptotal + data[i].totalSales
                     }
                     ));
                 }
@@ -374,7 +374,7 @@ function DashBoard() {
                     setCompleteOrdersData((prevState) => ({
                         ...prevState,
                         seasonal: prevState.seasonal + data[i].noOfOrders,
-                        seasonaltotal: prevState.seasonaltotal + data[i].total
+                        seasonaltotal: prevState.seasonaltotal + data[i].totalSales
                     }
                     ));
                 }

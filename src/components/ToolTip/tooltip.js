@@ -6,7 +6,7 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { APIURL, GetRequestOptions } from '../../constants/Constants';
 
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -22,11 +22,13 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 
 const CustomTooltip = ({ type, status, id }) => {
     const [orderIds, setOrderIds] = useState([]);
+    const [noData, setNoData] = useState(false);
     useEffect(async () => {
         await fetch(APIURL + `order/${type}-order-ids/${status}`, GetRequestOptions).then(
             response => response.json()).
             then(data => {
                 setOrderIds(data);
+                if (data.length == 0 && setNoData(true));
             });
     }, [])
     return (
@@ -45,8 +47,17 @@ const CustomTooltip = ({ type, status, id }) => {
                                     }}>{data.id}</Link></p>
                                 ))
                                 }
-                            </div> : <b>Nothing here:(</b>
+                            </div> :
+                            <>
+                                {noData ?
+                                    <b>Nothing here:(</b>
+                                    : <CircularProgress />
+                                }
+
+
+                            </>
                         }
+
                     </>
                 }
             >

@@ -9,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { NotificationManager } from "react-notifications";
 import WalletTransactions from "./WalletTransactions";
 import Loader from "../components/Loader/Loader";
+import { CircularProgress } from "@mui/material";
 const WalletInfo = ({ data, searchOrder }) => {
     const [wallet, setWallet] = useState({
         walletId: "",

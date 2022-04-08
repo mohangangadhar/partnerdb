@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { TableContainer, Table, TableCell, TableHead, TableBody, TableRow } from '@material-ui/core'
+import { TableContainer, Table, TableCell, TableHead, TableBody, TableRow, CircularProgress } from '@material-ui/core'
 function WalletTransactions({ walletid, toggle }) {
     const [wallet, setWallet] = useState([]);
+    const [isLoading, setisLoading] = useState(false);
     const fetchData = async () => {
+        setisLoading(true);
         await fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${walletid}/transaction`).
             then(response => response.json()).
-            then(data => setWallet(data.content)).catch(error => alert(error));
+            then(data => {
+                setWallet(data.content);
+                setisLoading(false);
+            }).catch(error => alert(error));
+        setisLoading(false);
     };
     useEffect(() => {
         fetchData();
@@ -18,30 +24,34 @@ function WalletTransactions({ walletid, toggle }) {
 
     return (
         <div>
-            <TableContainer>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell >Amount</TableCell>
-                            <TableCell >Type</TableCell>
-                            <TableCell >Current Balance</TableCell>
-                            <TableCell >Date</TableCell>
-                            <TableCell >Description</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {wallet.map((data, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{data.amount}</TableCell>
-                                <TableCell>{data.type}</TableCell>
-                                <TableCell>{data.currentBalance}</TableCell>
-                                <TableCell>{data.createdAt}</TableCell>
-                                <TableCell>{detail(data.meta)}</TableCell>
+            {isLoading ?
+                <CircularProgress />
+                :
+                <TableContainer>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell >Amount</TableCell>
+                                <TableCell >Type</TableCell>
+                                <TableCell >Current Balance</TableCell>
+                                <TableCell >Date</TableCell>
+                                <TableCell >Description</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {wallet.map((data, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>{data.amount}</TableCell>
+                                    <TableCell>{data.type}</TableCell>
+                                    <TableCell>{data.currentBalance}</TableCell>
+                                    <TableCell>{data.createdAt}</TableCell>
+                                    <TableCell>{detail(data.meta)}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
         </div>
     )
 }
