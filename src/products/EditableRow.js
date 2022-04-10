@@ -48,6 +48,7 @@ const EditableRow = ({
                 ></input>
             </TableCell>
             <TableCell align="center">{row.salePrice}</TableCell>
+            <TableCell align="center">{row.product.week}</TableCell>
             <TableCell align="center">
                 <input
                     type="text"
@@ -56,6 +57,7 @@ const EditableRow = ({
                     value={addFormData.stockQuantity}
                     onChange={handleEditFormChange}
                 ></input></TableCell>
+
             {/* <TableCell align="center"><Button variant="text" color="success">Active</Button></TableCell> */}
             <TableCell align="center"><Button variant="contained" on color="success" onClick={(event) => handleFormSubmit(event, row, addFormData)}>Save</Button></TableCell>
         </TableRow>

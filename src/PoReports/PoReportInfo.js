@@ -223,7 +223,7 @@ const PoReportInfo = () => {
                     "poReportId": "PO-V" + poId,
                     "createdAt": GetDate(),
                     "comments": "",
-                    "paymentStatus": "New",
+                    "paymentStatus": "yet to deliver",
                     "active": 1,
                     "poCreatedDate": poCreatedDate,
                     "poType": "Manual",

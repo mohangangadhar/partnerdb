@@ -16,11 +16,10 @@ const CodDeposit = ({ mobileNumber }) => {
             })
             .catch((error) => {
                 NotificationManager.error('Unable to retreive your record', 'Failed!');
-                // this.setState({
-                //     loading: false
-                // })
+
             })
     }
+    console.count();
     useEffect(() => {
         searchOrder();
     }, [])

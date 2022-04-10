@@ -25,7 +25,9 @@ const ReadOnlyRow = ({
             <TableCell>{row.product.express == 0 ? "NO" : "Yes"}</TableCell>
             <TableCell align="center">{row.product.price}</TableCell>
             <TableCell align="center">{row.salePrice}</TableCell>
+            <TableCell align="center">{row.product.week}</TableCell>
             <TableCell align="center">{row.product.stockQuantity}</TableCell>
+
             {/* <TableCell align="center"><Button variant="text" color="success">Active</Button></TableCell> */}
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row)}>Edit</Button></TableCell>
         </TableRow>

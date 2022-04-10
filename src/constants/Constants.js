@@ -68,7 +68,7 @@ export const usersTabData = [
     "User Id", "Name", "Email", "Mobile", "Verified", "Pincode", "Created At"
 ];
 export const productsTabData = [
-    "Product Id", "Vendor Name", "Title", "Express", "Price", "Sale Price", "Stock Quantity", "Actions"
+    "Product Id", "Vendor Name", "Title", "Express", "Price", "Sale Price", "Dispatch_Week", "Stock Quantity", "Actions"
 ];
 export const supportTabData = [
     "Id", "Name", "Mobile Number", "Email", "Message", "Created At", "Status", "Resolution",
