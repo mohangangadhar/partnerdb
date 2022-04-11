@@ -59,6 +59,7 @@ import SeasonalOrders from './orders/SeasonalOrders';
 import SupplyPlanning from './SupplyPlanning/SupplyPlanning';
 import PoReports from './PoReports/PoReports';
 import PoReportInfo from './PoReports/PoReportInfo';
+import SeasonalTest from './orders/SeasonalTest';
 
 const drawerWidth = 240;
 
@@ -384,7 +385,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/dashboard" exact component={Dashboard} />
                                     <Route exact path="/reset" component={Reset} />
                                     <Route path="/app/:vendorId" exact component={OrderList} />
-                                    <Route path="/app/:vendorId/seasonal" exact component={SeasonalOrders} />
+                                    <Route path="/app/:vendorId/seasonal" exact component={SeasonalTest} />
                                     <Route path="/app/:vendorId/express" exact component={ExpressOrderList} />
                                     <Route path="/app/:vendorId/order/:orderId" exact component={OrderDetail} />
                                     <Route path="/app/:vendorId/product/" exact component={ProductList} />
