@@ -13,6 +13,12 @@ const EditableRow = ({
         marginBottom: 5,
         fontSize: 15
     }
+    let price = 0;
+    if (row.receivedQty > 0 && row.receivedQty != null) {
+        price = (row.receivedQty - row.wastageQty) * row.totalPay;
+    } else {
+        price = row.orderedQty * row.totalPay;
+    }
     return (
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
@@ -39,7 +45,7 @@ const EditableRow = ({
             <TableCell align="center">
                 <textarea placeholder="Total to Pay" name="totalPay" value={addFormData.totalPay} cols="20" onChange={handleEditFormChange}></textarea>
             </TableCell>
-            <TableCell align="center">{(row.receivedQty - row.wastageQty) * row.totalPay}</TableCell>
+            <TableCell align="center">{price}</TableCell>
             <TableCell align="center">
                 <textarea placeholder="Comments" name="comments" value={addFormData.comments} cols="20" onChange={handleEditFormChange}></textarea>
             </TableCell>

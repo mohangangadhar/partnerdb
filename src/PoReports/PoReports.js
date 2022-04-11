@@ -138,12 +138,12 @@ function PoReports(props) {
 
         let urlString = `suppy-planning-snapshot/${row.id}`;
         let supportData = {
-            receivedQty: tempFormData.receivedQty,
-            wastageQty: tempFormData.wastageQty,
+            receivedQty: tempFormData.receivedQty > 0 ? tempFormData.receivedQty : 0,
+            wastageQty: tempFormData.wastageQty > 0 ? tempFormData.wastageQty : 0,
             qualityRating: tempFormData.qualityRating,
             updatedAt: GetDate(),
             missedQty: tempFormData.receivedQty - tempFormData.wastageQty,
-            comments: tempFormData.comments,
+            comments: tempFormData.comments == null ? "" : tempFormData.comments,
             totalPay: tempFormData.totalPay
         };
 
