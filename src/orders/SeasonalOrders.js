@@ -15,8 +15,9 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
 
-import { APIURL } from '../constants/Constants';
+import { APIURL, GetRequestOptions } from '../constants/Constants';
 import TableTitles from './TableTitles';
+import TableTitlesSeasonal from './TableTitlesSeasonal';
 
 function SeasonalOrders(props) {
     let { id } = useParams();
@@ -34,7 +35,29 @@ function SeasonalOrders(props) {
     const [searchOrder, setSearchOrder] = useState({});
     const [isDownloading, setisDownloading] = useState(false);
     const order = useSelector(state => state.expressstatusreducer);
+    const getRows = (data) => {
+        data.map(async (rows) => {
+            // let x = { "payment": "paid" };
+            let productName = "";
+            let paymentMethod = "";
+            await fetch(APIURL + `order/order-products/${rows.id}`, GetRequestOptions).then(
+                response => response.json()
+            ).then(productdata => {
+                fetch(APIURL + `order/payment-method/${rows.id}`, GetRequestOptions).then(
+                    response => response.json()
+                ).then(paymentdata => {
+                    let res = {
+                        order: { ...rows },
+                        productName: productdata[0].vendorProduct.product.title,
+                        paymentMethod: paymentdata.name
+                    };
+                    setRows(rows => [...rows, res]);
+                })
 
+            })
+        })
+
+    }
     const receivedData = (val, status) => {
         setSearchNotFound(false);
         setRows("");
@@ -55,7 +78,8 @@ function SeasonalOrders(props) {
         fetch(APIURL + urlString + status, requestOptions)
             .then(response => response.json())
             .then(data => {
-                setRows(data.content);
+                // setRows(data.content);
+                getRows(data.content);
                 setTotalPages(data.totalPages);
 
                 setisLoading(false);
@@ -170,28 +194,31 @@ function SeasonalOrders(props) {
             <Box m={1} />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <TableTitles auth={auth} />
+                    <TableTitlesSeasonal auth={auth} />
                     {rows.length > 0 && !(isLoading) ?
                         <TableBody>
                             {rows.map((row, index) => (
-                                <TableRow key={row.id}>
+                                <TableRow key={row.order.id}>
                                     <TableCell>
                                         <Link to={{
-                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
-                                            id: row.id
-                                        }}>{row.id}</Link>
+                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.order.id,
+                                            id: row.order.id
+                                        }}>{row.order.id}</Link>
                                     </TableCell>
-                                    <TableCell >{row.user.id} : {row.user.name}</TableCell>
+                                    <TableCell >{row.order.user.id} : {row.order.user.name}</TableCell>
+                                    <TableCell >{detail(row.productName)}</TableCell>
                                     <TableCell align="center">
-                                        {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
+                                        {new Date(Date.parse(row.order.createdAt + " UTC")).toLocaleString()}
                                     </TableCell>
-                                    <TableCell align="center" >{row.dispatchWeek}</TableCell>
-                                    <TableCell align="center" >{row.user.pincode}</TableCell>
-                                    <TableCell align="center">{row.total}</TableCell>
-                                    <TableCell >{detail(row.vendor.name)}</TableCell>
-                                    <TableCell align="center">{row.finalTotal == 0 ? row.total : row.finalTotal}</TableCell>
-                                    <TableCell align="center">{row.couponCode}</TableCell>
-                                    <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                    <TableCell align="center" >{row.order.dispatchWeek}</TableCell>
+                                    <TableCell align="center" >{row.order.user.pincode}</TableCell>
+                                    <TableCell align="center">{row.order.total}</TableCell>
+                                    <TableCell >{detail(row.order.vendor.name)}</TableCell>
+                                    <TableCell align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
+                                    <TableCell align="center">{row.paymentMethod}</TableCell>
+                                    <TableCell align="center">{row.order.couponCode}</TableCell>
+                                    <TableCell align="center">{row.order.deliveryStatus}</TableCell>
+
                                 </TableRow>
                             ))}
                         </TableBody>

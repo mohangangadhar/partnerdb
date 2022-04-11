@@ -82,6 +82,7 @@ function OrderDetail(props) {
                 setUserAddress(data.ecommerceOrderAddress);
                 setPaymentType({
                     method: data.paymentMethodFB.slug,
+                    type: data.paymentMethodFB.name
                 });
                 setDialogData({
                     userId: data.order.user.id,
@@ -103,26 +104,10 @@ function OrderDetail(props) {
             }
             );
     }
-    const getPaymentStatus = async () => {
-        let requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-        };
-        await fetch(`https://admin.ityme.in/api/admin/orders/${props.location.id}`, requestOptions).
-            then(response => response.json()).
-            then(data => {
-                setPaymentType((prev) => ({
-                    ...prev,
-                    type: data.payment.status
-                }));
-            }).catch(err => console.log(err));
-    }
+
     useEffect(async () => {
         await getData();
-        getPaymentStatus();
+
         setisLoading(false);
     }, [isLoading]);
     const sendEmail = async (e) => {
