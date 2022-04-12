@@ -48,6 +48,7 @@ const EditablePoReportInfo = ({
                     padding: 5,
                 }} name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange}>
                     <option style={styleOptions} value="" >Payment Status:</option>
+                    <option style={styleOptions} value="complete">Complete</option>
                     <option style={styleOptions} value="yet to deliver">Yet to Deliver</option>
                     <option style={styleOptions} value="pending">Pending</option>
                     <option style={styleOptions} value="past due">Past Due</option>
