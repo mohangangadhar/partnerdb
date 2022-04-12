@@ -117,6 +117,10 @@ function DashBoard() {
             count: 0,
             poTotal: 0
         },
+        complete: {
+            count: 0,
+            poTotal: 0
+        },
         pending: {
             count: 0,
             poTotal: 0
@@ -431,6 +435,16 @@ function DashBoard() {
                     }
                 }))
             }
+            if (poData[i].paymentStatus == "complete") {
+                setPoSummary((prevData) => ({
+                    ...prevData,
+                    complete: {
+                        ...prevData,
+                        count: poData[i].count,
+                        poTotal: poData[i].poTotal
+                    }
+                }))
+            }
             if (poData[i].paymentStatus == "pending") {
                 setPoSummary((prevData) => ({
                     ...prevData,
@@ -631,23 +645,25 @@ function DashBoard() {
                                 <TableRow >
                                     <TableCell align="center">Count</TableCell>
                                     <TableCell align="center">{poSummary.yettodeliver.count}</TableCell>
+                                    <TableCell align="center">{poSummary.complete.count}</TableCell>
                                     <TableCell align="center">{poSummary.pastdue.count}</TableCell>
                                     <TableCell align="center">{poSummary.pending.count}</TableCell>
                                     <TableCell align="center">{poSummary.onhold.count}</TableCell>
                                     <TableCell align="center">{poSummary.cancelled.count}</TableCell>
                                     <TableCell align="center">{
-                                        poSummary.yettodeliver.count + poSummary.pastdue.count + poSummary.pending.count + poSummary.onhold.count
+                                        poSummary.yettodeliver.count + poSummary.complete.count + poSummary.pastdue.count + poSummary.pending.count + poSummary.onhold.count
                                     }</TableCell>
                                 </TableRow>
                                 <TableRow >
                                     <TableCell align="center">Amount</TableCell>
                                     <TableCell align="center">{poSummary.yettodeliver.poTotal}</TableCell>
+                                    <TableCell align="center">{poSummary.complete.poTotal}</TableCell>
                                     <TableCell align="center">{poSummary.pastdue.poTotal}</TableCell>
                                     <TableCell align="center">{poSummary.pending.poTotal}</TableCell>
                                     <TableCell align="center">{poSummary.onhold.poTotal}</TableCell>
                                     <TableCell align="center">{poSummary.cancelled.poTotal}</TableCell>
                                     <TableCell align="center">{
-                                        poSummary.yettodeliver.poTotal + poSummary.pastdue.poTotal + poSummary.pending.poTotal + poSummary.onhold.poTotal
+                                        poSummary.yettodeliver.poTotal + poSummary.complete.poTotal + poSummary.pastdue.poTotal + poSummary.pending.poTotal + poSummary.onhold.poTotal
                                     }</TableCell>
                                 </TableRow>
 

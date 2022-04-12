@@ -59,7 +59,7 @@ export const dashboardSummary = [
     "Order Type", "New", "Processing", "Prepared", "Complete", "Pending", "Cancelled", "Total"
 ];
 export const poSummaryData = [
-    "Type", "Yet To Deliver", "Pending", "Past Due", "On Hold", "Cancelled", "Total"
+    "Type", "Yet To Deliver", "Completed", "Pending", "Past Due", "On Hold", "Cancelled", "Total"
 ];
 export const supportSummaryData = [
     "New", "Open", "In Progress", "Completed", "Total"

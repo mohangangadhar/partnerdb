@@ -51,6 +51,10 @@ function OrderDetail(props) {
         method: "",
         type: ""
     });
+    const [paymentStatus, setPaymentStatus] = useState({
+        status: "",
+        pendingAmount: ""
+    });
     const [isApiLoading, setisApiLoading] = useState(false);
     const [dialogData, setDialogData] = useState({
         orderId: 0,
@@ -104,10 +108,19 @@ function OrderDetail(props) {
             }
             );
     }
-
+    const getPaymentStatus = async () => {
+        await fetch(APIURL + "order/payment-status/" + props.location.id).then(
+            response => response.json()
+        ).then(data => {
+            setPaymentStatus({
+                status: data.status,
+                pendingAmount: data.pendingAmount
+            })
+        }).catch(err => console.log(err))
+    }
     useEffect(async () => {
         await getData();
-
+        await getPaymentStatus();
         setisLoading(false);
     }, [isLoading]);
     const sendEmail = async (e) => {
@@ -463,7 +476,7 @@ function OrderDetail(props) {
                                                     <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType.method} [{paymentType.type !== "" && paymentType.type}] </FormLabel>
+                                                    <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType.method} [{paymentStatus.status} {paymentStatus.pendingAmount}] </FormLabel>
                                                 </TableCell>
                                                 <TableCell>
                                                     <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
