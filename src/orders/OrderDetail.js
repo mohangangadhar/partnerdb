@@ -82,7 +82,7 @@ function OrderDetail(props) {
                 setUserAddress(data.ecommerceOrderAddress);
                 setPaymentType({
                     method: data.paymentMethodFB.slug,
-                    type: data.paymentMethodFB.name
+                    type: data.paymentMethodFB.type
                 });
                 setDialogData({
                     userId: data.order.user.id,
