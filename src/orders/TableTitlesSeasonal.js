@@ -10,7 +10,7 @@ const TableTitlesSeasonal = ({ auth }) => {
                 <TableCell style={{ color: 'wheat' }}>{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "User Name" : "User Id"}</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Product Name</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Order Date</TableCell>
-                <TableCell align="center" style={{ color: 'wheat' }}>Delivery Date</TableCell>
+                <TableCell align="center" style={{ color: 'wheat' }}>Dispatch_Week</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Pincode</TableCell>
                 <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>

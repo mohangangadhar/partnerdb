@@ -476,7 +476,7 @@ function OrderDetail(props) {
                                                     <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <FormLabel style={{ color: 'wheat' }}> Payment Method : {paymentType.method} [{paymentStatus.status} {paymentStatus.pendingAmount}] </FormLabel>
+                                                    <FormLabel style={{ color: 'wheat' }}> Payment Method: {paymentType.method} , Status : {paymentStatus.status} , Pending Amount : {paymentStatus.pendingAmount} </FormLabel>
                                                 </TableCell>
                                                 <TableCell>
                                                     <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>

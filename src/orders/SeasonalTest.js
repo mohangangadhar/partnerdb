@@ -44,40 +44,8 @@ const SeasonalTest = (props) => {
     const [userQueryLoad, setUserQueryLoad] = useState(false);
     const [userSearchData, setUserSearchData] = useState([]);
     const [userName, setUserName] = useState("");
-    let order = useSelector(state => state.orderstatusreducer);
-    const dispatch = useDispatch();
 
-    useEffect(async () => {
-        setisLoading(true);
-        if (user && order.status == "") {
-            dispatch(setstatus.setstatusvalue(auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "all" : "accepted"));
-            setisLoading(false);
-        }
-    }, [])
-    const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
-    const getRows = (data) => {
-        data.map(async (rows) => {
-            // let x = { "payment": "paid" };
-            let productName = "";
-            let paymentMethod = "";
-            await fetch(APIURL + `order/order-products/${rows.id}`, GetRequestOptions).then(
-                response => response.json()
-            ).then(productdata => {
-                fetch(APIURL + `order/payment-method/${rows.id}`, GetRequestOptions).then(
-                    response => response.json()
-                ).then(paymentdata => {
-                    let res = {
-                        order: { ...rows },
-                        productName: productdata[0].vendorProduct.product.title,
-                        paymentMethod: paymentdata.name
-                    };
-                    setRows(rows => [...rows, res]);
-                })
 
-            })
-        })
-
-    }
     const receivedData = async (val, status) => {
 
         setSearchNotFound(false);
@@ -87,27 +55,17 @@ const SeasonalTest = (props) => {
         setUserSearchData([]);
         setSearchOrder({});
         setisLoading(true);
-        let urlString = "order/seasonal/status/";
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "pageNumber": val,
-                "pageSize": 30,
-                "sortDirection": "asc",
-                "sortByKey": "id",
-                "startDate": startDate,
-                "endDate": endDate
-            })
-        };
-        fetch(APIURL + urlString + status, requestOptions)
+        let urlString = "order/seasonal-orders/status/";
+
+        fetch(APIURL + urlString + status + `?size=20&page=${val} `, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
-                // setRows(data.content);
-                getRows(data.content);
+                setRows(data.content);
+
                 setTotalPages(data.totalPages);
+
                 setisLoading(false);
-                if (data.content && data.content.length == 0) { setSearchNotFound(true) }
+                if (data.content.length == 0) { setSearchNotFound(true) }
             });
 
     }
@@ -173,7 +131,7 @@ const SeasonalTest = (props) => {
                 headers: { 'Content-Type': 'application/json' }
             };
 
-            await fetch(apiUrl + 'order/' + query, requestOptions)
+            await fetch(APIURL + 'order/seasonal-order/' + query, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setSearchOrder(data);
@@ -200,7 +158,32 @@ const SeasonalTest = (props) => {
             setSearchQuery("");
             setRows([]);
             setSearchNotFound(false);
-            await fetch(APIURL + 'order/user-name/' + userName, GetRequestOptions)
+            await fetch(APIURL + 'order/seasonal-order/user-name/' + userName, GetRequestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setUserSearchData(data);
+
+                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+                    setisLoading(false);
+                });
+        }
+    }
+    const handleSearchByProductName = async (event) => {
+        event.preventDefault();
+        setQueryLoad(false);
+        if (userName == "" || userName.length == 0) {
+            setUserQueryLoad(false);
+            receivedData(0, "all");
+            return;
+        } else if (userName.length >= 1) {
+            setUserQueryLoad(true);
+            setisLoading(true);
+            setSearchOrder({});
+            setUserSearchData([]);
+            setSearchQuery("");
+            setRows([]);
+            setSearchNotFound(false);
+            await fetch("http://127.0.0.1:8080/" + 'order/seasonal-order/product-name/' + userName, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setUserSearchData(data);
@@ -304,6 +287,8 @@ const SeasonalTest = (props) => {
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
                         handleSearch={handleSearch} label="Search By Order ID" />
+                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
+                        handleSearch={handleSearchByProductName} label="Search By Product Name" />
                     <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName} handleSearch={handleSearchByUserName}
                         label="Search By User Name" />
                 </div>
@@ -312,16 +297,16 @@ const SeasonalTest = (props) => {
             <Grid container justifyContent="space-between" component={Paper}>
                 <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-                    page={order.page + 1}
+
                     onChange={(event, value) => handlePageChange(event, value - 1)} />
             </Grid>
             <Box m={1} />
 
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-                    <>
-                        {queryLoad || userQueryLoad ? <TableTitles auth={auth} /> : <TableTitlesSeasonal auth={auth} />}
-                    </>
+
+                    <TableTitlesSeasonal auth={auth} />
+
                     {queryLoad ?
                         <>
                             {searchOrder.order != null && Object.keys(searchOrder.order).length > 2 && !(isLoading) ?
@@ -333,12 +318,14 @@ const SeasonalTest = (props) => {
                                                 id: searchOrder.order.id
                                             }}> {searchOrder.order.id}</Link></TableCell>
                                         <TableCell align="center" >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{searchOrder.order.user.id} : {searchOrder.order.user.name} </p> : <p>{searchOrder.order.user.id}</p>}</TableCell>
+                                        <TableCell align="center" >{detail(searchOrder.productName)}</TableCell>
                                         <TableCell align="center" > {new Date(Date.parse(searchOrder.order.createdAt + " UTC")).toLocaleString()}</TableCell>
-                                        <TableCell align="center" >---</TableCell>
-                                        <TableCell align="center" >{searchOrder.user.pincode}</TableCell>
+                                        <TableCell align="center" >{searchOrder.order.dispatchWeek}</TableCell>
+                                        <TableCell align="center" >{searchOrder.order.user.pincode}</TableCell>
                                         <TableCell align="center" >{searchOrder.order.total}</TableCell>
                                         <TableCell align="center" >{detail(searchOrder.order.vendor.name)}</TableCell>
                                         <TableCell align="center" >{searchOrder.order.finalTotal == 0 ? searchOrder.order.total : searchOrder.order.finalTotal}</TableCell>
+                                        <TableCell align="center" >{searchOrder.paymentMethod}</TableCell>
                                         <TableCell align="center" >{searchOrder.order.couponCode}</TableCell>
                                         <TableCell align="center" >{searchOrder.order.deliveryStatus}</TableCell>
                                     </TableRow>
@@ -358,21 +345,23 @@ const SeasonalTest = (props) => {
                                         <TableRow key={row.id}>
                                             <TableCell>
                                                 <Link to={{
-                                                    pathname: '/app/' + props.match.params.vendorId + '/order/' + row.id,
-                                                    id: row.id
-                                                }}>{row.id}</Link>
+                                                    pathname: '/app/' + props.match.params.vendorId + '/order/' + row.order.id,
+                                                    id: row.order.id
+                                                }}>{row.order.id}</Link>
                                             </TableCell>
-                                            <TableCell >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{row.user.id} : {row.user.name} </p> : <p>{row.user.id}</p>}</TableCell>
+                                            <TableCell >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{row.order.user.id} : {row.order.user.name} </p> : <p>{row.order.user.id}</p>}</TableCell>
+                                            <TableCell align="center" >{detail(row.productName)}</TableCell>
                                             <TableCell align="center">
-                                                {new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}
+                                                {new Date(Date.parse(row.order.createdAt + " UTC")).toLocaleString()}
                                             </TableCell>
-                                            <TableCell align="center" >{row.deliveryDate}</TableCell>
-                                            <TableCell align="center" >{row.user.pincode}</TableCell>
-                                            <TableCell align="center">{row.total}</TableCell>
-                                            <TableCell >{detail(row.vendor.name)}</TableCell>
-                                            <TableCell align="center">{row.finalTotal == 0 ? row.total : row.finalTotal}</TableCell>
-                                            <TableCell align="center">{row.couponCode}</TableCell>
-                                            <TableCell align="center">{row.deliveryStatus}</TableCell>
+                                            <TableCell align="center" >{row.order.dispatchWeek}</TableCell>
+                                            <TableCell align="center" >{row.order.user.pincode}</TableCell>
+                                            <TableCell align="center">{row.order.total}</TableCell>
+                                            <TableCell >{detail(row.order.vendor.name)}</TableCell>
+                                            <TableCell align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
+                                            <TableCell align="center">{row.paymentMethod}</TableCell>
+                                            <TableCell align="center">{row.order.couponCode}</TableCell>
+                                            <TableCell align="center">{row.order.deliveryStatus}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -394,7 +383,7 @@ const SeasonalTest = (props) => {
                                                     <TableCell align="center">
                                                         {new Date(Date.parse(row.order.createdAt + " UTC")).toLocaleString()}
                                                     </TableCell>
-                                                    <TableCell align="center" >{row.order.deliveryDate}</TableCell>
+                                                    <TableCell align="center" >{row.order.dispatchWeek}</TableCell>
                                                     <TableCell align="center" >{row.order.user.pincode}</TableCell>
                                                     <TableCell align="center">{row.order.total}</TableCell>
                                                     <TableCell >{detail(row.order.vendor.name)}</TableCell>
@@ -423,7 +412,7 @@ const SeasonalTest = (props) => {
                 <Grid container justifyContent={"center"}>
                     <Pagination variant={"text"} color={"primary"}
                         count={totalPages}
-                        page={order.page + 1}
+
                         onChange={(event, value) => handlePageChange(event, value - 1)} />
                 </Grid>
             }
