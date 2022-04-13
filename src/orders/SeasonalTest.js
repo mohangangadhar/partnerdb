@@ -183,7 +183,7 @@ const SeasonalTest = (props) => {
             setSearchQuery("");
             setRows([]);
             setSearchNotFound(false);
-            await fetch("http://127.0.0.1:8080/" + 'order/seasonal-order/product-name/' + userName, GetRequestOptions)
+            await fetch(APIURL + 'order/seasonal-order/product-name/' + userName, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setUserSearchData(data);
