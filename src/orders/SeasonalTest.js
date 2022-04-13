@@ -44,7 +44,7 @@ const SeasonalTest = (props) => {
     const [userQueryLoad, setUserQueryLoad] = useState(false);
     const [userSearchData, setUserSearchData] = useState([]);
     const [userName, setUserName] = useState("");
-
+    const [toggleForInput, setToggleForInput] = useState(false);
 
     const receivedData = async (val, status) => {
 
@@ -183,7 +183,7 @@ const SeasonalTest = (props) => {
             setSearchQuery("");
             setRows([]);
             setSearchNotFound(false);
-            await fetch(APIURL + 'order/seasonal-order/product-name/' + userName, GetRequestOptions)
+            await fetch(APIURL + 'order/seasonal-order/product-name/' + userName.toLowerCase(), GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setUserSearchData(data);
@@ -288,8 +288,8 @@ const SeasonalTest = (props) => {
                     <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
                         handleSearch={handleSearch} label="Search By Order ID" />
                     <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
-                        handleSearch={handleSearchByProductName} label="Search By Product Name" />
-                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName} handleSearch={handleSearchByUserName}
+                        handleSearch={handleSearchByProductName} toggle={toggleForInput} label="Search By Product Name" />
+                    <SearchOrdersByUserName setSearchQuery={setUserName} toggle={toggleForInput} searchquery={userName} handleSearch={handleSearchByUserName}
                         label="Search By User Name" />
                 </div>
             </div>
@@ -340,31 +340,38 @@ const SeasonalTest = (props) => {
                         :
                         <>
                             {userQueryLoad ?
-                                <TableBody>
-                                    {userSearchData.length > 0 && userSearchData.map((row, index) => (
-                                        <TableRow key={row.id}>
-                                            <TableCell>
-                                                <Link to={{
-                                                    pathname: '/app/' + props.match.params.vendorId + '/order/' + row.order.id,
-                                                    id: row.order.id
-                                                }}>{row.order.id}</Link>
-                                            </TableCell>
-                                            <TableCell >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{row.order.user.id} : {row.order.user.name} </p> : <p>{row.order.user.id}</p>}</TableCell>
-                                            <TableCell align="center" >{detail(row.productName)}</TableCell>
-                                            <TableCell align="center">
-                                                {new Date(Date.parse(row.order.createdAt + " UTC")).toLocaleString()}
-                                            </TableCell>
-                                            <TableCell align="center" >{row.order.dispatchWeek}</TableCell>
-                                            <TableCell align="center" >{row.order.user.pincode}</TableCell>
-                                            <TableCell align="center">{row.order.total}</TableCell>
-                                            <TableCell >{detail(row.order.vendor.name)}</TableCell>
-                                            <TableCell align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
-                                            <TableCell align="center">{row.paymentMethod}</TableCell>
-                                            <TableCell align="center">{row.order.couponCode}</TableCell>
-                                            <TableCell align="center">{row.order.deliveryStatus}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
+                                <>
+                                    {isLoading ?
+
+                                        <CircularProgress />
+                                        :
+                                        <TableBody>
+                                            {userSearchData.length > 0 && userSearchData.map((row, index) => (
+                                                <TableRow key={row.id}>
+                                                    <TableCell>
+                                                        <Link to={{
+                                                            pathname: '/app/' + props.match.params.vendorId + '/order/' + row.order.id,
+                                                            id: row.order.id
+                                                        }}>{row.order.id}</Link>
+                                                    </TableCell>
+                                                    <TableCell >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{row.order.user.id} : {row.order.user.name} </p> : <p>{row.order.user.id}</p>}</TableCell>
+                                                    <TableCell align="center" >{detail(row.productName)}</TableCell>
+                                                    <TableCell align="center">
+                                                        {new Date(Date.parse(row.order.createdAt + " UTC")).toLocaleString()}
+                                                    </TableCell>
+                                                    <TableCell align="center" >{row.order.dispatchWeek}</TableCell>
+                                                    <TableCell align="center" >{row.order.user.pincode}</TableCell>
+                                                    <TableCell align="center">{row.order.total}</TableCell>
+                                                    <TableCell >{detail(row.order.vendor.name)}</TableCell>
+                                                    <TableCell align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
+                                                    <TableCell align="center">{row.paymentMethod}</TableCell>
+                                                    <TableCell align="center">{row.order.couponCode}</TableCell>
+                                                    <TableCell align="center">{row.order.deliveryStatus}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    }
+                                </>
 
                                 :
                                 <>
