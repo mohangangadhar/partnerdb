@@ -25,6 +25,7 @@ import Select from '@mui/material/Select';
 import SearchOrdersByUserName from './SearchOrdersByUserName';
 import TableTitles from './TableTitles';
 import TableTitlesSeasonal from './TableTitlesSeasonal';
+import Dropdown from './Components/Dropdown';
 const SeasonalTest = (props) => {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -42,9 +43,10 @@ const SeasonalTest = (props) => {
     const [isDownloading, setisDownloading] = useState(false);
     const [searchOrder, setSearchOrder] = useState({});
     const [userQueryLoad, setUserQueryLoad] = useState(false);
+    const [seasonalPincodes, setSeasonalPincodes] = useState([]);
+    const [selectedPincode, setSelectedPincode] = useState("");
     const [userSearchData, setUserSearchData] = useState([]);
     const [userName, setUserName] = useState("");
-    const [toggleForInput, setToggleForInput] = useState(false);
 
     const receivedData = async (val, status) => {
 
@@ -71,14 +73,18 @@ const SeasonalTest = (props) => {
     }
     const [user] = useAuthState(auth);
     const history = useHistory();
-    useEffect(() => {
-
+    const getPincodes = async () => {
+        await fetch(APIURL + "order/seasonal-pincodes", GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setSeasonalPincodes(data);
+            }).catch(err => setSeasonalPincodes([]));
+    }
+    useEffect(async () => {
 
         receivedData(0, "all");
-
-
+        getPincodes();
     }, []);
-
     const handlePageChange = (event, value) => {
         event.preventDefault();
 
@@ -144,8 +150,7 @@ const SeasonalTest = (props) => {
     const handleSearchByUserName = async (event) => {
         event.preventDefault();
         setQueryLoad(false);
-
-
+        setSelectedPincode("");
         if (userName == "" || userName.length == 0) {
             setUserQueryLoad(false);
             receivedData(0, "all");
@@ -171,6 +176,7 @@ const SeasonalTest = (props) => {
     const handleSearchByProductName = async (event) => {
         event.preventDefault();
         setQueryLoad(false);
+        setSelectedPincode("");
         if (userName == "" || userName.length == 0) {
             setUserQueryLoad(false);
             receivedData(0, "all");
@@ -184,6 +190,33 @@ const SeasonalTest = (props) => {
             setRows([]);
             setSearchNotFound(false);
             await fetch(APIURL + 'order/seasonal-order/product-name/' + userName.toLowerCase(), GetRequestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setUserSearchData(data);
+
+                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+                    setisLoading(false);
+                });
+        }
+    }
+    const handleGetPincodeData = async (event) => {
+        event.preventDefault();
+        setQueryLoad(false);
+        setUserName("");
+
+        if (event.target.value == "all" || event.target.value.length == 0) {
+            setUserQueryLoad(false);
+            receivedData(0, "all");
+            return;
+        } else if (event.target.value.length >= 1) {
+            setUserQueryLoad(true);
+            setisLoading(true);
+            setSearchOrder({});
+            setUserSearchData([]);
+            setSearchQuery("");
+            setRows([]);
+            setSearchNotFound(false);
+            await fetch(APIURL + 'order/seasonal-order/pincode/' + event.target.value, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setUserSearchData(data);
@@ -287,9 +320,10 @@ const SeasonalTest = (props) => {
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
                         handleSearch={handleSearch} label="Search By Order ID" />
+                    {seasonalPincodes.length > 0 && <Dropdown data={seasonalPincodes} selectedPincode={selectedPincode} handleGetPincodeData={handleGetPincodeData} />}
                     <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
-                        handleSearch={handleSearchByProductName} toggle={toggleForInput} label="Search By Product Name" />
-                    <SearchOrdersByUserName setSearchQuery={setUserName} toggle={toggleForInput} searchquery={userName} handleSearch={handleSearchByUserName}
+                        handleSearch={handleSearchByProductName} label="Search By Product Name" />
+                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName} handleSearch={handleSearchByUserName}
                         label="Search By User Name" />
                 </div>
             </div>
