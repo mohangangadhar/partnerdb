@@ -112,10 +112,19 @@ function OrderDetail(props) {
         await fetch(APIURL + "order/payment-status/" + props.location.id).then(
             response => response.json()
         ).then(data => {
-            setPaymentStatus({
-                status: data.status,
-                pendingAmount: data.pendingAmount
-            })
+            if (data.status == 500) {
+                setPaymentStatus({
+                    status: "pending",
+                    pendingAmount: "TBC"
+                })
+            }
+            else {
+                setPaymentStatus({
+                    status: data.status,
+                    pendingAmount: data.pendingAmount
+                })
+            }
+
         }).catch(err => console.log(err))
     }
     useEffect(async () => {
