@@ -366,10 +366,9 @@ const SeasonalTest = (props) => {
             </div>
 
             <Grid container justifyContent="space-between" component={Paper}>
-                <Pagination variant={"text"} color={"primary"}
+                {!queryLoad && !userQueryLoad && <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
-
-                    onChange={(event, value) => handlePageChange(event, value - 1)} />
+                    onChange={(event, value) => handlePageChange(event, value - 1)} />}
             </Grid>
             <Box m={1} />
 
