@@ -44,6 +44,7 @@ const SeasonalTest = (props) => {
     const [searchOrder, setSearchOrder] = useState({});
     const [userQueryLoad, setUserQueryLoad] = useState(false);
     const [seasonalPincodes, setSeasonalPincodes] = useState([]);
+    const [seasonalDispatch, setSeasonalDispatch] = useState([]);
     const [selectedPincode, setSelectedPincode] = useState("");
     const [userSearchData, setUserSearchData] = useState([]);
     const [userName, setUserName] = useState("");
@@ -80,10 +81,18 @@ const SeasonalTest = (props) => {
                 setSeasonalPincodes(data);
             }).catch(err => setSeasonalPincodes([]));
     }
+    const getDispatchWeek = async () => {
+        await fetch(APIURL + "order/seasonal-dispatch-week", GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setSeasonalDispatch(data);
+            }).catch(err => setSeasonalPincodes([]));
+    }
     useEffect(async () => {
 
         receivedData(0, "all");
         getPincodes();
+        getDispatchWeek();
     }, []);
     const handlePageChange = (event, value) => {
         event.preventDefault();
@@ -226,6 +235,33 @@ const SeasonalTest = (props) => {
                 });
         }
     }
+    const handleGetDispatchData = async (event) => {
+        event.preventDefault();
+        setQueryLoad(false);
+        setUserName("");
+
+        if (event.target.value == "all" || event.target.value.length == 0) {
+            setUserQueryLoad(false);
+            receivedData(0, "all");
+            return;
+        } else if (event.target.value.length >= 1) {
+            setUserQueryLoad(true);
+            setisLoading(true);
+            setSearchOrder({});
+            setUserSearchData([]);
+            setSearchQuery("");
+            setRows([]);
+            setSearchNotFound(false);
+            await fetch(APIURL + 'order/seasonal-order/dispatch-week/' + event.target.value, GetRequestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setUserSearchData(data);
+
+                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+                    setisLoading(false);
+                });
+        }
+    }
     return (
         <div>
             {isDownloading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Downloading Orders</b>}
@@ -320,7 +356,8 @@ const SeasonalTest = (props) => {
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
                         handleSearch={handleSearch} label="Search By Order ID" />
-                    {seasonalPincodes.length > 0 && <Dropdown data={seasonalPincodes} selectedPincode={selectedPincode} handleGetPincodeData={handleGetPincodeData} />}
+                    {seasonalPincodes.length > 0 && <Dropdown data={seasonalPincodes} type="pincode" label="Search Pincode" handleGetPincodeData={handleGetPincodeData} />}
+                    {seasonalDispatch.length > 0 && <Dropdown data={seasonalDispatch} type="Dispatch Week" label="Search Dispatch Week" handleGetPincodeData={handleGetDispatchData} />}
                     <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
                         handleSearch={handleSearchByProductName} label="Search By Product Name" />
                     <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName} handleSearch={handleSearchByUserName}
