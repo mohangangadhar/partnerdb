@@ -20,7 +20,7 @@ const Dropdown = ({ data, handleGetPincodeData, label, type }) => {
                     <option style={styleOptions} value="all">All</option>
                     <>
                         {data.map((data) => (
-                            <option style={styleOptions} value={`${data}.${type}`}>{`${data}.${type}`}</option>
+                            <option style={styleOptions} value={type == "pincode" ? data.pincode : data.dispatchWeek}>{type == "pincode" ? data.pincode : data.dispatchWeek}</option>
                         ))}
                     </>
                 </select>
