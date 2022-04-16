@@ -270,6 +270,10 @@ const SeasonalTest = (props) => {
         }
     }
     const handleGetZoneData = async (id, val) => {
+        if (id == "all") {
+            receivedData(0, "all");
+            return;
+        }
         setSearchNotFound(false);
         setQueryLoad(false);
         setUserQueryLoad(false);

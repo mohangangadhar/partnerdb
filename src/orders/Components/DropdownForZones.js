@@ -17,7 +17,7 @@ const DropdownForZones = ({ data, handleGetZoneData, label, type }) => {
                     padding: 5,
                 }} name={type} onChange={(event) => handleGetZoneData(event.target.value, 0)}>
                     <option style={styleOptions} selected disabled value={label}>{label}</option>
-
+                    <option style={styleOptions} value="all">All</option>
                     <>
                         {data.map((data) => (
                             <option style={styleOptions} value={data.id}>{data.zoneName}</option>

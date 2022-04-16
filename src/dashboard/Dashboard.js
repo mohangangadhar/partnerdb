@@ -6,13 +6,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchTodos, fetchSupportReport, fetchPoData } from '../Actions';
+import { fetchTodos, fetchSupportReport, fetchPoData, fetchWalletSummary } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgressInTable, dashboardSummary, poSummaryData, supportSummaryData } from '../constants/Constants';
+import { CircularProgressInTable, dashboardSummary, poSummaryData, supportSummaryData, walletSummaryData } from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
-import Tooltip from '../components/ToolTip/tooltip';
 import CustomTooltip from '../components/ToolTip/tooltip';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
@@ -141,6 +140,7 @@ function DashBoard() {
     const order = useSelector(state => state.dashboardreducer);
     const poReport = useSelector(state => state.poreducer);
     const supportReport = useSelector(state => state.supportreducer);
+    const walletReport = useSelector(state => state.walletsummaryreducer);
     const dispatch = useDispatch();
 
 
@@ -494,10 +494,10 @@ function DashBoard() {
         dispatch(fetchTodos);
         dispatch(fetchPoData);
         dispatch(fetchSupportReport);
+        dispatch(fetchWalletSummary);
     }, []);
     useEffect(() => {
         getData();
-
     }, [order.apiData.length > 5])
     useEffect(() => {
         getSupportData();
@@ -665,6 +665,30 @@ function DashBoard() {
                                     <TableCell align="center">{
                                         poSummary.yettodeliver.poTotal + poSummary.complete.poTotal + poSummary.pastdue.poTotal + poSummary.pending.poTotal + poSummary.onhold.poTotal
                                     }</TableCell>
+                                </TableRow>
+
+                            </>
+                            : CircularProgressInTable}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Wallet Summary:</h3>
+            <TableContainer component={Paper}>
+                <Table className="table" aria-label="spanning table">
+                    <TableTitles data={walletSummaryData} />
+                    <TableBody>
+                        {walletReport.walletData.walletSum ?
+                            <>
+
+                                <TableRow >
+                                    <TableCell align="center">{walletReport.walletData.totalUsersWithWalletBalance}</TableCell>
+                                    <TableCell align="center">{walletReport.walletData.totalUsersWithPositiveBalance}</TableCell>
+                                    <TableCell align="center">{walletReport.walletData.totalUsersWithNegativeWalletBalance}</TableCell>
+                                    <TableCell align="center">{walletReport.walletData.totalUsersWithZeroWalletBalance}</TableCell>
+                                    <TableCell align="center">{walletReport.walletData.positiveWalletBalance}</TableCell>
+                                    <TableCell align="center">{walletReport.walletData.negativeWalletBalance}</TableCell>
+                                    <TableCell align="center">{walletReport.walletData.zeroWalletBalance}</TableCell>
+                                    <TableCell align="center">{walletReport.walletData.walletSum}</TableCell>
                                 </TableRow>
 
                             </>

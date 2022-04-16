@@ -67,6 +67,11 @@ export async function fetchZoneList(dispatch, getState) {
         .then(response => response.json());
     dispatch({ type: 'GETZONELIST', payload: response })
 }
+export async function fetchWalletSummary(dispatch, getState) {
+    const response = await fetch(APIURL + "user-wallets/report", GetRequestOptions)
+        .then(response => response.json());
+    dispatch({ type: 'GETWALLETSUMMARY', payload: response })
+}
 export default {
     setstatusvalue,
     setstatusresetvalue,

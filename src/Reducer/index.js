@@ -5,12 +5,14 @@ import dashboardreducer from "./dashboardreducer";
 import poreducer from "./poreducer";
 import supportreducer from "./supportreducer";
 import zonelistreducer from "./zonelistreducer";
+import walletsummaryreducer from "./walletsummaryreducer";
 const reducer = combineReducers({
     orderstatusreducer,
     expressstatusreducer,
     dashboardreducer,
     supportreducer,
     poreducer,
-    zonelistreducer
+    zonelistreducer,
+    walletsummaryreducer
 })
 export default reducer;
