@@ -26,6 +26,7 @@ import SearchOrdersByUserName from './SearchOrdersByUserName';
 import TableTitles from './TableTitles';
 import TableTitlesSeasonal from './TableTitlesSeasonal';
 import Dropdown from './Components/Dropdown';
+import DropdownForStatus from './Components/DropdownForStatus';
 const SeasonalTest = (props) => {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -48,7 +49,7 @@ const SeasonalTest = (props) => {
     const [selectedPincode, setSelectedPincode] = useState("");
     const [userSearchData, setUserSearchData] = useState([]);
     const [userName, setUserName] = useState("");
-
+    let paymentStatus = [];
     const receivedData = async (val, status) => {
 
         setSearchNotFound(false);
@@ -60,20 +61,17 @@ const SeasonalTest = (props) => {
         setisLoading(true);
         let urlString = "order/seasonal-orders/status/";
 
-        fetch(APIURL + urlString + status + `?size=20&page=${val} `, GetRequestOptions)
+        await fetch(APIURL + urlString + status + `?size=20&page=${val} `, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
 
                 setTotalPages(data.totalPages);
-
                 setisLoading(false);
                 if (data.content.length == 0) { setSearchNotFound(true) }
             });
-
+        setisLoading(false);
     }
-    const [user] = useAuthState(auth);
-    const history = useHistory();
     const getPincodes = async () => {
         await fetch(APIURL + "order/seasonal-pincodes", GetRequestOptions)
             .then(response => response.json())
@@ -88,11 +86,14 @@ const SeasonalTest = (props) => {
                 setSeasonalDispatch(data);
             }).catch(err => setSeasonalPincodes([]));
     }
+
+
     useEffect(async () => {
 
         receivedData(0, "all");
         getPincodes();
         getDispatchWeek();
+
     }, []);
     const handlePageChange = (event, value) => {
         event.preventDefault();
@@ -262,6 +263,7 @@ const SeasonalTest = (props) => {
                 });
         }
     }
+
     return (
         <div>
             {isDownloading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Downloading Orders</b>}
@@ -272,84 +274,7 @@ const SeasonalTest = (props) => {
                     :
 
                     <div>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "all" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "all") { return; }
-                            else {
-                                setStatus("all");
-                                receivedData(0, "all");
-                            }
-
-                        }}
-                        >ALL</Button>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "new" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "new") { return; }
-                            else {
-                                setStatus("new");
-                                receivedData(0, "new");
-                            }
-                        }}
-                        >New</Button>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "accepted" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "accepted") { return; }
-                            else {
-                                setStatus("accepted");
-                                receivedData(0, "accepted");
-                            }
-
-                        }}
-                        >Processing</Button>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "prepared" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "prepared") { return; }
-                            else {
-                                setStatus("prepared");
-                                receivedData(0, "prepared");
-                            }
-
-                        }}
-                        >Out for Delivery</Button>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "pending" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "pending") { return; }
-                            else {
-                                setStatus("pending");
-                                receivedData(0, "pending");
-                            }
-
-                        }}
-                        >Delivered</Button>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "complete" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "complete") { return; }
-                            else {
-                                setStatus("complete");
-                                receivedData(0, "complete");
-                            }
-
-                        }}
-                        >Completed</Button>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "cancelled" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "cancelled") { return; }
-                            else {
-                                setStatus("cancelled");
-                                receivedData(0, "cancelled");
-                            }
-
-                        }}
-                        >Cancelled</Button>
-                        <Button style={{ marginRight: 10, color: 'white' }} variant={status == "failed" ? 'contained' : "outlined"} color="success" onClick={(ev) => {
-                            ev.preventDefault();
-                            if (status == "failed") { return; }
-                            else {
-                                setStatus("failed");
-                                receivedData(0, "failed");
-                            }
-                        }}
-                        >Failed</Button>
+                        <DropdownForStatus status={status} setStatus={setStatus} receivedData={receivedData} label="Select Status" />
 
                     </div>
                 }
@@ -448,7 +373,8 @@ const SeasonalTest = (props) => {
                                     {rows.length > 0 && !(isLoading) ?
                                         <TableBody>
                                             {rows.map((row, index) => (
-                                                <TableRow key={row.order.id}>
+
+                                                <TableRow key={index}>
                                                     <TableCell>
                                                         <Link to={{
                                                             pathname: '/app/' + props.match.params.vendorId + '/order/' + row.order.id,
@@ -469,7 +395,9 @@ const SeasonalTest = (props) => {
                                                     <TableCell align="center">{row.order.couponCode}</TableCell>
                                                     <TableCell align="center">{row.order.deliveryStatus}</TableCell>
                                                 </TableRow>
+
                                             ))}
+
                                         </TableBody>
                                         :
                                         <div>

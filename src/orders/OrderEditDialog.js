@@ -86,7 +86,7 @@ function OrderEditDialog(props) {
             source_payment_type: "Online",
             source_title: "",
         };
-        console.log(meta);
+
         var source = {
             walletId: walletid,
             amount: total.toString(),

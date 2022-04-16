@@ -15,9 +15,6 @@ const SearchOrdersByUserName = (props) => {
             onChange={(event) => {
                 setSearchQuery(event.target.value);
 
-
-
-
             }}
             InputProps={{
                 style: {

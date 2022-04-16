@@ -34,52 +34,20 @@ function SeasonalOrders(props) {
     const [queryLoad, setQueryLoad] = useState(false);
     const [searchOrder, setSearchOrder] = useState({});
     const [isDownloading, setisDownloading] = useState(false);
+
     const order = useSelector(state => state.expressstatusreducer);
-    const getRows = (data) => {
-        data.map(async (rows) => {
-            // let x = { "payment": "paid" };
-            let productName = "";
-            let paymentMethod = "";
-            await fetch(APIURL + `order/order-products/${rows.id}`, GetRequestOptions).then(
-                response => response.json()
-            ).then(productdata => {
-                fetch(APIURL + `order/payment-method/${rows.id}`, GetRequestOptions).then(
-                    response => response.json()
-                ).then(paymentdata => {
-                    let res = {
-                        order: { ...rows },
-                        productName: productdata[0].vendorProduct.product.title,
-                        paymentMethod: paymentdata.name
-                    };
-                    setRows(rows => [...rows, res]);
-                })
 
-            })
-        })
-
-    }
     const receivedData = (val, status) => {
         setSearchNotFound(false);
         setRows("");
         setisLoading(true);
-        let urlString = "order/seasonal/status/";
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "pageNumber": val,
-                "pageSize": 30,
-                "sortDirection": "asc",
-                "sortByKey": "id",
-                "startDate": startDate,
-                "endDate": endDate
-            })
-        };
-        fetch(APIURL + urlString + status, requestOptions)
+        let urlString = "order/seasonal-orders/status/";
+
+        fetch(APIURL + urlString + status + `?size=20&page=${val} `, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
-                // setRows(data.content);
-                getRows(data.content);
+                setRows(data.content);
+
                 setTotalPages(data.totalPages);
 
                 setisLoading(false);
@@ -88,11 +56,6 @@ function SeasonalOrders(props) {
 
     }
 
-    useEffect(async () => {
-
-        receivedData(0, "all");
-
-    }, []);
 
 
 
