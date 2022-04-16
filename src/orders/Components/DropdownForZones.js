@@ -3,7 +3,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
-const Dropdown = ({ data, handleGetPincodeData, label, type }) => {
+const DropdownForZones = ({ data, handleGetZoneData, label, type }) => {
     const styleOptions = {
         padding: 10,
         marginBottom: 5,
@@ -15,12 +15,12 @@ const Dropdown = ({ data, handleGetPincodeData, label, type }) => {
             <TableCell align="center">
                 <select style={{
                     padding: 5,
-                }} name={type} onChange={(event) => handleGetPincodeData(event)}>
-                    <option style={styleOptions} selected disabled value={label}>{type}</option>
-                    <option style={styleOptions} value="all">All</option>
+                }} name={type} onChange={(event) => handleGetZoneData(event.target.value, 0)}>
+                    <option style={styleOptions} selected disabled value={label}>{label}</option>
+
                     <>
                         {data.map((data) => (
-                            <option style={styleOptions} value={`${data}.${type}`}>{`${data}.${type}`}</option>
+                            <option style={styleOptions} value={data.id}>{data.zoneName}</option>
                         ))}
                     </>
                 </select>
@@ -29,4 +29,4 @@ const Dropdown = ({ data, handleGetPincodeData, label, type }) => {
     )
 }
 
-export default Dropdown
+export default DropdownForZones

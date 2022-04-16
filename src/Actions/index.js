@@ -62,7 +62,11 @@ export async function fetchSupportReport(dispatch, getState) {
         .then(response => response.json());
     dispatch({ type: 'GETSUPPORTDATA', payload: response })
 }
-
+export async function fetchZoneList(dispatch, getState) {
+    const response = await fetch(APIURL + "ecommerce-zone", GetRequestOptions)
+        .then(response => response.json());
+    dispatch({ type: 'GETZONELIST', payload: response })
+}
 export default {
     setstatusvalue,
     setstatusresetvalue,

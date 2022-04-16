@@ -7,26 +7,24 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import Button from '@mui/material/Button';
+import { fetchZoneList } from '../Actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Grid } from "@material-ui/core";
-import Picker from "../components/Picker";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useHistory } from 'react-router-dom';
+
 import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
-import setstatus from '../Actions';
+
 import SearchOrders from './SearchOrders';
+
 import { APIURL, GetRequestOptions } from '../constants/Constants';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
 import SearchOrdersByUserName from './SearchOrdersByUserName';
-import TableTitles from './TableTitles';
+
 import TableTitlesSeasonal from './TableTitlesSeasonal';
 import Dropdown from './Components/Dropdown';
 import DropdownForStatus from './Components/DropdownForStatus';
+import DropdownForZones from './Components/DropdownForZones';
 const SeasonalTest = (props) => {
     let { id } = useParams();
     const [rows, setRows] = useState([]);
@@ -37,8 +35,8 @@ const SeasonalTest = (props) => {
     const [totalPages, setTotalPages] = useState(0);
     const [searchNotFound, setSearchNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [count, setCount] = useState(0);
+    const [zoneId, setZoneId] = useState(0);
     const [searchquery, setSearchQuery] = useState(0);
     const [queryLoad, setQueryLoad] = useState(false);
     const [isDownloading, setisDownloading] = useState(false);
@@ -49,9 +47,11 @@ const SeasonalTest = (props) => {
     const [selectedPincode, setSelectedPincode] = useState("");
     const [userSearchData, setUserSearchData] = useState([]);
     const [userName, setUserName] = useState("");
-    let paymentStatus = [];
+    const zonelist = useSelector(state => state.zonelistreducer);
+    const [pageToggle, setPageToggle] = useState("all");
+    const dispatch = useDispatch();
     const receivedData = async (val, status) => {
-
+        setPageToggle("all");
         setSearchNotFound(false);
         setQueryLoad(false);
         setUserQueryLoad(false);
@@ -67,11 +67,13 @@ const SeasonalTest = (props) => {
                 setRows(data.content);
 
                 setTotalPages(data.totalPages);
+                setCount(data.totalElements);
                 setisLoading(false);
                 if (data.content.length == 0) { setSearchNotFound(true) }
             });
         setisLoading(false);
     }
+
     const getPincodes = async () => {
         await fetch(APIURL + "order/seasonal-pincodes", GetRequestOptions)
             .then(response => response.json())
@@ -89,16 +91,20 @@ const SeasonalTest = (props) => {
 
 
     useEffect(async () => {
-
         receivedData(0, "all");
         getPincodes();
         getDispatchWeek();
-
+        dispatch(fetchZoneList);
     }, []);
     const handlePageChange = (event, value) => {
         event.preventDefault();
+        if (pageToggle == "all") {
+            receivedData(value, status)
+        }
+        if (pageToggle == "zone") {
+            handleGetZoneData(zoneId, value);
+        }
 
-        receivedData(value, status)
     }
     const downloadCsvFile = async (statusType) => {
         setisDownloading(true);
@@ -263,18 +269,42 @@ const SeasonalTest = (props) => {
                 });
         }
     }
+    const handleGetZoneData = async (id, val) => {
+        setSearchNotFound(false);
+        setQueryLoad(false);
+        setUserQueryLoad(false);
+        setRows("");
+        setZoneId(id);
+        setPageToggle("zone");
+        setUserSearchData([]);
+        setSearchOrder({});
+        setisLoading(true);
+        let urlString = "order/seasonal-zones/";
 
+        await fetch(APIURL + urlString + id + `?size=20&page=${val} `, GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setRows(data.content);
+
+                setTotalPages(data.totalPages);
+                setCount(data.totalElements);
+                setisLoading(false);
+                if (data.content.length == 0) { setSearchNotFound(true) }
+            });
+        setisLoading(false);
+    }
     return (
         <div>
             {isDownloading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Downloading Orders</b>}
-            <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>Seasonal Orders</h2></center>
+            <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'grey' }}>Seasonal Orders <span style={{ color: 'white' }}>[{count}]</span></h2></center>
             <div>
                 {queryLoad || userQueryLoad ?
                     <h4 style={{ color: 'white' }}>Clear the Search & Press Search Icon to see Options...</h4>
                     :
 
-                    <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <DropdownForStatus status={status} setStatus={setStatus} receivedData={receivedData} label="Select Status" />
+                        {zonelist.zoneList.length > 0 && <DropdownForZones data={zonelist.zoneList} type="Zone Name" label="Select Zone" handleGetZoneData={handleGetZoneData} />}
 
                     </div>
                 }
