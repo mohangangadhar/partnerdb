@@ -57,9 +57,6 @@ function SeasonalOrders(props) {
     }
 
 
-
-
-
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;

@@ -1,0 +1,103 @@
+Index: src/products/ProductList.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState, useEffect } from 'react'\nimport TableContainer from \"@material-ui/core/TableContainer\";\nimport Paper from \"@material-ui/core/Paper\";\nimport Table from \"@material-ui/core/Table\";\nimport TableHead from \"@material-ui/core/TableHead\";\nimport TableRow from \"@material-ui/core/TableRow\";\nimport TableCell from \"@material-ui/core/TableCell\";\nimport TableBody from \"@material-ui/core/TableBody\";\nimport Pagination from '@material-ui/lab/Pagination';\nimport { Link } from 'react-router-dom';\nimport { Box, Button, Grid, Typography } from \"@material-ui/core\";\nimport Picker from \"../components/Picker\";\nimport { useAuthState } from \"react-firebase-hooks/auth\";\nimport { useHistory } from 'react-router-dom';\nimport { auth } from \"../firebase\";\nimport ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';\nfunction ProductList(props) {\n    const [rows, setRows] = useState([]);\n    const [offSet, setOffSet] = useState(0);\n    const [perPage, serPerPage] = useState(0);\n    const [totalPages, setTotalPages] = useState(0);\n    const [currentPage, setCurrentPage] = useState(0);\n    const [startDate, setStartDate] = useState(\"\");\n    const [endDate, setEndDate] = useState(\"\");\n    const handlePageClick = (event, value) => {\n        value = value - 1 < 0 ? 0 : value - 1\n        setOffSet(value);\n        receivedData();\n    };\n    const receivedData = () => {\n        const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`\n        const requestOptions = {\n            method: 'POST',\n            headers: { 'Content-Type': 'application/json' },\n            body: JSON.stringify({\n                \"pageNumber\": offSet,\n                \"pageSize\": perPage,\n                \"sortDirection\": \"asc\",\n                \"sortByKey\": \"id\",\n                \"startDate\": startDate,\n                \"endDate\": endDate\n            })\n        };\n\n        fetch(apiUrl + 'product/', requestOptions)\n            .then(response => response.json())\n            .then(data => {\n                setRows(data.content);\n                setTotalPages(data.totalPages);\n            });\n        console.log(rows, totalPages);\n    }\n    const [user] = useAuthState(auth);\n    const history = useHistory();\n    useEffect(async () => {\n        // if (!user) {\n        //     console.log(user);\n        //     history.replace(\"/\");\n        // }\n        receivedData()\n    }, []);\n\n\n    const handleButtonClick = () => {\n        receivedData()\n    }\n    const detail = (val) => {\n        let jsonVal = JSON.parse(val)\n        return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;\n    }\n    return (\n        <div>\n            <Typography component=\"h2\" variant=\"h6\" style={{ color: 'wheat', }} align={\"left\"} gutterBottom>\n                Products\n            </Typography>\n            <Box m={1} />\n            <TableContainer component={Paper}>\n                <Table className=\"table\" aria-label=\"spanning table\">\n                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>\n                        <TableRow>\n                            {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}\n                            <TableCell style={{ color: 'wheat' }}>Product Id</TableCell>\n                            <TableCell align=\"left\" style={{ color: 'wheat' }}>Title</TableCell>\n                            <TableCell align=\"center\" style={{ color: 'wheat' }}>Price</TableCell>\n                            <TableCell align=\"center\" style={{ color: 'wheat' }}>sellsCount</TableCell>\n                        </TableRow>\n                    </TableHead>\n                    <TableBody>\n                        {rows.map((row, index) => (\n                            <TableRow key={row.id}>\n                                {/*<TableCell align=\"left\">{index + 1}</TableCell>*/}\n                                <TableCell>\n                                    <Link to={{\n                                        pathname: '/app/' + props.match.params.vendorId + '/product/' + row.id,\n                                        id: row.id\n                                    }}>{row.id}</Link>\n                                </TableCell>\n                                <TableCell align=\"left\">{detail(row.title)}</TableCell>\n                                <TableCell align=\"center\">{row.price}</TableCell>\n                                <TableCell align=\"center\">{row.sellsCount}</TableCell>\n                            </TableRow>\n                        ))}\n                    </TableBody>\n                </Table>\n            </TableContainer>\n            <Box m={2} />\n            <Grid container justifyContent={\"center\"}>\n                <Pagination variant={\"text\"} color={\"primary\"}\n                    count={totalPages}\n                    onChange={handlePageClick} />\n            </Grid>\n            <Box m={2} />\n        </div>\n    )\n}\n\nexport default ProductList\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/products/ProductList.js b/src/products/ProductList.js
+--- a/src/products/ProductList.js	
++++ b/src/products/ProductList.js	
+@@ -1,4 +1,4 @@
+-import React, { useState, useEffect } from 'react'
++import React, {useState, useEffect} from 'react'
+ import TableContainer from "@material-ui/core/TableContainer";
+ import Paper from "@material-ui/core/Paper";
+ import Table from "@material-ui/core/Table";
+@@ -7,13 +7,14 @@
+ import TableCell from "@material-ui/core/TableCell";
+ import TableBody from "@material-ui/core/TableBody";
+ import Pagination from '@material-ui/lab/Pagination';
+-import { Link } from 'react-router-dom';
+-import { Box, Button, Grid, Typography } from "@material-ui/core";
++import {Link} from 'react-router-dom';
++import {Box, Button, Grid, Typography} from "@material-ui/core";
+ import Picker from "../components/Picker";
+-import { useAuthState } from "react-firebase-hooks/auth";
+-import { useHistory } from 'react-router-dom';
+-import { auth } from "../firebase";
++import {useAuthState} from "react-firebase-hooks/auth";
++import {useHistory} from 'react-router-dom';
++import {auth} from "../firebase";
+ import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
++
+ function ProductList(props) {
+     const [rows, setRows] = useState([]);
+     const [offSet, setOffSet] = useState(0);
+@@ -31,18 +32,11 @@
+         const apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/`
+         const requestOptions = {
+             method: 'POST',
+-            headers: { 'Content-Type': 'application/json' },
+-            body: JSON.stringify({
+-                "pageNumber": offSet,
+-                "pageSize": perPage,
+-                "sortDirection": "asc",
+-                "sortByKey": "id",
+-                "startDate": startDate,
+-                "endDate": endDate
+-            })
++            headers: {'Content-Type': 'application/json'}
+         };
++        const uriRem = "vendor-product-m/"+vendorId+"/query?size=10&page="+offSet;
+ 
+-        fetch(apiUrl + 'product/', requestOptions)
++        fetch(apiUrl + uriRem, requestOptions)
+             .then(response => response.json())
+             .then(data => {
+                 setRows(data.content);
+@@ -70,19 +64,19 @@
+     }
+     return (
+         <div>
+-            <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
++            <Typography component="h2" variant="h6" style={{color: 'wheat',}} align={"left"} gutterBottom>
+                 Products
+             </Typography>
+-            <Box m={1} />
++            <Box m={1}/>
+             <TableContainer component={Paper}>
+                 <Table className="table" aria-label="spanning table">
+-                    <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
++                    <TableHead style={{backgroundColor: 'indianred', color: 'white',}}>
+                         <TableRow>
+                             {/*<TableCell style={{color: 'wheat'}}>Sl.No</TableCell>*/}
+-                            <TableCell style={{ color: 'wheat' }}>Product Id</TableCell>
+-                            <TableCell align="left" style={{ color: 'wheat' }}>Title</TableCell>
+-                            <TableCell align="center" style={{ color: 'wheat' }}>Price</TableCell>
+-                            <TableCell align="center" style={{ color: 'wheat' }}>sellsCount</TableCell>
++                            <TableCell style={{color: 'wheat'}}>Product Id</TableCell>
++                            <TableCell align="left" style={{color: 'wheat'}}>Title</TableCell>
++                            <TableCell align="center" style={{color: 'wheat'}}>Price</TableCell>
++                            <TableCell align="center" style={{color: 'wheat'}}>sellsCount</TableCell>
+                         </TableRow>
+                     </TableHead>
+                     <TableBody>
+@@ -103,13 +97,13 @@
+                     </TableBody>
+                 </Table>
+             </TableContainer>
+-            <Box m={2} />
++            <Box m={2}/>
+             <Grid container justifyContent={"center"}>
+                 <Pagination variant={"text"} color={"primary"}
+-                    count={totalPages}
+-                    onChange={handlePageClick} />
++                            count={totalPages}
++                            onChange={handlePageClick}/>
+             </Grid>
+-            <Box m={2} />
++            <Box m={2}/>
+         </div>
+     )
+ }

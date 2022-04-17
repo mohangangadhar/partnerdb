@@ -44,6 +44,7 @@ const SeasonalTest = (props) => {
     const [userQueryLoad, setUserQueryLoad] = useState(false);
     const [seasonalPincodes, setSeasonalPincodes] = useState([]);
     const [seasonalDispatch, setSeasonalDispatch] = useState([]);
+    const [seasonalProduct, setSeasonalProduct] = useState([]);
     const [selectedPincode, setSelectedPincode] = useState("");
     const [userSearchData, setUserSearchData] = useState([]);
     const [userName, setUserName] = useState("");
@@ -89,11 +90,19 @@ const SeasonalTest = (props) => {
             }).catch(err => setSeasonalPincodes([]));
     }
 
+    const getSeasonalProduct = async () => {
+        await fetch(APIURL + "order/seasonal-products", GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setSeasonalProduct(data);
+            }).catch(err => setSeasonalPincodes([]));
+    }
 
     useEffect(async () => {
         receivedData(0, "all");
         getPincodes();
         getDispatchWeek();
+        getSeasonalProduct();
         dispatch(fetchZoneList);
     }, []);
     const handlePageChange = (event, value) => {
@@ -242,6 +251,35 @@ const SeasonalTest = (props) => {
                 });
         }
     }
+
+    const handleGetProductData = async (event) => {
+        event.preventDefault();
+        setQueryLoad(false);
+        setUserName("");
+
+        if (event.target.value == "all" || event.target.value.length == 0) {
+            setUserQueryLoad(false);
+            receivedData(0, "all");
+            return;
+        } else if (event.target.value.length >= 1) {
+            setUserQueryLoad(true);
+            setisLoading(true);
+            setSearchOrder({});
+            setUserSearchData([]);
+            setSearchQuery("");
+            setRows([]);
+            setSearchNotFound(false);
+            await fetch(APIURL + 'order/filter/seasonal?productId=' + event.target.value, GetRequestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setUserSearchData(data);
+
+                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+                    setisLoading(false);
+                });
+        }
+    }
+
     const handleGetDispatchData = async (event) => {
         event.preventDefault();
         setQueryLoad(false);
@@ -317,8 +355,7 @@ const SeasonalTest = (props) => {
                         handleSearch={handleSearch} label="Search By Order ID" />
                     {seasonalPincodes.length > 0 && <Dropdown data={seasonalPincodes} type="pincode" label="Search Pincode" handleGetPincodeData={handleGetPincodeData} />}
                     {seasonalDispatch.length > 0 && <Dropdown data={seasonalDispatch} type="Dispatch Week" label="Search Dispatch Week" handleGetPincodeData={handleGetDispatchData} />}
-                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
-                        handleSearch={handleSearchByProductName} label="Search By Product Name" />
+                    {seasonalProduct.length > 0 && <Dropdown data={seasonalProduct} type="Product" label="Search Dispatch Week" handleGetPincodeData={handleGetProductData} />}
                     <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName} handleSearch={handleSearchByUserName}
                         label="Search By User Name" />
                 </div>

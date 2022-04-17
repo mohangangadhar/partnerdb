@@ -1,9 +1,10 @@
 import React from 'react'
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Button from '@mui/material/Button';
-const Dropdown = ({ data, handleGetPincodeData, label, type }) => {
+
+const Dropdown = ({data, handleGetPincodeData, label, type}) => {
     const styleOptions = {
         padding: 10,
         marginBottom: 5,
@@ -20,7 +21,10 @@ const Dropdown = ({ data, handleGetPincodeData, label, type }) => {
                     <option style={styleOptions} value="all">All</option>
                     <>
                         {data.map((data) => (
-                            <option style={styleOptions} value={type == "pincode" ? data.pincode : data.dispatchWeek}>{type == "pincode" ? data.pincode : data.dispatchWeek}</option>
+                            <option style={styleOptions} value={type == "pincode" ? data.pincode : type === "Product" ?  data.id: data.dispatchWeek}>
+                                {type == "pincode" ? data.pincode : type === "Product" ? JSON.parse(data.name).en  : data.dispatchWeek}
+                                { type === "Product" ? console.log(JSON.parse(data.name).en) : "" }
+                            </option>
                         ))}
                     </>
                 </select>
