@@ -331,24 +331,24 @@ const SeasonalTest = (props) => {
         }
     }
 
-    const filterSeasonalOrders = async () => {
-
-        let urlString = "order/seasonal-zones/";
-
-        await fetch(APIURL + urlString + id + `?size=20&page=${val} `, GetRequestOptions)
-            .then(response => response.json())
-            .then(data => {
-                setRows(data.content);
-
-                setTotalPages(data.totalPages);
-                setCount(data.totalElements);
-                setisLoading(false);
-                if (data.content.length == 0) {
-                    setSearchNotFound(true)
-                }
-            });
-        setisLoading(false);
-    }
+    // const filterSeasonalOrders = async () => {
+    //
+    //     let urlString = "order/seasonal-zones/";
+    //
+    //     await fetch(APIURL + urlString + id + `?size=20&page=${val} `, GetRequestOptions)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             setRows(data.content);
+    //
+    //             setTotalPages(data.totalPages);
+    //             setCount(data.totalElements);
+    //             setisLoading(false);
+    //             if (data.content.length == 0) {
+    //                 setSearchNotFound(true)
+    //             }
+    //         });
+    //     setisLoading(false);
+    // }
 
 
     const handleGetZoneData = async (id, val) => {
