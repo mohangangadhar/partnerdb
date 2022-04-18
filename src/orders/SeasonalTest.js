@@ -406,16 +406,18 @@ const SeasonalTest = (props) => {
             zoneUri = zoneId !== 0 ? "&zoneId=" + selectedZoneId : "";
         }
 
-        if (zoneUri == "") {
+        if (statusUri == "" && zoneUri == "") {
             productUri = selectedDeliveryWeek !== "" ? "dispatchWeek=" + selectedDeliveryWeek : "";
         } else {
             productUri = selectedDeliveryWeek !== "" ? "&dispatchWeek=" + selectedDeliveryWeek : "";
         }
 
-        if (productUri == "") {
-            deliveryWeekUri = selectedProduct !== "" ? "product=" + selectedProduct : "";
+        console.log(JSON.parse(selectedProduct));
+
+        if (productUri == "" && zoneUri == "" && statusUri == "") {
+            deliveryWeekUri = selectedProduct !== "" ? "product=" + JSON.parse(selectedProduct).en : "";
         } else {
-            deliveryWeekUri = selectedProduct !== "" ? "&product=" + selectedProduct : "";
+            deliveryWeekUri = selectedProduct !== "" ? "&product=" + JSON.parse(selectedProduct).en : "";
         }
 
         console.log(statusUri + zoneUri + productUri + deliveryWeekUri);

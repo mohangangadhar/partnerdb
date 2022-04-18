@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="Code Refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orders/Components/Dropdown.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/Components/Dropdown.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orders/Components/DropdownForStatus.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/Components/DropdownForStatus.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orders/SeasonalTest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/orders/SeasonalTest.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +21,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="new_main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -86,7 +89,7 @@
       <workItem from="1634889492946" duration="3613000" />
       <workItem from="1635573521221" duration="9000" />
       <workItem from="1635573551110" duration="2000" />
-      <workItem from="1650213175858" duration="12468000" />
+      <workItem from="1650213175858" duration="13445000" />
     </task>
     <task id="LOCAL-00001" summary="Code Refactor">
       <created>1634889718993</created>
