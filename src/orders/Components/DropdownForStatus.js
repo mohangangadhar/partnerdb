@@ -3,7 +3,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
-const DropdownForStatus = ({ status, receivedData, setStatus, label, type }) => {
+const DropdownForStatus = ({ status, setDeliveryStatus, setStatus, label, type }) => {
     const styleOptions = {
         padding: 10,
         marginBottom: 5,
@@ -17,7 +17,6 @@ const DropdownForStatus = ({ status, receivedData, setStatus, label, type }) => 
                     padding: 5,
                 }} name={type} onChange={(event) => {
                     setStatus(event.target.value);
-                    receivedData(0, event.target.value)
                 }
                 }>
                     <option style={styleOptions} selected disabled value={label}>{label}</option>

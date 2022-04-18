@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -7,17 +7,17 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import { fetchZoneList } from '../Actions';
+import {fetchZoneList} from '../Actions';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Link, useParams } from 'react-router-dom';
-import { Box, Grid } from "@material-ui/core";
+import {Link, useParams} from 'react-router-dom';
+import {Box, Grid} from "@material-ui/core";
 
-import { auth } from "../firebase";
-import { useSelector, useDispatch } from 'react-redux'
+import {auth} from "../firebase";
+import {useSelector, useDispatch} from 'react-redux'
 
 import SearchOrders from './SearchOrders';
 
-import { APIURL, GetRequestOptions } from '../constants/Constants';
+import {APIURL, GetRequestOptions} from '../constants/Constants';
 
 import SearchOrdersByUserName from './SearchOrdersByUserName';
 
@@ -25,8 +25,9 @@ import TableTitlesSeasonal from './TableTitlesSeasonal';
 import Dropdown from './Components/Dropdown';
 import DropdownForStatus from './Components/DropdownForStatus';
 import DropdownForZones from './Components/DropdownForZones';
+
 const SeasonalTest = (props) => {
-    let { id } = useParams();
+    let {id} = useParams();
     const [rows, setRows] = useState([]);
     const [offSet, setOffSet] = useState(0);
     const [status, setStatus] = useState("all");
@@ -51,6 +52,17 @@ const SeasonalTest = (props) => {
     const zonelist = useSelector(state => state.zonelistreducer);
     const [pageToggle, setPageToggle] = useState("all");
     const dispatch = useDispatch();
+
+    const [selectedZoneId, setSelectedZoneId] = useState("");
+    const [selectedDeliveryWeek, setSelectedDeliveryWeek] = useState("");
+    const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState("");
+    const [selectedProduct, setSelectedProduct] = useState("");
+
+    const setDeliveryStatus = async (val, status) => {
+        setSelectedDeliveryStatus(status);
+    }
+
+
     const receivedData = async (val, status) => {
         setPageToggle("all");
         setSearchNotFound(false);
@@ -70,7 +82,9 @@ const SeasonalTest = (props) => {
                 setTotalPages(data.totalPages);
                 setCount(data.totalElements);
                 setisLoading(false);
-                if (data.content.length == 0) { setSearchNotFound(true) }
+                if (data.content.length == 0) {
+                    setSearchNotFound(true)
+                }
             });
         setisLoading(false);
     }
@@ -159,14 +173,17 @@ const SeasonalTest = (props) => {
             setSearchNotFound(false);
             const requestOptions = {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {'Content-Type': 'application/json'}
             };
 
             await fetch(APIURL + 'order/seasonal-order/' + query, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setSearchOrder(data);
-                    if (data.order == null) { setSearchNotFound(true); setisLoading(false); }
+                    if (data.order == null) {
+                        setSearchNotFound(true);
+                        setisLoading(false);
+                    }
                     setisLoading(false);
                 });
         }
@@ -193,7 +210,10 @@ const SeasonalTest = (props) => {
                 .then(data => {
                     setUserSearchData(data);
 
-                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+                    if (data.length == 0) {
+                        setSearchNotFound(true);
+                        setisLoading(false);
+                    }
                     setisLoading(false);
                 });
         }
@@ -202,6 +222,7 @@ const SeasonalTest = (props) => {
         event.preventDefault();
         setQueryLoad(false);
         setSelectedPincode("");
+
         if (userName == "" || userName.length == 0) {
             setUserQueryLoad(false);
             receivedData(0, "all");
@@ -214,14 +235,14 @@ const SeasonalTest = (props) => {
             setSearchQuery("");
             setRows([]);
             setSearchNotFound(false);
-            await fetch(APIURL + 'order/seasonal-order/product-name/' + userName.toLowerCase(), GetRequestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    setUserSearchData(data);
-
-                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
-                    setisLoading(false);
-                });
+            // await fetch(APIURL + 'order/seasonal-order/product-name/' + userName.toLowerCase(), GetRequestOptions)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         setUserSearchData(data);
+            //
+            //         if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+            //         setisLoading(false);
+            //     });
         }
     }
     const handleGetPincodeData = async (event) => {
@@ -235,20 +256,20 @@ const SeasonalTest = (props) => {
             return;
         } else if (event.target.value.length >= 1) {
             setUserQueryLoad(true);
-            setisLoading(true);
+//            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
             setSearchQuery("");
             setRows([]);
             setSearchNotFound(false);
-            await fetch(APIURL + 'order/seasonal-order/pincode/' + event.target.value, GetRequestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    setUserSearchData(data);
-
-                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
-                    setisLoading(false);
-                });
+            // await fetch(APIURL + 'order/seasonal-order/pincode/' + event.target.value, GetRequestOptions)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         setUserSearchData(data);
+            //
+            //         if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+            //         setisLoading(false);
+            //     });
         }
     }
 
@@ -256,6 +277,7 @@ const SeasonalTest = (props) => {
         event.preventDefault();
         setQueryLoad(false);
         setUserName("");
+        setSelectedProduct(event.target.value);
 
         if (event.target.value == "all" || event.target.value.length == 0) {
             setUserQueryLoad(false);
@@ -263,20 +285,20 @@ const SeasonalTest = (props) => {
             return;
         } else if (event.target.value.length >= 1) {
             setUserQueryLoad(true);
-            setisLoading(true);
+//            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
             setSearchQuery("");
             setRows([]);
             setSearchNotFound(false);
-            await fetch(APIURL + 'order/filter/seasonal?productId=' + event.target.value, GetRequestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    setUserSearchData(data);
-
-                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
-                    setisLoading(false);
-                });
+            // await fetch(APIURL + 'order/filter/seasonal?productId=' + event.target.value, GetRequestOptions)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         setUserSearchData(data);
+            //
+            //         if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+            //         setisLoading(false);
+            //     });
         }
     }
 
@@ -284,6 +306,7 @@ const SeasonalTest = (props) => {
         event.preventDefault();
         setQueryLoad(false);
         setUserName("");
+        setSelectedDeliveryWeek(event.target.value);
 
         if (event.target.value == "all" || event.target.value.length == 0) {
             setUserQueryLoad(false);
@@ -291,36 +314,25 @@ const SeasonalTest = (props) => {
             return;
         } else if (event.target.value.length >= 1) {
             setUserQueryLoad(true);
-            setisLoading(true);
+//            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
             setSearchQuery("");
             setRows([]);
             setSearchNotFound(false);
-            await fetch(APIURL + 'order/seasonal-order/dispatch-week/' + event.target.value, GetRequestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    setUserSearchData(data);
-
-                    if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
-                    setisLoading(false);
-                });
+            // await fetch(APIURL + 'order/seasonal-order/dispatch-week/' + event.target.value, GetRequestOptions)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         setUserSearchData(data);
+            //
+            //         if (data.length == 0) { setSearchNotFound(true); setisLoading(false); }
+            //         setisLoading(false);
+            //     });
         }
     }
-    const handleGetZoneData = async (id, val) => {
-        if (id == "all") {
-            receivedData(0, "all");
-            return;
-        }
-        setSearchNotFound(false);
-        setQueryLoad(false);
-        setUserQueryLoad(false);
-        setRows("");
-        setZoneId(id);
-        setPageToggle("zone");
-        setUserSearchData([]);
-        setSearchOrder({});
-        setisLoading(true);
+
+    const filterSeasonalOrders = async () => {
+
         let urlString = "order/seasonal-zones/";
 
         await fetch(APIURL + urlString + id + `?size=20&page=${val} `, GetRequestOptions)
@@ -331,47 +343,148 @@ const SeasonalTest = (props) => {
                 setTotalPages(data.totalPages);
                 setCount(data.totalElements);
                 setisLoading(false);
-                if (data.content.length == 0) { setSearchNotFound(true) }
+                if (data.content.length == 0) {
+                    setSearchNotFound(true)
+                }
             });
         setisLoading(false);
     }
+
+
+    const handleGetZoneData = async (id, val) => {
+        if (id == "all") {
+            await receivedData(0, "all");
+            return;
+        }
+        setSelectedZoneId(id);
+
+        setSearchNotFound(false);
+        setQueryLoad(false);
+        setUserQueryLoad(false);
+        setRows("");
+        setZoneId(id);
+        setPageToggle("zone");
+        setUserSearchData([]);
+        setSearchOrder({});
+//        setisLoading(true);
+        // let urlString = "order/seasonal-zones/";
+        //
+        // await fetch(APIURL + urlString + id + `?size=20&page=${val} `, GetRequestOptions)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         setRows(data.content);
+        //
+        //         setTotalPages(data.totalPages);
+        //         setCount(data.totalElements);
+        //         setisLoading(false);
+        //         if (data.content.length == 0) {
+        //             setSearchNotFound(true)
+        //         }
+        //     });
+//        setisLoading(false);
+    }
+
+    const handleSubmit = async () => {
+        console.log(status);
+        console.log(selectedZoneId);
+        console.log(selectedDeliveryWeek);
+        console.log(selectedProduct);
+
+//        setisLoading(true);
+
+        let urlString = "order/filter/seasonal?";
+        let statusUri;
+        let zoneUri;
+        let productUri;
+        let deliveryWeekUri;
+
+        statusUri = status !== "" ? "status=" + status : "";
+
+        if (statusUri == "") {
+            zoneUri = zoneId !== 0 ? "zoneId=" + selectedZoneId : "";
+        } else {
+            zoneUri = zoneId !== 0 ? "&zoneId=" + selectedZoneId : "";
+        }
+
+        if (zoneUri == "") {
+            productUri = selectedDeliveryWeek !== "" ? "dispatchWeek=" + selectedDeliveryWeek : "";
+        } else {
+            productUri = selectedDeliveryWeek !== "" ? "&dispatchWeek=" + selectedDeliveryWeek : "";
+        }
+
+        if (productUri == "") {
+            deliveryWeekUri = selectedProduct !== "" ? "product=" + selectedProduct : "";
+        } else {
+            deliveryWeekUri = selectedProduct !== "" ? "&product=" + selectedProduct : "";
+        }
+
+        console.log(statusUri + zoneUri + productUri + deliveryWeekUri);
+
+        setisLoading(true)
+        await fetch(APIURL + urlString + statusUri + zoneUri + productUri + deliveryWeekUri, GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setRows(data);
+                setisLoading(false);
+                console.log(data);
+                if (data.length == 0) {
+                    setSearchNotFound(true)
+                }
+            });
+        setisLoading(false);
+
+    }
+
     return (
         <div>
-            {isDownloading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Downloading Orders</b>}
-            <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'grey' }}>Seasonal Orders <span style={{ color: 'white' }}>[{count}]</span></h2></center>
+            {isDownloading && <b style={{
+                position: 'fixed',
+                left: '-20',
+                color: 'white',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                width: '40%',
+                backgroundColor: 'red'
+            }}>Downloading Orders</b>}
+            <center><h2 style={{marginTop: -9, fontStyle: 'italic', color: 'grey'}}>Seasonal Orders <span
+                style={{color: 'white'}}>[{count}]</span></h2></center>
             <div>
                 {queryLoad || userQueryLoad ?
-                    <h4 style={{ color: 'white' }}>Clear the Search & Press Search Icon to see Options...</h4>
-                    :
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <DropdownForStatus status={status} setStatus={setStatus} receivedData={receivedData} label="Select Status" />
-                        {zonelist.zoneList.length > 0 && <DropdownForZones data={zonelist.zoneList} type="Zone Name" label="Select Zone" handleGetZoneData={handleGetZoneData} />}
-
-                    </div>
+                    <h4 style={{color: 'white'}}>Clear the Search & Press Search Icon to see Options...</h4>
+                    : ""
                 }
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
-                        handleSearch={handleSearch} label="Search By Order ID" />
-                    {seasonalPincodes.length > 0 && <Dropdown data={seasonalPincodes} type="pincode" label="Search Pincode" handleGetPincodeData={handleGetPincodeData} />}
-                    {seasonalDispatch.length > 0 && <Dropdown data={seasonalDispatch} type="Dispatch Week" label="Search Dispatch Week" handleGetPincodeData={handleGetDispatchData} />}
-                    {seasonalProduct.length > 0 && <Dropdown data={seasonalProduct} type="Product" label="Search Dispatch Week" handleGetPincodeData={handleGetProductData} />}
-                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName} handleSearch={handleSearchByUserName}
-                        label="Search By User Name" />
+                                  handleSearch={handleSearch} label="Search By Order ID"/>
+                    <DropdownForStatus status={status} setStatus={setStatus} setDeliveryStatus={setDeliveryStatus}
+                                       label="Select Status"/>
+                    {zonelist.zoneList.length > 0 &&
+                    <DropdownForZones data={zonelist.zoneList} type="Zone Name" label="Select Zone"
+                                      handleGetZoneData={handleGetZoneData}/>}
+                    {seasonalDispatch.length > 0 &&
+                    <Dropdown data={seasonalDispatch} type="Dispatch Week" label="Search Dispatch Week"
+                              handleGetPincodeData={handleGetDispatchData}/>}
+                    {seasonalProduct.length > 0 &&
+                    <Dropdown data={seasonalProduct} type="Product" label="Search Dispatch Week"
+                              handleGetPincodeData={handleGetProductData}/>}
+                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
+                                            handleSearch={handleSearchByUserName}
+                                            label="Search By User Name"/>
+                    <button onClick={handleSubmit}> Search</button>
                 </div>
             </div>
 
             <Grid container justifyContent="space-between" component={Paper}>
                 {!queryLoad && !userQueryLoad && <Pagination variant={"text"} color={"primary"}
-                    count={totalPages}
-                    onChange={(event, value) => handlePageChange(event, value - 1)} />}
+                                                             count={totalPages}
+                                                             onChange={(event, value) => handlePageChange(event, value - 1)}/>}
             </Grid>
-            <Box m={1} />
+            <Box m={1}/>
 
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
 
-                    <TableTitlesSeasonal auth={auth} />
+                    <TableTitlesSeasonal auth={auth}/>
 
                     {queryLoad ?
                         <>
@@ -383,22 +496,27 @@ const SeasonalTest = (props) => {
                                                 pathname: '/app/' + props.match.params.vendorId + '/order/' + searchOrder.order.id,
                                                 id: searchOrder.order.id
                                             }}> {searchOrder.order.id}</Link></TableCell>
-                                        <TableCell align="center" >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{searchOrder.order.user.id} : {searchOrder.order.user.name} </p> : <p>{searchOrder.order.user.id}</p>}</TableCell>
-                                        <TableCell align="center" >{detail(searchOrder.productName)}</TableCell>
-                                        <TableCell align="center" > {new Date(Date.parse(searchOrder.order.createdAt + " UTC")).toLocaleString()}</TableCell>
-                                        <TableCell align="center" >{searchOrder.order.dispatchWeek}</TableCell>
-                                        <TableCell align="center" >{searchOrder.order.user.pincode}</TableCell>
-                                        <TableCell align="center" >{searchOrder.order.total}</TableCell>
-                                        <TableCell align="center" >{detail(searchOrder.order.vendor.name)}</TableCell>
-                                        <TableCell align="center" >{searchOrder.order.finalTotal == 0 ? searchOrder.order.total : searchOrder.order.finalTotal}</TableCell>
-                                        <TableCell align="center" >{searchOrder.paymentMethod}</TableCell>
-                                        <TableCell align="center" >{searchOrder.order.couponCode}</TableCell>
-                                        <TableCell align="center" >{searchOrder.order.deliveryStatus}</TableCell>
+                                        <TableCell
+                                            align="center">{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?
+                                            <p>{searchOrder.order.user.id} : {searchOrder.order.user.name} </p> :
+                                            <p>{searchOrder.order.user.id}</p>}</TableCell>
+                                        <TableCell align="center">{detail(searchOrder.productName)}</TableCell>
+                                        <TableCell
+                                            align="center"> {new Date(Date.parse(searchOrder.order.createdAt + " UTC")).toLocaleString()}</TableCell>
+                                        <TableCell align="center">{searchOrder.order.dispatchWeek}</TableCell>
+                                        <TableCell align="center">{searchOrder.order.user.pincode}</TableCell>
+                                        <TableCell align="center">{searchOrder.order.total}</TableCell>
+                                        <TableCell align="center">{detail(searchOrder.order.vendor.name)}</TableCell>
+                                        <TableCell
+                                            align="center">{searchOrder.order.finalTotal == 0 ? searchOrder.order.total : searchOrder.order.finalTotal}</TableCell>
+                                        <TableCell align="center">{searchOrder.paymentMethod}</TableCell>
+                                        <TableCell align="center">{searchOrder.order.couponCode}</TableCell>
+                                        <TableCell align="center">{searchOrder.order.deliveryStatus}</TableCell>
                                     </TableRow>
                                 </TableBody>
                                 :
                                 <center>
-                                    {searchNotFound ? <h1 style={{ color: 'black' }}>Not Found</h1> : <CircularProgress />}
+                                    {searchNotFound ? <h1 style={{color: 'black'}}>Not Found</h1> : <CircularProgress/>}
                                 </center>
                             }
                         </>
@@ -409,7 +527,7 @@ const SeasonalTest = (props) => {
                                 <>
                                     {isLoading ?
 
-                                        <CircularProgress />
+                                        <CircularProgress/>
                                         :
                                         <TableBody>
                                             {userSearchData.length > 0 && userSearchData.map((row, index) => (
@@ -420,16 +538,19 @@ const SeasonalTest = (props) => {
                                                             id: row.order.id
                                                         }}>{row.order.id}</Link>
                                                     </TableCell>
-                                                    <TableCell >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{row.order.user.id} : {row.order.user.name} </p> : <p>{row.order.user.id}</p>}</TableCell>
-                                                    <TableCell align="center" >{detail(row.productName)}</TableCell>
+                                                    <TableCell>{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?
+                                                        <p>{row.order.user.id} : {row.order.user.name} </p> :
+                                                        <p>{row.order.user.id}</p>}</TableCell>
+                                                    <TableCell align="center">{detail(row.productName)}</TableCell>
                                                     <TableCell align="center">
                                                         {new Date(Date.parse(row.order.createdAt + " UTC")).toLocaleString()}
                                                     </TableCell>
-                                                    <TableCell align="center" >{row.order.dispatchWeek}</TableCell>
-                                                    <TableCell align="center" >{row.order.user.pincode}</TableCell>
+                                                    <TableCell align="center">{row.order.dispatchWeek}</TableCell>
+                                                    <TableCell align="center">{row.order.user.pincode}</TableCell>
                                                     <TableCell align="center">{row.order.total}</TableCell>
-                                                    <TableCell >{detail(row.order.vendor.name)}</TableCell>
-                                                    <TableCell align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
+                                                    <TableCell>{detail(row.order.vendor.name)}</TableCell>
+                                                    <TableCell
+                                                        align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
                                                     <TableCell align="center">{row.paymentMethod}</TableCell>
                                                     <TableCell align="center">{row.order.couponCode}</TableCell>
                                                     <TableCell align="center">{row.order.deliveryStatus}</TableCell>
@@ -452,17 +573,20 @@ const SeasonalTest = (props) => {
                                                             id: row.order.id
                                                         }}>{row.order.id}</Link>
                                                     </TableCell>
-                                                    <TableCell >{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? <p>{row.order.user.id} : {row.order.user.name} </p> : <p>{row.order.user.id}</p>}</TableCell>
-                                                    <TableCell align="center" >{detail(row.productName)}</TableCell>
+                                                    <TableCell>{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?
+                                                        <p>{row.order.user.id} : {row.order.user.name} </p> :
+                                                        <p>{row.order.user.id}</p>}</TableCell>
+                                                    <TableCell align="center">{detail(row.productName)}</TableCell>
                                                     <TableCell align="center">
                                                         {new Date(Date.parse(row.order.createdAt + " UTC")).toLocaleString()}
                                                     </TableCell>
-                                                    <TableCell align="center" >{row.order.dispatchWeek}</TableCell>
-                                                    <TableCell align="center" >{row.order.user.pincode}</TableCell>
+                                                    <TableCell align="center">{row.order.dispatchWeek}</TableCell>
+                                                    <TableCell align="center">{row.order.user.pincode}</TableCell>
                                                     <TableCell align="center">{row.order.total}</TableCell>
-                                                    <TableCell >{detail(row.order.vendor.name)}</TableCell>
-                                                    <TableCell align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
-                                                    <TableCell align="center" >{row.paymentMethod}</TableCell>
+                                                    <TableCell>{detail(row.order.vendor.name)}</TableCell>
+                                                    <TableCell
+                                                        align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
+                                                    <TableCell align="center">{row.paymentMethod}</TableCell>
                                                     <TableCell align="center">{row.order.couponCode}</TableCell>
                                                     <TableCell align="center">{row.order.deliveryStatus}</TableCell>
                                                 </TableRow>
@@ -473,7 +597,8 @@ const SeasonalTest = (props) => {
                                         :
                                         <div>
                                             <center>
-                                                {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> : <CircularProgress />}
+                                                {searchNotFound ? <h1 style={{color: 'black'}}>No Data</h1> :
+                                                    <CircularProgress/>}
                                             </center>
                                         </div>}
                                 </>
@@ -483,16 +608,16 @@ const SeasonalTest = (props) => {
                 </Table>
 
             </TableContainer>
-            <Box m={2} />
+            <Box m={2}/>
             {!queryLoad && !userQueryLoad &&
-                <Grid container justifyContent={"center"}>
-                    <Pagination variant={"text"} color={"primary"}
-                        count={totalPages}
+            <Grid container justifyContent={"center"}>
+                <Pagination variant={"text"} color={"primary"}
+                            count={totalPages}
 
-                        onChange={(event, value) => handlePageChange(event, value - 1)} />
-                </Grid>
+                            onChange={(event, value) => handlePageChange(event, value - 1)}/>
+            </Grid>
             }
-            <Box m={2} />
+            <Box m={2}/>
         </div>
     )
 }

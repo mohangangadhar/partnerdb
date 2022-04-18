@@ -21,9 +21,8 @@ const Dropdown = ({data, handleGetPincodeData, label, type}) => {
                     <option style={styleOptions} value="all">All</option>
                     <>
                         {data.map((data) => (
-                            <option style={styleOptions} value={type == "pincode" ? data.pincode : type === "Product" ?  data.id: data.dispatchWeek}>
+                            <option style={styleOptions} value={type == "pincode" ? data.pincode : type === "Product" ?  data.name: data.dispatchWeek}>
                                 {type == "pincode" ? data.pincode : type === "Product" ? JSON.parse(data.name).en  : data.dispatchWeek}
-                                { type === "Product" ? console.log(JSON.parse(data.name).en) : "" }
                             </option>
                         ))}
                     </>
