@@ -428,6 +428,8 @@ const SeasonalTest = (props) => {
             .then(data => {
                 setRows(data);
                 setisLoading(false);
+                setQueryLoad(false);
+                setUserQueryLoad(false);
                 console.log(data);
                 if (data.length == 0) {
                     setSearchNotFound(true)
