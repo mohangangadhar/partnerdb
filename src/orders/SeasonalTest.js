@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -7,17 +7,17 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
-import {fetchZoneList} from '../Actions';
+import { fetchZoneList } from '../Actions';
 import CircularProgress from '@mui/material/CircularProgress';
-import {Link, useParams} from 'react-router-dom';
-import {Box, Grid} from "@material-ui/core";
+import { Link, useParams } from 'react-router-dom';
+import { Box, Grid } from "@material-ui/core";
 
-import {auth} from "../firebase";
-import {useSelector, useDispatch} from 'react-redux'
+import { auth } from "../firebase";
+import { useSelector, useDispatch } from 'react-redux'
 
 import SearchOrders from './SearchOrders';
 
-import {APIURL, GetRequestOptions} from '../constants/Constants';
+import { APIURL, GetRequestOptions } from '../constants/Constants';
 
 import SearchOrdersByUserName from './SearchOrdersByUserName';
 
@@ -27,9 +27,9 @@ import DropdownForStatus from './Components/DropdownForStatus';
 import DropdownForZones from './Components/DropdownForZones';
 
 const SeasonalTest = (props) => {
-    let {id} = useParams();
+    let { id } = useParams();
     const [rows, setRows] = useState([]);
-    const [offSet, setOffSet] = useState(0);
+    const [filterQueryLoad, setFilterQueryLoad] = useState(false);
     const [status, setStatus] = useState("all");
     const [perPage, setPerPage] = useState(10);
     const [isLoading, setisLoading] = useState(false);
@@ -67,6 +67,7 @@ const SeasonalTest = (props) => {
         setPageToggle("all");
         setSearchNotFound(false);
         setQueryLoad(false);
+        setFilterQueryLoad(false);
         setUserQueryLoad(false);
         setRows("");
         setUserSearchData([]);
@@ -173,7 +174,7 @@ const SeasonalTest = (props) => {
             setSearchNotFound(false);
             const requestOptions = {
                 method: 'GET',
-                headers: {'Content-Type': 'application/json'}
+                headers: { 'Content-Type': 'application/json' }
             };
 
             await fetch(APIURL + 'order/seasonal-order/' + query, requestOptions)
@@ -256,7 +257,7 @@ const SeasonalTest = (props) => {
             return;
         } else if (event.target.value.length >= 1) {
             setUserQueryLoad(true);
-//            setisLoading(true);
+            //            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
             setSearchQuery("");
@@ -285,7 +286,7 @@ const SeasonalTest = (props) => {
             return;
         } else if (event.target.value.length >= 1) {
             setUserQueryLoad(true);
-//            setisLoading(true);
+            //            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
             setSearchQuery("");
@@ -314,7 +315,7 @@ const SeasonalTest = (props) => {
             return;
         } else if (event.target.value.length >= 1) {
             setUserQueryLoad(true);
-//            setisLoading(true);
+            //            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
             setSearchQuery("");
@@ -366,7 +367,7 @@ const SeasonalTest = (props) => {
         setPageToggle("zone");
         setUserSearchData([]);
         setSearchOrder({});
-//        setisLoading(true);
+        //        setisLoading(true);
         // let urlString = "order/seasonal-zones/";
         //
         // await fetch(APIURL + urlString + id + `?size=20&page=${val} `, GetRequestOptions)
@@ -381,7 +382,7 @@ const SeasonalTest = (props) => {
         //             setSearchNotFound(true)
         //         }
         //     });
-//        setisLoading(false);
+        //        setisLoading(false);
     }
 
     const handleSubmit = async () => {
@@ -390,7 +391,7 @@ const SeasonalTest = (props) => {
         console.log(selectedDeliveryWeek);
         console.log(selectedProduct);
 
-//        setisLoading(true);
+        //        setisLoading(true);
 
         let urlString = "order/filter/seasonal?";
         let statusUri;
@@ -425,9 +426,11 @@ const SeasonalTest = (props) => {
             .then(response => response.json())
             .then(data => {
                 setRows(data);
+                setCount(data.length);
                 setisLoading(false);
                 setQueryLoad(false);
                 setUserQueryLoad(false);
+                setFilterQueryLoad(true);
                 console.log(data);
                 if (data.length == 0) {
                     setSearchNotFound(true)
@@ -448,45 +451,45 @@ const SeasonalTest = (props) => {
                 width: '40%',
                 backgroundColor: 'red'
             }}>Downloading Orders</b>}
-            <center><h2 style={{marginTop: -9, fontStyle: 'italic', color: 'grey'}}>Seasonal Orders <span
-                style={{color: 'white'}}>[{count}]</span></h2></center>
+            <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'grey' }}>Seasonal Orders <span
+                style={{ color: 'white' }}>[{count}]</span></h2></center>
             <div>
                 {queryLoad || userQueryLoad ?
-                    <h4 style={{color: 'white'}}>Clear the Search & Press Search Icon to see Options...</h4>
+                    <h4 style={{ color: 'white' }}>Clear the Search & Press Search Icon to see Options...</h4>
                     : ""
                 }
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
-                                  handleSearch={handleSearch} label="Search By Order ID"/>
+                        handleSearch={handleSearch} label="Search By Order ID" />
                     <DropdownForStatus status={status} setStatus={setStatus} setDeliveryStatus={setDeliveryStatus}
-                                       label="Select Status"/>
+                        label="Select Status" />
                     {zonelist.zoneList.length > 0 &&
-                    <DropdownForZones data={zonelist.zoneList} type="Zone Name" label="Select Zone"
-                                      handleGetZoneData={handleGetZoneData}/>}
+                        <DropdownForZones data={zonelist.zoneList} type="Zone Name" label="Select Zone"
+                            handleGetZoneData={handleGetZoneData} />}
                     {seasonalDispatch.length > 0 &&
-                    <Dropdown data={seasonalDispatch} type="Dispatch Week" label="Search Dispatch Week"
-                              handleGetPincodeData={handleGetDispatchData}/>}
+                        <Dropdown data={seasonalDispatch} type="Dispatch Week" label="Search Dispatch Week"
+                            handleGetPincodeData={handleGetDispatchData} />}
                     {seasonalProduct.length > 0 &&
-                    <Dropdown data={seasonalProduct} type="Product" label="Search Dispatch Week"
-                              handleGetPincodeData={handleGetProductData}/>}
+                        <Dropdown data={seasonalProduct} type="Product" label="Search Dispatch Week"
+                            handleGetPincodeData={handleGetProductData} />}
                     <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
-                                            handleSearch={handleSearchByUserName}
-                                            label="Search By User Name"/>
+                        handleSearch={handleSearchByUserName}
+                        label="Search By User Name" />
                     <button onClick={handleSubmit}> Search</button>
                 </div>
             </div>
 
             <Grid container justifyContent="space-between" component={Paper}>
-                {!queryLoad && !userQueryLoad && <Pagination variant={"text"} color={"primary"}
-                                                             count={totalPages}
-                                                             onChange={(event, value) => handlePageChange(event, value - 1)}/>}
+                {!queryLoad && !userQueryLoad && !filterQueryLoad && <Pagination variant={"text"} color={"primary"}
+                    count={totalPages}
+                    onChange={(event, value) => handlePageChange(event, value - 1)} />}
             </Grid>
-            <Box m={1}/>
+            <Box m={1} />
 
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
 
-                    <TableTitlesSeasonal auth={auth}/>
+                    <TableTitlesSeasonal auth={auth} />
 
                     {queryLoad ?
                         <>
@@ -500,8 +503,8 @@ const SeasonalTest = (props) => {
                                             }}> {searchOrder.order.id}</Link></TableCell>
                                         <TableCell
                                             align="center">{auth.currentUser.uid == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?
-                                            <p>{searchOrder.order.user.id} : {searchOrder.order.user.name} </p> :
-                                            <p>{searchOrder.order.user.id}</p>}</TableCell>
+                                                <p>{searchOrder.order.user.id} : {searchOrder.order.user.name} </p> :
+                                                <p>{searchOrder.order.user.id}</p>}</TableCell>
                                         <TableCell align="center">{detail(searchOrder.productName)}</TableCell>
                                         <TableCell
                                             align="center"> {new Date(Date.parse(searchOrder.order.createdAt + " UTC")).toLocaleString()}</TableCell>
@@ -518,7 +521,7 @@ const SeasonalTest = (props) => {
                                 </TableBody>
                                 :
                                 <center>
-                                    {searchNotFound ? <h1 style={{color: 'black'}}>Not Found</h1> : <CircularProgress/>}
+                                    {searchNotFound ? <h1 style={{ color: 'black' }}>Not Found</h1> : <CircularProgress />}
                                 </center>
                             }
                         </>
@@ -529,7 +532,7 @@ const SeasonalTest = (props) => {
                                 <>
                                     {isLoading ?
 
-                                        <CircularProgress/>
+                                        <CircularProgress />
                                         :
                                         <TableBody>
                                             {userSearchData.length > 0 && userSearchData.map((row, index) => (
@@ -599,8 +602,8 @@ const SeasonalTest = (props) => {
                                         :
                                         <div>
                                             <center>
-                                                {searchNotFound ? <h1 style={{color: 'black'}}>No Data</h1> :
-                                                    <CircularProgress/>}
+                                                {searchNotFound ? <h1 style={{ color: 'black' }}>No Data</h1> :
+                                                    <CircularProgress />}
                                             </center>
                                         </div>}
                                 </>
@@ -610,16 +613,16 @@ const SeasonalTest = (props) => {
                 </Table>
 
             </TableContainer>
-            <Box m={2}/>
-            {!queryLoad && !userQueryLoad &&
-            <Grid container justifyContent={"center"}>
-                <Pagination variant={"text"} color={"primary"}
-                            count={totalPages}
+            <Box m={2} />
+            {!queryLoad && !userQueryLoad && !filterQueryLoad &&
+                <Grid container justifyContent={"center"}>
+                    <Pagination variant={"text"} color={"primary"}
+                        count={totalPages}
 
-                            onChange={(event, value) => handlePageChange(event, value - 1)}/>
-            </Grid>
+                        onChange={(event, value) => handlePageChange(event, value - 1)} />
+                </Grid>
             }
-            <Box m={2}/>
+            <Box m={2} />
         </div>
     )
 }

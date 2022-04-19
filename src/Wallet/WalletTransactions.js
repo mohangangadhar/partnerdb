@@ -33,7 +33,7 @@ function WalletTransactions({ walletid, toggle }) {
                             <TableRow>
                                 <TableCell >Amount</TableCell>
                                 <TableCell >Type</TableCell>
-                                <TableCell >Current Balance</TableCell>
+                                <TableCell >Earlier Balance</TableCell>
                                 <TableCell >Date</TableCell>
                                 <TableCell >Description</TableCell>
                             </TableRow>

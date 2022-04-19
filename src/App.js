@@ -214,6 +214,18 @@ export default function MiniDrawer() {
                                         id: "3"
                                     }}><ListItemText primary="Users" /></Link>
                                 </ListItem>
+                                <ListItem button key="Support">
+
+                                    <Link to={{
+                                        pathname: '/app/support',
+                                        id: "5"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Support</h6></Link>
+
+                                    <Link to={{
+                                        pathname: '/app/support',
+                                        id: "5"
+                                    }}><ListItemText primary="Support" /></Link>
+                                </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="Product">
 
                                     <Link to={{
@@ -349,18 +361,7 @@ export default function MiniDrawer() {
                                         id: "9"
                                     }}><ListItemText primary="Supply Planning" /></Link>
                                 </ListItem>
-                                <ListItem button key="Support">
 
-                                    <Link to={{
-                                        pathname: '/app/support',
-                                        id: "5"
-                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Support</h6></Link>
-
-                                    <Link to={{
-                                        pathname: '/app/support',
-                                        id: "5"
-                                    }}><ListItemText primary="Support" /></Link>
-                                </ListItem>
                             </HashRouter>
                         </List>
                     </Drawer>

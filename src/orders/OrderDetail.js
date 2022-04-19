@@ -68,6 +68,11 @@ function OrderDetail(props) {
         discountValue: 0
     });
     const [user] = useAuthState(auth);
+    const [paymentRefData, setPaymentRefData] = useState({
+        paymentReference: "",
+        paymentReferenceDate: "",
+        actualDeliveryDate: ""
+    });
     const history = useHistory();
     const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNDcxMzQxNDQ3NmFjZjMzNmZlZTAzYjk0YTBiNGRkMjJiOWE0NTk3M2U5Y2MyN2M5Y2U1OTdjZjJhMmJhZDIwZTQ4Y2M0OWVjODU0MGVjZTIiLCJpYXQiOjE2NDQzMDYyOTgsIm5iZiI6MTY0NDMwNjI5OCwiZXhwIjoxNjc1ODQyMjk3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.cPLfFwvU-9Ga26YBaGc_dnLKHj1hbDC4ozf8YA6nX-Z72XMN-nOMWN8v-7uchBvIjSWfN-i4_J4k9bQMO0c-o8J1RncvlEu55EUTfTaHd5L8lYovuCiNYp0C5aNlK4uoYg9ms7koMcEt0n4Sd818y9SLWAXOOFJ_aNQHNl69Fpj9fMRs5l2idMonnEK-IMIHbZ-1JQsLo2m5DkjASfFi3sTDywsRJ4Zj78ajN7kvtyOT2yokc4DdDlcYCeFwtHfoNtm7M9yY4uNpiPTtagKDmzBpnB9wRsXcyEO_M8KJVBPLGmB6DzOov5_D0P4Ir61Oae6ZEmyul7upnHqKqBCRPi7w3k-oM1Z8yljgvag7AcVZjNcVdUX4nB8KDt3FQHiBrIf6FN39xZUNivQ_aeBottFLbB6x5-zoYxFB0n4tI7rk5GpuIhHFNEa2-c3Jx5QNKaZ_ohHaPGu8VfTowZ0p9l_Lh6NodHlnTaeMRXDCJgcpTgstEOW-eIOaBjCH7raj3tE6oXSxc47r23Ro1-hGXWsHkcDATDPX5g4HXzLwWUksgkPnQ8ignDAUwrWywcqX_smIpnR2PGVdUXoJNiL9DElpwQs7cwQy4gCsuFdEs_fZOYwYz5OiGhaIxcIKEJsvoGZ-ItuHfWTYVUQqE-sgGPTNpGc7Fa_dqSmbhkK2PNo";
     let userId = auth.currentUser.uid;
@@ -96,7 +101,11 @@ function OrderDetail(props) {
                 setStatus(data.order.deliveryStatus);
                 setFinalTotal(data.order.finalTotal);
                 setRefundCount(data.order.refundCount == null ? 0 : data.order.refundCount);
-
+                setPaymentRefData({
+                    paymentReference: data.order.paymentReference,
+                    paymentReferenceDate: data.order.paymentReferenceDate,
+                    actualDeliveryDate: data.order.actualDeliveryDate
+                });
                 setTotalData({
                     total: data.order.total,
                     refundTotal: data.order.refundTotal,
@@ -226,7 +235,10 @@ function OrderDetail(props) {
                     "id": props.location.id,
                     "status": status,
                     "comments": comment,
-                    "refundCount": refundCount
+                    "refundCount": refundCount,
+                    "paymentReference": paymentRefData.paymentReference,
+                    "paymentReferenceDate": paymentRefData.paymentReferenceDate,
+                    "actualDeliveryDate": paymentRefData.actualDeliveryDate
                 };
                 const requestOptions = {
                     method: 'PUT',
@@ -341,7 +353,10 @@ function OrderDetail(props) {
             "id": props.location.id,
             "status": status,
             "comments": comment + " | " + message + " refunds done ",
-            "refundCount": refundCount + 1
+            "refundCount": refundCount + 1,
+            "paymentReference": paymentRefData.paymentReference,
+            "paymentReferenceDate": paymentRefData.paymentReferenceDate,
+            "actualDeliveryDate": paymentRefData.actualDeliveryDate
         };
         const requestOptions = {
             method: 'PUT',
@@ -384,7 +399,10 @@ function OrderDetail(props) {
             "id": props.location.id,
             "status": status,
             "comments": comment,
-            "refundCount": refundCount
+            "refundCount": refundCount,
+            "paymentReference": paymentRefData.paymentReference,
+            "paymentReferenceDate": paymentRefData.paymentReferenceDate,
+            "actualDeliveryDate": paymentRefData.actualDeliveryDate
         };
         const requestOptions = {
             method: 'PUT',
@@ -567,6 +585,60 @@ function OrderDetail(props) {
                             <TableCell colSpan={2}>
                                 <TextField multiline label="Add Comment" value={comment}
                                     onChange={(ev) => setComment(ev.target.value)
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <TextField multiline label="Add Payment Reference" value={paymentRefData.paymentReference}
+                                    onChange={(ev) => setPaymentRefData((prev) => ({
+                                        ...prev,
+                                        paymentReference: ev.target.value
+                                    }
+                                    ))
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <TextField multiline label="Add Payment Date" value={paymentRefData.paymentReferenceDate}
+                                    onChange={(ev) => setPaymentRefData((prev) => ({
+                                        ...prev,
+                                        paymentReferenceDate: ev.target.value
+                                    }
+                                    ))
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <TextField multiline label="Actual Delivered" value={paymentRefData.actualDeliveryDate}
+                                    onChange={(ev) => setPaymentRefData((prev) => ({
+                                        ...prev,
+                                        actualDeliveryDate: ev.target.value
+                                    }
+                                    ))
                                     }
                                     InputProps={{
                                         style: {
