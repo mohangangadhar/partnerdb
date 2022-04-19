@@ -412,8 +412,6 @@ const SeasonalTest = (props) => {
             productUri = selectedDeliveryWeek !== "" ? "&dispatchWeek=" + selectedDeliveryWeek : "";
         }
 
-        console.log(JSON.parse(selectedProduct));
-
         if (productUri == "" && zoneUri == "" && statusUri == "") {
             deliveryWeekUri = selectedProduct !== "" ? "product=" + JSON.parse(selectedProduct).en : "";
         } else {
