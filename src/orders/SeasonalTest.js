@@ -556,7 +556,7 @@ const SeasonalTest = (props) => {
                                                     <TableCell>{detail(row.order.vendor.name)}</TableCell>
                                                     <TableCell
                                                         align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
-                                                    <TableCell align="center">{row.paymentMethod}</TableCell>
+                                                    {/*<TableCell align="center">{row.paymentMethod}</TableCell>*/}
                                                     <TableCell align="center">{row.order.couponCode}</TableCell>
                                                     <TableCell align="center">{row.order.deliveryStatus}</TableCell>
                                                 </TableRow>
@@ -591,7 +591,7 @@ const SeasonalTest = (props) => {
                                                     <TableCell>{detail(row.order.vendor.name)}</TableCell>
                                                     <TableCell
                                                         align="center">{row.order.finalTotal == 0 ? row.order.total : row.order.finalTotal}</TableCell>
-                                                    <TableCell align="center">{row.paymentMethod}</TableCell>
+                                                    {/*<TableCell align="center">{row.paymentMethod}</TableCell>*/}
                                                     <TableCell align="center">{row.order.couponCode}</TableCell>
                                                     <TableCell align="center">{row.order.deliveryStatus}</TableCell>
                                                 </TableRow>

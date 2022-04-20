@@ -15,7 +15,7 @@ const TableTitlesSeasonal = ({ auth }) => {
                 <TableCell align="center" style={{ color: 'wheat' }}>Total Value</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Vendor Name</TableCell>
                 <TableCell style={{ color: 'wheat' }}>Final Total</TableCell>
-                <TableCell style={{ color: 'wheat' }}>Payment Method</TableCell>
+                {/*<TableCell style={{ color: 'wheat' }}>Payment Method</TableCell>*/}
                 <TableCell style={{ color: 'wheat' }}>Coupon Code</TableCell>
 
                 <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
