@@ -514,7 +514,7 @@ const SeasonalTest = (props) => {
                                         <TableCell align="center">{detail(searchOrder.order.vendor.name)}</TableCell>
                                         <TableCell
                                             align="center">{searchOrder.order.finalTotal == 0 ? searchOrder.order.total : searchOrder.order.finalTotal}</TableCell>
-                                        <TableCell align="center">{searchOrder.paymentMethod}</TableCell>
+                                        {/*<TableCell align="center">{searchOrder.paymentMethod}</TableCell>*/}
                                         <TableCell align="center">{searchOrder.order.couponCode}</TableCell>
                                         <TableCell align="center">{searchOrder.order.deliveryStatus}</TableCell>
                                     </TableRow>
