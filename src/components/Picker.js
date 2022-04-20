@@ -17,21 +17,18 @@ const useStyles = (theme) => ({
 
 class Picker extends Component {
     render() {
-        const { classes, color, dateChange } = this.props;
+        const { classes, color, dateChange, label, date } = this.props;
         return (
             <form className={classes.container} noValidate={false}>
                 <TextField
                     id="date"
                     onChange={dateChange}
                     type="date"
-                    defaultValue="2021-07-24"
+                    value={date}
                     style={{ color: 'white' }}
                     className={classes.textField}
-                    InputProps={{
-                        style: {
-                            color: color,
-                        }
-                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    label={label}
                     InputLabelProps={{
                         shrink: true,
                         style: { color: color },

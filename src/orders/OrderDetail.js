@@ -27,6 +27,7 @@ import { NotificationManager } from "react-notifications";
 import { APIURL, GetRequestOptions } from '../constants/Constants';
 import OrderEditDialog from './OrderEditDialog';
 import CodDeposit from './CodDeposit';
+import Picker from '../components/Picker';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
@@ -73,6 +74,8 @@ function OrderDetail(props) {
         paymentReferenceDate: "",
         actualDeliveryDate: ""
     });
+    const [paymentDate, setPaymentDate] = useState(null);
+    const [deliveryDate, setDeliveryDate] = useState(null);
     const history = useHistory();
     const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNDcxMzQxNDQ3NmFjZjMzNmZlZTAzYjk0YTBiNGRkMjJiOWE0NTk3M2U5Y2MyN2M5Y2U1OTdjZjJhMmJhZDIwZTQ4Y2M0OWVjODU0MGVjZTIiLCJpYXQiOjE2NDQzMDYyOTgsIm5iZiI6MTY0NDMwNjI5OCwiZXhwIjoxNjc1ODQyMjk3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.cPLfFwvU-9Ga26YBaGc_dnLKHj1hbDC4ozf8YA6nX-Z72XMN-nOMWN8v-7uchBvIjSWfN-i4_J4k9bQMO0c-o8J1RncvlEu55EUTfTaHd5L8lYovuCiNYp0C5aNlK4uoYg9ms7koMcEt0n4Sd818y9SLWAXOOFJ_aNQHNl69Fpj9fMRs5l2idMonnEK-IMIHbZ-1JQsLo2m5DkjASfFi3sTDywsRJ4Zj78ajN7kvtyOT2yokc4DdDlcYCeFwtHfoNtm7M9yY4uNpiPTtagKDmzBpnB9wRsXcyEO_M8KJVBPLGmB6DzOov5_D0P4Ir61Oae6ZEmyul7upnHqKqBCRPi7w3k-oM1Z8yljgvag7AcVZjNcVdUX4nB8KDt3FQHiBrIf6FN39xZUNivQ_aeBottFLbB6x5-zoYxFB0n4tI7rk5GpuIhHFNEa2-c3Jx5QNKaZ_ohHaPGu8VfTowZ0p9l_Lh6NodHlnTaeMRXDCJgcpTgstEOW-eIOaBjCH7raj3tE6oXSxc47r23Ro1-hGXWsHkcDATDPX5g4HXzLwWUksgkPnQ8ignDAUwrWywcqX_smIpnR2PGVdUXoJNiL9DElpwQs7cwQy4gCsuFdEs_fZOYwYz5OiGhaIxcIKEJsvoGZ-ItuHfWTYVUQqE-sgGPTNpGc7Fa_dqSmbhkK2PNo";
     let userId = auth.currentUser.uid;
@@ -106,6 +109,8 @@ function OrderDetail(props) {
                     paymentReferenceDate: data.order.paymentReferenceDate,
                     actualDeliveryDate: data.order.actualDeliveryDate
                 });
+                setPaymentDate(data.order.paymentReferenceDate);
+                setDeliveryDate(data.order.actualDeliveryDate);
                 setTotalData({
                     total: data.order.total,
                     refundTotal: data.order.refundTotal,
@@ -615,40 +620,20 @@ function OrderDetail(props) {
                                 />
                             </TableCell>
                             <TableCell colSpan={2}>
-                                <TextField multiline label="Add Payment Date" value={paymentRefData.paymentReferenceDate}
-                                    onChange={(ev) => setPaymentRefData((prev) => ({
-                                        ...prev,
-                                        paymentReferenceDate: ev.target.value
-                                    }
-                                    ))
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
+                                {paymentDate == null ? <Picker color="white" date={paymentRefData.paymentReferenceDate} dateChange={(e) => setPaymentRefData((prev) => ({
+                                    ...prev,
+                                    paymentReferenceDate: e.target.value
+                                }
+                                ))
+                                } label={"Payment Date"} /> : <h3 style={{ color: "white" }}>Payment Date : {paymentRefData.paymentReferenceDate}</h3>}
                             </TableCell>
                             <TableCell colSpan={2}>
-                                <TextField multiline label="Actual Delivered" value={paymentRefData.actualDeliveryDate}
-                                    onChange={(ev) => setPaymentRefData((prev) => ({
-                                        ...prev,
-                                        actualDeliveryDate: ev.target.value
-                                    }
-                                    ))
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
+                                {deliveryDate == null ? <Picker color="white" date={paymentRefData.actualDeliveryDate} dateChange={(e) => setPaymentRefData((prev) => ({
+                                    ...prev,
+                                    actualDeliveryDate: e.target.value
+                                }
+                                ))
+                                } label={"Delivered Date"} /> : <h3 style={{ color: "white" }}>Actual Delivered Date : {paymentRefData.actualDeliveryDate}</h3>}
                             </TableCell>
                             <TableCell>
                                 <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>

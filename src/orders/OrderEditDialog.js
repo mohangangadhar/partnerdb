@@ -41,7 +41,7 @@ function OrderEditDialog(props) {
         headers: { 'Content-Type': 'application/json' }
     };
     const handleUserChange = async (editeduserid) => {
-        console.log(editeduserid);
+        // console.log(editeduserid);
         setUpdating(false);
         setUserId(editeduserid);
         setIsSelected(false);
@@ -59,7 +59,7 @@ function OrderEditDialog(props) {
         await fetch(APIURL + `user/${editeduserid}`).
             then(response => response.json()).then(data => {
                 setMobile(data.mobileNumber);
-                console.log(data.mobileNumber)
+                // console.log(data.mobileNumber)
             });
     }
 
