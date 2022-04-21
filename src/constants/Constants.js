@@ -70,7 +70,7 @@ export const supportSummaryData = [
     "New", "Open", "In Progress", "Completed", "Total"
 ];
 export const usersTabData = [
-    "User Id", "Name", "Email", "Mobile", "Verified", "Pincode", "Created At"
+    "User Id", "Name", "Email", "Mobile", "Verified", "Alt Mobile Number", "Wallet", "Pincode", "Created At"
 ];
 export const productsTabData = [
     "Product Id", "Vendor Name", "Title", "Express", "Price", "Sale Price", "Dispatch_Week", "Stock Quantity", "Actions"
