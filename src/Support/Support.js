@@ -14,16 +14,20 @@ import "../App.css"
 import { Box, Grid, TextField } from "@material-ui/core";
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
-import { supportTabData } from '../constants/Constants';
+import { APIURL, supportTabData } from '../constants/Constants';
+import FilterByStatus from './Components/FilterByStatus';
 
 
 const Support = () => {
     const [perPage, setPerPage] = useState(15);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+    const [editPage, setEditPage] = useState(0);
+    const [noData, setNoData] = useState(false);
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
     const [isRowLoading, setisRowLoading] = useState(false);
+    const [url, setUrl] = useState(APIURL + "support/page-query?page=");
     const [addFormData, setAddFormData] = useState({
         status: "",
         resolution: "",
@@ -38,27 +42,34 @@ const Support = () => {
         },
     };
 
-    const handleChange = async (page) => {
+    const handleChange = async (page, apiUrl) => {
         setisLoading(true);
-        let apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/support/page-query?page=${page}`;
-
-        await fetch(apiUrl, RequestOptions)
+        setNoData(false);
+        setEditedRowData([]);
+        setEditPage(page);
+        await fetch(apiUrl + page, RequestOptions)
             .then(response => response.json())
             .then(data => {
-                setEditedRowData(data.content.reverse());
-                setTotalPages(data.totalPages - 1);
+                setEditedRowData(data.content);
+                setTotalPages(data.totalPages);
+                if (data.content.length == 0) { setNoData(true); }
             }).catch(err => console.log(err));
         setisLoading(false);
     }
     useEffect(async () => {
-        setisLoading(true);
-        let apiUrl = `https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/support/page-query?page=0`;
-        await fetch(apiUrl, RequestOptions)
-            .then(response => response.json())
-            .then(data => {
-                handleChange(data.totalPages - 1);
-            }).catch(err => console.log(err));
+        handleChange(0, APIURL + "support/page-query?page=");
     }, []);
+
+    const handleChangeStatus = (e) => {
+        if (e == "all") {
+            setUrl(APIURL + "support/page-query?page=");
+            handleChange(0, APIURL + "support/page-query?page=");
+            return;
+        }
+        setUrl(APIURL + `support/${e}/page-query?page=`);
+        handleChange(0, APIURL + `support/${e}/page-query?page=`);
+        console.log(e);
+    }
     const handleEditFormChange = (event) => {
         event.preventDefault();
 
@@ -128,6 +139,7 @@ const Support = () => {
     }
     return <div>
         {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
+        <FilterByStatus handleChangeStatus={handleChangeStatus} />
         <TableContainer component={Paper}>
             <Table className="table" aria-label="spanning table">
                 <TableTitles data={supportTabData} />
@@ -149,7 +161,7 @@ const Support = () => {
                     :
                     <div>
                         <center>
-                            <h2>Loading....</h2>
+                            {noData ? <h2>No Data</h2> : <h2>Loading....</h2>}
                         </center>
                     </div>
                 }
@@ -159,7 +171,8 @@ const Support = () => {
         <Grid container justifyContent={"center"}>
             <Pagination variant={"text"} color={"primary"}
                 count={totalPages}
-                onChange={(event, value) => handleChange(totalPages - value)} />
+                page={editPage + 1}
+                onChange={(event, value) => handleChange(value - 1, url)} />
         </Grid>
         <Box m={2} />
     </div >;

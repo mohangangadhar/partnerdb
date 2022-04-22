@@ -97,12 +97,13 @@ function PoReports(props) {
 
         setisLoading(true);
         setRows([]);
-        await fetch(APIURL + `/suppy-planning-snapshot/po-number/${poNumber}`, GetRequestOptions)
+        await fetch(APIURL + `suppy-planning-snapshot/po-number/${poNumber}`, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
 
                 setRows(data);
                 getActualPay(data);
+
             }).catch(err => { console.log(err); setisLoading(false); })
 
 

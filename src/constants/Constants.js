@@ -108,3 +108,8 @@ export const supplyPlanningTabData = [
     "Suggested Quantity", "Primary Supplier",
     "Ordered Quantity", "Ordered Uom", "Actions"
 ];
+export const styleOptions = {
+    padding: 10,
+    marginBottom: 5,
+    fontSize: 15,
+};
