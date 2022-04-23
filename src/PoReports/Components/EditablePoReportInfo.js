@@ -2,6 +2,7 @@ import React from "react";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Button from '@mui/material/Button';
+import Picker from "../../components/Picker";
 const EditablePoReportInfo = ({
     row,
     addFormData,
@@ -38,7 +39,7 @@ const EditablePoReportInfo = ({
             </TableCell>
 
             <TableCell align="center">
-                <input type="text" placeholder="Received Date" name="poReceivedDate" value={addFormData.poReceivedDate} onChange={handleEditFormChange} />
+                <Picker color="white" date={addFormData.poReceivedDate} dateChange={handleEditFormChange} label="poReceivedDate" />
             </TableCell>
             <TableCell align="center">
                 <input type="text" placeholder="actualTotal" name="actualTotal" value={addFormData.actualTotal} onChange={handleEditFormChange} />

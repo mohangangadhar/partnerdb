@@ -23,6 +23,7 @@ class Picker extends Component {
                 <TextField
                     id="date"
                     onChange={dateChange}
+                    name={label}
                     type="date"
                     value={date}
                     style={{ color: 'white' }}

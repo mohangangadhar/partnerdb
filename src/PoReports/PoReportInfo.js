@@ -47,7 +47,8 @@ const PoReportInfo = () => {
         actualTotal: 0,
         poType: "",
         poStatus: "",
-        comments: ""
+        comments: "",
+        poReceivedDate: ""
     });
     const [editedRowData, setEditedRowData] = useState([]);
 
@@ -93,8 +94,8 @@ const PoReportInfo = () => {
             actualTotal: row.actualTotal,
             poType: row.poType,
             poStatus: row.poStatus,
-            comments: row.comments
-
+            comments: row.comments,
+            poReceivedDate: row.poReceivedDate
         });
         setEditContactId(row.id);
     }
