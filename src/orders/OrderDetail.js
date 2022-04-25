@@ -518,7 +518,7 @@ function OrderDetail(props) {
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell colSpan={4}>
-                                                    <FormLabel style={{ color: 'wheat' }}> Address : {userAddress.formattedAddress} </FormLabel>
+                                                    <FormLabel style={{ color: 'wheat' }}> Address : {userAddress.formattedAddress} {userAddress.address1} {userAddress.address2} </FormLabel>
                                                 </TableCell>
                                                 <TableCell colSpan={2}>
                                                     <FormLabel style={{ color: 'wheat' }}> Delivery Fee : {order.deliveryFee} </FormLabel>
