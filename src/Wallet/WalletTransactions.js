@@ -10,7 +10,7 @@ function WalletTransactions({ walletid, toggle }) {
     const [totalPages, setTotalPages] = useState(0);
     const fetchData = async () => {
         setisLoading(true);
-
+        setWallet([]);
         await fetch(APIURL + `wallet/${walletid}/transaction?size=10&page=${offSet}`).
             then(response => response.json()).
             then(data => {

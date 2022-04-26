@@ -72,7 +72,8 @@ function OrderDetail(props) {
     const [paymentRefData, setPaymentRefData] = useState({
         paymentReference: "",
         paymentReferenceDate: "",
-        actualDeliveryDate: ""
+        actualDeliveryDate: "",
+        deliveryPartner: ""
     });
     const [paymentDate, setPaymentDate] = useState(null);
     const [deliveryDate, setDeliveryDate] = useState(null);
@@ -107,7 +108,8 @@ function OrderDetail(props) {
                 setPaymentRefData({
                     paymentReference: data.order.paymentReference,
                     paymentReferenceDate: data.order.paymentReferenceDate,
-                    actualDeliveryDate: data.order.actualDeliveryDate
+                    actualDeliveryDate: data.order.actualDeliveryDate,
+                    deliveryPartner: data.order.deliveryPartner
                 });
                 setPaymentDate(data.order.paymentReferenceDate);
                 setDeliveryDate(data.order.actualDeliveryDate);
@@ -243,7 +245,8 @@ function OrderDetail(props) {
                     "refundCount": refundCount,
                     "paymentReference": paymentRefData.paymentReference,
                     "paymentReferenceDate": paymentRefData.paymentReferenceDate,
-                    "actualDeliveryDate": paymentRefData.actualDeliveryDate
+                    "actualDeliveryDate": paymentRefData.actualDeliveryDate,
+                    "deliveryPartner": paymentRefData.deliveryPartner
                 };
                 const requestOptions = {
                     method: 'PUT',
@@ -361,7 +364,8 @@ function OrderDetail(props) {
             "refundCount": refundCount + 1,
             "paymentReference": paymentRefData.paymentReference,
             "paymentReferenceDate": paymentRefData.paymentReferenceDate,
-            "actualDeliveryDate": paymentRefData.actualDeliveryDate
+            "actualDeliveryDate": paymentRefData.actualDeliveryDate,
+            "deliveryPartner": paymentRefData.deliveryPartner
         };
         const requestOptions = {
             method: 'PUT',
@@ -407,7 +411,8 @@ function OrderDetail(props) {
             "refundCount": refundCount,
             "paymentReference": paymentRefData.paymentReference,
             "paymentReferenceDate": paymentRefData.paymentReferenceDate,
-            "actualDeliveryDate": paymentRefData.actualDeliveryDate
+            "actualDeliveryDate": paymentRefData.actualDeliveryDate,
+            "deliveryPartner": paymentRefData.deliveryPartner
         };
         const requestOptions = {
             method: 'PUT',
@@ -634,6 +639,24 @@ function OrderDetail(props) {
                                 }
                                 ))
                                 } label={"Delivered Date"} /> : <h3 style={{ color: "white" }}>Actual Delivered Date : {paymentRefData.actualDeliveryDate}</h3>}
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <TextField label="Add Delivery Partner" value={paymentRefData.deliveryPartner}
+                                    onChange={(ev) => setPaymentRefData((prev) => ({
+                                        ...prev,
+                                        deliveryPartner: ev.target.value
+                                    }
+                                    ))
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
                             </TableCell>
                             <TableCell>
                                 <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
