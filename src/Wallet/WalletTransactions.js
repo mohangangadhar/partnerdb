@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { TableContainer, Table, TableCell, TableHead, TableBody, TableRow, CircularProgress } from '@material-ui/core'
+import Pagination from '@material-ui/lab/Pagination';
+import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { APIURL } from '../constants/Constants';
 function WalletTransactions({ walletid, toggle }) {
     const [wallet, setWallet] = useState([]);
     const [isLoading, setisLoading] = useState(false);
+    const [offSet, setOffSet] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const fetchData = async () => {
         setisLoading(true);
-        await fetch(`https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/wallet/${walletid}/transaction`).
+
+        await fetch(APIURL + `wallet/${walletid}/transaction?size=10&page=${offSet}`).
             then(response => response.json()).
             then(data => {
                 setWallet(data.content);
+                setTotalPages(data.totalPages);
                 setisLoading(false);
+
             }).catch(error => alert(error));
         setisLoading(false);
     };
     useEffect(() => {
         fetchData();
-    }, [toggle]);
+    }, [toggle, offSet]);
 
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
@@ -52,6 +60,13 @@ function WalletTransactions({ walletid, toggle }) {
                     </Table>
                 </TableContainer>
             }
+            <Box m={2} />
+            <Grid container justifyContent={"center"}>
+                <Pagination variant={"text"} color={"primary"}
+                    value={offSet + 1}
+                    count={totalPages}
+                    onChange={(event, value) => setOffSet(value - 1)} />
+            </Grid>
         </div>
     )
 }

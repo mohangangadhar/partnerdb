@@ -79,7 +79,6 @@ const SeasonalTest = (props) => {
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
-
                 setTotalPages(data.totalPages);
                 setCount(data.totalElements);
                 setisLoading(false);

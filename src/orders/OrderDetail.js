@@ -298,7 +298,7 @@ function OrderDetail(props) {
     //UPLOAD WALLET
     const uploadWalletBackend = async (refundTotal, type) => {
         setisApiLoading(true);
-        console.log(refundTotal);
+        // console.log(refundTotal);
         await fetch("https://cors-everywhere.herokuapp.com/http://ec2-3-109-25-149.ap-south-1.compute.amazonaws.com:8080/" + '/wallet/' + userData.mobileNumber)
             .then(res => res.json())
             .then((data) => {
