@@ -54,7 +54,8 @@ function OrderDetail(props) {
     });
     const [paymentStatus, setPaymentStatus] = useState({
         status: "",
-        pendingAmount: ""
+        pendingAmount: "",
+        razorpayPaymentId: ""
     });
     const [isApiLoading, setisApiLoading] = useState(false);
     const [dialogData, setDialogData] = useState({
@@ -131,13 +132,15 @@ function OrderDetail(props) {
             if (data.status == 500) {
                 setPaymentStatus({
                     status: "pending",
-                    pendingAmount: "TBC"
+                    pendingAmount: "TBC",
+                    razorpayPaymentId: "no razorpay id"
                 })
             }
             else {
                 setPaymentStatus({
                     status: data.status,
-                    pendingAmount: data.pendingAmount
+                    pendingAmount: data.pendingAmount,
+                    razorpayPaymentId: data.razorpayPaymentId
                 })
             }
 
@@ -513,7 +516,7 @@ function OrderDetail(props) {
                                                     <FormLabel style={{ color: 'wheat' }}> Email : {userData.email} </FormLabel>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <FormLabel style={{ color: 'wheat' }}> Payment Method: {paymentType.method} , Status : {paymentStatus.status} , Pending Amount : {paymentStatus.pendingAmount} </FormLabel>
+                                                    <FormLabel style={{ color: 'wheat' }}> Payment Method: {paymentType.method} , Status : {paymentStatus.status} , Pending Amount : {paymentStatus.pendingAmount} [{paymentStatus.razorpayPaymentId}] </FormLabel>
                                                 </TableCell>
                                                 <TableCell>
                                                     <Button variant="contained" color="primary" onClick={(ev) => handleClickOpen(ev)}>
