@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="629e711f-e4c0-4f1c-906b-2eaa2d4720d4" name="Changes" comment="Code Refactor">
+      <change afterPath="$PROJECT_DIR$/src/expenses/EditableRow.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/expenses/ReadOnlyRow.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PoReports/PoReports.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/PoReports/PoReports.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/constants/Constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/Constants.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/users/UserList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/UserList.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,13 +54,15 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/users" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/expenses" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/expenses" />
       <recent name="$PROJECT_DIR$/src/users" />
       <recent name="$PROJECT_DIR$/src" />
     </key>

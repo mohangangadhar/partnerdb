@@ -79,6 +79,11 @@ export const supportTabData = [
     "Id", "Name", "Mobile Number", "Email", "Message", "Created At", "Status", "Resolution",
     "Category", "Resolver", "Action"
 ];
+
+export const expenseTabData = [
+"Id", "Expense Id", "Name", "Amount", "Category", "Sub Category", "Payment Status", "Reimbursement Status", "Raised By",
+    "Raised Date", "Event date", "Vendor/ Delivery Partner name", "Cleared By", "Cleared Date", "Actions"
+]
 export const poReportInfoTabData = [
     "Id", "Po Number", "Primary Supplier", "PO Date", "Active", "PO Total", "Status",
     "Received Date", "Actual Total", "Payment Status", "Created At",
