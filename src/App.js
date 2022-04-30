@@ -60,6 +60,7 @@ import SupplyPlanning from './SupplyPlanning/SupplyPlanning';
 import PoReports from './PoReports/PoReports';
 import PoReportInfo from './PoReports/PoReportInfo';
 import SeasonalTest from './orders/SeasonalTest';
+import Expenses from './expenses/Expenses';
 
 const drawerWidth = 240;
 
@@ -226,6 +227,18 @@ export default function MiniDrawer() {
                                         id: "5"
                                     }}><ListItemText primary="Support" /></Link>
                                 </ListItem>
+                                <ListItem button key="Expenses">
+
+                                    <Link to={{
+                                        pathname: '/app/expenses',
+                                        id: "5"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Expenses</h6></Link>
+
+                                    <Link to={{
+                                        pathname: '/app/expenses',
+                                        id: "5"
+                                    }}><ListItemText primary="Expenses" /></Link>
+                                </ListItem>
                                 <ListItem style={{ color: "wheat" }} button key="Product">
 
                                     <Link to={{
@@ -377,6 +390,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
+                                    <Route path="/app/expenses" exact component={Expenses} />
                                     <Route path="/app/:poNumber/poreports" exact component={PoReports} />
                                     <Route path="/app/poreportsinfo" exact component={PoReportInfo} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
