@@ -61,6 +61,7 @@ import PoReports from './PoReports/PoReports';
 import PoReportInfo from './PoReports/PoReportInfo';
 import SeasonalTest from './orders/SeasonalTest';
 import Expenses from './expenses/Expenses';
+import Mango from "./mango/mango";
 
 const drawerWidth = 240;
 
@@ -227,6 +228,18 @@ export default function MiniDrawer() {
                                         id: "5"
                                     }}><ListItemText primary="Support" /></Link>
                                 </ListItem>
+                                <ListItem button key="Mango">
+
+                                    <Link to={{
+                                        pathname: '/app/mango',
+                                        id: "5"
+                                    }}><h4 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Mango</h4></Link>
+
+                                    <Link to={{
+                                        pathname: '/app/mango',
+                                        id: "5"
+                                    }}><ListItemText primary="Mango" /></Link>
+                                </ListItem>
                                 <ListItem button key="Expenses">
 
                                     <Link to={{
@@ -391,6 +404,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/expenses" exact component={Expenses} />
+                                    <Route path="/app/mango" exact component={Mango} />
                                     <Route path="/app/:poNumber/poreports" exact component={PoReports} />
                                     <Route path="/app/poreportsinfo" exact component={PoReportInfo} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />
