@@ -224,7 +224,6 @@ function ProductList(props) {
             urlString = props.match.params.vendorId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ? "export/admin/productexport/" : "export/" + props.match.params.vendorId + "/productexport/";
         }
 
-
         fetch(APIURL + urlString, RequestOptions)
             .then(response => {
                 const filename = response.headers.get('Content-Disposition').split('filename=')[1];

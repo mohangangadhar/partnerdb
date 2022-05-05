@@ -174,6 +174,7 @@ function OrderDetail(props) {
         let orderdata = {
             "status": val,
         };
+        setisLoading(true);
         let apiUrl;
         apiUrl = `https://admin.ityme.in/api/admin/orders/${props.location.id}`;
 
@@ -190,9 +191,10 @@ function OrderDetail(props) {
             .then(data => {
                 setisLoading(false);
                 NotificationManager.success('Updated Status', 'Successful!', 1000);
+                setisLoading(false);
             }
-            ).then(history.goBack());
-
+            ).catch(err => alert("could not update due to" + err.message));
+        setisLoading(false);
     }
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
@@ -456,7 +458,7 @@ function OrderDetail(props) {
                                             <FormLabel style={{ color: 'wheat' }}>Date: {new Date(Date.parse(order.createdAt + " UTC")).toLocaleString()} </FormLabel>
                                         </TableCell>
                                         <TableCell>
-                                            <FormLabel style={{ color: 'wheat' }}>Current Status: {order.deliveryStatus} </FormLabel>
+                                            <FormLabel style={{ color: 'wheat' }}> Current Status: <span style={{ fontSize: "25px" }}>{order.deliveryStatus} </span> </FormLabel>
                                         </TableCell>
                                         <TableCell>
                                             {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" ?

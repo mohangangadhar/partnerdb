@@ -21,7 +21,7 @@ const SearchOrdersByUserName = (props) => {
                     color: "white",
                 },
                 endAdornment: (
-                    <IconButton>
+                    <IconButton style={{ color: '#fff' }}>
                         <SearchOutlined
                             onClick={(event) => handleSearch(event)}
                         />

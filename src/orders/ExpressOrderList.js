@@ -19,7 +19,7 @@ import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
 import setstatus from '../Actions';
 import SearchOrders from './SearchOrders';
-import { APIURL } from '../constants/Constants';
+import { APIURL, GetRequestOptions } from '../constants/Constants';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -108,12 +108,8 @@ function ExpressOrderList(props) {
                 ? `export/status/${statusType}`
                 : `export/" + props.match.params.vendorId + "/status/${statusType}`
         }
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        };
 
-        fetch(APIURL + urlString, requestOptions)
+        fetch(APIURL + urlString, GetRequestOptions)
             .then(response => {
                 const filename = response.headers.get('Content-Disposition').split('filename=')[1];
                 response.blob().then(blob => {
@@ -140,12 +136,9 @@ function ExpressOrderList(props) {
             setQueryLoad(true);
             setisLoading(true);
             setSearchNotFound(false);
-            const requestOptions = {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            };
 
-            fetch(APIURL + 'order/' + query, requestOptions)
+
+            fetch(APIURL + 'order/' + query, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setSearchOrder(data);

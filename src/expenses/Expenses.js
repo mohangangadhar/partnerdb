@@ -182,15 +182,7 @@ const Expenses = () => {
             ).catch(err => console.log(err))
     }
     return <div>
-        {isApiLoading && <b style={{
-            position: 'fixed',
-            left: '-20',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            width: '40%',
-            backgroundColor: 'red'
-        }}>Updating...Do not go to any other Page</b>}
+
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                 Expenses

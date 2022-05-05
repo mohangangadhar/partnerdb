@@ -11,7 +11,7 @@ import { fetchZoneList } from '../Actions';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Grid } from "@material-ui/core";
-
+import Button from '@mui/material/Button';
 import { auth } from "../firebase";
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -129,29 +129,7 @@ const SeasonalTest = (props) => {
         }
 
     }
-    const downloadCsvFile = async (statusType) => {
-        setisDownloading(true);
-        let urlString;
-        if (props.match.params.hasOwnProperty("vendorId")) {
-            urlString = props.match.params.vendorId === "order"
-                ? `export/status/${statusType}`
-                : `export/" + props.match.params.vendorId + "/status/${statusType}`
-        }
 
-
-        fetch(APIURL + urlString, GetRequestOptions)
-            .then(response => {
-                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
-                response.blob().then(blob => {
-                    let url = window.URL.createObjectURL(blob);
-                    let a = document.createElement('a');
-                    a.href = url
-                    a.download = filename;
-                    a.click();
-                    setisDownloading(false);
-                }).catch(err => setisDownloading(false));
-            });
-    }
     const detail = (val) => {
         let jsonVal = JSON.parse(val)
         return jsonVal.hasOwnProperty('en') ? jsonVal.en : jsonVal;
@@ -284,7 +262,7 @@ const SeasonalTest = (props) => {
             receivedData(0, "all");
             return;
         } else if (event.target.value.length >= 1) {
-            setUserQueryLoad(true);
+            // setUserQueryLoad(true);
             //            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
@@ -313,7 +291,7 @@ const SeasonalTest = (props) => {
             receivedData(0, "all");
             return;
         } else if (event.target.value.length >= 1) {
-            setUserQueryLoad(true);
+            // setUserQueryLoad(true);
             //            setisLoading(true);
             setSearchOrder({});
             setUserSearchData([]);
@@ -383,21 +361,12 @@ const SeasonalTest = (props) => {
         //     });
         //        setisLoading(false);
     }
-
-    const handleSubmit = async () => {
-        console.log(status);
-        console.log(selectedZoneId);
-        console.log(selectedDeliveryWeek);
-        console.log(selectedProduct);
-
-        //        setisLoading(true);
-
-        let urlString = "order/filter/seasonal?";
+    const filterUrl = () => {
+        // let urlString = "order/filter/seasonal?";
         let statusUri;
         let zoneUri;
         let productUri;
         let deliveryWeekUri;
-
         statusUri = status !== "" ? "status=" + status : "";
 
         if (statusUri == "") {
@@ -417,11 +386,21 @@ const SeasonalTest = (props) => {
         } else {
             deliveryWeekUri = selectedProduct !== "" ? "&product=" + JSON.parse(selectedProduct).en : "";
         }
+        let arr = [statusUri, zoneUri, productUri, deliveryWeekUri];
+        return arr;
 
-        console.log(statusUri + zoneUri + productUri + deliveryWeekUri);
+    }
+    const handleSubmit = async () => {
+
+
+        setisLoading(true);
+
+        const urlParams = filterUrl();
+
+        console.log(urlParams);
 
         setisLoading(true)
-        await fetch(APIURL + urlString + statusUri + zoneUri + productUri + deliveryWeekUri, GetRequestOptions)
+        await fetch(APIURL + "order/filter/seasonal?" + urlParams[0] + urlParams[1] + urlParams[2] + urlParams[3], GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data);
@@ -438,7 +417,23 @@ const SeasonalTest = (props) => {
         setisLoading(false);
 
     }
+    const downloadCsvFile = async () => {
+        setisDownloading(true);
 
+        const urlParams = filterUrl();
+        await fetch(APIURL + "export/filter/seasonal?" + urlParams[0] + urlParams[1] + urlParams[2] + urlParams[3], GetRequestOptions)
+            .then(response => {
+                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+                response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url
+                    a.download = filename;
+                    a.click();
+                    setisDownloading(false);
+                }).catch(err => setisDownloading(false));
+            });
+    }
     return (
         <div>
             {isDownloading && <b style={{
@@ -450,16 +445,19 @@ const SeasonalTest = (props) => {
                 width: '40%',
                 backgroundColor: 'red'
             }}>Downloading Orders</b>}
-            <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'grey' }}>Seasonal Orders <span
-                style={{ color: 'white' }}>[{count}]</span></h2></center>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'grey' }}>Seasonal Orders <span
+                    style={{ color: 'white' }}>[{count}]</span></h2>
+                <Button variant='contained' color="success" onClick={() => downloadCsvFile()}
+                >Download</Button>
+
+            </div>
             <div>
                 {queryLoad || userQueryLoad ?
                     <h4 style={{ color: 'white' }}>Clear the Search & Press Search Icon to see Options...</h4>
                     : ""
                 }
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
-                        handleSearch={handleSearch} label="Search By Order ID" />
                     <DropdownForStatus status={status} setStatus={setStatus} setDeliveryStatus={setDeliveryStatus}
                         label="Select Status" />
                     {zonelist.zoneList.length > 0 &&
@@ -471,13 +469,17 @@ const SeasonalTest = (props) => {
                     {seasonalProduct.length > 0 &&
                         <Dropdown data={seasonalProduct} type="Product" label="Search Dispatch Week"
                             handleGetPincodeData={handleGetProductData} />}
-                    <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
-                        handleSearch={handleSearchByUserName}
-                        label="Search By User Name" />
+
                     <button onClick={handleSubmit}> Search</button>
                 </div>
             </div>
-
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <SearchOrders setSearchQuery={setSearchQuery} searchquery={searchquery}
+                    handleSearch={handleSearch} label="Search By Order ID" />
+                <SearchOrdersByUserName setSearchQuery={setUserName} searchquery={userName}
+                    handleSearch={handleSearchByUserName}
+                    label="Search By User Name" />
+            </div>
             <Grid container justifyContent="space-between" component={Paper}>
                 {!queryLoad && !userQueryLoad && !filterQueryLoad && <Pagination variant={"text"} color={"primary"}
                     count={totalPages}
@@ -487,9 +489,7 @@ const SeasonalTest = (props) => {
 
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
-
                     <TableTitlesSeasonal auth={auth} />
-
                     {queryLoad ?
                         <>
                             {searchOrder.order != null && Object.keys(searchOrder.order).length > 2 && !(isLoading) ?
