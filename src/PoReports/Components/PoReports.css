@@ -1,0 +1,9 @@
+.newPostForm > input[type="file"]::-webkit-file-upload-button {
+    background-color: rgb(38, 63, 173);
+    color: white;
+    padding: 1vmax;
+    border-radius: 30px;
+    border: none;
+    font: 100 1.2rem "Roboto", sans-serif;
+    margin:5px
+  }

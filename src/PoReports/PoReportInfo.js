@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-
+import * as xlsx from 'xlsx';
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -20,6 +20,8 @@ import ReadOnlyRow from "./Components/ReadOnlyPoReportInfo";
 import GetDate from '../components/GetDate';
 import AddPoData from './Components/AddPoData';
 import Picker from '../components/Picker';
+import Modal from './Components/ImportPoModal';
+import ImportPoModal from './Components/ImportPoModal';
 
 
 const PoReportInfo = () => {
@@ -37,8 +39,10 @@ const PoReportInfo = () => {
     const [filterInStock, setFilterInStock] = useState("");
     const [isLoading, setisLoading] = useState(false);
     const [searchNotFound, setSearchNotFound] = useState(false);
-
-
+    const [importData, setImportData] = useState([]);
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const [editContactId, setEditContactId] = useState(null);
     const [addFormData, setAddFormData] = useState({
         id: 0,
@@ -170,30 +174,39 @@ const PoReportInfo = () => {
         newFormData["updatedAt"] = GetDate();
         setPoData(newFormData);
     }
-    const getTotalPay = () => {
+    const getTotalPay = (finalData) => {
         let finalSum = 0;
-        totalPoData.map(data => (
+        finalData.map(data => (
             finalSum += data.totalPay * data.orderedQty
         ))
         console.log(finalSum);
         return finalSum;
     }
-    const sendTotalPoData = async (checkList) => {
+    const sendTotalPoData = async (checkList, type) => {
         let finalList = [];
+        console.log(checkList);
         setisApiLoading(true);
+        let primarySupplier = inputPrimarySupplier;
+
+        let finalData = totalPoData;
+        if (type == "import" && checkList && checkList.length > 1) {
+            primarySupplier = checkList[0].primarySupplier;
+
+            finalData = checkList;
+        }
 
         let poId = getRandom();
 
         checkList.map((row) =>
 
             finalList.push({
-                "skuUom": row.skuUom,
+                "skuUom": null,
                 "staginArea": "nm",
                 "skuCount": 0,
                 "orderIdCount": 0,
                 "totalQtyReq": "",
                 "suggestedQty": 0,
-                "primarySupplier": inputPrimarySupplier,
+                "primarySupplier": primarySupplier,
                 "orderedQty": row.orderedQty,
                 "orderedUom": row.orderedUom,
                 "productName": row.productName,
@@ -230,8 +243,8 @@ const PoReportInfo = () => {
                     "poType": "Manual",
                     "poStatus": "New",
                     "actualTotal": 0,
-                    "poTotal": getTotalPay(),
-                    "primarySupplier": inputPrimarySupplier,
+                    "poTotal": getTotalPay(finalData),
+                    "primarySupplier": primarySupplier,
                     "poReceivedDate": null
                 }
                 const requestOptionsz = {
@@ -245,9 +258,28 @@ const PoReportInfo = () => {
                     setTotalPoData([]);
                     setisApiLoading(false);
                     receivedData(offSet);
+                    handleClose();
                 }).catch(err => alert(err))
                 setisApiLoading(false);
             }).catch(err => console.log(err));
+    }
+    const readUploadFile = (e) => {
+        e.preventDefault();
+        if (e.target.files) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = e.target.result;
+                const workbook = xlsx.read(data, { type: "array" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const json = xlsx.utils.sheet_to_json(worksheet);
+
+                console.log(json);
+                setImportData(json);
+            };
+            reader.readAsArrayBuffer(e.target.files[0]);
+        }
+
     }
     return (
         <div>
@@ -285,27 +317,34 @@ const PoReportInfo = () => {
 
             }
 
+            <div style={{ width: '60%', display: 'flex' }}>
+                {toggle ?
+                    <>
 
-            {toggle ?
-                <>
+                        {totalPoData.length == 0 &&
+                            <div style={{ display: 'flex' }}>
+                                <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />
+                                <Picker color="white" dateChange={(e) => setPoCreatedDate(e.target.value)} label={"Po Created Date"} />
 
-                    {totalPoData.length == 0 &&
-                        <div style={{ display: 'flex' }}>
-                            <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />
-                            <Picker color="white" dateChange={(e) => setPoCreatedDate(e.target.value)} label={"Po Created Date"} />
+                            </div>
+                        }
 
-                        </div>
-                    }
-
-                    <Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 && poCreatedDate.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
-                    {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData)}>Save All</Button>}
-                </>
-                :
-                <div>
-                    <h3 style={{ color: 'white' }}>{inputPrimarySupplier} | PO Created Date : {poCreatedDate}</h3>
-                    <AddPoData setInputPrimarySupplier={setInputPrimarySupplier} setToggle={setToggle} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
+                        <Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 && poCreatedDate.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
+                        {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData, "")}>Save All</Button>}
+                    </>
+                    :
+                    <div>
+                        <h3 style={{ color: 'white' }}>{inputPrimarySupplier} | PO Created Date : {poCreatedDate}</h3>
+                        <AddPoData setInputPrimarySupplier={setInputPrimarySupplier} setToggle={setToggle} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
+                    </div>
+                }
+                <div style={{ color: 'white', display: 'flex', marginLeft: "40px" }}>
+                    <h3 >Import PO : </h3>
+                    <Button variant="contained" color="success" onClick={(event) => handleOpen()}>Import File</Button>
                 </div>
-            }
+            </div>
+            <ImportPoModal open={open} setPoCreatedDate={setPoCreatedDate} sendTotalPoData={sendTotalPoData} importData={importData}
+                readUploadFile={readUploadFile} handleClose={handleClose} />
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableTitles data={poReportInfoTabData} />
