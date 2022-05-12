@@ -49,7 +49,7 @@ function UserList(props) {
             headers: { 'Content-Type': 'application/json' },
         };
 
-        await fetch(process.env.REACT_APP_APIURL + "user-wallets/page-query?" + urlParams, requestOptions)
+        await fetch(APIURL + "user-wallets/page-query?" + urlParams, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setRows(data.content);
@@ -87,7 +87,7 @@ function UserList(props) {
             setQueryLoad(true);
             setisLoading(true);
 
-            fetch(process.env.REACT_APP_APIURL + "user/" + query, GetRequestOptions)
+            fetch(APIURL + "user/" + query, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setSearchOrder(data);
@@ -112,7 +112,7 @@ function UserList(props) {
             setUserQueryLoad(true);
             setisLoading(true);
 
-            fetch(process.env.REACT_APP_APIURL + "user/query/" + query, GetRequestOptions)
+            fetch(APIURL + "user/query/" + query, GetRequestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setUserSearchData(data)
@@ -127,7 +127,7 @@ function UserList(props) {
     }
     return (
         <div>
-            
+
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                     Users
