@@ -177,7 +177,6 @@ function OrderDetail(props) {
         setisLoading(true);
         let apiUrl;
         apiUrl = `https://admin.ityme.in/api/admin/orders/${props.location.id}`;
-
         const requestOptions = {
             method: 'PUT',
             headers: {
@@ -189,11 +188,36 @@ function OrderDetail(props) {
         await fetch(apiUrl, requestOptions)
             .then(response => response.json())
             .then(data => {
-                setisLoading(false);
-                NotificationManager.success('Updated Status', 'Successful!', 1000);
+
+                let updateBody = {
+                    "id": props.location.id,
+                    "status": val,
+                    "comments": comment,
+                    "refundCount": refundCount,
+                    "paymentReference": paymentRefData.paymentReference,
+                    "paymentReferenceDate": paymentRefData.paymentReferenceDate,
+                    "actualDeliveryDate": paymentRefData.actualDeliveryDate,
+                    "deliveryPartner": paymentRefData.deliveryPartner,
+                    "feedback": editFeedback
+                };
+                const requestOptions = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updateBody)
+                };
+
+                fetch(APIURL + "order/status", requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        getData();
+                        NotificationManager.success('Updated Status', 'Successful!', 1000);
+                    }
+                    ).catch(err => console.log(err.message));
                 setisLoading(false);
             }
-            ).catch(err => alert("could not update due to" + err.message));
+            ).catch(err => alert("come back to this page & check" + err.message));
         setisLoading(false);
     }
     const detail = (val) => {

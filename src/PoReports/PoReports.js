@@ -161,7 +161,7 @@ function PoReports(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(supportData)
         };
-        await fetch("http://127.0.0.1:8080/" + urlString, requestOptionsForUpdate)
+        await fetch(APIURL + urlString, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);

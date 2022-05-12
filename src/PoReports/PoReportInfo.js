@@ -65,7 +65,7 @@ const PoReportInfo = () => {
     const receivedData = async (val) => {
         setSearchNotFound(false);
 
-        await fetch("http://127.0.0.1:8080/" + "po-report-info/page-query?size=30&page=" + val, GetRequestOptions)
+        await fetch(APIURL + "po-report-info/page-query?size=30&page=" + val, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data.content);
@@ -137,7 +137,7 @@ const PoReportInfo = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(poData)
         };
-        await fetch("http://127.0.0.1:8080/" + 'po-report-info/' + row.id, requestOptionsForUpdate)
+        await fetch(APIURL + 'po-report-info/' + row.id, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);
@@ -272,7 +272,7 @@ const PoReportInfo = () => {
                     },
                     body: JSON.stringify(reqBody)
                 };
-                fetch("http://127.0.0.1:8080/" + "po-report-info", requestOptionsz).then(response => {
+                fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
                     setisApiLoading(false);
                     receivedData(offSet);
