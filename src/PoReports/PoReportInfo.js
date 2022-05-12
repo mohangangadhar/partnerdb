@@ -52,7 +52,12 @@ const PoReportInfo = () => {
         poType: "",
         poStatus: "",
         comments: "",
-        poReceivedDate: ""
+        poReceivedDate: "",
+        primarySupplier: "",
+        poTotal: 0,
+        invoiceNumber: 0,
+        paymentDate: "",
+        paymentRefNumber: ""
     });
     const [editedRowData, setEditedRowData] = useState([]);
 
@@ -60,7 +65,7 @@ const PoReportInfo = () => {
     const receivedData = async (val) => {
         setSearchNotFound(false);
 
-        await fetch(APIURL + "po-report-info/page-query?size=30&page=" + val, GetRequestOptions)
+        await fetch("http://127.0.0.1:8080/" + "po-report-info/page-query?size=30&page=" + val, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data.content);
@@ -99,7 +104,12 @@ const PoReportInfo = () => {
             poType: row.poType,
             poStatus: row.poStatus,
             comments: row.comments,
-            poReceivedDate: row.poReceivedDate
+            poReceivedDate: row.poReceivedDate,
+            primarySupplier: row.primarySupplier,
+            poTotal: row.poTotal,
+            invoiceNumber: row.invoiceNumber,
+            paymentDate: row.paymentDate,
+            paymentRefNumber: row.paymentRefNumber
         });
         setEditContactId(row.id);
     }
@@ -112,7 +122,12 @@ const PoReportInfo = () => {
             "poType": tempFormData.poType == null ? "" : tempFormData.poType,
             "poStatus": tempFormData.poStatus == null ? "" : tempFormData.poStatus,
             "comments": tempFormData.comments == null ? "" : tempFormData.comments,
-            "poReceivedDate": tempFormData.poReceivedDate == null ? "" : tempFormData.poReceivedDate
+            "poReceivedDate": tempFormData.poReceivedDate == null ? "" : tempFormData.poReceivedDate,
+            "primarySupplier": tempFormData.primarySupplier,
+            "poTotal": tempFormData.poTotal,
+            "paymentRefNumber": tempFormData.paymentRefNumber,
+            "paymentDate": tempFormData.paymentDate,
+            "invoiceNumber": tempFormData.invoiceNumber
         };
         setisApiLoading(true);
 
@@ -122,7 +137,7 @@ const PoReportInfo = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(poData)
         };
-        await fetch(APIURL + 'po-report-info/' + row.id, requestOptionsForUpdate)
+        await fetch("http://127.0.0.1:8080/" + 'po-report-info/' + row.id, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);
@@ -143,6 +158,11 @@ const PoReportInfo = () => {
         xyz.poStatus = tempFormData.poStatus;
         xyz.comments = tempFormData.comments;
         xyz.poReceivedDate = tempFormData.poReceivedDate;
+        xyz.primarySupplier = tempFormData.primarySupplier;
+        xyz.poTotal = tempFormData.poTotal;
+        xyz.paymentDate = tempFormData.paymentDate;
+        xyz.paymentRefNumber = tempFormData.paymentRefNumber;
+        xyz.invoiceNumber = tempFormData.invoiceNumber;
         for (let i = 0; i < editedRowData.length; i++) {
             if (row.id == editedRowData[i].id) {
                 ind = i;
@@ -179,8 +199,7 @@ const PoReportInfo = () => {
         finalData.map(data => (
             finalSum += data.totalPay * data.orderedQty
         ))
-        console.log(finalSum);
-        return finalSum;
+        return Math.round(finalSum * 100) / 100;
     }
     const sendTotalPoData = async (checkList, type) => {
         let finalList = [];
@@ -198,7 +217,6 @@ const PoReportInfo = () => {
         let poId = getRandom();
 
         checkList.map((row) =>
-
             finalList.push({
                 "skuUom": null,
                 "staginArea": "nm",
@@ -242,7 +260,7 @@ const PoReportInfo = () => {
                     "poCreatedDate": poCreatedDate,
                     "poType": "Manual",
                     "poStatus": "New",
-                    "actualTotal": 0,
+                    "actualTotal": getTotalPay(finalData),
                     "poTotal": getTotalPay(finalData),
                     "primarySupplier": primarySupplier,
                     "poReceivedDate": null
@@ -254,7 +272,7 @@ const PoReportInfo = () => {
                     },
                     body: JSON.stringify(reqBody)
                 };
-                fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
+                fetch("http://127.0.0.1:8080/" + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
                     setisApiLoading(false);
                     receivedData(offSet);
@@ -317,7 +335,7 @@ const PoReportInfo = () => {
 
             }
 
-            <div style={{ width: '60%', display: 'flex' }}>
+            <div style={{ display: 'flex' }}>
                 {toggle ?
                     <>
 
@@ -338,7 +356,8 @@ const PoReportInfo = () => {
                         <AddPoData setInputPrimarySupplier={setInputPrimarySupplier} setToggle={setToggle} poData={podata} setPoData={setPoData} handleAddPoData={handleAddPoData} handlePoDataChange={handlePoDataChange} />
                     </div>
                 }
-                <div style={{ color: 'white', display: 'flex', marginLeft: "40px" }}>
+                <Box m={2} />
+                <div style={{ color: 'white', marginLeft: '20px' }}>
                     <h3 >Import PO : </h3>
                     <Button variant="contained" color="success" onClick={(event) => handleOpen()}>Import File</Button>
                 </div>

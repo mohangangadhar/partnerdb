@@ -25,12 +25,15 @@ const EditableRow = ({
 
 
             <TableCell align="center" >{row.skuCount}</TableCell>
-            <TableCell align="center" >{row.productName}</TableCell>
+            <TableCell align="center">
+                <input type="text" placeholder="Product Name" name="productName" value={addFormData.productName} onChange={handleEditFormChange} />
+            </TableCell>
             <TableCell >{row.skuUom}</TableCell>
             <TableCell align="center">{row.orderIdCount}</TableCell>
             <TableCell align="center">{row.totalQtyReq}</TableCell>
-
-            <TableCell align="center">{row.orderedQty}</TableCell>
+            <TableCell align="center">
+                <input type="text" placeholder="Ordered Qty" name="orderedQty" value={addFormData.orderedQty} onChange={handleEditFormChange} />
+            </TableCell>
             <TableCell align="center">{row.orderedUom}</TableCell>
             <TableCell align="center">
                 <textarea placeholder="Received Quantity" name="receivedQty" value={addFormData.receivedQty} cols="20" onChange={handleEditFormChange}></textarea>

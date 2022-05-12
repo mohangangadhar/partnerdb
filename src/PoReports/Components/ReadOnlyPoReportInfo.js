@@ -36,7 +36,9 @@ const ReadOnlyPoReportInfo = ({
 
 
             <TableCell align="center">{row.comments}</TableCell>
-
+            <TableCell align="center">{row.paymentRefNumber}</TableCell>
+            <TableCell align="center">{row.paymentDate}</TableCell>
+            <TableCell align="center">{row.invoiceNumber}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row)}>Edit</Button></TableCell>
         </TableRow>
     );

@@ -18,13 +18,16 @@ const EditablePoReportInfo = ({
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
             <TableCell align="center" >{row.poReportId}</TableCell>
-            <TableCell align="center" >{row.primarySupplier}</TableCell>
+            <TableCell align="center">
+                <input type="text" placeholder="Primary Supplier" name="primarySupplier" value={addFormData.primarySupplier} onChange={handleEditFormChange} />
+            </TableCell>
             <TableCell align="center">{row.poCreatedDate}</TableCell>
             <TableCell align="center">
                 <input type="text" placeholder="Active?" name="active" value={addFormData.active} onChange={handleEditFormChange} />
             </TableCell>
-
-            <TableCell align="center">{row.poTotal}</TableCell>
+            <TableCell align="center">
+                <input type="text" placeholder="Po Total" name="poTotal" value={addFormData.poTotal} onChange={handleEditFormChange} />
+            </TableCell>
             <TableCell align="center">
                 <select style={{
                     padding: 5,
@@ -70,6 +73,15 @@ const EditablePoReportInfo = ({
 
             <TableCell align="center">
                 <input type="text" placeholder="comments" name="comments" value={addFormData.comments} onChange={handleEditFormChange} />
+            </TableCell>
+            <TableCell align="center">
+                <input type="text" placeholder="payment reference" name="paymentRefNumber" value={addFormData.paymentRefNumber} onChange={handleEditFormChange} />
+            </TableCell>
+            <TableCell align="center">
+                <Picker color="white" date={addFormData.paymentDate} dateChange={handleEditFormChange} label="paymentDate" />
+            </TableCell>
+            <TableCell align="center">
+                <input type="text" placeholder="invoice no" name="invoiceNumber" value={addFormData.invoiceNumber} onChange={handleEditFormChange} />
             </TableCell>
 
             <TableCell align="center"><Button variant="contained" on color="success"
