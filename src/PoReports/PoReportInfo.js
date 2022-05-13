@@ -22,6 +22,7 @@ import AddPoData from './Components/AddPoData';
 import Picker from '../components/Picker';
 import Modal from './Components/ImportPoModal';
 import ImportPoModal from './Components/ImportPoModal';
+import DropDownForPoStatus from './Components/DropDownForPoStatus';
 
 
 const PoReportInfo = () => {
@@ -44,6 +45,8 @@ const PoReportInfo = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [editContactId, setEditContactId] = useState(null);
+    const [poStatus, setPoStatus] = useState("");
+
     const [addFormData, setAddFormData] = useState({
         id: 0,
         active: 0,
@@ -62,10 +65,10 @@ const PoReportInfo = () => {
     const [editedRowData, setEditedRowData] = useState([]);
 
 
-    const receivedData = async (val) => {
+    const receivedData = async (val, query) => {
         setSearchNotFound(false);
-
-        await fetch(APIURL + "po-report-info/page-query?size=30&page=" + val, GetRequestOptions)
+        setisLoading(true);
+        await fetch(APIURL + "po-report-info/" + query + val, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data.content);
@@ -73,13 +76,13 @@ const PoReportInfo = () => {
                 setTotalPages(data.totalPages);
                 setisLoading(false);
                 if (data.content && data.content.length == 0) { setSearchNotFound(true) }
-            });
-
+            }).catch(err => console.log(err.message));
+        setisLoading(false);
     }
     useEffect(() => {
         setisLoading(true);
         setSearchNotFound(false);
-        receivedData(offSet);
+        receivedData(offSet, "page-query?size=30&page=");
     }, [offSet]);
 
 
@@ -174,6 +177,17 @@ const PoReportInfo = () => {
         setisRowLoading(false);
         uploadBackEnd(row, tempFormData);
     }
+    const handleChangePoStatus = async (val) => {
+        console.log(val);
+        setOffSet(0);
+        setPoStatus(val);
+        if (val == "all") {
+            await receivedData(0, "page-query?size=30&page=");
+            return;
+        }
+
+        await receivedData(0, `po-status/${val}?size=30&page=`);
+    }
     const handleAddPoData = async (event, tempData) => {
         setTotalPoData(totalPoData => [...totalPoData, tempData]);
 
@@ -259,7 +273,7 @@ const PoReportInfo = () => {
                     "active": 1,
                     "poCreatedDate": poCreatedDate,
                     "poType": "Manual",
-                    "poStatus": "New",
+                    "poStatus": "new",
                     "actualTotal": getTotalPay(finalData),
                     "poTotal": getTotalPay(finalData),
                     "primarySupplier": primarySupplier,
@@ -337,8 +351,7 @@ const PoReportInfo = () => {
 
             <div style={{ display: 'flex' }}>
                 {toggle ?
-                    <>
-
+                    <div style={{ width: '33%' }}>
                         {totalPoData.length == 0 &&
                             <div style={{ display: 'flex' }}>
                                 <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />
@@ -349,7 +362,7 @@ const PoReportInfo = () => {
 
                         <Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 && poCreatedDate.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
                         {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData, "")}>Save All</Button>}
-                    </>
+                    </div>
                     :
                     <div>
                         <h3 style={{ color: 'white' }}>{inputPrimarySupplier} | PO Created Date : {poCreatedDate}</h3>
@@ -357,43 +370,47 @@ const PoReportInfo = () => {
                     </div>
                 }
                 <Box m={2} />
-                <div style={{ color: 'white', marginLeft: '20px' }}>
+                <div style={{ marginRight: '30px', color: 'white' }}>
                     <h3 >Import PO : </h3>
                     <Button variant="contained" color="success" onClick={(event) => handleOpen()}>Import File</Button>
                 </div>
-            </div>
+                <DropDownForPoStatus poStatus={poStatus} handleChangePoStatus={handleChangePoStatus} />
+            </div >
             <ImportPoModal open={open} setPoCreatedDate={setPoCreatedDate} sendTotalPoData={sendTotalPoData} importData={importData}
                 readUploadFile={readUploadFile} handleClose={handleClose} />
             <TableContainer component={Paper}>
-                <Table className="table" aria-label="spanning table">
-                    <TableTitles data={poReportInfoTabData} />
-                    {editedRowData.length > 0 && !(isLoading) ?
-                        <TableBody>
-                            {editedRowData.map((row, index) => (
-                                <Fragment>
-                                    {editContactId === row.id ?
+                {isLoading ? <CircularProgress /> :
+                    <Table className="table" aria-label="spanning table">
+                        <TableTitles data={poReportInfoTabData} />
+                        {editedRowData.length > 0 && !(isLoading) ?
+                            <TableBody>
+                                {editedRowData.map((row, index) => (
+                                    <Fragment>
+                                        {editContactId === row.id ?
 
 
-                                        <EditableRow row={row} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />
+                                            <EditableRow row={row} addFormData={addFormData} handleEditFormChange={handleEditFormChange} handleFormSubmit={handleFormSubmit} />
 
-                                        :
-                                        <ReadOnlyRow row={row} handleEditClick={handleEditClick} />}
-                                </Fragment>
-                            ))}
-                        </TableBody> :
-                        <div>
-                            <center>
-                                {searchNotFound ? <h1 style={{ color: 'black' }}>Not Found</h1> : <CircularProgress />}
-                            </center>
-                        </div>
-                    }
-                </Table>
+                                            :
+                                            <ReadOnlyRow row={row} handleEditClick={handleEditClick} />}
+                                    </Fragment>
+                                ))}
+                            </TableBody> :
+                            <div>
+                                <center>
+                                    {searchNotFound ? <h1 style={{ color: 'black' }}>Not Found</h1> : <CircularProgress />}
+                                </center>
+                            </div>
+                        }
+                    </Table>
+                }
             </TableContainer>
             <Box m={2} />
             {
 
                 <Grid container justifyContent={"center"}>
                     <Pagination variant={"text"} color={"primary"}
+
                         count={totalPages}
                         onChange={(event, value) => setOffSet(value - 1)} />
                 </Grid>
