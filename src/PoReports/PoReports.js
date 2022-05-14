@@ -29,10 +29,7 @@ function PoReports(props) {
     const [inputPrimarySupplier, setInputPrimarySupplier] = useState([]);
     const [errFound, setErrFound] = useState(false);
     const [isLoading, setisLoading] = useState(false);
-    const [recentPoId, setRecentPoId] = useState({
-        poId: "",
-        createdAt: ""
-    });
+
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
     const [addFormData, setAddFormData] = useState({
@@ -62,7 +59,9 @@ function PoReports(props) {
                     "poType": "",
                     "poStatus": "",
                     "comments": "",
-                    "poReceivedDate": ""
+                    "poReceivedDate": "",
+                    "primarySupplier": data.primarySupplier
+
                 }
 
                 const requestOptionsForUpdate = {

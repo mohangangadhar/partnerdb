@@ -68,6 +68,7 @@ const PoReportInfo = () => {
     const receivedData = async (val, query) => {
         setSearchNotFound(false);
         setisLoading(true);
+        setInputPrimarySupplier("");
         await fetch(APIURL + "po-report-info/" + query + val, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
@@ -289,7 +290,7 @@ const PoReportInfo = () => {
                 fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
                     setisApiLoading(false);
-                    receivedData(offSet);
+                    receivedData(0, "page-query?size=30&page=");
                     handleClose();
                 }).catch(err => alert(err))
                 setisApiLoading(false);
