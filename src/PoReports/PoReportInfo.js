@@ -182,6 +182,7 @@ const PoReportInfo = () => {
         console.log(val);
         setOffSet(0);
         setPoStatus(val);
+        setEditedRowData([]);
         if (val == "all") {
             await receivedData(0, "page-query?size=30&page=");
             return;
@@ -383,7 +384,7 @@ const PoReportInfo = () => {
                 {isLoading ? <CircularProgress /> :
                     <Table className="table" aria-label="spanning table">
                         <TableTitles data={poReportInfoTabData} />
-                        {editedRowData.length > 0 && !(isLoading) ?
+                        {editedRowData && editedRowData.length > 0 && !(isLoading) ?
                             <TableBody>
                                 {editedRowData.map((row, index) => (
                                     <Fragment>

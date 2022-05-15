@@ -32,7 +32,7 @@ class Picker extends Component {
                     label={label}
                     InputLabelProps={{
                         shrink: true,
-                        style: { color: color },
+                        style: { color: 'black' },
                     }}
 
                 />

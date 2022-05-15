@@ -9,10 +9,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchTodos, fetchSupportReport, fetchPoData, fetchWalletSummary } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgressInTable, dashboardSummary, poSummaryData, supportSummaryData, walletSummaryData } from '../constants/Constants';
+import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData } from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
 import CustomTooltip from '../components/ToolTip/tooltip';
+import Picker from '../components/Picker';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
     const [orderdata, setOrderData] = useState([]);
@@ -23,6 +24,8 @@ function DashBoard() {
     const [isSummaryLoading, setisSummaryLoading] = useState(false);
     const [isPoSummaryLoading, setisPoSummaryLoading] = useState(false);
     const [isSupportSummaryLoading, setisSupportSummaryLoading] = useState(false);
+    const [deliveredDateReport, setDeliveredDateReport] = useState([]);
+    const [noData, setNoData] = useState(false);
     const [supportSummary, setSupportSummary] = useState({
         new: 0,
         completed: 0,
@@ -505,11 +508,49 @@ function DashBoard() {
     useEffect(() => {
         getPoData();
     }, [poReport.poData.length > 2])
+    const handleDateChange = async (val) => {
+        setDeliveredDateReport([]);
+        setNoData(false);
+        await fetch(`http://127.0.0.1:8080/order/delivered-date/reports/${val}`, GetRequestOptions).
+            then(res => res.json()).
+            then(data => {
+                console.log(data);
+                setDeliveredDateReport(data);
+                if (data.length == 0) {
+                    setNoData(true);
+                }
+            }).catch(err => console.log(err));
+    }
     return (
         <div>
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>DashBoard</h2></center>
+
+            <TableContainer component={Paper}>
+                <Picker color="white" dateChange={(e) => handleDateChange(e.target.value)} label={"Get Orders for"} />
+                {deliveredDateReport.length > 1 && !noData ?
+                    <Table className="table" aria-label="spanning table">
+                        <TableRow style={{ backgroundColor: '#CD5C5C', color: 'wheat' }}>
+                            <TableCell align="center" >Delivery Status</TableCell>
+                            <TableCell align="center" >No Of Orders</TableCell>
+                            <TableCell align="center">Total</TableCell>
+                        </TableRow>
+
+
+                        {deliveredDateReport.map((data, index) =>
+                            <TableRow>
+
+                                <TableCell align="center" >{data.deliveryStatus}</TableCell>
+                                <TableCell align="center" >{data.noOfOrders}</TableCell>
+                                <TableCell align="center">{data.finalTotal}</TableCell>
+                            </TableRow>
+                        )}
+                    </Table>
+                    : <h2>{noData ? "No Data" : "Select Delivery Date"} </h2>
+                }
+            </TableContainer>
             <h3 style={{ marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Orders Summary:</h3>
             <TableContainer component={Paper}>
+
                 <Table className="table" aria-label="spanning table">
 
                     <TableTitles data={dashboardSummary} />
