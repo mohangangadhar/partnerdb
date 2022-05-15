@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Link } from 'react-router-dom';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
@@ -9,11 +9,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchTodos, fetchSupportReport, fetchPoData, fetchWalletSummary } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData,APIURL} from '../constants/Constants';
+import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData, APIURL } from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
 import CustomTooltip from '../components/ToolTip/tooltip';
 import Picker from '../components/Picker';
+import DeliveredOrderReports from './DeliveredOrderReports';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
     const [orderdata, setOrderData] = useState([]);
@@ -26,6 +27,7 @@ function DashBoard() {
     const [isSupportSummaryLoading, setisSupportSummaryLoading] = useState(false);
     const [deliveredDateReport, setDeliveredDateReport] = useState([]);
     const [noData, setNoData] = useState(false);
+    const [actualDeliveryDate,setActualDeliveryDate]=useState(null);
     const [supportSummary, setSupportSummary] = useState({
         new: 0,
         completed: 0,
@@ -510,6 +512,7 @@ function DashBoard() {
     }, [poReport.poData.length > 2])
     const handleDateChange = async (val) => {
         setDeliveredDateReport([]);
+        setActualDeliveryDate(val);
         setNoData(false);
         await fetch(APIURL + `order/delivered-date/reports/${val}`, GetRequestOptions).
             then(res => res.json()).
@@ -539,7 +542,11 @@ function DashBoard() {
                         {deliveredDateReport.map((data, index) =>
                             <TableRow>
 
-                                <TableCell align="center" >{data.deliveryStatus}</TableCell>
+                                <TableCell align="center" >
+                                    <Link to={{
+                                        pathname: `/app/${actualDeliveryDate}/deliveredreports`,
+                                    }}>{data.deliveryStatus}</Link>
+                                </TableCell>
                                 <TableCell align="center" >{data.noOfOrders}</TableCell>
                                 <TableCell align="center">{data.finalTotal}</TableCell>
                             </TableRow>

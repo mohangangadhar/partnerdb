@@ -61,6 +61,7 @@ import PoReportInfo from './PoReports/PoReportInfo';
 import SeasonalTest from './orders/SeasonalTest';
 import Expenses from './expenses/Expenses';
 import Mango from './mango/mango';
+import DeliveredOrderReports from './dashboard/DeliveredOrderReports';
 
 const drawerWidth = 240;
 
@@ -403,6 +404,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/mango" exact component={Mango} />
                                     <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/expenses" exact component={Expenses} />
+                                    <Route path="/app/:date/deliveredreports" exact component={DeliveredOrderReports} />
                                     <Route path="/app/:poNumber/poreports" exact component={PoReports} />
                                     <Route path="/app/poreportsinfo" exact component={PoReportInfo} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />

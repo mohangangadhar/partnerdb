@@ -58,6 +58,9 @@ export const getRandom = () => {
 export const dashboardSummary = [
     "Order Type", "New", "Processing", "Prepared", "Complete", "Pending", "Cancelled", "Total"
 ];
+export const deliveredOrdersData = [
+    "Order Id", "User", "Final Total", "Delivery Status"
+];
 export const walletSummaryData = [
     "Users With Wallet Balance", "Users With (+ve)Balance", "Users With (-ve)Balance",
     "Users With Zero Balance", "(+ve) Wallet Balance", "(-ve) Wallet Balance", "Zero Wallet Balance",
