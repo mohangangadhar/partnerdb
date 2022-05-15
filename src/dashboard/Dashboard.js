@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchTodos, fetchSupportReport, fetchPoData, fetchWalletSummary } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData } from '../constants/Constants';
+import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData,APIURL} from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
 import CustomTooltip from '../components/ToolTip/tooltip';
@@ -511,7 +511,7 @@ function DashBoard() {
     const handleDateChange = async (val) => {
         setDeliveredDateReport([]);
         setNoData(false);
-        await fetch(`http://127.0.0.1:8080/order/delivered-date/reports/${val}`, GetRequestOptions).
+        await fetch(APIURL + `order/delivered-date/reports/${val}`, GetRequestOptions).
             then(res => res.json()).
             then(data => {
                 console.log(data);
