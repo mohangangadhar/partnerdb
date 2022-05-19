@@ -55,6 +55,7 @@ function PoReports(props) {
                 let reqBody = {
                     "active": 1,
                     "paymentStatus": "",
+                    "poTotal": data.poTotal,
                     "actualTotal": Math.round(sum * 100) / 100,
                     "poType": "",
                     "poStatus": "",

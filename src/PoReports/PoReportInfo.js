@@ -221,14 +221,14 @@ const PoReportInfo = () => {
         let finalList = [];
         console.log(checkList);
         setisApiLoading(true);
-        let primarySupplier = inputPrimarySupplier;
+        // let primarySupplier = inputPrimarySupplier;
 
-        let finalData = totalPoData;
-        if (type == "import" && checkList && checkList.length > 1) {
-            primarySupplier = checkList[0].primarySupplier;
+        // let finalData = totalPoData;
+        // if (type == "import" && checkList && checkList.length > 1) {
+        //     primarySupplier = checkList[0].primarySupplier;
 
-            finalData = checkList;
-        }
+        //     finalData = checkList;
+        // }
 
         let poId = getRandom();
 
@@ -240,7 +240,7 @@ const PoReportInfo = () => {
                 "orderIdCount": 0,
                 "totalQtyReq": "",
                 "suggestedQty": 0,
-                "primarySupplier": primarySupplier,
+                "primarySupplier": inputPrimarySupplier,
                 "orderedQty": row.orderedQty,
                 "orderedUom": row.orderedUom,
                 "productName": row.productName,
@@ -276,9 +276,9 @@ const PoReportInfo = () => {
                     "poCreatedDate": poCreatedDate,
                     "poType": "Manual",
                     "poStatus": "new",
-                    "actualTotal": getTotalPay(finalData),
-                    "poTotal": getTotalPay(finalData),
-                    "primarySupplier": primarySupplier,
+                    "actualTotal": getTotalPay(checkList),
+                    "poTotal": getTotalPay(checkList),
+                    "primarySupplier": inputPrimarySupplier,
                     "poReceivedDate": null
                 }
                 const requestOptionsz = {
@@ -372,10 +372,10 @@ const PoReportInfo = () => {
                     </div>
                 }
                 <Box m={2} />
-                <div style={{ marginRight: '30px', color: 'white' }}>
+                {/* <div style={{ marginRight: '30px', color: 'white' }}>
                     <h3 >Import PO : </h3>
                     <Button variant="contained" color="success" onClick={(event) => handleOpen()}>Import File</Button>
-                </div>
+                </div> */}
                 <DropDownForPoStatus poStatus={poStatus} handleChangePoStatus={handleChangePoStatus} />
             </div >
             <ImportPoModal open={open} setPoCreatedDate={setPoCreatedDate} sendTotalPoData={sendTotalPoData} importData={importData}

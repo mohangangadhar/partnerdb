@@ -1,0 +1,38 @@
+  POR REPORTS
+  ----------
+  let reqBody = {
+                    "active": 1,
+                    "paymentStatus": "",
+                    "actualTotal": Math.round(sum * 100) / 100,
+                    "poType": "",
+                    "poStatus": "",
+                    "comments": "",
+                    "poReceivedDate": "",
+                    "primarySupplier": data.primarySupplier
+                }
+
+                const requestOptionsForUpdate = {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reqBody)
+                };
+
+                fetch(APIURL + 'po-report-info/' + data.id, requestOptionsForUpdate)
+                    .then(response => {
+                        setisApiLoading(false);
+                    }
+                    ).catch((err) => setisApiLoading(false));
+                    -------
+                    // const getActualPay = (list) => {
+    //     let sum = 0;
+
+    //     list.map((row) => {
+    //         if (row.receivedQty > 0) {
+    //             sum += (row.receivedQty - row.wastageQty) * row.totalPay;
+    //         }
+    //         else {
+    //             sum += row.orderedQty * row.totalPay;
+    //         }
+    //     })
+    //     getPoSummary(sum);
+    // }
