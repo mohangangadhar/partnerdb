@@ -10,12 +10,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import { CircularProgress } from '@material-ui/core';
 const DeliveredOrderReports = () => {
-    let { date } = useParams();
+    let { date, status } = useParams();
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const getData = async () => {
         setIsLoading(true);
-        await fetch(APIURL + `order/delivered-date/${date}`, GetRequestOptions).
+        await fetch(APIURL + `order/delivered-date/${date}/status/${status}`, GetRequestOptions).
             then(res => res.json()).
             then(data => {
                 setOrders(data);

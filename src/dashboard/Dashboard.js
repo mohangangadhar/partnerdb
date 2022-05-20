@@ -27,7 +27,7 @@ function DashBoard() {
     const [isSupportSummaryLoading, setisSupportSummaryLoading] = useState(false);
     const [deliveredDateReport, setDeliveredDateReport] = useState([]);
     const [noData, setNoData] = useState(false);
-    const [actualDeliveryDate,setActualDeliveryDate]=useState(null);
+    const [actualDeliveryDate, setActualDeliveryDate] = useState(null);
     const [supportSummary, setSupportSummary] = useState({
         new: 0,
         completed: 0,
@@ -544,7 +544,7 @@ function DashBoard() {
 
                                 <TableCell align="center" >
                                     <Link to={{
-                                        pathname: `/app/${actualDeliveryDate}/deliveredreports`,
+                                        pathname: `/app/${actualDeliveryDate}/deliveredreports/${data.deliveryStatus}`,
                                     }}>{data.deliveryStatus}</Link>
                                 </TableCell>
                                 <TableCell align="center" >{data.noOfOrders}</TableCell>
