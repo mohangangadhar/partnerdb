@@ -23,6 +23,7 @@ import Picker from '../components/Picker';
 import Modal from './Components/ImportPoModal';
 import ImportPoModal from './Components/ImportPoModal';
 import DropDownForPoStatus from './Components/DropDownForPoStatus';
+import SearchOrdersByUserName from '../orders/SearchOrdersByUserName';
 
 
 const PoReportInfo = () => {
@@ -46,7 +47,7 @@ const PoReportInfo = () => {
     const handleClose = () => setOpen(false);
     const [editContactId, setEditContactId] = useState(null);
     const [poStatus, setPoStatus] = useState("");
-
+    const [supplier, setSupplier] = useState("");
     const [addFormData, setAddFormData] = useState({
         id: 0,
         active: 0,
@@ -181,6 +182,7 @@ const PoReportInfo = () => {
     const handleChangePoStatus = async (val) => {
         console.log(val);
         setOffSet(0);
+        setSupplier("");
         setPoStatus(val);
         setEditedRowData([]);
         if (val == "all") {
@@ -315,6 +317,17 @@ const PoReportInfo = () => {
         }
 
     }
+    const handleSearchBySupplier = async (event) => {
+        event.preventDefault();
+        setOffSet(0);
+        setEditedRowData([]);
+        setPoStatus("");
+        if (supplier == "" || supplier.length == 0) {
+            await receivedData(0, "page-query?size=30&page=");
+            return;
+        }
+        await receivedData(0, `supplier/${supplier}?size=30&page=`);
+    }
     return (
         <div>
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
@@ -377,6 +390,9 @@ const PoReportInfo = () => {
                     <Button variant="contained" color="success" onClick={(event) => handleOpen()}>Import File</Button>
                 </div> */}
                 <DropDownForPoStatus poStatus={poStatus} handleChangePoStatus={handleChangePoStatus} />
+                <SearchOrdersByUserName setSearchQuery={setSupplier} searchquery={supplier}
+                    handleSearch={handleSearchBySupplier}
+                    label="Search By Primary Supplier" />
             </div >
             <ImportPoModal open={open} setPoCreatedDate={setPoCreatedDate} sendTotalPoData={sendTotalPoData} importData={importData}
                 readUploadFile={readUploadFile} handleClose={handleClose} />

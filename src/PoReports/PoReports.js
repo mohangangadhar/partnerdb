@@ -50,7 +50,6 @@ function PoReports(props) {
         await fetch(APIURL + "po-report-info/po-number/" + poNumber, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 setPoSummary(data);
                 let reqBody = {
                     "active": 1,
@@ -62,7 +61,6 @@ function PoReports(props) {
                     "comments": "",
                     "poReceivedDate": "",
                     "primarySupplier": data.primarySupplier
-
                 }
 
                 const requestOptionsForUpdate = {

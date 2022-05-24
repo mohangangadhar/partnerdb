@@ -530,7 +530,7 @@ function DashBoard() {
 
             <TableContainer component={Paper}>
                 <Picker color="white" dateChange={(e) => handleDateChange(e.target.value)} label={"Get Orders for"} />
-                {deliveredDateReport.length > 1 && !noData ?
+                {deliveredDateReport.length >= 1 && !noData ?
                     <Table className="table" aria-label="spanning table">
                         <TableRow style={{ backgroundColor: '#CD5C5C', color: 'wheat' }}>
                             <TableCell align="center" >Delivery Status</TableCell>

@@ -1,35 +1,55 @@
 import React from 'react'
-import emailjs from 'emailjs-com';
-const dummy = () => {
-    let name = "Bhavani";
-    let email = "bhavaniprasadsastra@gmail.com";
-    let subject = "Hiii";
-    let message = "Message";
-    const sendEmail = (e) => {
-        e.preventDefault();
 
-        emailjs.sendForm('service_6su3zlp', 'template_7jfisde', e.target, 'user_LJaGxh5HdqkXRo3ivnoRW')
-            .then((result) => {
-                console.log(result);
-            }).catch(error => {
-                console.log(error.text);
+const Razorpay = require("razorpay");
+const dummy = () => {
+
+
+    const handlePaymentLink = async () => {
+        var instance = new Razorpay({ key_id: "rzp_live_IU4OXE829Ye0R2", key_secret: "p3T00tCsAjfS8dUrQXLMVHJp" });
+        var options = {
+            amount: 500,
+            currency: "INR",
+            description: "For mangoes",
+            customer: {
+                name: "Gaurav Kumar",
+                email: "bhavanibharath2@gmail.com.com",
+                contact: 919944588103
+            },
+            notify: {
+                sms: true,
+                email: true
+            },
+            reminder_enable: true,
+            notes: {
+                policy_name: "Mangoes"
+            },
+            callback_url: "https://example-callback-url.com/",
+            callback_method: "get"
+        };
+        try {
+            // const response = await fetch("https://api.razorpay.com/v1/payment_links", {
+            //     method: 'post',
+            //     mode: 'no-cors',
+            //     headers: {
+            //         'Authorization': 'Basic ' + ('rzp_live_IU4OXE829Ye0R2:p3T00tCsAjfS8dUrQXLMVHJp'),
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(options)
+            // });
+            var response = instance.paymentLink.create(options, {
+                'mode': 'no-cors',
+                'Content-Type': 'application/json'
             });
-    };
+            // const data = await response.json();
+            console.log(response);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
     return (
         <div style={{ justifyContent: 'center' }}>
-
-            <form className="contact-form" onSubmit={sendEmail}>
-                <label>Name</label>
-                <input type="text" name="name" value={name} />
-                <label>Email</label>
-                <input type="email" name="email" value={email} />
-                <label>Subject</label>
-                <input type="text" name="subject" value={subject} />
-                <label>Message</label>
-                <textarea name="message" value={message} />
-                <input type="submit" value="Send" />
-            </form>
-
+            <button onClick={handlePaymentLink}>Pay</button>
         </div>
     )
 }
