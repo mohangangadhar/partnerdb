@@ -1,5 +1,5 @@
 import React from 'react'
-
+import axios from "axios";
 const Razorpay = require("razorpay");
 const dummy = () => {
 
@@ -47,9 +47,57 @@ const dummy = () => {
             console.log(err);
         }
     }
+    const sendPaymentLink = async () => {
+        var data = JSON.stringify({
+            "amount": 1000,
+            "currency": "INR",
+            "accept_partial": true,
+            "first_min_partial_amount": 100,
+            "expire_by": 1691097057,
+            "reference_id": "TSsd1989",
+            "description": "Payment for policy no #23456",
+            "customer": {
+                "name": "",
+                "contact": "+919944588103",
+                "email": "bhavaniprasadsmart@gmail.com"
+            },
+            "notify": {
+                "sms": true,
+                "email": true
+            },
+            "reminder_enable": true,
+            "notes": {
+                "policy_name": "Jeevan Bima"
+            },
+            "callback_url": "https://example-callback-url.com/",
+            "callback_method": "get"
+        });
+
+        var config = {
+            method: 'post',
+            mode: 'no-cors',
+            url: 'https://api.razorpay.com/v1/payment_links',
+            headers: {
+                'Authorization': "Basic " + window.btoa('rzp_live_IU4OXE829Ye0R2' + ':' + 'p3T00tCsAjfS8dUrQXLMVHJp'),
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            data: data
+        };
+
+        await axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     return (
         <div style={{ justifyContent: 'center' }}>
             <button onClick={handlePaymentLink}>Pay</button>
+            <button onClick={sendPaymentLink}>Send</button>
         </div>
     )
 }
