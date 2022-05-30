@@ -31,16 +31,18 @@ const dummy = () => {
             //     method: 'post',
             //     mode: 'no-cors',
             //     headers: {
-            //         'Authorization': 'Basic ' + ('rzp_live_IU4OXE829Ye0R2:p3T00tCsAjfS8dUrQXLMVHJp'),
+            //         'Authorization': 'Basic ' + window.btoa('rzp_live_IU4OXE829Ye0R2:p3T00tCsAjfS8dUrQXLMVHJp'),
             //         'Content-Type': 'application/json'
             //     },
             //     body: JSON.stringify(options)
             // });
             var response = instance.paymentLink.create(options, {
+                'method': 'post',
                 'mode': 'no-cors',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             });
-            // const data = await response.json();
+            const data = await response.json();
             console.log(response);
         }
         catch (err) {
@@ -78,7 +80,7 @@ const dummy = () => {
             mode: 'no-cors',
             url: 'https://api.razorpay.com/v1/payment_links',
             headers: {
-                'Authorization': "Basic " + window.btoa('rzp_live_IU4OXE829Ye0R2' + ':' + 'p3T00tCsAjfS8dUrQXLMVHJp'),
+                'Authorization': "Basic " + btoa('rzp_live_IU4OXE829Ye0R2:p3T00tCsAjfS8dUrQXLMVHJp'),
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
             },

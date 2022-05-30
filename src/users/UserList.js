@@ -153,28 +153,31 @@ function UserList(props) {
                                     {rows.length >= 0 && !(isLoading) ?
                                         <TableBody>
                                             {rows.map((row, index) => (
-                                                <TableRow key={row.user.id}>
-                                                    <TableCell> {row.user.id} </TableCell>
-                                                    <TableCell>{row.user.name}</TableCell>
-                                                    <TableCell align="left">{row.user.email}</TableCell>
-                                                    <TableCell align="center">{row.user.mobileNumber}</TableCell>
-                                                    <TableCell align="center">{row.user.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
-                                                    <TableCell align="center">{row.user.altMobileNumber}</TableCell>
-                                                    <TableCell align="center">{row.balance}</TableCell>
-                                                    <TableCell align="center">{row.user.pincode}</TableCell>
-                                                    <TableCell
-                                                        align="center">{new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}</TableCell>
-                                                    <TableCell>
-                                                        <Button variant="contained" color="primary" onClick={(e) =>
+                                                <>
+                                                    {row.user &&
+                                                        <TableRow key={row.user.id}>
+                                                            <TableCell> {row.user.id} </TableCell>
+                                                            <TableCell>{row.user.name}</TableCell>
+                                                            <TableCell align="left">{row.user.email}</TableCell>
+                                                            <TableCell align="center">{row.user.mobileNumber}</TableCell>
+                                                            <TableCell align="center">{row.user.mobileVerified === 1 ? "Yes" : "No"}</TableCell>
+                                                            <TableCell align="center">{row.user.altMobileNumber}</TableCell>
+                                                            <TableCell align="center">{row.balance}</TableCell>
+                                                            <TableCell align="center">{row.user.pincode}</TableCell>
+                                                            <TableCell
+                                                                align="center">{new Date(Date.parse(row.createdAt + " UTC")).toLocaleString()}</TableCell>
+                                                            <TableCell>
+                                                                <Button variant="contained" color="primary" onClick={(e) =>
 
-                                                            handleClickOpen(row.user)
+                                                                    handleClickOpen(row.user)
 
-                                                        }>
-                                                            Edit
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-
+                                                                }>
+                                                                    Edit
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    }
+                                                </>
                                             ))}
                                         </TableBody> :
                                         <div>
