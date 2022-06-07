@@ -18,29 +18,36 @@ import SearchByUserName from "../users/SearchByUserName";
 import SearchProducts from "../products/Components/SearchProducts";
 import Button from "@mui/material/Button";
 import Picker from "../components/Picker";
+import DropDownForPaymentStatus from './Components/DropDownForStatus';
+import DropDownForStatus from './Components/DropDownForStatus';
+import SearchOrdersByUserName from '../orders/SearchOrdersByUserName';
 
 const Expenses = () => {
     const [perPage, setPerPage] = useState(15);
     const [startDate, setStartDate] = useState("");
-
+    const [offSet, setOffSet] = useState(0);
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
     const [editPage, setEditPage] = useState(0);
     const [noData, setNoData] = useState(false);
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
-    const [isRowLoading, setisRowLoading] = useState(false);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const [url, setUrl] = useState(APIURL + "support/page-query?page=");
+    const [paymentStatus, setPaymentStatus] = useState("");
+    const [reimbursmentStatus, setReimbursmentStatus] = useState("");
+    const [url, setUrl] = useState("page-query?size=30&page=");
+    const [vendorName, setVendorName] = useState("");
     const [addFormData, setAddFormData] = useState({
         paymentStatus: "",
         clearedDate: "",
         clearedBy: "",
         eventDate: "",
-        reimbursementStatus: "",
-        vendorName: ""
+        reimbursmentStatus: "",
+        vendorName: "",
+        paymentRef: "",
+        comments: ""
     });
     const [modalData, setModalData] = useState({
         raisedDate: "",
@@ -54,12 +61,12 @@ const Expenses = () => {
     })
     const [editedRowData, setEditedRowData] = useState([]);
 
-    const handleChange = async (page) => {
+    const receivedData = async (currUrl, page) => {
         setisLoading(true);
         setNoData(false);
         setEditedRowData([]);
         setEditPage(page);
-        await fetch(APIURL + "expenses/page-query?page=" + page, GetRequestOptions)
+        await fetch(APIURL + "expenses/" + currUrl + page, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setEditedRowData(data.content);
@@ -71,7 +78,7 @@ const Expenses = () => {
         setisLoading(false);
     }
     useEffect(async () => {
-        handleChange(0);
+        receivedData("page-query?size=30&page=", 0);
     }, []);
 
 
@@ -95,8 +102,10 @@ const Expenses = () => {
             clearedDate: row.clearedDate,
             clearedBy: row.clearedBy,
             eventDate: row.eventDate,
-            reimbursementStatus: row.reimbursementStatus,
-            vendorName: row.vendorName
+            reimbursmentStatus: row.reimbursmentStatus,
+            vendorName: row.vendorName,
+            paymentRef: row.paymentRef,
+            comments: row.comments
         });
         setEditContactId(row.id);
     }
@@ -106,8 +115,10 @@ const Expenses = () => {
             clearedDate: tempFormData.clearedDate,
             clearedBy: tempFormData.clearedBy,
             eventDate: tempFormData.eventDate,
-            reimbursementStatus: tempFormData.reimbursementStatus,
-            vendorName: tempFormData.vendorName
+            reimbursmentStatus: tempFormData.reimbursmentStatus,
+            vendorName: tempFormData.vendorName,
+            paymentRef: tempFormData.paymentRef,
+            comments: tempFormData.comments
         };
 
         setisApiLoading(true);
@@ -130,16 +141,17 @@ const Expenses = () => {
     const handleFormSubmit = async (event, row, tempFormData) => {
         event.preventDefault();
         setAddFormData("");
-        setisRowLoading(true);
         let ind;
         let xyz = row;
         xyz = { ...xyz };
         xyz.paymentStatus = tempFormData.paymentStatus;
         xyz.clearedBy = tempFormData.clearedBy;
         xyz.clearedDate = tempFormData.clearedDate;
-        xyz.reimbursementStatus = tempFormData.reimbursementStatus;
+        xyz.reimbursmentStatus = tempFormData.reimbursmentStatus;
         xyz.eventDate = tempFormData.eventDate;
         xyz.vendorName = tempFormData.vendorName;
+        xyz.paymentRef = tempFormData.paymentRef;
+        xyz.comments = tempFormData.comments;
         for (let i = 0; i < editedRowData.length; i++) {
             if (row.id == editedRowData[i].id) {
                 ind = i;
@@ -148,11 +160,47 @@ const Expenses = () => {
         }
         editedRowData[ind] = xyz;
         setEditContactId(null);
-        setisRowLoading(false);
         uploadBackEnd(row, tempFormData);
     }
 
-
+    const handleChangePaymentStatus = async (val) => {
+        setReimbursmentStatus("");
+        setPaymentStatus(val);
+        setVendorName("");
+        setEditedRowData([]);
+        if (val == "all") {
+            setUrl("page-query?size=30&page=");
+            await receivedData("page-query?size=30&page=", 0);
+            return;
+        }
+        setUrl(`payment-status/${val}?size=30&page=`);
+        await receivedData(`payment-status/${val}?size=30&page=`, 0);
+    }
+    const handleChangeReimbursmentStatus = async (val) => {
+        console.log(val);
+        setPaymentStatus("");
+        setVendorName("");
+        setReimbursmentStatus(val);
+        setEditedRowData([]);
+        if (val == "all") {
+            setUrl("page-query?size=30&page=");
+            await receivedData("page-query?size=30&page=", 0);
+            return;
+        }
+        setUrl(`reimbursment-status/${val}?size=30&page=`);
+        await receivedData(`reimbursment-status/${val}?size=30&page=`, 0);
+    }
+    const handleSearchByVendorName = async (event) => {
+        event.preventDefault();
+        setPaymentStatus("");
+        setReimbursmentStatus("");
+        setEditedRowData([]);
+        if (vendorName == "" || vendorName.length == 0) {
+            await receivedData("page-query?size=30&page=", 0);
+            return;
+        }
+        await receivedData(`vendor/${vendorName}?size=30&page=`, 0);
+    }
     const style = {
         position: 'absolute',
         top: '50%',
@@ -174,7 +222,7 @@ const Expenses = () => {
         await fetch(APIURL + "expenses", requestOptions).
             then(response => response.json()).
             then(data => {
-                handleChange(0);
+                receivedData("page-query?size=30&page=", 0);
                 handleClose();
                 setModalData(null);
             }
@@ -183,10 +231,15 @@ const Expenses = () => {
     }
     return <div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                 Expenses
             </Typography>
+            <DropDownForStatus label="Payment Status" status={paymentStatus} handleChangeStatus={handleChangePaymentStatus} />
+            <DropDownForStatus label="Reimbursment Status" status={reimbursmentStatus} handleChangeStatus={handleChangeReimbursmentStatus} />
+            <SearchOrdersByUserName setSearchQuery={setVendorName} searchquery={vendorName}
+                handleSearch={handleSearchByVendorName}
+                label="Search By Vendor Name" />
             <Button variant="contained" color="success" onClick={(event) => handleOpen()}>Add</Button>
 
         </div>
@@ -336,7 +389,7 @@ const Expenses = () => {
             <Pagination variant={"text"} color={"primary"}
                 count={totalPages}
                 page={editPage + 1}
-                onChange={(event, value) => handleChange(value - 1)} />
+                onChange={(event, value) => receivedData(url, value - 1)} />
         </Grid>
         <Box m={2} />
     </div>;

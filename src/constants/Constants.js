@@ -84,8 +84,8 @@ export const supportTabData = [
 ];
 
 export const expenseTabData = [
-    "Id", "Expense Id", "Name", "Amount", "Category", "Sub Category", "Payment Status", "Reimbursement Status", "Raised By",
-    "Raised Date", "Event date", "Vendor/ Delivery Partner name", "Cleared By", "Cleared Date", "Actions"
+    "Id", "Expense Id", "Name", "Amount", "Category", "Sub Category", "Payment Status", "Payment Ref", "Reimbursement Status", "Raised By",
+    "Raised Date", "Event date", "Vendor/ Delivery Partner name", "Cleared By", "Cleared Date", "Comments", "Actions"
 ]
 export const mangoTabData = ["Id", "Mango Name", "No Of Orders", "Total Quantity"];
 export const poReportInfoTabData = [

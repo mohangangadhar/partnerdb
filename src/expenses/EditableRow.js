@@ -28,6 +28,9 @@ const EditableRow = ({
                 <input placeholder="payment status" name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center">
+                <input placeholder="payment ref" name="paymentRef" value={addFormData.paymentRef} onChange={handleEditFormChange} />
+            </TableCell>
+            <TableCell align="center">
                 <input placeholder="Reimburesment status" name="reimbursementStatus" value={addFormData.reimbursementStatus} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center">{row.raisedBy}</TableCell>
@@ -43,6 +46,9 @@ const EditableRow = ({
             </TableCell>
             <TableCell align="center">
                 <Picker color="white" date={addFormData.clearedDate} dateChange={handleEditFormChange} label="clearedDate" />
+            </TableCell>
+            <TableCell align="center">
+                <input placeholder="comments" name="comments" value={addFormData.comments} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center"><Button variant="contained" on color="success"
                 onClick={(event) => handleFormSubmit(event, row, addFormData)}>Save</Button></TableCell>

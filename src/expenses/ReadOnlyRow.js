@@ -22,13 +22,15 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.category}</TableCell>
             <TableCell align="center">{row.subCategory}</TableCell>
             <TableCell align="center">{row.paymentStatus}</TableCell>
-            <TableCell align="center">{row.reimbursementStatus}</TableCell>
+            <TableCell align="center">{row.paymentRef}</TableCell>
+            <TableCell align="center">{row.reimbursmentStatus}</TableCell>
             <TableCell align="center">{row.raisedBy}</TableCell>
             <TableCell align="center">{row.raisedDate}</TableCell>
             <TableCell align="center">{row.eventDate}</TableCell>
             <TableCell align="center">{row.vendorName}</TableCell>
             <TableCell align="center">{row.clearedBy}</TableCell>
             <TableCell align="center">{row.clearedDate}</TableCell>
+            <TableCell align="center">{row.comments}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row)}>Edit</Button></TableCell>
         </TableRow>
     );
