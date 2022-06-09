@@ -31,7 +31,7 @@ const EditableRow = ({
                 <input placeholder="payment ref" name="paymentRef" value={addFormData.paymentRef} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center">
-                <input placeholder="Reimburesment status" name="reimbursementStatus" value={addFormData.reimbursementStatus} onChange={handleEditFormChange} />
+                <input placeholder="Reimbursment status" name="reimbursmentStatus" value={addFormData.reimbursmentStatus} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center">{row.raisedBy}</TableCell>
             <TableCell align="center">{row.raisedDate}</TableCell>

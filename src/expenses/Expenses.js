@@ -91,12 +91,12 @@ const Expenses = () => {
 
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
-
+        console.log(newFormData);
         setAddFormData(newFormData);
     };
     const handleEditClick = (event, row) => {
         event.preventDefault();
-        console.log(row.status);
+        console.log(row.reimbursmentStatus);
         setAddFormData({
             paymentStatus: row.paymentStatus,
             clearedDate: row.clearedDate,
@@ -110,6 +110,7 @@ const Expenses = () => {
         setEditContactId(row.id);
     }
     const uploadBackEnd = async (row, tempFormData) => {
+
         let supportData = {
             paymentStatus: tempFormData.paymentStatus,
             clearedDate: tempFormData.clearedDate,
@@ -120,7 +121,7 @@ const Expenses = () => {
             paymentRef: tempFormData.paymentRef,
             comments: tempFormData.comments
         };
-
+        console.log(tempFormData.reimbursmentStatus + "" + tempFormData.paymentStatus);
         setisApiLoading(true);
 
         const requestOptionsForUpdate = {
