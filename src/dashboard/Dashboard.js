@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchTodos, fetchSupportReport, fetchPoData, fetchWalletSummary } from '../Actions';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData, APIURL } from '../constants/Constants';
+import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData, APIURL, expenseSummaryData } from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
 import DetailTableTitles from './DetailTableTitles';
 import CustomTooltip from '../components/ToolTip/tooltip';
@@ -142,6 +142,7 @@ function DashBoard() {
             poTotal: 0
         }
     });
+    const [expenseSummary, setExpenseSummary] = useState([]);
     const order = useSelector(state => state.dashboardreducer);
     const poReport = useSelector(state => state.poreducer);
     const supportReport = useSelector(state => state.supportreducer);
@@ -494,12 +495,22 @@ function DashBoard() {
         // console.log(poSummary);
         setisPoSummaryLoading(false);
     }
+    const fetchExpenseSummary = async () => {
+        await fetch(APIURL + "expenses/expense-summary").then(
+            response => response.json()
+        ).then(
+            res => {
+                setExpenseSummary(res);
+            }
+        ).catch(err => console.log(err))
+    }
     useEffect(async () => {
         setisSummaryLoading(true);
         dispatch(fetchTodos);
         dispatch(fetchPoData);
         dispatch(fetchSupportReport);
         dispatch(fetchWalletSummary);
+        await fetchExpenseSummary();
     }, []);
     useEffect(() => {
         getData();
@@ -680,6 +691,47 @@ function DashBoard() {
                             </>
                             : CircularProgressInTable}
                     </TableBody>
+                </Table>
+            </TableContainer>
+            <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Expense Summary:</h3>
+            <TableContainer component={Paper}>
+
+                <Table className="table" aria-label="spanning table">
+                 
+                    {expenseSummary.length > 1 ?
+                        <>
+                            <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
+                                <TableRow>
+                                    {expenseSummary.map((exp, index) => (
+
+                                        <TableCell align="center" style={{ color: 'wheat' }}>{exp.paymentStatus}</TableCell>
+
+                                    ))}
+                                </TableRow>
+
+                            </TableHead>
+                            <TableBody>
+                                <TableRow >
+                                    {expenseSummary.map((exp, index) => (
+
+
+                                        <TableCell align="center" >{exp.count}</TableCell>
+
+
+                                    ))}
+                                </TableRow>
+                                <TableRow >
+                                    {expenseSummary.map((exp, index) => (
+
+
+                                        <TableCell align="center" >{exp.amount}</TableCell>
+
+
+                                    ))}
+                                </TableRow>
+                            </TableBody>
+                        </>
+                        : CircularProgressInTable}
                 </Table>
             </TableContainer>
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Po Summary:</h3>

@@ -72,6 +72,9 @@ export const poSummaryData = [
 export const supportSummaryData = [
     "New", "Open", "In Progress", "Completed", "Total"
 ];
+export const expenseSummaryData = [
+    "Pending", "On Hold", "Complete", "Cancelled", "Total"
+];
 export const usersTabData = [
     "User Id", "Name", "Email", "Mobile", "Verified", "Alt Mobile Number", "Wallet", "Pincode", "Created At", "Actions"
 ];

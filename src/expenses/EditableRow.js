@@ -25,13 +25,29 @@ const EditableRow = ({
             <TableCell align="center">{row.category}</TableCell>
             <TableCell align="center">{row.subCategory}</TableCell>
             <TableCell align="center">
-                <input placeholder="payment status" name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange} />
+                <select style={{
+                    padding: 5,
+                }} name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange}>
+                    <option style={styleOptions} value="" >Payment Status:</option>
+                    <option style={styleOptions} value="complete">Complete</option>
+                    <option style={styleOptions} value="pending">Pending</option>
+                    <option style={styleOptions} value="on hold">On Hold</option>
+                    <option style={styleOptions} value="cancelled">Cancelled</option>
+                </select>
             </TableCell>
             <TableCell align="center">
                 <input placeholder="payment ref" name="paymentRef" value={addFormData.paymentRef} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center">
-                <input placeholder="Reimbursment status" name="reimbursmentStatus" value={addFormData.reimbursmentStatus} onChange={handleEditFormChange} />
+                <select style={{
+                    padding: 5,
+                }} name="reimbursmentStatus" value={addFormData.reimbursmentStatus} onChange={handleEditFormChange}>
+                    <option style={styleOptions} value="" >Reimbursment Status:</option>
+                    <option style={styleOptions} value="complete">Complete</option>
+                    <option style={styleOptions} value="pending">Pending</option>
+                    <option style={styleOptions} value="on hold">On Hold</option>
+                    <option style={styleOptions} value="cancelled">Cancelled</option>
+                </select>
             </TableCell>
             <TableCell align="center">{row.raisedBy}</TableCell>
             <TableCell align="center">{row.raisedDate}</TableCell>
