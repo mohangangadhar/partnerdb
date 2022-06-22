@@ -60,7 +60,8 @@ function PoReports(props) {
                     "poStatus": "",
                     "comments": "",
                     "poReceivedDate": "",
-                    "primarySupplier": data.primarySupplier
+                    "primarySupplier": data.primarySupplier,
+                    "invoiceNumber": data.invoiceNumber
                 }
 
                 const requestOptionsForUpdate = {
@@ -83,7 +84,7 @@ function PoReports(props) {
         let sum = 0;
 
         list.map((row) => {
-            if (row.receivedQty > 0) {
+            if (row.receivedQty >= 0) {
                 sum += (row.receivedQty - row.wastageQty) * row.totalPay;
             }
             else {
