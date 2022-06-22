@@ -9,7 +9,7 @@ const ReadOnlyRow = ({
 }) => {
 
     let price = 0;
-    if (row.receivedQty > 0 && row.receivedQty != null) {
+    if (row.receivedQty >= 0 && row.receivedQty != null) {
         price = (row.receivedQty - row.wastageQty) * row.totalPay;
     } else {
         price = row.orderedQty * row.totalPay;
