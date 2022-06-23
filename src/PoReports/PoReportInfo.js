@@ -64,7 +64,7 @@ const PoReportInfo = () => {
         paymentRefNumber: ""
     });
     const [editedRowData, setEditedRowData] = useState([]);
-
+    const [searchPoNumber, setSearchPoNumber] = useState("");
 
     const receivedData = async (val, query) => {
         setSearchNotFound(false);
@@ -183,6 +183,7 @@ const PoReportInfo = () => {
         console.log(val);
         setOffSet(0);
         setSupplier("");
+        setSearchPoNumber("");
         setPoStatus(val);
         setEditedRowData([]);
         if (val == "all") {
@@ -322,11 +323,24 @@ const PoReportInfo = () => {
         setOffSet(0);
         setEditedRowData([]);
         setPoStatus("");
+        setSearchPoNumber("");
         if (supplier == "" || supplier.length == 0) {
             await receivedData(0, "page-query?size=30&page=");
             return;
         }
         await receivedData(0, `supplier/${supplier}?size=30&page=`);
+    }
+    const handleSearchByPoNumber = async (event) => {
+        event.preventDefault();
+        setOffSet(0);
+        setEditedRowData([]);
+        setPoStatus("");
+        setSupplier("");
+        if (searchPoNumber == "" || searchPoNumber.length == 0) {
+            await receivedData(0, "page-query?size=30&page=");
+            return;
+        }
+        await receivedData(0, `po-id/${searchPoNumber}?size=30&page=`);
     }
     return (
         <div>
@@ -364,7 +378,7 @@ const PoReportInfo = () => {
 
             }
 
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 {toggle ?
                     <div style={{ width: '33%' }}>
                         {totalPoData.length == 0 &&
@@ -393,6 +407,9 @@ const PoReportInfo = () => {
                 <SearchOrdersByUserName setSearchQuery={setSupplier} searchquery={supplier}
                     handleSearch={handleSearchBySupplier}
                     label="Search By Primary Supplier" />
+                <SearchOrdersByUserName setSearchQuery={setSearchPoNumber} searchquery={searchPoNumber}
+                    handleSearch={handleSearchByPoNumber}
+                    label="Search By Po Number" />
             </div >
             <ImportPoModal open={open} setPoCreatedDate={setPoCreatedDate} sendTotalPoData={sendTotalPoData} importData={importData}
                 readUploadFile={readUploadFile} handleClose={handleClose} />

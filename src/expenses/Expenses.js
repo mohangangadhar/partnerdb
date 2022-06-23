@@ -57,10 +57,9 @@ const Expenses = () => {
         memberName: "",
         amount: 0,
         vendorName: ""
-
     })
     const [editedRowData, setEditedRowData] = useState([]);
-
+    const [expenseId, setExpenseId] = useState(0);
     const receivedData = async (currUrl, page) => {
         setisLoading(true);
         setNoData(false);
@@ -168,6 +167,7 @@ const Expenses = () => {
         setReimbursmentStatus("");
         setPaymentStatus(val);
         setVendorName("");
+        setExpenseId("");
         setEditedRowData([]);
         if (val == "all") {
             setUrl("page-query?size=30&page=");
@@ -181,6 +181,7 @@ const Expenses = () => {
         console.log(val);
         setPaymentStatus("");
         setVendorName("");
+        setExpenseId("");
         setReimbursmentStatus(val);
         setEditedRowData([]);
         if (val == "all") {
@@ -194,6 +195,7 @@ const Expenses = () => {
     const handleSearchByVendorName = async (event) => {
         event.preventDefault();
         setPaymentStatus("");
+        setExpenseId("");
         setReimbursmentStatus("");
         setEditedRowData([]);
         if (vendorName == "" || vendorName.length == 0) {
@@ -201,6 +203,18 @@ const Expenses = () => {
             return;
         }
         await receivedData(`vendor/${vendorName}?size=30&page=`, 0);
+    }
+    const handleSearchByExpenseId = async (event) => {
+        event.preventDefault();
+        setPaymentStatus("");
+        setVendorName("");
+        setReimbursmentStatus("");
+        setEditedRowData([]);
+        if (expenseId == "" || expenseId.length == 0) {
+            await receivedData("page-query?size=30&page=", 0);
+            return;
+        }
+        await receivedData(`id/${expenseId}?size=30&page=`, 0);
     }
     const style = {
         position: 'absolute',
@@ -242,7 +256,9 @@ const Expenses = () => {
                 handleSearch={handleSearchByVendorName}
                 label="Search By Vendor Name" />
             <Button variant="contained" color="success" onClick={(event) => handleOpen()}>Add</Button>
-
+            <SearchOrdersByUserName setSearchQuery={setExpenseId} searchquery={expenseId}
+                handleSearch={handleSearchByExpenseId}
+                label="Search By Expense Id" />
         </div>
         <div>
             <Modal

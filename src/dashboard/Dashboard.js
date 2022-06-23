@@ -144,13 +144,15 @@ function DashBoard() {
     });
     const [expenseSummary, setExpenseSummary] = useState([]);
     const [reimbursmentSummary, setReimbursmentSummary] = useState([]);
+    const [reimbursmentPending, setReimbursmentPending] = useState({
+        count: 0,
+        amount: 0
+    });
     const order = useSelector(state => state.dashboardreducer);
     const poReport = useSelector(state => state.poreducer);
     const supportReport = useSelector(state => state.supportreducer);
     const walletReport = useSelector(state => state.walletsummaryreducer);
     const dispatch = useDispatch();
-
-
     const regularOrdersSum = () => (newCount.regular.length >= 1 && newCount.regular[0].noOfOrders) + (preparedCount.regular.length >= 1 && preparedCount.regular[0].noOfOrders) + (processingCount.regular.length >= 1 && processingCount.regular[0].noOfOrders)
         + (completeCount.regular.length >= 1 && completeCount.regular[0].noOfOrders) + (pendingCount.regular.length && pendingCount.regular[0].noOfOrders);
 
@@ -509,6 +511,17 @@ function DashBoard() {
         ).then(
             res => {
                 setReimbursmentSummary(res);
+                let sum = 0;
+                let count = 0;
+                res.filter(data => data.reimbursmentStatus != "cancelled" && data.reimbursmentStatus != "complete").map(exp => {
+                    sum = sum + exp.amount;
+                    count = count + exp.count;
+                });
+                setReimbursmentPending({
+                    count: count,
+                    amount: sum
+                });
+                console.log(sum);
             }
         ).catch(err => console.log(err))
     }
@@ -721,20 +734,12 @@ function DashBoard() {
                             <TableBody>
                                 <TableRow >
                                     {expenseSummary.map((exp, index) => (
-
-
                                         <TableCell align="center" >{exp.count}</TableCell>
-
-
                                     ))}
                                 </TableRow>
                                 <TableRow >
                                     {expenseSummary.map((exp, index) => (
-
-
                                         <TableCell align="center" >{exp.amount}</TableCell>
-
-
                                     ))}
                                 </TableRow>
                             </TableBody>
@@ -766,9 +771,18 @@ function DashBoard() {
 
                                     <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "complete").map(exp => exp.count)}</TableCell>
 
-                                    <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "pending").map(exp => exp.count)}</TableCell>
+                                    <TableCell align="center" >{reimbursmentPending.count}</TableCell>
 
                                     <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "cancelled").map(exp => exp.count)}</TableCell>
+                                </TableRow>
+                                <TableRow >
+
+
+                                    <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "complete").map(exp => exp.amount)}</TableCell>
+
+                                    <TableCell align="center" >{reimbursmentPending.amount}</TableCell>
+
+                                    <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "cancelled").map(exp => exp.amount)}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </>
