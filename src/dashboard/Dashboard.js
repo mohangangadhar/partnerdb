@@ -143,6 +143,7 @@ function DashBoard() {
         }
     });
     const [expenseSummary, setExpenseSummary] = useState([]);
+    const [reimbursmentSummary, setReimbursmentSummary] = useState([]);
     const order = useSelector(state => state.dashboardreducer);
     const poReport = useSelector(state => state.poreducer);
     const supportReport = useSelector(state => state.supportreducer);
@@ -503,6 +504,13 @@ function DashBoard() {
                 setExpenseSummary(res);
             }
         ).catch(err => console.log(err))
+        await fetch(APIURL + "expenses/reimbursment-summary").then(
+            response => response.json()
+        ).then(
+            res => {
+                setReimbursmentSummary(res);
+            }
+        ).catch(err => console.log(err))
     }
     useEffect(async () => {
         setisSummaryLoading(true);
@@ -697,7 +705,7 @@ function DashBoard() {
             <TableContainer component={Paper}>
 
                 <Table className="table" aria-label="spanning table">
-                 
+
                     {expenseSummary.length > 1 ?
                         <>
                             <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
@@ -728,6 +736,39 @@ function DashBoard() {
 
 
                                     ))}
+                                </TableRow>
+                            </TableBody>
+                        </>
+                        : CircularProgressInTable}
+                </Table>
+            </TableContainer>
+            <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Reimbursment Summary:</h3>
+            <TableContainer component={Paper}>
+
+                <Table className="table" aria-label="spanning table">
+
+                    {reimbursmentSummary.length > 1 ?
+                        <>
+                            <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
+                                <TableRow>
+
+
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Complete</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Pending</TableCell>
+                                    <TableCell align="center" style={{ color: 'wheat' }}>Cancelled</TableCell>
+
+                                </TableRow>
+
+                            </TableHead>
+                            <TableBody>
+                                <TableRow >
+
+
+                                    <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "complete").map(exp => exp.count)}</TableCell>
+
+                                    <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "pending").map(exp => exp.count)}</TableCell>
+
+                                    <TableCell align="center" >{reimbursmentSummary.filter(data => data.reimbursmentStatus == "cancelled").map(exp => exp.count)}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </>
