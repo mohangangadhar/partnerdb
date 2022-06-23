@@ -40,7 +40,8 @@ function PoReports(props) {
         comments: "",
         totalPay: 0.0,
         productName: "",
-        orderedQty: 0
+        orderedQty: 0,
+        orderedUom: ""
     });
     const [poSummary, setPoSummary] = useState("");
     const { poNumber } = useParams();
@@ -135,7 +136,8 @@ function PoReports(props) {
             totalPay: row.totalPay,
             comments: row.comments,
             productName: row.productName,
-            orderedQty: row.orderedQty
+            orderedQty: row.orderedQty,
+            orderedUom: row.orderedUom
         });
         setEditContactId(row.id);
     }
@@ -151,6 +153,7 @@ function PoReports(props) {
             comments: tempFormData.comments == null ? "" : tempFormData.comments,
             totalPay: tempFormData.totalPay,
             orderedQty: tempFormData.orderedQty,
+            orderedUom: tempFormData.orderedUom,
             productName: tempFormData.productName
         };
 
@@ -185,6 +188,7 @@ function PoReports(props) {
         xyz.comments = tempFormData.comments;
         xyz.productName = tempFormData.productName;
         xyz.orderedQty = tempFormData.orderedQty;
+        xyz.orderedUom = tempFormData.orderedUom;
         for (let i = 0; i < rows.length; i++) {
             if (row.id == rows[i].id) {
                 ind = i;

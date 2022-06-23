@@ -34,7 +34,22 @@ const EditableRow = ({
             <TableCell align="center">
                 <input type="text" placeholder="Ordered Qty" name="orderedQty" value={addFormData.orderedQty} onChange={handleEditFormChange} />
             </TableCell>
-            <TableCell align="center">{row.orderedUom}</TableCell>
+            <TableCell align="center">
+                <select style={{
+                    padding: 5,
+                }} name="orderedUom" value={addFormData.orderedUom} onChange={handleEditFormChange}>
+                    <option style={styleOptions} disabled>Ordered Uom:</option>
+                    <option style={styleOptions} value="Box">Box</option>
+                    <option style={styleOptions} value="Bunch">Bunch</option>
+                    <option style={styleOptions} value="Case">Case</option>
+                    <option style={styleOptions} value="Dozen">Dozen</option>
+                    <option style={styleOptions} value="Kg">Kg</option>
+                    <option style={styleOptions} value="Pc">Pc</option>
+                    <option style={styleOptions} value="Day">Day</option>
+                    <option style={styleOptions} value="Hr">Hr</option>
+                    <option style={styleOptions} value="Unit">Unit</option>
+                </select>
+            </TableCell>
             <TableCell align="center">
                 <textarea placeholder="Received Quantity" name="receivedQty" value={addFormData.receivedQty} cols="20" onChange={handleEditFormChange}></textarea>
             </TableCell>
