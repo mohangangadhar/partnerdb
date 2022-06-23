@@ -279,12 +279,12 @@ const Expenses = () => {
                         autoFocus
                         onChange={(e) => setModalData((prev) => ({
                             ...prev,
-                            memberName: e.target.value
+                            raisedBy: e.target.value
                         }))
                         }
                         margin="dense"
-                        id="name"
-                        label="Name"
+                        id="raisedBy"
+                        label="Raised By"
                         type="text"
                         fullWidth
                         variant="standard"
@@ -317,21 +317,21 @@ const Expenses = () => {
                         fullWidth
                         variant="standard"
                     />
+
                     <TextField
                         autoFocus
                         onChange={(e) => setModalData((prev) => ({
                             ...prev,
-                            raisedBy: e.target.value
+                            memberName: e.target.value
                         }))
                         }
                         margin="dense"
-                        id="raisedBy"
-                        label="Raised By"
+                        id="name"
+                        label="Paid By"
                         type="text"
                         fullWidth
                         variant="standard"
                     />
-
                     <TextField
                         autoFocus
                         onChange={(e) => setModalData((prev) => ({
