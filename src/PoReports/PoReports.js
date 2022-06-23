@@ -59,9 +59,11 @@ function PoReports(props) {
                     "poType": "",
                     "poStatus": "",
                     "comments": "",
-                    "poReceivedDate": "",
+                    "poReceivedDate": data.poReceivedDate,
                     "primarySupplier": data.primarySupplier,
-                    "invoiceNumber": data.invoiceNumber
+                    "invoiceNumber": data.invoiceNumber,
+                    "paymentRefNumber": data.paymentRefNumber,
+                    "paymentDate": data.paymentDate,
                 }
 
                 const requestOptionsForUpdate = {
