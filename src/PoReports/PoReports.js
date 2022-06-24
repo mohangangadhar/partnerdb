@@ -60,7 +60,7 @@ function PoReports(props) {
                     "poType": "",
                     "poStatus": "",
                     "comments": "",
-                    "poReceivedDate": data.poReceivedDate,
+                    "poReceivedDate": data.poReceivedDate != null ? data.poReceivedDate : "",
                     "primarySupplier": data.primarySupplier,
                     "invoiceNumber": data.invoiceNumber,
                     "paymentRefNumber": data.paymentRefNumber,
@@ -87,13 +87,14 @@ function PoReports(props) {
         let sum = 0;
 
         list.map((row) => {
-            if (row.receivedQty >= 0) {
+            if (row.receivedQty != null) {
                 sum += (row.receivedQty - row.wastageQty) * row.totalPay;
             }
             else {
                 sum += row.orderedQty * row.totalPay;
             }
         })
+        console.log(sum);
         getPoSummary(sum);
     }
     const getLatestReport = async () => {
