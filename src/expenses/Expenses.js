@@ -29,6 +29,7 @@ const Expenses = () => {
     const [isLoading, setisLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
     const [editPage, setEditPage] = useState(0);
+    const [isDownloading, setisDownloading] = useState(false);
     const [noData, setNoData] = useState(false);
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
@@ -244,8 +245,24 @@ const Expenses = () => {
 
             ).catch(err => console.log(err))
     }
-    return <div>
+    const handleDownload = async () => {
+        setisDownloading(true);
 
+        fetch(APIURL + "export/admin/expensereport/", GetRequestOptions)
+            .then(response => {
+                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+                response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url
+                    a.download = filename;
+                    a.click();
+                    setisDownloading(false);
+                }).catch(err => setisDownloading(false));
+            });
+    }
+    return <div>
+        {isDownloading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Downloading Orders</b>}
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <Typography component="h2" variant="h6" style={{ color: 'wheat', }} align={"left"} gutterBottom>
                 Expenses
@@ -259,6 +276,7 @@ const Expenses = () => {
             <SearchOrdersByUserName setSearchQuery={setExpenseId} searchquery={expenseId}
                 handleSearch={handleSearchByExpenseId}
                 label="Search By Expense Id" />
+            <Button variant="contained" color="success" onClick={(event) => handleDownload()}>Download</Button>
         </div>
         <div>
             <Modal

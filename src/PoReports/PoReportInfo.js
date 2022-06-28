@@ -342,6 +342,22 @@ const PoReportInfo = () => {
         }
         await receivedData(0, `po-id/${searchPoNumber}?size=30&page=`);
     }
+    const handleDownload = async () => {
+        setisApiLoading(true);
+
+        fetch(APIURL + "export/admin/poreport/", GetRequestOptions)
+            .then(response => {
+                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+                response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url
+                    a.download = filename;
+                    a.click();
+                    setisApiLoading(false);
+                }).catch(err => setisApiLoading(false));
+            });
+    }
     return (
         <div>
             {isApiLoading && <b style={{ position: 'fixed', left: '-20', color: 'white', display: 'flex', justifyContent: 'flex-start', width: '40%', backgroundColor: 'red' }}>Updating...Do not go to any other Page</b>}
@@ -410,6 +426,7 @@ const PoReportInfo = () => {
                 <SearchOrdersByUserName setSearchQuery={setSearchPoNumber} searchquery={searchPoNumber}
                     handleSearch={handleSearchByPoNumber}
                     label="Search By Po Number" />
+                <Button style={{ maxHeight: '2vw', display: 'flex', justifyContent: 'center' }} variant="contained" color="success" onClick={(event) => handleDownload()}>Download</Button>
             </div >
             <ImportPoModal open={open} setPoCreatedDate={setPoCreatedDate} sendTotalPoData={sendTotalPoData} importData={importData}
                 readUploadFile={readUploadFile} handleClose={handleClose} />
