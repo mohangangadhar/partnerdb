@@ -24,6 +24,7 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.paymentStatus}</TableCell>
             <TableCell align="center">{row.paymentRef}</TableCell>
             <TableCell align="center">{row.reimbursmentStatus}</TableCell>
+            <TableCell align="center">{row.reimbursmentRef}</TableCell>
             <TableCell align="center">{row.raisedBy}</TableCell>
             <TableCell align="center">{row.raisedDate}</TableCell>
             <TableCell align="center">{row.eventDate}</TableCell>

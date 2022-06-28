@@ -49,6 +49,9 @@ const EditableRow = ({
                     <option style={styleOptions} value="cancelled">Cancelled</option>
                 </select>
             </TableCell>
+            <TableCell align="center">
+                <input placeholder="Reimbursment Ref" name="reimbursmentRef" value={addFormData.reimbursmentRef} onChange={handleEditFormChange} />
+            </TableCell>
             <TableCell align="center">{row.raisedBy}</TableCell>
             <TableCell align="center">{row.raisedDate}</TableCell>
             <TableCell align="center">
