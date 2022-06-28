@@ -48,6 +48,7 @@ const PoReportInfo = () => {
     const [editContactId, setEditContactId] = useState(null);
     const [poStatus, setPoStatus] = useState("");
     const [supplier, setSupplier] = useState("");
+    const [poCreatedBy, setPoCreatedBy] = useState("");
     const [addFormData, setAddFormData] = useState({
         id: 0,
         active: 0,
@@ -279,6 +280,7 @@ const PoReportInfo = () => {
                     "poCreatedDate": poCreatedDate,
                     "poType": "Manual",
                     "poStatus": "new",
+                    "createdBy": poCreatedBy,
                     "actualTotal": getTotalPay(checkList),
                     "poTotal": getTotalPay(checkList),
                     "primarySupplier": inputPrimarySupplier,
@@ -291,7 +293,7 @@ const PoReportInfo = () => {
                     },
                     body: JSON.stringify(reqBody)
                 };
-                fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
+                fetch("http://127.0.0.1:8080/" + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
                     setisApiLoading(false);
                     receivedData(0, "page-query?size=30&page=");
@@ -399,13 +401,14 @@ const PoReportInfo = () => {
                     <div style={{ width: '33%' }}>
                         {totalPoData.length == 0 &&
                             <div style={{ display: 'flex' }}>
+                                <input placeholder="Po Created By" type="text" onChange={(e) => setPoCreatedBy(e.target.value)} />
                                 <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />
                                 <Picker color="white" dateChange={(e) => setPoCreatedDate(e.target.value)} label={"Po Created Date"} />
 
                             </div>
                         }
 
-                        <Button variant="contained" style={{ color: 'yellow' }} disabled={inputPrimarySupplier.length > 1 && poCreatedDate.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
+                        <Button variant="contained" style={{ color: 'yellow' }} disabled={poCreatedBy.length > 1 && inputPrimarySupplier.length > 1 && poCreatedDate.length > 1 ? false : true} onClick={() => setToggle(false)}>Add</Button> &nbsp;
                         {totalPoData.length > 0 && <Button variant="contained" onClick={() => sendTotalPoData(totalPoData, "")}>Save All</Button>}
                     </div>
                     :
