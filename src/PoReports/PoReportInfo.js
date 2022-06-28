@@ -24,6 +24,7 @@ import Modal from './Components/ImportPoModal';
 import ImportPoModal from './Components/ImportPoModal';
 import DropDownForPoStatus from './Components/DropDownForPoStatus';
 import SearchOrdersByUserName from '../orders/SearchOrdersByUserName';
+import DropDownForSuppliers from './Components/DropDownForSuppliers';
 
 
 const PoReportInfo = () => {
@@ -41,6 +42,7 @@ const PoReportInfo = () => {
     const [filterInStock, setFilterInStock] = useState("");
     const [isLoading, setisLoading] = useState(false);
     const [searchNotFound, setSearchNotFound] = useState(false);
+    const [suppliers, setSuppliers] = useState([]);
     const [importData, setImportData] = useState([]);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -82,10 +84,18 @@ const PoReportInfo = () => {
             }).catch(err => console.log(err.message));
         setisLoading(false);
     }
+    const getPrimarySuppliers = async () => {
+        await fetch(APIURL + "po-report-info/primary-suppliers", GetRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setSuppliers(data)
+            }).catch(err => console.log(err.message));
+    }
     useEffect(() => {
         setisLoading(true);
         setSearchNotFound(false);
         receivedData(offSet, "page-query?size=30&page=");
+        getPrimarySuppliers();
     }, [offSet]);
 
 
@@ -293,7 +303,7 @@ const PoReportInfo = () => {
                     },
                     body: JSON.stringify(reqBody)
                 };
-                fetch("http://127.0.0.1:8080/" + "po-report-info", requestOptionsz).then(response => {
+                fetch(APIURL + "po-report-info", requestOptionsz).then(response => {
                     setTotalPoData([]);
                     setisApiLoading(false);
                     receivedData(0, "page-query?size=30&page=");
@@ -402,7 +412,7 @@ const PoReportInfo = () => {
                         {totalPoData.length == 0 &&
                             <div style={{ display: 'flex' }}>
                                 <input placeholder="Po Created By" type="text" onChange={(e) => setPoCreatedBy(e.target.value)} />
-                                <input placeholder="Enter Primary Supplier" type="text" onChange={(e) => setInputPrimarySupplier(e.target.value)} />
+                                <DropDownForSuppliers suppliers={suppliers} supplier={inputPrimarySupplier} handleChangeSupplier={setInputPrimarySupplier} />
                                 <Picker color="white" dateChange={(e) => setPoCreatedDate(e.target.value)} label={"Po Created Date"} />
 
                             </div>
