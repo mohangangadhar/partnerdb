@@ -19,7 +19,9 @@ const EditableRow = ({
         <TableRow key={row.id}>
             <TableCell >{row.id}</TableCell>
             <TableCell align="center" >{row.expenseId}</TableCell>
-            <TableCell >{row.memberName}</TableCell>
+            <TableCell align="center">
+                <input placeholder="paid by[name]" name="memberName" value={addFormData.memberName} onChange={handleEditFormChange} />
+            </TableCell>
             <TableCell align="center" >{row.amount}</TableCell>
 
             <TableCell align="center">{row.category}</TableCell>

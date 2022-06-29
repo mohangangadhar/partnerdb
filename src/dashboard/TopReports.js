@@ -19,7 +19,7 @@ const TopReports = () => {
     const [status, setStatus] = useState('expenses');
     const changeStatus = async (status) => {
         setTopReports([]);
-        let url = status == "expenses" ? "expenses/top-expense-summary" : "po-report-info/top-po-summary";
+        let url = status == "expenses" ? "expenses/top-expense-summary" : status == "po" ? "po-report-info/top-po-summary" : "order/top-orders-summary";
         await fetch(APIURL + url, GetRequestOptions).then(
             response => response.json()
         ).then(data => {
@@ -37,16 +37,17 @@ const TopReports = () => {
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
-                        {status == "expenses" ?
+                        {status == "expenses" &&
                             <>
-                                <TableCell align="center" style={{ color: 'wheat' }}>Payment Status</TableCell>
-                                <TableCell align="center" style={{ color: 'wheat' }}>reimbursmentStatus</TableCell>
-                                <TableCell align="center" style={{ color: 'wheat' }}>Amount</TableCell>
 
+                                <TableCell align="center" style={{ color: 'wheat' }}>ReimbursmentStatus</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Amount</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Raised By</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Category</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Expense Id</TableCell>
-                            </> :
+                                <TableCell align="center" style={{ color: 'wheat' }}>Payment Status</TableCell>
+                            </>}
+                        {status == "po" &&
                             <>
                                 <TableCell align="center" style={{ color: 'wheat' }}> Po Number</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Payment Status</TableCell>
@@ -56,6 +57,15 @@ const TopReports = () => {
                                 <TableCell align="center" style={{ color: 'wheat' }}>Primary Supplier</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Po Received Date</TableCell>
                             </>
+                        }
+                        {status == "orders" &&
+                            <>
+                                <TableCell align="center" style={{ color: 'wheat' }}> User Id</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>User name</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Pending Amount</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Pending Orders</TableCell>
+                            </>
+
                         }
 
                         <TableCell>
@@ -76,36 +86,45 @@ const TopReports = () => {
                                         Expenses
                                     </MenuItem>
                                     <MenuItem value="po">Po</MenuItem>
-
+                                    <MenuItem value="orders">Orders</MenuItem>
                                 </Select>
                             </FormControl>
                         </TableCell>
                     </TableHead>
                     {topReports ?
                         <TableBody>
-                            {status == "expenses" ? topReports.map((rows, index) => (
+                            {status == "expenses" && topReports.map((rows, index) => (
                                 <TableRow >
-                                    <TableCell align="center">{rows.paymentStatus}</TableCell>
+
                                     <TableCell align="center">{rows.reimbursmentStatus}</TableCell>
                                     <TableCell align="center">{rows.amount}</TableCell>
                                     <TableCell align="center">{rows.raisedBy}</TableCell>
                                     <TableCell align="center">{rows.category}</TableCell>
                                     <TableCell align="center">{rows.expenseId}</TableCell>
+                                    <TableCell align="center">{rows.paymentStatus}</TableCell>
                                 </TableRow>
-                            ))
-                                : topReports.map((rows, index) => (
-                                    <TableRow >
-                                        <TableCell align="center">{rows.poNumber}</TableCell>
-                                        <TableCell align="center">{rows.paymentStatus}</TableCell>
-                                        <TableCell align="center">{rows.poTotal}</TableCell>
-                                        <TableCell align="center">{rows.actualTotal}</TableCell>
-                                        <TableCell align="center">{rows.poStatus}</TableCell>
-                                        <TableCell align="center">{rows.primarySupplier}</TableCell>
-                                        <TableCell align="center">{rows.poReceivedDate}</TableCell>
-                                    </TableRow>
+                            ))}
+                            {status == "po" && topReports.map((rows, index) => (
+                                <TableRow >
+                                    <TableCell align="center">{rows.poNumber}</TableCell>
+                                    <TableCell align="center">{rows.paymentStatus}</TableCell>
+                                    <TableCell align="center">{rows.poTotal}</TableCell>
+                                    <TableCell align="center">{rows.actualTotal}</TableCell>
+                                    <TableCell align="center">{rows.poStatus}</TableCell>
+                                    <TableCell align="center">{rows.primarySupplier}</TableCell>
+                                    <TableCell align="center">{rows.poReceivedDate}</TableCell>
+                                </TableRow>
 
-                                ))}
+                            ))}
+                            {status == "orders" && topReports.map((rows, index) => (
+                                <TableRow >
+                                    <TableCell align="center">{rows.id}</TableCell>
+                                    <TableCell align="center">{rows.name}</TableCell>
+                                    <TableCell align="center">{rows.total}</TableCell>
+                                    <TableCell align="center">{rows.noOfOrders}</TableCell>
+                                </TableRow>
 
+                            ))}
 
                         </TableBody> : <CircularProgressInTable />}
                 </Table>

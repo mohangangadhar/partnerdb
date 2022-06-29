@@ -641,7 +641,6 @@ function DashBoard() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TopReports />
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Revenue Summary:</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
@@ -853,6 +852,7 @@ function DashBoard() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TopReports />
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Orders :</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">

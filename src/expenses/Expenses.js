@@ -50,6 +50,7 @@ const Expenses = () => {
         paymentRef: "",
         comments: "",
         reimbursmentRef: "",
+        memberName: ""
     });
     const [modalData, setModalData] = useState({
         raisedDate: "",
@@ -108,6 +109,7 @@ const Expenses = () => {
             paymentRef: row.paymentRef,
             comments: row.comments,
             reimbursmentRef: row.reimbursmentRef,
+            memberName: row.memberName
         });
         setEditContactId(row.id);
     }
@@ -122,7 +124,8 @@ const Expenses = () => {
             vendorName: tempFormData.vendorName,
             paymentRef: tempFormData.paymentRef,
             reimbursmentRef: tempFormData.reimbursmentRef,
-            comments: tempFormData.comments
+            comments: tempFormData.comments,
+            memberName: tempFormData.memberName
         };
         setisApiLoading(true);
 
@@ -156,6 +159,7 @@ const Expenses = () => {
         xyz.paymentRef = tempFormData.paymentRef;
         xyz.comments = tempFormData.comments;
         xyz.reimbursmentRef = tempFormData.reimbursmentRef;
+        xyz.memberName = tempFormData.memberName;
         for (let i = 0; i < editedRowData.length; i++) {
             if (row.id == editedRowData[i].id) {
                 ind = i;
