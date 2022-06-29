@@ -15,6 +15,7 @@ import DetailTableTitles from './DetailTableTitles';
 import CustomTooltip from '../components/ToolTip/tooltip';
 import Picker from '../components/Picker';
 import DeliveredOrderReports from './DeliveredOrderReports';
+import TopReports from './TopReports';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
     const [orderdata, setOrderData] = useState([]);
@@ -640,6 +641,7 @@ function DashBoard() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TopReports />
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Revenue Summary:</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
