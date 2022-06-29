@@ -43,6 +43,7 @@ const TopReports = () => {
                                 <TableCell align="center" style={{ color: 'wheat' }}>ReimbursmentStatus</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Amount</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Raised By</TableCell>
+                                <TableCell align="center" style={{ color: 'wheat' }}>Paid By</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Category</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Expense Id</TableCell>
                                 <TableCell align="center" style={{ color: 'wheat' }}>Payment Status</TableCell>
@@ -99,6 +100,7 @@ const TopReports = () => {
                                     <TableCell align="center">{rows.reimbursmentStatus}</TableCell>
                                     <TableCell align="center">{rows.amount}</TableCell>
                                     <TableCell align="center">{rows.raisedBy}</TableCell>
+                                    <TableCell align="center">{rows.paidBy}</TableCell>
                                     <TableCell align="center">{rows.category}</TableCell>
                                     <TableCell align="center">{rows.expenseId}</TableCell>
                                     <TableCell align="center">{rows.paymentStatus}</TableCell>
