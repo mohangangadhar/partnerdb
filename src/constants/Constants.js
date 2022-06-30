@@ -93,7 +93,7 @@ export const expenseTabData = [
 export const mangoTabData = ["Id", "Mango Name", "No Of Orders", "Total Quantity"];
 export const poReportInfoTabData = [
     "Id", "Po Number", "Primary Supplier", "PO Date", "Active", "PO Total", "Status",
-    "Received Date", "Actual Total", "Payment Status", "Created At",
+    "Received Date", "Actual Total", "Payment Status", "Created At", "Created By",
     "Type", "Comments", "Payment Reference", "Payment Date", "Invoice No", "Action"
 ];
 export const paymentReportsTabData = [

@@ -29,7 +29,7 @@ const ReadOnlyPoReportInfo = ({
 
 
             <TableCell align="center" >{row.createdAt}</TableCell>
-
+            <TableCell align="center" >{row.createdBy}</TableCell>
 
 
             <TableCell align="center">{row.poType}</TableCell>

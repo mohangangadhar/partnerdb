@@ -64,7 +64,7 @@ const EditablePoReportInfo = ({
 
 
             <TableCell align="center" >{row.createdAt}</TableCell>
-
+            <TableCell align="center" >{row.createdBy}</TableCell>
 
             <TableCell align="center">
                 <input type="text" placeholder="poType" name="poType" value={addFormData.poType} onChange={handleEditFormChange} />
