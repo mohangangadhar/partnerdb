@@ -20,7 +20,7 @@ const TopReports = () => {
     const changeStatus = async (status) => {
         setTopReports([]);
         let url = status == "expenses" ? "expenses/top-expense-summary" : status == "po" ? "po-report-info/top-po-summary" : "order/top-orders-summary";
-        await fetch("http://127.0.0.1:8080/" + url, GetRequestOptions).then(
+        await fetch(APIURL + url, GetRequestOptions).then(
             response => response.json()
         ).then(data => {
             console.log(data);
