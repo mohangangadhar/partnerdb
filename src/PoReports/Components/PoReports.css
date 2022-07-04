@@ -7,3 +7,9 @@
     font: 100 1.2rem "Roboto", sans-serif;
     margin:5px
   }
+  .createdBy > input[type="text"]{
+    border-radius: 30px;
+    border: solid 1px black;
+    font: 100 1.2rem "Roboto", sans-serif;
+    margin:5px
+  }

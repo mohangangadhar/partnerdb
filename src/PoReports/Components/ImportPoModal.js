@@ -3,7 +3,7 @@ import { Box, DialogTitle, Grid, Modal, TextField, Typography } from "@material-
 import Button from "@mui/material/Button";
 import Picker from "../../components/Picker";
 import "./PoReports.css"
-const ImportPoModal = ({ setPoCreatedDate, open, handleClose, readUploadFile, sendTotalPoData, importData }) => {
+const ImportPoModal = ({ setPoCreatedBy, setPoCreatedDate, open, handleClose, readUploadFile, sendTotalPoData, importData }) => {
     const style = {
         position: 'absolute',
         top: '50%',
@@ -29,6 +29,11 @@ const ImportPoModal = ({ setPoCreatedDate, open, handleClose, readUploadFile, se
                         Import PO
                     </Typography>
                     <Picker dateChange={(e) => setPoCreatedDate(e.target.value)} label={"Created Date"} />
+                    <div className='createdBy'>
+                        <label htmlFor="upload">Po created By: </label>
+                        <input type="text" placeholder='Enter Po Created By' name="createdBy" onChange={(e) => setPoCreatedBy(e.target.value)} />
+                    </div>
+
                     <div className='newPostForm'>
                         <label htmlFor="upload">Import File</label>
                         <input
