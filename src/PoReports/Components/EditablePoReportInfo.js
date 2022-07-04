@@ -81,6 +81,9 @@ const EditablePoReportInfo = ({
                 <Picker color="white" date={addFormData.paymentDate} dateChange={handleEditFormChange} label="paymentDate" />
             </TableCell>
             <TableCell align="center">
+                <Picker color="white" date={addFormData.expectedDeliveryDate} dateChange={handleEditFormChange} label="expectedDeliveryDate" />
+            </TableCell>
+            <TableCell align="center">
                 <input type="text" placeholder="invoice no" name="invoiceNumber" value={addFormData.invoiceNumber} onChange={handleEditFormChange} />
             </TableCell>
 

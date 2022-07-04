@@ -64,7 +64,8 @@ const PoReportInfo = () => {
         poTotal: 0,
         invoiceNumber: 0,
         paymentDate: "",
-        paymentRefNumber: ""
+        paymentRefNumber: "",
+        expectedDeliveryDate: ""
     });
     const [editedRowData, setEditedRowData] = useState([]);
     const [searchPoNumber, setSearchPoNumber] = useState("");
@@ -76,7 +77,7 @@ const PoReportInfo = () => {
         await fetch(APIURL + "po-report-info/" + query + val, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data.content);
+
                 setEditedRowData(data.content);
                 setTotalPages(data.totalPages);
                 setisLoading(false);
@@ -125,7 +126,8 @@ const PoReportInfo = () => {
             poTotal: row.poTotal,
             invoiceNumber: row.invoiceNumber,
             paymentDate: row.paymentDate,
-            paymentRefNumber: row.paymentRefNumber
+            paymentRefNumber: row.paymentRefNumber,
+            expectedDeliveryDate: row.expectedDeliveryDate
         });
         setEditContactId(row.id);
     }
@@ -143,7 +145,8 @@ const PoReportInfo = () => {
             "poTotal": tempFormData.poTotal,
             "paymentRefNumber": tempFormData.paymentRefNumber,
             "paymentDate": tempFormData.paymentDate,
-            "invoiceNumber": tempFormData.invoiceNumber
+            "invoiceNumber": tempFormData.invoiceNumber,
+            "expectedDeliveryDate": tempFormData.expectedDeliveryDate
         };
         setisApiLoading(true);
 
@@ -179,6 +182,7 @@ const PoReportInfo = () => {
         xyz.paymentDate = tempFormData.paymentDate;
         xyz.paymentRefNumber = tempFormData.paymentRefNumber;
         xyz.invoiceNumber = tempFormData.invoiceNumber;
+        xyz.expectedDeliveryDate = tempFormData.expectedDeliveryDate;
         for (let i = 0; i < editedRowData.length; i++) {
             if (row.id == editedRowData[i].id) {
                 ind = i;

@@ -69,6 +69,9 @@ const EditableRow = ({
                 <Picker color="white" date={addFormData.clearedDate} dateChange={handleEditFormChange} label="clearedDate" />
             </TableCell>
             <TableCell align="center">
+                <Picker color="white" date={addFormData.expectedDeliveryDate} dateChange={handleEditFormChange} label="expectedDeliveryDate" />
+            </TableCell>
+            <TableCell align="center">
                 <input placeholder="comments" name="comments" value={addFormData.comments} onChange={handleEditFormChange} />
             </TableCell>
             <TableCell align="center"><Button variant="contained" on color="success"

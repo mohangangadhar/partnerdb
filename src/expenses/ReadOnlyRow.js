@@ -31,6 +31,7 @@ const ReadOnlyRow = ({
             <TableCell align="center">{row.vendorName}</TableCell>
             <TableCell align="center">{row.clearedBy}</TableCell>
             <TableCell align="center">{row.clearedDate}</TableCell>
+            <TableCell align="center">{row.expectedDeliveryDate}</TableCell>
             <TableCell align="center">{row.comments}</TableCell>
             <TableCell align="center"><Button variant="contained" color="success" onClick={(event) => handleEditClick(event, row)}>Edit</Button></TableCell>
         </TableRow>

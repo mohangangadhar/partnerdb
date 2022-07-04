@@ -9,9 +9,12 @@ import TableBody from "@material-ui/core/TableBody";
 import Pagination from '@material-ui/lab/Pagination';
 import TableTitles from "../components/TableTitles/TableTitles";
 import "../App.css"
+import Select from '@mui/material/Select';
 import EditableRow from "./EditableRow"
 import ReadOnlyRow from "./ReadOnlyRow"
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 import { Box, DialogTitle, Grid, Modal, TextField, Typography } from "@material-ui/core";
 import { APIURL, expenseTabData, GetRequestOptions, supportTabData } from '../constants/Constants';
 import SearchByUserName from "../users/SearchByUserName";
@@ -50,7 +53,8 @@ const Expenses = () => {
         paymentRef: "",
         comments: "",
         reimbursmentRef: "",
-        memberName: ""
+        memberName: "",
+        expectedDeliveryDate: ""
     });
     const [modalData, setModalData] = useState({
         raisedDate: "",
@@ -109,7 +113,8 @@ const Expenses = () => {
             paymentRef: row.paymentRef,
             comments: row.comments,
             reimbursmentRef: row.reimbursmentRef,
-            memberName: row.memberName
+            memberName: row.memberName,
+            expectedDeliveryDate: row.expectedDeliveryDate
         });
         setEditContactId(row.id);
     }
@@ -125,7 +130,8 @@ const Expenses = () => {
             paymentRef: tempFormData.paymentRef,
             reimbursmentRef: tempFormData.reimbursmentRef,
             comments: tempFormData.comments,
-            memberName: tempFormData.memberName
+            memberName: tempFormData.memberName,
+            expectedDeliveryDate: tempFormData.expectedDeliveryDate
         };
         setisApiLoading(true);
 
@@ -160,6 +166,7 @@ const Expenses = () => {
         xyz.comments = tempFormData.comments;
         xyz.reimbursmentRef = tempFormData.reimbursmentRef;
         xyz.memberName = tempFormData.memberName;
+        xyz.expectedDeliveryDate = tempFormData.expectedDeliveryDate;
         for (let i = 0; i < editedRowData.length; i++) {
             if (row.id == editedRowData[i].id) {
                 ind = i;
@@ -314,20 +321,31 @@ const Expenses = () => {
                         fullWidth
                         variant="standard"
                     />
-                    <TextField
-                        autoFocus
-                        onChange={(e) => setModalData((prev) => ({
-                            ...prev,
-                            category: e.target.value
-                        }))
-                        }
-                        margin="dense"
-                        id="category"
-                        label="Category"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                    />
+                    <FormControl sx={{ minWidth: 120, width: '100%' }}>
+                        <InputLabel id="demo-simple-select-required-label"> Category</InputLabel>
+                        <Select
+
+                            labelId="demo-simple-select-required-label"
+                            id="demo-simple-select-disabled"
+
+                            onChange={(e) => setModalData((prev) => ({
+                                ...prev,
+                                category: e.target.value
+                            }))
+                            }
+                            label="category"
+                        >
+                            <MenuItem value="operations">Operations</MenuItem>
+                            <MenuItem value="inbound tranportation">Inbound Tranportation</MenuItem>
+                            <MenuItem value="outbound transportation">Outbound Transportation</MenuItem>
+                            <MenuItem value="office">Office</MenuItem>
+                            <MenuItem value="marketing">Marketing</MenuItem>
+                            <MenuItem value="technology">Technology</MenuItem>
+                            <MenuItem value="advance">Advance</MenuItem>
+                            <MenuItem value="ops associate">Ops Associate</MenuItem>
+                            <MenuItem value="others">Others</MenuItem>
+                        </Select>
+                    </FormControl>
                     <TextField
                         autoFocus
                         onChange={(e) => setModalData((prev) => ({
