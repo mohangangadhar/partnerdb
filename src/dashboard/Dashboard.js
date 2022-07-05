@@ -589,6 +589,8 @@ function DashBoard() {
                             <TableCell align="center" >No Of Orders</TableCell>
                             <TableCell align="center">Expected Total</TableCell>
                             <TableCell align="center">Final Total</TableCell>
+                            <TableCell align="center">Po Total</TableCell>
+                            <TableCell align="center">Expenses</TableCell>
                         </TableRow>
 
 
@@ -616,31 +618,28 @@ function DashBoard() {
                             <TableCell align="center" >
                                 {deliveredDateReport.map(item => item.finalTotal).reduce((prev, curr) => prev + curr, 0)}
                             </TableCell>
-                        </TableRow>
+                            {poTotalOnDeliveryDate && poTotalOnDeliveryDate.length > 0 &&
+                                <>
+                                    <TableCell align="center" >
+                                        {poTotalOnDeliveryDate[0].total}
+                                    </TableCell>
+                                </>
+                            }
+                       
+                        {expenseTotalOnDeliveryDate && expenseTotalOnDeliveryDate.length > 0 &&
+                            <>
 
+                                <TableCell align="center" >
+                                    {expenseTotalOnDeliveryDate[0].total}
+                                </TableCell>
+                            </>
+
+                        }
+                         </TableRow>
                     </Table>
                     : <h2>{noData ? "No Data" : "Select Delivery Date"} </h2>
                 }
-                <TableRow style={{ display: 'flex', justifyContent: 'center' }}>
-                    {poTotalOnDeliveryDate && poTotalOnDeliveryDate.length > 0 &&
-                        <>
 
-                            <TableCell align="center" >Po Total :</TableCell>
-                            <TableCell align="center" >
-                                {poTotalOnDeliveryDate[0].total}
-                            </TableCell>
-                        </>
-                    }
-                    {expenseTotalOnDeliveryDate && expenseTotalOnDeliveryDate.length > 0 &&
-                        <>
-                            <TableCell align="center" >Expense :</TableCell>
-                            <TableCell align="center" >
-                                {expenseTotalOnDeliveryDate[0].total}
-                            </TableCell>
-                        </>
-
-                    }
-                </TableRow>
             </TableContainer>
             <h3 style={{ marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Orders Summary:</h3>
             <TableContainer component={Paper}>

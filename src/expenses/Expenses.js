@@ -336,9 +336,9 @@ const Expenses = () => {
                             label="category"
                         >
                             <MenuItem value="operations">Operations</MenuItem>
-                            <MenuItem value="inbound tranportation">Inbound Tranportation</MenuItem>
+                            <MenuItem value="inbound transportation">Inbound Tranportation</MenuItem>
                             <MenuItem value="outbound transportation">Outbound Transportation</MenuItem>
-                            <MenuItem value="office">Office</MenuItem>
+                            <MenuItem value="office expense">Office Expense</MenuItem>
                             <MenuItem value="marketing">Marketing</MenuItem>
                             <MenuItem value="technology">Technology</MenuItem>
                             <MenuItem value="advance">Advance</MenuItem>
