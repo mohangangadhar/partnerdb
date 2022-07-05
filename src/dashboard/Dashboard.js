@@ -587,7 +587,8 @@ function DashBoard() {
                         <TableRow style={{ backgroundColor: '#CD5C5C', color: 'wheat' }}>
                             <TableCell align="center" >Delivery Status</TableCell>
                             <TableCell align="center" >No Of Orders</TableCell>
-                            <TableCell align="center">Total</TableCell>
+                            <TableCell align="center">Expected Total</TableCell>
+                            <TableCell align="center">Final Total</TableCell>
                         </TableRow>
 
 
@@ -600,17 +601,18 @@ function DashBoard() {
                                     }}>{data.deliveryStatus}</Link>
                                 </TableCell>
                                 <TableCell align="center" >{data.noOfOrders}</TableCell>
+                                <TableCell align="center">{data.expectedTotal}</TableCell>
                                 <TableCell align="center">{data.finalTotal}</TableCell>
                             </TableRow>
                         )}
                         <TableRow>
-                            <TableCell align="center" >Expected Total</TableCell>
+                            <TableCell align="center" >Total</TableCell>
+                            <TableCell align="center" >
+                                {deliveredDateReport.map(item => item.noOfOrders).reduce((prev, curr) => prev + curr, 0)}
+                            </TableCell>
                             <TableCell align="center" >
                                 {deliveredDateReport.map(item => item.expectedTotal).reduce((prev, curr) => prev + curr, 0)}
                             </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align="center" >Actual Total</TableCell>
                             <TableCell align="center" >
                                 {deliveredDateReport.map(item => item.finalTotal).reduce((prev, curr) => prev + curr, 0)}
                             </TableCell>
