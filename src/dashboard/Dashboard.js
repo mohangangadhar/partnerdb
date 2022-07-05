@@ -568,7 +568,7 @@ function DashBoard() {
                 setPoTotalOnDeliveryDate(data);
 
             }).catch(err => console.log(err));
-        await fetch("http://127.0.0.1:8080/" + `expenses/delivered-date/${val}`, GetRequestOptions).
+        await fetch(APIURL + `expenses/delivered-date/${val}`, GetRequestOptions).
             then(res => res.json()).
             then(data => {
 
@@ -619,25 +619,25 @@ function DashBoard() {
                     </Table>
                     : <h2>{noData ? "No Data" : "Select Delivery Date"} </h2>
                 }
-                <TableRow style={{display:'flex',justifyContent : 'center'}}>
-                {poTotalOnDeliveryDate && poTotalOnDeliveryDate.length > 0 &&
-                    <>
-                    
-                        <TableCell align="center" >Po Total :</TableCell>
-                        <TableCell align="center" >
-                            {poTotalOnDeliveryDate[0].total}
-                        </TableCell>
+                <TableRow style={{ display: 'flex', justifyContent: 'center' }}>
+                    {poTotalOnDeliveryDate && poTotalOnDeliveryDate.length > 0 &&
+                        <>
+
+                            <TableCell align="center" >Po Total :</TableCell>
+                            <TableCell align="center" >
+                                {poTotalOnDeliveryDate[0].total}
+                            </TableCell>
                         </>
-                }
-                {expenseTotalOnDeliveryDate && expenseTotalOnDeliveryDate.length > 0 &&
-                 <>
-                        <TableCell align="center" >Expense :</TableCell>
-                        <TableCell align="center" >
-                            {expenseTotalOnDeliveryDate[0].total}
-                        </TableCell>
+                    }
+                    {expenseTotalOnDeliveryDate && expenseTotalOnDeliveryDate.length > 0 &&
+                        <>
+                            <TableCell align="center" >Expense :</TableCell>
+                            <TableCell align="center" >
+                                {expenseTotalOnDeliveryDate[0].total}
+                            </TableCell>
                         </>
-                    
-                }
+
+                    }
                 </TableRow>
             </TableContainer>
             <h3 style={{ marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Orders Summary:</h3>
