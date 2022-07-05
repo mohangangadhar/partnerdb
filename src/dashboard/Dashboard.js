@@ -149,6 +149,8 @@ function DashBoard() {
         count: 0,
         amount: 0
     });
+    const [poTotalOnDeliveryDate, setPoTotalOnDeliveryDate] = useState([]);
+    const [expenseTotalOnDeliveryDate, setExpenseTotalOnDeliveryDate] = useState([]);
     const order = useSelector(state => state.dashboardreducer);
     const poReport = useSelector(state => state.poreducer);
     const supportReport = useSelector(state => state.supportreducer);
@@ -543,8 +545,11 @@ function DashBoard() {
     useEffect(() => {
         getPoData();
     }, [poReport.poData.length > 2])
+
     const handleDateChange = async (val) => {
         setDeliveredDateReport([]);
+        setPoTotalOnDeliveryDate(0);
+        setExpenseTotalOnDeliveryDate(0);
         setActualDeliveryDate(val);
         setNoData(false);
         await fetch(APIURL + `order/delivered-date/reports/${val}`, GetRequestOptions).
@@ -555,6 +560,20 @@ function DashBoard() {
                 if (data.length == 0) {
                     setNoData(true);
                 }
+            }).catch(err => console.log(err));
+        await fetch(APIURL + `po-report-info/delivered-date/${val}`, GetRequestOptions).
+            then(res => res.json()).
+            then(data => {
+
+                setPoTotalOnDeliveryDate(data);
+
+            }).catch(err => console.log(err));
+        await fetch("http://127.0.0.1:8080/" + `expenses/delivered-date/${val}`, GetRequestOptions).
+            then(res => res.json()).
+            then(data => {
+
+                setExpenseTotalOnDeliveryDate(data);
+
             }).catch(err => console.log(err));
     }
     return (
@@ -584,9 +603,42 @@ function DashBoard() {
                                 <TableCell align="center">{data.finalTotal}</TableCell>
                             </TableRow>
                         )}
+                        <TableRow>
+                            <TableCell align="center" >Expected Total</TableCell>
+                            <TableCell align="center" >
+                                {deliveredDateReport.map(item => item.expectedTotal).reduce((prev, curr) => prev + curr, 0)}
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell align="center" >Actual Total</TableCell>
+                            <TableCell align="center" >
+                                {deliveredDateReport.map(item => item.finalTotal).reduce((prev, curr) => prev + curr, 0)}
+                            </TableCell>
+                        </TableRow>
+
                     </Table>
                     : <h2>{noData ? "No Data" : "Select Delivery Date"} </h2>
                 }
+                <TableRow style={{display:'flex',justifyContent : 'center'}}>
+                {poTotalOnDeliveryDate && poTotalOnDeliveryDate.length > 0 &&
+                    <>
+                    
+                        <TableCell align="center" >Po Total :</TableCell>
+                        <TableCell align="center" >
+                            {poTotalOnDeliveryDate[0].total}
+                        </TableCell>
+                        </>
+                }
+                {expenseTotalOnDeliveryDate && expenseTotalOnDeliveryDate.length > 0 &&
+                 <>
+                        <TableCell align="center" >Expense :</TableCell>
+                        <TableCell align="center" >
+                            {expenseTotalOnDeliveryDate[0].total}
+                        </TableCell>
+                        </>
+                    
+                }
+                </TableRow>
             </TableContainer>
             <h3 style={{ marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Orders Summary:</h3>
             <TableContainer component={Paper}>
