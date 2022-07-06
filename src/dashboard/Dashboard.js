@@ -16,6 +16,7 @@ import CustomTooltip from '../components/ToolTip/tooltip';
 import Picker from '../components/Picker';
 import DeliveredOrderReports from './DeliveredOrderReports';
 import TopReports from './TopReports';
+import CategorySummary from './CategorySummary';
 function DashBoard() {
     const [bigData, setBigData] = useState([]);
     const [orderdata, setOrderData] = useState([]);
@@ -625,22 +626,23 @@ function DashBoard() {
                                     </TableCell>
                                 </>
                             }
-                       
-                        {expenseTotalOnDeliveryDate && expenseTotalOnDeliveryDate.length > 0 &&
-                            <>
 
-                                <TableCell align="center" >
-                                    {expenseTotalOnDeliveryDate[0].total}
-                                </TableCell>
-                            </>
+                            {expenseTotalOnDeliveryDate && expenseTotalOnDeliveryDate.length > 0 &&
+                                <>
 
-                        }
-                         </TableRow>
+                                    <TableCell align="center" >
+                                        {expenseTotalOnDeliveryDate[0].total}
+                                    </TableCell>
+                                </>
+
+                            }
+                        </TableRow>
                     </Table>
                     : <h2>{noData ? "No Data" : "Select Delivery Date"} </h2>
                 }
 
             </TableContainer>
+
             <h3 style={{ marginBottom: -1, fontStyle: 'italic', color: 'white' }}>Orders Summary:</h3>
             <TableContainer component={Paper}>
 
@@ -843,6 +845,7 @@ function DashBoard() {
                         : CircularProgressInTable}
                 </Table>
             </TableContainer>
+
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Po Summary:</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
@@ -881,6 +884,7 @@ function DashBoard() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <CategorySummary />
             <h3 style={{ marginBottom: -1, marginTop: 4, fontStyle: 'italic', color: 'white' }}>Wallet Summary:</h3>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
