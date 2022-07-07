@@ -62,6 +62,7 @@ import SeasonalTest from './orders/SeasonalTest';
 import Expenses from './expenses/Expenses';
 import Mango from './mango/mango';
 import DeliveredOrderReports from './dashboard/DeliveredOrderReports';
+import PricingSelection from './Pricing/PricingSelection';
 
 const drawerWidth = 240;
 
@@ -338,6 +339,18 @@ export default function MiniDrawer() {
                                         id: "3"
                                     }}><ListItemText primary="Wallet" /></Link>
                                 </ListItem>
+                                <ListItem style={{ color: "wheat" }} button key="Wallet">
+
+                                    <Link to={{
+                                        pathname: '/app/pricing',
+                                        id: "3"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -6 }}>Pricing</h6></Link>
+
+                                    <Link to={{
+                                        pathname: '/app/pricing',
+                                        id: "3"
+                                    }}><ListItemText primary="Pricing" /></Link>
+                                </ListItem>
                                 <ListItem button key="ServiceZones">
 
                                     <Link to={{
@@ -404,6 +417,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/mango" exact component={Mango} />
                                     <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/expenses" exact component={Expenses} />
+                                    <Route path="/app/pricing" exact component={PricingSelection} />
                                     <Route path="/app/:date/deliveredreports/:status" exact component={DeliveredOrderReports} />
                                     <Route path="/app/:poNumber/poreports" exact component={PoReports} />
                                     <Route path="/app/poreportsinfo" exact component={PoReportInfo} />

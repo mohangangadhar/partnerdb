@@ -58,6 +58,9 @@ export const getRandom = () => {
 export const dashboardSummary = [
     "Order Type", "New", "Processing", "Prepared", "Complete", "Pending", "Cancelled", "Total"
 ];
+export const PricingSelectionTabData = [
+    "Category", "Product", "Unit", "BB (C)", "Vijetha (C)", "Daman(O)", "Dhriti(O)", "Jeevamrut", "Landing Cost", "Proposed Cost", "Last Updated", "Comments", "Actions"
+]
 export const deliveredOrdersData = [
     "Order Id", "User", "Final Total", "Delivery Status"
 ];
