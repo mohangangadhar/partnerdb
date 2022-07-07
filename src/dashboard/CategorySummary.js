@@ -55,7 +55,7 @@ const CategorySummary = () => {
                         <TableCell align="center" style={{ color: 'wheat' }}>Out Of Stock</TableCell>
                         <TableCell>
                             <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Vendor</InputLabel>
+                                <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Category</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-required-label"
                                     style={{ height: 50, color: 'white' }}
