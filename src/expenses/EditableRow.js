@@ -31,7 +31,8 @@ const EditableRow = ({
                     padding: 5,
                 }} name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange}>
                     <option style={styleOptions} value="" >Payment Status:</option>
-                    <option style={styleOptions} value="complete">Complete</option>
+                    <option style={styleOptions} value="paid">Paid</option>
+                    <option style={styleOptions} value="new">New</option>
                     <option style={styleOptions} value="pending">Pending</option>
                     <option style={styleOptions} value="on hold">On Hold</option>
                     <option style={styleOptions} value="cancelled">Cancelled</option>
@@ -45,7 +46,7 @@ const EditableRow = ({
                     padding: 5,
                 }} name="reimbursmentStatus" value={addFormData.reimbursmentStatus} onChange={handleEditFormChange}>
                     <option style={styleOptions} value="" >Reimbursment Status:</option>
-                    <option style={styleOptions} value="complete">Complete</option>
+                    <option style={styleOptions} value="paid">Paid</option>
                     <option style={styleOptions} value="pending">Pending</option>
                     <option style={styleOptions} value="on hold">On Hold</option>
                     <option style={styleOptions} value="cancelled">Cancelled</option>

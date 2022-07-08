@@ -37,6 +37,7 @@ const EditablePoReportInfo = ({
                     <option style={styleOptions} value="delivered">Delivered</option>
                     <option style={styleOptions} value="rejected">Rejected</option>
                     <option style={styleOptions} value="cancelled">Cancelled</option>
+                    <option style={styleOptions} value="complete">Complete</option>
                     <option style={styleOptions} value="onhold">On Hold</option>
                 </select>
             </TableCell>
@@ -52,9 +53,12 @@ const EditablePoReportInfo = ({
                     padding: 5,
                 }} name="paymentStatus" value={addFormData.paymentStatus} onChange={handleEditFormChange}>
                     <option style={styleOptions} value="" >Payment Status:</option>
-                    <option style={styleOptions} value="complete">Complete</option>
-                    <option style={styleOptions} value="yet to deliver">Yet to Deliver</option>
+                    <option style={styleOptions} value="paid">Paid</option>
+                    <option style={styleOptions} value="approved">Approved for Payment</option>
+                    <option style={styleOptions} value="new">New</option>
+                    <option style={styleOptions} value="yet to received">Yet to Receive</option>
                     <option style={styleOptions} value="pending">Pending</option>
+                    <option style={styleOptions} value="pending approval">Pending Approval</option>
                     <option style={styleOptions} value="past due">Past Due</option>
                     <option style={styleOptions} value="on hold">On Hold</option>
                     <option style={styleOptions} value="cancelled">Cancelled</option>
