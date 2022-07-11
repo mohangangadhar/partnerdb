@@ -27,7 +27,7 @@ const PricingSelection = () => {
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
     const [isRowLoading, setisRowLoading] = useState(false);
-    const [url, setUrl] = useState("http://127.0.0.1:8080/" + "PricingSelection/page-query?page=");
+    const [url, setUrl] = useState(APIURL + "PricingSelection/page-query?page=");
     const [addFormData, setAddFormData] = useState({
         product: "",
         category: "",
@@ -50,7 +50,7 @@ const PricingSelection = () => {
         setNoData(false);
         setEditedRowData([]);
 
-        await fetch("http://127.0.0.1:8080/" + "pricing-selection/get-all", GetRequestOptions)
+        await fetch(APIURL + "pricing-selection/get-all", GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setEditedRowData(data);
@@ -117,7 +117,7 @@ const PricingSelection = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(PricingSelectionData)
         };
-        await fetch("http://127.0.0.1:8080/" + `pricing-selection`, requestOptionsForUpdate)
+        await fetch(APIURL + `pricing-selection`, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);
