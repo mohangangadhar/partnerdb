@@ -27,13 +27,16 @@ const PricingSelection = () => {
     const [editContactId, setEditContactId] = useState(null);
     const [isApiLoading, setisApiLoading] = useState(false);
     const [isRowLoading, setisRowLoading] = useState(false);
-    const [url, setUrl] = useState(APIURL + "PricingSelection/page-query?page=");
+    const [url, setUrl] = useState("http://127.0.0.1:8080/" + "PricingSelection/page-query?page=");
     const [addFormData, setAddFormData] = useState({
         product: "",
         category: "",
         unit: "",
-        jeevamrut: "",
-        bb: "",
+        jeevamrut: 0,
+        daman: 0,
+        dhriti: 0,
+        bb: 0,
+        vijetha: 0,
         lastUpdated: "",
         landingCost: "",
         proposedCost: "",
@@ -47,7 +50,7 @@ const PricingSelection = () => {
         setNoData(false);
         setEditedRowData([]);
 
-        await fetch(APIURL + "pricing-selection", GetRequestOptions)
+        await fetch("http://127.0.0.1:8080/" + "pricing-selection/get-all", GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setEditedRowData(data);
@@ -81,6 +84,9 @@ const PricingSelection = () => {
             unit: row.unit,
             jeevamrut: row.jeevamrut,
             bb: row.bb,
+            daman: row.daman,
+            dhriti: row.dhriti,
+            vijetha: row.vijetha,
             lastUpdated: row.lastUpdated,
             landingCost: row.landingCost,
             proposedCost: row.proposedCost,
@@ -95,6 +101,9 @@ const PricingSelection = () => {
             "unit": tempFormData.unit,
             "jeevamrut": tempFormData.jeevamrut,
             "bb": tempFormData.bb,
+            "daman": tempFormData.daman,
+            "dhriti": tempFormData.dhriti,
+            "vijetha": tempFormData.vijetha,
             "lastUpdated": tempFormData.lastUpdated,
             "landingCost": tempFormData.landingCost,
             "proposedCost": tempFormData.proposedCost,
@@ -104,11 +113,11 @@ const PricingSelection = () => {
         setisApiLoading(true);
 
         const requestOptionsForUpdate = {
-            method: 'PUT',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(PricingSelectionData)
         };
-        await fetch(APIURL + `pricing-selection/${row.id}`, requestOptionsForUpdate)
+        await fetch("http://127.0.0.1:8080/" + `pricing-selection`, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);
@@ -127,9 +136,13 @@ const PricingSelection = () => {
         xyz.unit = tempFormData.unit;
         xyz.jeevamrut = tempFormData.jeevamrut;
         xyz.bb = tempFormData.bb;
+        xyz.daman = tempFormData.daman;
+        xyz.dhriti = tempFormData.dhriti;
+        xyz.vijetha = tempFormData.vijetha;
         xyz.landingCost = tempFormData.landingCost;
         xyz.proposedCost = tempFormData.proposedCost;
         xyz.comments = tempFormData.comments;
+        xyz.lastUpdated = tempFormData.lastUpdated;
         for (let i = 0; i < editedRowData.length; i++) {
             if (row.id == editedRowData[i].id) {
                 ind = i;

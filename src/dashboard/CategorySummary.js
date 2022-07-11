@@ -69,12 +69,12 @@ const CategorySummary = () => {
                                         setCategory(event.target.value);
                                         changeStatus(event.target.value);
                                     }}
-                                    label="Report Type?"
+                                    label="Category"
                                 >
-                                    {categories.length > 0 && categories.map((cat, index) => {
-
-                                        return <MenuItem key={index} value={cat.slug}>{cat.slug}</MenuItem>
-                                    })}
+                                    <MenuItem value="fruits">Fruits</MenuItem>
+                                    <MenuItem value="vegetables">Vegetables</MenuItem>
+                                    <MenuItem value="grocery">Grocery</MenuItem>
+                                    <MenuItem value="seasonalfruit">Seasonal Fruit</MenuItem>
 
                                 </Select>
                             </FormControl>
