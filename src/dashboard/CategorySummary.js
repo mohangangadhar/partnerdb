@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableTitles from '../components/TableTitles/TableTitles';
-import { APIURL, CircularProgressInTable, GetRequestOptions, poSummaryData } from '../constants/Constants';
+import { APIURL, CircularProgressInTable, GetRequestOptions, poSummaryData, detail } from '../constants/Constants';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import InputLabel from '@mui/material/InputLabel';
@@ -16,13 +16,13 @@ import Select from '@mui/material/Select';
 import { CircularProgress } from '@material-ui/core';
 const CategorySummary = () => {
     const [topReports, setTopReports] = useState([]);
-
+    const [noData, setNoData] = useState(false);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("");
     const [status, setStatus] = useState();
 
     const getCategories = async () => {
-        await fetch(APIURL + "category", GetRequestOptions).then(
+        await fetch("http://127.0.0.1:8080/" + "category", GetRequestOptions).then(
             response => response.json()
         ).then(data => {
             console.log(data);
@@ -31,12 +31,15 @@ const CategorySummary = () => {
     }
     const changeStatus = async (slug) => {
         setTopReports([]);
-
-        await fetch(APIURL + `order/categories-summary/${slug}`, GetRequestOptions).then(
+        setNoData(false);
+        await fetch("http://127.0.0.1:8080/" + `order/categories-summary/${slug}`, GetRequestOptions).then(
             response => response.json()
         ).then(data => {
             console.log(data);
             setTopReports(data);
+            if (data.length === 0) {
+                setNoData(true);
+            }
         }).catch(err => console.log(err));
     }
     useEffect(() => {
@@ -51,8 +54,9 @@ const CategorySummary = () => {
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
 
 
-                        <TableCell align="center" style={{ color: 'wheat' }}> Instock</TableCell>
-                        <TableCell align="center" style={{ color: 'wheat' }}>Out Of Stock</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}> Product</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Stock Quantity</TableCell>
                         <TableCell>
                             <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
                                 <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Category</InputLabel>
@@ -77,15 +81,19 @@ const CategorySummary = () => {
                         </TableCell>
                     </TableHead>
                     {topReports ?
+
                         < TableBody >
-                            <TableRow >
-                                {topReports.map((rows, index) => (
+                            {noData && <h2>No Data</h2>}
+                            {topReports.map((rows, index) => (
+                                <TableRow >
 
-                                    <TableCell align="center">{rows.count}</TableCell>
 
-                                ))}
-                            </TableRow>
+                                    <TableCell align="center">{detail(rows.product)}</TableCell>
+                                    <TableCell align="center">{rows.status}</TableCell>
+                                    <TableCell align="center">{rows.stockQuantity}</TableCell>
 
+                                </TableRow>
+                            ))}
                         </TableBody> : <CircularProgressInTable />}
                 </Table>
             </TableContainer>

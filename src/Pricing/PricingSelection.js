@@ -47,7 +47,7 @@ const PricingSelection = () => {
         setNoData(false);
         setEditedRowData([]);
 
-        await fetch("http://127.0.0.1:8080/" + "pricing-selection", GetRequestOptions)
+        await fetch(APIURL + "pricing-selection", GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setEditedRowData(data);
@@ -108,7 +108,7 @@ const PricingSelection = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(PricingSelectionData)
         };
-        await fetch("http://127.0.0.1:8080/" + `pricing-selection/${row.id}`, requestOptionsForUpdate)
+        await fetch(APIURL + `pricing-selection/${row.id}`, requestOptionsForUpdate)
             .then(response => response.json())
             .then(data => {
                 setisApiLoading(false);
