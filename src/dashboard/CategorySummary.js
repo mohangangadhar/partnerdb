@@ -22,7 +22,7 @@ const CategorySummary = () => {
     const [status, setStatus] = useState();
 
     const getCategories = async () => {
-        await fetch("http://127.0.0.1:8080/" + "category", GetRequestOptions).then(
+        await fetch(APIURL + "category", GetRequestOptions).then(
             response => response.json()
         ).then(data => {
             console.log(data);
@@ -32,7 +32,7 @@ const CategorySummary = () => {
     const changeStatus = async (slug) => {
         setTopReports([]);
         setNoData(false);
-        await fetch("http://127.0.0.1:8080/" + `order/categories-summary/${slug}`, GetRequestOptions).then(
+        await fetch(APIURL + `order/categories-summary/${slug}`, GetRequestOptions).then(
             response => response.json()
         ).then(data => {
             console.log(data);
