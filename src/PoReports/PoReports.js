@@ -236,7 +236,7 @@ function PoReports(props) {
                 "productId": 0,
                 "vendorName": "",
                 "comments": row.comments,
-                "poId": "PO-M" + poNumber.substring(4),
+                "poId": "POM" + poNumber.substring(4),
                 "poNumber": poNumber,
                 "totalPay": row.totalPay,
                 "createdAt": GetDate(),

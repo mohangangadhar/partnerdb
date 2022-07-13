@@ -265,8 +265,8 @@ const PoReportInfo = () => {
                 "productId": 0,
                 "vendorName": "",
                 "comments": row.comments,
-                "poId": "PO-M" + poId,
-                "poNumber": "PO-V" + poId,
+                "poId": "POM" + poId,
+                "poNumber": "POV" + poId,
                 "totalPay": row.totalPay,
                 "createdAt": GetDate(),
             })
@@ -286,7 +286,7 @@ const PoReportInfo = () => {
                 NotificationManager.success('Saved Data', 'Success', 1000);
 
                 let reqBody = {
-                    "poReportId": "PO-V" + poId,
+                    "poReportId": "POV" + poId,
                     "createdAt": GetDate(),
                     "comments": "",
                     "paymentStatus": "yet to deliver",
