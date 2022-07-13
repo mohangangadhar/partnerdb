@@ -25,6 +25,7 @@ const DropdownForStatus = ({ status, setDeliveryStatus, setStatus, label, type }
                     <option style={styleOptions} value="accepted">Processing</option>
                     <option style={styleOptions} value="prepared">Out for Delivery</option>
                     <option style={styleOptions} value="pending">Pending</option>
+                    <option style={styleOptions} value="delivered">Delivered</option>
                     <option style={styleOptions} value="complete">Completed</option>
                     <option style={styleOptions} value="cancelled">Cancelled</option>
                     <option style={styleOptions} value="failed">Failed</option>
