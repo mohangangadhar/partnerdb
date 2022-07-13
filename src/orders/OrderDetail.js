@@ -511,6 +511,7 @@ function OrderDetail(props) {
                                                         <MenuItem value="prepared">
                                                             Out For Delivery
                                                         </MenuItem>
+                                                        <MenuItem value="delivered">Delivered</MenuItem>
                                                         <MenuItem value="complete">Complete</MenuItem>
                                                         <MenuItem value="cancelled">Cancelled</MenuItem>
                                                         <MenuItem value="failed">Failed</MenuItem>
