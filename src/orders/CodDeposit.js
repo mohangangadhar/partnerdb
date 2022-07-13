@@ -6,7 +6,7 @@ const CodDeposit = ({ mobileNumber }) => {
     const [data, setData] = useState("");
     const searchOrder = async () => {
         setData("");
-        console.log(mobileNumber);
+
         await fetch(APIURL + 'wallet/' + mobileNumber)
             .then(res => res.json())
             .then((data) => {
@@ -19,7 +19,7 @@ const CodDeposit = ({ mobileNumber }) => {
 
             })
     }
-    console.count();
+
     useEffect(() => {
         searchOrder();
     }, [])

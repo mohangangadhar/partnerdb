@@ -175,6 +175,7 @@ function OrderDetail(props) {
 
     };
     const handleSubmit = async (val) => {
+        console.log(val);
         let orderdata = {
             "status": val,
         };
@@ -202,7 +203,9 @@ function OrderDetail(props) {
                     "paymentReferenceDate": paymentRefData.paymentReferenceDate,
                     "actualDeliveryDate": paymentRefData.actualDeliveryDate,
                     "deliveryPartner": paymentRefData.deliveryPartner,
-                    "feedback": editFeedback
+                    "feedback": editFeedback,
+                    "logisticsCost": paymentRefData.logisticsCost,
+                    "paymentStatus": tempPaymentStatus
                 };
                 const requestOptions = {
                     method: 'PUT',
@@ -282,7 +285,9 @@ function OrderDetail(props) {
                     "paymentReferenceDate": paymentRefData.paymentReferenceDate,
                     "actualDeliveryDate": paymentRefData.actualDeliveryDate,
                     "deliveryPartner": paymentRefData.deliveryPartner,
-                    "feedback": editFeedback
+                    "feedback": editFeedback,
+                    "logisticsCost": paymentRefData.logisticsCost,
+                    "paymentStatus": tempPaymentStatus
                 };
                 const requestOptions = {
                     method: 'PUT',
@@ -402,7 +407,9 @@ function OrderDetail(props) {
             "paymentReferenceDate": paymentRefData.paymentReferenceDate,
             "actualDeliveryDate": paymentRefData.actualDeliveryDate,
             "deliveryPartner": paymentRefData.deliveryPartner,
-            "feedback": editFeedback
+            "feedback": editFeedback,
+            "logisticsCost": paymentRefData.logisticsCost,
+            "paymentStatus": tempPaymentStatus
         };
         const requestOptions = {
             method: 'PUT',
