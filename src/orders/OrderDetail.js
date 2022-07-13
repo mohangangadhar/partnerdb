@@ -47,6 +47,7 @@ function OrderDetail(props) {
         discountTotal: 0
     });
     const [comment, setComment] = useState("");
+
     const [finalTotal, setFinalTotal] = useState(0);
     const [paymentType, setPaymentType] = useState({
         method: "",
@@ -74,7 +75,8 @@ function OrderDetail(props) {
         paymentReference: "",
         paymentReferenceDate: "",
         actualDeliveryDate: "",
-        deliveryPartner: ""
+        deliveryPartner: "",
+        logisticsCost: "",
     });
     const [editFeedback, setEditFeedback] = useState("");
     const [paymentDate, setPaymentDate] = useState(null);
@@ -112,7 +114,8 @@ function OrderDetail(props) {
                     paymentReference: data.order.paymentReference,
                     paymentReferenceDate: data.order.paymentReferenceDate,
                     actualDeliveryDate: data.order.actualDeliveryDate,
-                    deliveryPartner: data.order.deliveryPartner
+                    deliveryPartner: data.order.deliveryPartner,
+                    logisticsCost: data.order.logisticsCost
                 });
                 setPaymentDate(data.order.paymentReferenceDate);
                 setDeliveryDate(data.order.actualDeliveryDate);
@@ -446,7 +449,8 @@ function OrderDetail(props) {
             "paymentReferenceDate": paymentRefData.paymentReferenceDate,
             "actualDeliveryDate": paymentRefData.actualDeliveryDate,
             "deliveryPartner": paymentRefData.deliveryPartner,
-            "feedback": editFeedback
+            "feedback": editFeedback,
+            "logisticsCost": paymentRefData.logisticsCost,
         };
         const requestOptions = {
             method: 'PUT',
@@ -695,23 +699,43 @@ function OrderDetail(props) {
 
 
                         </TableRow>
-                        <>
-
-                            <TextField label="Add Feedback" value={editFeedback}
-                                onChange={(ev) => setEditFeedback(ev.target.value)}
-                                style={{ width: '80%' }}
-                                InputProps={{
-                                    style: {
-                                        color: "white",
+                        <TableRow>
+                            <TableCell colSpan={4}>
+                                <TextField label="Add Feedback" value={editFeedback}
+                                    onChange={(ev) => setEditFeedback(ev.target.value)}
+                                    style={{ width: '80%' }}
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <TextField label="Add Logistics Cost" value={paymentRefData.logisticsCost}
+                                    onChange={(ev) => setPaymentRefData((prev) => ({
+                                        ...prev,
+                                        logisticsCost: ev.target.value
                                     }
-                                }}
-                                InputLabelProps={{
-                                    style: { color: '#fff' },
-                                }}
-                            />
-                            <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
-
-                        </>
+                                    ))
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
+                            </TableCell>
+                        </TableRow>
                     </Container>
                     {userData.mobileNumber &&
                         <TableContainer component={Paper} >

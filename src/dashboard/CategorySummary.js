@@ -21,18 +21,11 @@ const CategorySummary = () => {
     const [category, setCategory] = useState("");
     const [status, setStatus] = useState();
 
-    const getCategories = async () => {
-        await fetch(APIURL + "category", GetRequestOptions).then(
-            response => response.json()
-        ).then(data => {
-            console.log(data);
-            setCategories(data);
-        }).catch(err => console.log(err));
-    }
+
     const changeStatus = async (slug) => {
         setTopReports([]);
         setNoData(false);
-        await fetch(APIURL + `order/categories-summary/${slug}`, GetRequestOptions).then(
+        await fetch(APIURL + `order/categories-summary`, GetRequestOptions).then(
             response => response.json()
         ).then(data => {
             console.log(data);
@@ -43,7 +36,7 @@ const CategorySummary = () => {
         }).catch(err => console.log(err));
     }
     useEffect(() => {
-        getCategories();
+        changeStatus();
     }, []);
 
     return (
@@ -54,43 +47,22 @@ const CategorySummary = () => {
                     <TableHead style={{ backgroundColor: 'indianred', color: 'white', }}>
 
 
-                        <TableCell align="center" style={{ color: 'wheat' }}> Product</TableCell>
-                        <TableCell align="center" style={{ color: 'wheat' }}>Status</TableCell>
-                        <TableCell align="center" style={{ color: 'wheat' }}>Stock Quantity</TableCell>
-                        <TableCell>
-                            <FormControl sx={{ m: 1, minWidth: 120, color: 'white' }}>
-                                <InputLabel style={{ color: 'white' }} id="demo-simple-select-required-label">Select Category</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-required-label"
-                                    style={{ height: 50, color: 'white' }}
-                                    id="demo-simple-select-disabled"
-                                    value={status}
-                                    onChange={(event) => {
-                                        setCategory(event.target.value);
-                                        changeStatus(event.target.value);
-                                    }}
-                                    label="Category"
-                                >
-                                    <MenuItem value="fruits">Fruits</MenuItem>
-                                    <MenuItem value="vegetables">Vegetables</MenuItem>
-                                    <MenuItem value="grocery">Grocery</MenuItem>
-                                    <MenuItem value="seasonalfruit">Seasonal Fruit</MenuItem>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Category</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>In Stock</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Out Of Stock</TableCell>
 
-                                </Select>
-                            </FormControl>
-                        </TableCell>
                     </TableHead>
                     {topReports ?
 
                         < TableBody >
                             {noData && <h2>No Data</h2>}
-                            {topReports.map((rows, index) => (
+                            {topReports.length > 0 && topReports.map((rows, index) => (
                                 <TableRow >
 
 
-                                    <TableCell align="center">{detail(rows.product)}</TableCell>
-                                    <TableCell align="center">{rows.status}</TableCell>
-                                    <TableCell align="center">{rows.stockQuantity}</TableCell>
+                                    <TableCell align="center">{rows.category}</TableCell>
+                                    <TableCell align="center">{rows.inStock}</TableCell>
+                                    <TableCell align="center">{rows.outOfStock}</TableCell>
 
                                 </TableRow>
                             ))}
