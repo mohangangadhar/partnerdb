@@ -47,7 +47,7 @@ function OrderDetail(props) {
         discountTotal: 0
     });
     const [comment, setComment] = useState("");
-
+    const [tempPaymentStatus, setTempPaymentStatus] = useState("");
     const [finalTotal, setFinalTotal] = useState(0);
     const [paymentType, setPaymentType] = useState({
         method: "",
@@ -101,6 +101,7 @@ function OrderDetail(props) {
                     method: data.paymentMethodFB.slug,
                     type: data.paymentMethodFB.type
                 });
+                setTempPaymentStatus(data.order.paymentStatus);
                 setDialogData({
                     userId: data.order.user.id,
                     orderId: data.order.id,
@@ -451,6 +452,7 @@ function OrderDetail(props) {
             "deliveryPartner": paymentRefData.deliveryPartner,
             "feedback": editFeedback,
             "logisticsCost": paymentRefData.logisticsCost,
+            "paymentStatus": tempPaymentStatus
         };
         const requestOptions = {
             method: 'PUT',
@@ -722,6 +724,20 @@ function OrderDetail(props) {
                                         logisticsCost: ev.target.value
                                     }
                                     ))
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <TextField multiline label="Payment Status" value={tempPaymentStatus}
+                                    onChange={(ev) => setTempPaymentStatus(ev.target.value)
                                     }
                                     InputProps={{
                                         style: {
