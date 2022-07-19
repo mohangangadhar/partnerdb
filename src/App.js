@@ -63,6 +63,7 @@ import Expenses from './expenses/Expenses';
 import Mango from './mango/mango';
 import DeliveredOrderReports from './dashboard/DeliveredOrderReports';
 import PricingSelection from './Pricing/PricingSelection';
+import StallSummary from './Stall/StallSummary';
 
 const drawerWidth = 240;
 
@@ -217,17 +218,17 @@ export default function MiniDrawer() {
                                         id: "3"
                                     }}><ListItemText primary="Users" /></Link>
                                 </ListItem>
-                                <ListItem button key="Mango">
+                                <ListItem button key="Seasonal">
 
                                     <Link to={{
                                         pathname: '/app/mango',
                                         id: "5"
-                                    }}><h4 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Mango</h4></Link>
+                                    }}><h4 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Seasonal</h4></Link>
 
                                     <Link to={{
                                         pathname: '/app/mango',
                                         id: "5"
-                                    }}><ListItemText primary="Mango" /></Link>
+                                    }}><ListItemText primary="Seasonal" /></Link>
                                 </ListItem>
                                 <ListItem button key="Support">
                                     <Link to={{
@@ -351,6 +352,18 @@ export default function MiniDrawer() {
                                         id: "3"
                                     }}><ListItemText primary="Pricing" /></Link>
                                 </ListItem>
+                                <ListItem button key="Stall">
+
+                                    <Link to={{
+                                        pathname: '/app/stall',
+                                        id: "8"
+                                    }}><h6 style={{ marginRight: 30, marginTop: 0, marginBottom: 0, marginLeft: -10 }}>Stall</h6></Link>
+
+                                    <Link to={{
+                                        pathname: '/app/stall',
+                                        id: "8"
+                                    }}><ListItemText primary="Stall" /></Link>
+                                </ListItem>
                                 <ListItem button key="ServiceZones">
 
                                     <Link to={{
@@ -415,6 +428,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/wallet" user={user} exact component={Wallet} />
                                     <Route path="/app/user" exact component={UserList} />
                                     <Route path="/app/mango" exact component={Mango} />
+                                    <Route path="/app/stall" exact component={StallSummary} />
                                     <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/expenses" exact component={Expenses} />
                                     <Route path="/app/pricing" exact component={PricingSelection} />
