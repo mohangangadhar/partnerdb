@@ -73,10 +73,10 @@ const StallSummary = () => {
 
                         <TableCell align="center" style={{ color: 'wheat' }}>Type</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Sales</TableCell>
-                        {/* <TableCell align="center" style={{ color: 'wheat' }}>Inbound</TableCell>
+                        <TableCell align="center" style={{ color: 'wheat' }}>Inbound</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Outbound</TableCell>
                         <TableCell align="center" style={{ color: 'wheat' }}>Testing</TableCell>
-                        <TableCell align="center" style={{ color: 'wheat' }}>Wastage</TableCell> */}
+                        <TableCell align="center" style={{ color: 'wheat' }}>Wastage</TableCell>
 
                     </TableHead>
                     {topReports ?
@@ -87,10 +87,15 @@ const StallSummary = () => {
                             <TableRow >
                                 <TableCell align="center" >Count</TableCell>
                                 {topReports.length > 0 && topReports.map((rows, index) => (
+
+
                                     <TableCell align="center">{rows.count}</TableCell>
+
+
                                 ))}
                             </TableRow>
                             <TableRow >
+
                                 <TableCell align="center" >Amount</TableCell>
                                 {topReports.length > 0 && topReports.map((rows, index) => (
                                     <TableCell align="center">{rows.sum}</TableCell>
