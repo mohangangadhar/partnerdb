@@ -28,6 +28,10 @@ import { APIURL, GetRequestOptions } from '../constants/Constants';
 import OrderEditDialog from './OrderEditDialog';
 import CodDeposit from './CodDeposit';
 import Picker from '../components/Picker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 function OrderDetail(props) {
     const [order, setOrder] = useState({});
     const [status, setStatus] = useState("");
@@ -37,6 +41,10 @@ function OrderDetail(props) {
     const [editContactId, setEditContactId] = useState(null);
     const [userAddress, setUserAddress] = useState({});
     const formClick = useRef();
+    const [value, setValue] = useState("");
+
+
+
     const [open, setOpen] = useState(false);
     const [refundCount, setRefundCount] = useState(0);
     const [totalData, setTotalData] = useState({
@@ -78,6 +86,13 @@ function OrderDetail(props) {
         deliveryPartner: "",
         logisticsCost: "",
     });
+    const [logisticsRefData, setLogisticsRefData] = useState({
+        auditedBy: "",
+        orderPackedBy: ""
+    });
+    const [orderPackedTime, setOrderPackedTime] = useState("");
+    const [orderDeliveryStartTime, setOrderDeliveryStartTime] = useState("");
+    const [orderDeliveryEndTime, setOrderDeliveryEndTime] = useState("");
     const [editFeedback, setEditFeedback] = useState("");
     const [paymentDate, setPaymentDate] = useState(null);
     const [deliveryDate, setDeliveryDate] = useState(null);
@@ -101,6 +116,13 @@ function OrderDetail(props) {
                     method: data.paymentMethodFB.slug,
                     type: data.paymentMethodFB.type
                 });
+                setLogisticsRefData({
+                    auditedBy: data.order.auditedBy,
+                    orderPackedBy: data.order.orderPackedBy,
+                });
+                setOrderDeliveryStartTime(data.order.orderDeliveryStartTime);
+                setOrderDeliveryEndTime(data.order.orderDeliveryEndTime);
+                setOrderPackedTime(data.order.orderPackedTime);
                 setTempPaymentStatus(data.order.paymentStatus);
                 setDialogData({
                     userId: data.order.user.id,
@@ -131,6 +153,15 @@ function OrderDetail(props) {
             }
             );
     }
+    const handleChangePackedTime = (newValue) => {
+        setOrderPackedTime(newValue)
+    };
+    const handleChangeStartTime = (newValue) => {
+        setOrderDeliveryStartTime(newValue)
+    };
+    const handleChangeEndTime = (newValue) => {
+        setOrderDeliveryEndTime(newValue)
+    };
     const getPaymentStatus = async () => {
         await fetch(APIURL + "order/payment-status/" + props.location.id).then(
             response => response.json()
@@ -476,6 +507,30 @@ function OrderDetail(props) {
             }
             );
     }
+    const handleUpdateLogistics = async () => {
+
+        let updateLogisticsBody = {
+            "auditedBy": logisticsRefData.auditedBy,
+            "orderPackedBy": logisticsRefData.orderPackedBy,
+            "orderPackedTime": orderPackedTime,
+            "orderDeliveryStartTime": orderDeliveryStartTime,
+            "orderDeliveryEndTime": orderDeliveryEndTime
+        };
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateLogisticsBody)
+        };
+
+        await fetch(APIURL + `order/order-details/${props.location.id}`, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                NotificationManager.success('Updated Status', 'Successful!', 1000);
+            }
+            );
+    }
     return (
         <div>
             {isApiLoading ? <Loader /> :
@@ -760,6 +815,100 @@ function OrderDetail(props) {
                                 <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
                             </TableCell>
                         </TableRow>
+
+                    </Container>
+                    <Container>
+                        <TableRow>
+                            <TableCell colSpan={2}>
+                                <TextField multiline label="Audited By" value={logisticsRefData.auditedBy}
+                                    onChange={(ev) => setLogisticsRefData((prev) => ({
+                                        ...prev,
+                                        auditedBy: ev.target.value
+                                    }
+                                    ))
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <TextField multiline label="Packed By" value={logisticsRefData.orderPackedBy}
+                                    onChange={(ev) => setLogisticsRefData((prev) => ({
+                                        ...prev,
+                                        orderPackedBy: ev.target.value
+                                    }
+                                    ))
+                                    }
+                                    InputProps={{
+                                        style: {
+                                            color: "white",
+                                        }
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#fff' },
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DateTimePicker
+                                        label="Order Packed Time"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            style: { color: 'white' },
+                                        }}
+                                        value={orderPackedTime}
+                                        onChange={handleChangePackedTime}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell colSpan={2}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DateTimePicker
+                                        label="Delivery Start Time"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            style: { color: 'white' },
+                                        }}
+                                        value={orderDeliveryStartTime}
+                                        onChange={handleChangeStartTime}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DateTimePicker
+                                        label="Delivery End Time"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            style: { color: 'white' },
+                                        }}
+                                        value={orderDeliveryEndTime}
+                                        onChange={handleChangeEndTime}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
+                            </TableCell>
+
+
+
+
+
+                            <TableCell colSpan={2}>
+                                <Button variant="contained" color="success" onClick={handleUpdateLogistics}>Update</Button>
+                            </TableCell>
+                        </TableRow>
+
                     </Container>
                     {userData.mobileNumber &&
                         <TableContainer component={Paper} >
