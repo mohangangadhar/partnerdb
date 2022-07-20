@@ -432,7 +432,7 @@ export default function MiniDrawer() {
                                     <Route path="/app/support" exact component={Support} />
                                     <Route path="/app/expenses" exact component={Expenses} />
                                     <Route path="/app/pricing" exact component={PricingSelection} />
-                                    <Route path="/app/:date/deliveredreports/:status" exact component={DeliveredOrderReports} />
+                                    <Route path="/app/:startdate/:enddate/deliveredreports/:status" exact component={DeliveredOrderReports} />
                                     <Route path="/app/:poNumber/poreports" exact component={PoReports} />
                                     <Route path="/app/poreportsinfo" exact component={PoReportInfo} />
                                     <Route path="/app/servicezones" exact component={ServiceZones} />

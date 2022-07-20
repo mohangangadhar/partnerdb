@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { CircularProgressInTable, dashboardSummary, GetRequestOptions, poSummaryData, supportSummaryData, walletSummaryData, APIURL, expenseSummaryData } from '../constants/Constants';
 import TableTitles from "../components/TableTitles/TableTitles";
+import { Button, CircularProgress } from '@material-ui/core';
 import DetailTableTitles from './DetailTableTitles';
 import CustomTooltip from '../components/ToolTip/tooltip';
 import Picker from '../components/Picker';
@@ -152,6 +153,8 @@ function DashBoard() {
     });
     const [poTotalOnDeliveryDate, setPoTotalOnDeliveryDate] = useState([]);
     const [expenseTotalOnDeliveryDate, setExpenseTotalOnDeliveryDate] = useState([]);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
     const order = useSelector(state => state.dashboardreducer);
     const poReport = useSelector(state => state.poreducer);
     const supportReport = useSelector(state => state.supportreducer);
@@ -547,13 +550,21 @@ function DashBoard() {
         getPoData();
     }, [poReport.poData.length > 2])
 
-    const handleDateChange = async (val) => {
+    const handleDateChange = async () => {
         setDeliveredDateReport([]);
         setPoTotalOnDeliveryDate(0);
         setExpenseTotalOnDeliveryDate(0);
-        setActualDeliveryDate(val);
+        // setActualDeliveryDate(val);
+        if (startDate.length == 0 || endDate.length == 0) {
+            alert("Please select start and end date");
+            return;
+        }
+        const date = new Date(endDate);
+        date.setDate(date.getDate() + 1);
+        var todayDate = date.toISOString().slice(0, 10);
+
         setNoData(false);
-        await fetch(APIURL + `order/delivered-date/reports/${val}`, GetRequestOptions).
+        await fetch(APIURL + `order/delivered-date/reports?startDate=${startDate}&endDate=${todayDate}`, GetRequestOptions).
             then(res => res.json()).
             then(data => {
                 console.log(data);
@@ -562,14 +573,14 @@ function DashBoard() {
                     setNoData(true);
                 }
             }).catch(err => console.log(err));
-        await fetch(APIURL + `po-report-info/delivered-date/${val}`, GetRequestOptions).
+        await fetch(APIURL + `po-report-info/delivered-date?startDate=${startDate}&endDate=${todayDate}`, GetRequestOptions).
             then(res => res.json()).
             then(data => {
 
                 setPoTotalOnDeliveryDate(data);
 
             }).catch(err => console.log(err));
-        await fetch(APIURL + `expenses/delivered-date/${val}`, GetRequestOptions).
+        await fetch(APIURL + `expenses/delivered-date?startDate=${startDate}&endDate=${todayDate}`, GetRequestOptions).
             then(res => res.json()).
             then(data => {
 
@@ -583,7 +594,13 @@ function DashBoard() {
             <center><h2 style={{ marginTop: -9, fontStyle: 'italic', color: 'white' }}>DashBoard</h2></center>
 
             <TableContainer component={Paper}>
-                <Picker color="white" dateChange={(e) => handleDateChange(e.target.value)} label={"Get Orders for"} />
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <h2>Order Details for:</h2>
+                    <Picker color="white" dateChange={(e) => setStartDate(e.target.value)} date={startDate} label="Start Date" />
+                    <Picker color="white" dateChange={(e) => setEndDate(e.target.value)} date={endDate} label="End Date" />
+                    <Button variant="contained" color="primary" onClick={handleDateChange}>Search</Button>
+                </div>
+
                 {deliveredDateReport.length >= 1 && !noData ?
                     <Table className="table" aria-label="spanning table">
                         <TableRow style={{ backgroundColor: '#CD5C5C', color: 'wheat' }}>
@@ -601,7 +618,7 @@ function DashBoard() {
 
                                 <TableCell align="center" >
                                     <Link to={{
-                                        pathname: `/app/${actualDeliveryDate}/deliveredreports/${data.deliveryStatus}`,
+                                        pathname: `/app/${startDate}/${endDate}/deliveredreports/${data.deliveryStatus}`,
                                     }}>{data.deliveryStatus}</Link>
                                 </TableCell>
                                 <TableCell align="center" >{data.noOfOrders}</TableCell>

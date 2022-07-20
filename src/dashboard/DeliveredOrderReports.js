@@ -10,12 +10,15 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import { CircularProgress } from '@material-ui/core';
 const DeliveredOrderReports = () => {
-    let { date, status } = useParams();
+    let { startdate, enddate, status } = useParams();
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const getData = async () => {
         setIsLoading(true);
-        await fetch(APIURL + `order/delivered-date/${date}/status/${status}`, GetRequestOptions).
+        const date = new Date(enddate);
+        date.setDate(date.getDate() + 1);
+        var todayDate = date.toISOString().slice(0, 10);
+        await fetch(APIURL + `order/delivered-date/status/${status}?startDate=${startdate}&endDate=${todayDate}`, GetRequestOptions).
             then(res => res.json()).
             then(data => {
                 setOrders(data);
@@ -29,7 +32,7 @@ const DeliveredOrderReports = () => {
     }, [])
     return (
         <div>
-            <h2 style={{ fontStyle: 'italic', color: 'white' }}>Orders on {date}</h2>
+            <h2 style={{ fontStyle: 'italic', color: 'white' }}>Orders B/w {startdate} & {enddate}</h2>
             <TableContainer component={Paper}>
                 <Table className="table" aria-label="spanning table">
                     <TableTitles data={deliveredOrdersData} />
