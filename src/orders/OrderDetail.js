@@ -88,7 +88,8 @@ function OrderDetail(props) {
     });
     const [logisticsRefData, setLogisticsRefData] = useState({
         auditedBy: "",
-        orderPackedBy: ""
+        orderPackedBy: "",
+        expectedDeliveryDate: ""
     });
     const [orderPackedTime, setOrderPackedTime] = useState("");
     const [orderDeliveryStartTime, setOrderDeliveryStartTime] = useState("");
@@ -105,7 +106,7 @@ function OrderDetail(props) {
         }
     }, []);
     const getData = async () => {
-        await fetch(APIURL + 'order/' + props.location.id, GetRequestOptions)
+        await fetch("http://127.0.0.1:8080/" + 'order/' + props.location.id, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setOrder(data.order);
@@ -119,7 +120,9 @@ function OrderDetail(props) {
                 setLogisticsRefData({
                     auditedBy: data.order.auditedBy,
                     orderPackedBy: data.order.orderPackedBy,
+                    expectedDeliveryDate: data.order.deliveryDate
                 });
+                console.log(logisticsRefData);
                 setOrderDeliveryStartTime(data.order.orderDeliveryStartTime);
                 setOrderDeliveryEndTime(data.order.orderDeliveryEndTime);
                 setOrderPackedTime(data.order.orderPackedTime);
@@ -514,8 +517,10 @@ function OrderDetail(props) {
             "orderPackedBy": logisticsRefData.orderPackedBy,
             "orderPackedTime": orderPackedTime,
             "orderDeliveryStartTime": orderDeliveryStartTime,
-            "orderDeliveryEndTime": orderDeliveryEndTime
+            "orderDeliveryEndTime": orderDeliveryEndTime,
+            "deliveryDate": logisticsRefData.expectedDeliveryDate
         };
+
         const requestOptions = {
             method: 'PUT',
             headers: {
@@ -524,7 +529,7 @@ function OrderDetail(props) {
             body: JSON.stringify(updateLogisticsBody)
         };
 
-        await fetch(APIURL + `order/order-details/${props.location.id}`, requestOptions)
+        await fetch("http://127.0.0.1:8080/" + `order/order-details/${props.location.id}`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 NotificationManager.success('Updated Status', 'Successful!', 1000);
@@ -856,6 +861,17 @@ function OrderDetail(props) {
                                 />
                             </TableCell>
                             <TableCell colSpan={2}>
+                                <Picker color="white" date={logisticsRefData.expectedDeliveryDate} dateChange={(ev) => setLogisticsRefData((prev) => ({
+                                    ...prev,
+                                    expectedDeliveryDate: ev.target.value
+                                }
+                                ))
+                                } label={"Expected Delivery Date"} />
+                            </TableCell>
+
+                        </TableRow>
+                        <TableRow>
+                            <TableCell colSpan={2}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DateTimePicker
                                         label="Order Packed Time"
@@ -869,8 +885,6 @@ function OrderDetail(props) {
                                     />
                                 </LocalizationProvider>
                             </TableCell>
-                        </TableRow>
-                        <TableRow>
                             <TableCell colSpan={2}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DateTimePicker
