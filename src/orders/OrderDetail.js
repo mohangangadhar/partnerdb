@@ -106,7 +106,7 @@ function OrderDetail(props) {
         }
     }, []);
     const getData = async () => {
-        await fetch("http://127.0.0.1:8080/" + 'order/' + props.location.id, GetRequestOptions)
+        await fetch(APIURL + 'order/' + props.location.id, GetRequestOptions)
             .then(response => response.json())
             .then(data => {
                 setOrder(data.order);
@@ -529,7 +529,7 @@ function OrderDetail(props) {
             body: JSON.stringify(updateLogisticsBody)
         };
 
-        await fetch("http://127.0.0.1:8080/" + `order/order-details/${props.location.id}`, requestOptions)
+        await fetch(APIURL + `order/order-details/${props.location.id}`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 NotificationManager.success('Updated Status', 'Successful!', 1000);
