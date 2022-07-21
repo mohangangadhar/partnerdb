@@ -693,252 +693,256 @@ function OrderDetail(props) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                        <input onClick={(ev) => handleUpdate(ev, "first")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Undelivered Refunds" />
-                        <input onClick={(ev) => handleUpdate(ev, "second")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Post Delivery Refunds" />
-                        <input onClick={(ev) => handleUpdate(ev, "discount")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Discount Refunds" />
-                    </Container>
-                    <Container>
-                        <TableRow>
-                            <TableCell colSpan={2}>
-                                <TextField multiline label="Add Comment" value={comment}
-                                    onChange={(ev) => setComment(ev.target.value)
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
+                    {userId == "MWzJ2s6kM5ZUZyaa4l2o37ZQCWj2" &&
+                        <>
+                            <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                                <input onClick={(ev) => handleUpdate(ev, "first")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Undelivered Refunds" />
+                                <input onClick={(ev) => handleUpdate(ev, "second")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Post Delivery Refunds" />
+                                <input onClick={(ev) => handleUpdate(ev, "discount")} style={{ backgroundColor: '#D5D5D5', padding: '12px', borderRadius: '10px', cursor: 'pointer' }} type="submit" value="Discount Refunds" />
+                            </Container>
+                            <Container>
+                                <TableRow>
+                                    <TableCell colSpan={2}>
+                                        <TextField multiline label="Add Comment" value={comment}
+                                            onChange={(ev) => setComment(ev.target.value)
+                                            }
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <TextField multiline label="Add Payment Reference" value={paymentRefData.paymentReference}
+                                            onChange={(ev) => setPaymentRefData((prev) => ({
+                                                ...prev,
+                                                paymentReference: ev.target.value
+                                            }
+                                            ))
+                                            }
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        {paymentDate == null ? <Picker color="white" date={paymentRefData.paymentReferenceDate} dateChange={(e) => setPaymentRefData((prev) => ({
+                                            ...prev,
+                                            paymentReferenceDate: e.target.value
                                         }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <TextField multiline label="Add Payment Reference" value={paymentRefData.paymentReference}
-                                    onChange={(ev) => setPaymentRefData((prev) => ({
-                                        ...prev,
-                                        paymentReference: ev.target.value
-                                    }
-                                    ))
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
+                                        ))
+                                        } label={"Payment Date"} /> : <h3 style={{ color: "white" }}>Payment Date : {paymentRefData.paymentReferenceDate}</h3>}
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        {deliveryDate == null ? <Picker color="white" date={paymentRefData.actualDeliveryDate} dateChange={(e) => setPaymentRefData((prev) => ({
+                                            ...prev,
+                                            actualDeliveryDate: e.target.value
                                         }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                {paymentDate == null ? <Picker color="white" date={paymentRefData.paymentReferenceDate} dateChange={(e) => setPaymentRefData((prev) => ({
-                                    ...prev,
-                                    paymentReferenceDate: e.target.value
-                                }
-                                ))
-                                } label={"Payment Date"} /> : <h3 style={{ color: "white" }}>Payment Date : {paymentRefData.paymentReferenceDate}</h3>}
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                {deliveryDate == null ? <Picker color="white" date={paymentRefData.actualDeliveryDate} dateChange={(e) => setPaymentRefData((prev) => ({
-                                    ...prev,
-                                    actualDeliveryDate: e.target.value
-                                }
-                                ))
-                                } label={"Delivered Date"} /> : <h3 style={{ color: "white" }}>Actual Delivered Date : {paymentRefData.actualDeliveryDate}</h3>}
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <TextField label="Add Delivery Partner" value={paymentRefData.deliveryPartner}
-                                    onChange={(ev) => setPaymentRefData((prev) => ({
-                                        ...prev,
-                                        deliveryPartner: ev.target.value
-                                    }
-                                    ))
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
+                                        ))
+                                        } label={"Delivered Date"} /> : <h3 style={{ color: "white" }}>Actual Delivered Date : {paymentRefData.actualDeliveryDate}</h3>}
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <TextField label="Add Delivery Partner" value={paymentRefData.deliveryPartner}
+                                            onChange={(ev) => setPaymentRefData((prev) => ({
+                                                ...prev,
+                                                deliveryPartner: ev.target.value
+                                            }
+                                            ))
+                                            }
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+
+
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell colSpan={4}>
+                                        <TextField label="Add Feedback" value={editFeedback}
+                                            onChange={(ev) => setEditFeedback(ev.target.value)}
+                                            style={{ width: '80%' }}
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <TextField label="Add Logistics Cost" value={paymentRefData.logisticsCost}
+                                            onChange={(ev) => setPaymentRefData((prev) => ({
+                                                ...prev,
+                                                logisticsCost: ev.target.value
+                                            }
+                                            ))
+                                            }
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <TextField multiline label="Payment Status" value={tempPaymentStatus}
+                                            onChange={(ev) => setTempPaymentStatus(ev.target.value)
+                                            }
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
+                                    </TableCell>
+                                </TableRow>
+
+                            </Container>
+                            <Container>
+                                <TableRow>
+                                    <TableCell colSpan={2}>
+                                        <TextField multiline label="Audited By" value={logisticsRefData.auditedBy}
+                                            onChange={(ev) => setLogisticsRefData((prev) => ({
+                                                ...prev,
+                                                auditedBy: ev.target.value
+                                            }
+                                            ))
+                                            }
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <TextField multiline label="Packed By" value={logisticsRefData.orderPackedBy}
+                                            onChange={(ev) => setLogisticsRefData((prev) => ({
+                                                ...prev,
+                                                orderPackedBy: ev.target.value
+                                            }
+                                            ))
+                                            }
+                                            InputProps={{
+                                                style: {
+                                                    color: "white",
+                                                }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#fff' },
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <Picker color="white" date={logisticsRefData.expectedDeliveryDate} dateChange={(ev) => setLogisticsRefData((prev) => ({
+                                            ...prev,
+                                            expectedDeliveryDate: ev.target.value
                                         }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
+                                        ))
+                                        } label={"Expected Delivery Date"} />
+                                    </TableCell>
+
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell colSpan={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DateTimePicker
+                                                label="Order Packed Time"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                    style: { color: 'white' },
+                                                }}
+                                                value={orderPackedTime}
+                                                onChange={handleChangePackedTime}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DateTimePicker
+                                                label="Delivery Start Time"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                    style: { color: 'white' },
+                                                }}
+                                                value={orderDeliveryStartTime}
+                                                onChange={handleChangeStartTime}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DateTimePicker
+                                                label="Delivery End Time"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                    style: { color: 'white' },
+                                                }}
+                                                value={orderDeliveryEndTime}
+                                                onChange={handleChangeEndTime}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </TableCell>
+
+
+
+
+
+                                    <TableCell colSpan={2}>
+                                        <Button variant="contained" color="success" onClick={handleUpdateLogistics}>Update</Button>
+                                    </TableCell>
+                                </TableRow>
+
+                            </Container>
+                            {userData.mobileNumber &&
+                                <TableContainer component={Paper} >
+                                    <CodDeposit mobileNumber={userData.mobileNumber} />
+                                </TableContainer>
+                            }
+                            <Container>
+                                <OrderEditDialog
+                                    open={open}
+                                    getData={getData}
+                                    onClose={handleClose}
+                                    dialogData={dialogData}
+                                    total={totalData.total}
+                                    setisLoading={setisLoading}
                                 />
-                            </TableCell>
-
-
-                        </TableRow>
-                        <TableRow>
-                            <TableCell colSpan={4}>
-                                <TextField label="Add Feedback" value={editFeedback}
-                                    onChange={(ev) => setEditFeedback(ev.target.value)}
-                                    style={{ width: '80%' }}
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <TextField label="Add Logistics Cost" value={paymentRefData.logisticsCost}
-                                    onChange={(ev) => setPaymentRefData((prev) => ({
-                                        ...prev,
-                                        logisticsCost: ev.target.value
-                                    }
-                                    ))
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <TextField multiline label="Payment Status" value={tempPaymentStatus}
-                                    onChange={(ev) => setTempPaymentStatus(ev.target.value)
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <Button variant="contained" color="success" onClick={handleUpdateComment}>Update</Button>
-                            </TableCell>
-                        </TableRow>
-
-                    </Container>
-                    <Container>
-                        <TableRow>
-                            <TableCell colSpan={2}>
-                                <TextField multiline label="Audited By" value={logisticsRefData.auditedBy}
-                                    onChange={(ev) => setLogisticsRefData((prev) => ({
-                                        ...prev,
-                                        auditedBy: ev.target.value
-                                    }
-                                    ))
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <TextField multiline label="Packed By" value={logisticsRefData.orderPackedBy}
-                                    onChange={(ev) => setLogisticsRefData((prev) => ({
-                                        ...prev,
-                                        orderPackedBy: ev.target.value
-                                    }
-                                    ))
-                                    }
-                                    InputProps={{
-                                        style: {
-                                            color: "white",
-                                        }
-                                    }}
-                                    InputLabelProps={{
-                                        style: { color: '#fff' },
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <Picker color="white" date={logisticsRefData.expectedDeliveryDate} dateChange={(ev) => setLogisticsRefData((prev) => ({
-                                    ...prev,
-                                    expectedDeliveryDate: ev.target.value
-                                }
-                                ))
-                                } label={"Expected Delivery Date"} />
-                            </TableCell>
-
-                        </TableRow>
-                        <TableRow>
-                            <TableCell colSpan={2}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DateTimePicker
-                                        label="Order Packed Time"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                            style: { color: 'white' },
-                                        }}
-                                        value={orderPackedTime}
-                                        onChange={handleChangePackedTime}
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DateTimePicker
-                                        label="Delivery Start Time"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                            style: { color: 'white' },
-                                        }}
-                                        value={orderDeliveryStartTime}
-                                        onChange={handleChangeStartTime}
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DateTimePicker
-                                        label="Delivery End Time"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                            style: { color: 'white' },
-                                        }}
-                                        value={orderDeliveryEndTime}
-                                        onChange={handleChangeEndTime}
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-                            </TableCell>
-
-
-
-
-
-                            <TableCell colSpan={2}>
-                                <Button variant="contained" color="success" onClick={handleUpdateLogistics}>Update</Button>
-                            </TableCell>
-                        </TableRow>
-
-                    </Container>
-                    {userData.mobileNumber &&
-                        <TableContainer component={Paper} >
-                            <CodDeposit mobileNumber={userData.mobileNumber} />
-                        </TableContainer>
+                            </Container>
+                        </>
                     }
-                    <Container>
-                        <OrderEditDialog
-                            open={open}
-                            getData={getData}
-                            onClose={handleClose}
-                            dialogData={dialogData}
-                            total={totalData.total}
-                            setisLoading={setisLoading}
-                        />
-                    </Container>
                     <Container style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
                         <form onSubmit={(ev) => handleUpdate(ev)}>
                             <div style={{ display: 'none' }}>
